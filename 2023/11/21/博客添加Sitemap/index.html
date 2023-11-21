@@ -2,9 +2,9 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Hexo主题常用配置 | George&#39;s Blog</title>
-  <meta name="keywords" content=" hexo , github pages ">
-  <meta name="description" content="Hexo主题常用配置 | George&#39;s Blog">
+  <title>给博客网站添加站点地图-sitemap | George&#39;s Blog</title>
+  <meta name="keywords" content=" hexo , github pages , sitemap ">
+  <meta name="description" content="给博客网站添加站点地图-sitemap | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="环境 系统 : Windows 10 NodeJS : 14.21.3  概述在使用 Typora 编辑Markdown笔记时需要将复制的截图上传到图床，并能够自动将上传后的路径替换掉图片粘贴时自动生成的路径。这样操作方便笔记查看和迁移。 这里使用Github做图床，优点：免费&amp;没有容量的限制，缺点：国内网络访问很慢。 图片上传使用 PicGo-Core 插件，需要使用 npm 安装该插件">
 <meta property="og:type" content="article">
@@ -346,9 +346,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-3-Hexo主题常用配置修改" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-博客添加Sitemap" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Hexo主题常用配置</h1>
+        <h1 class="article-title">给博客网站添加站点地图-sitemap</h1>
     
     <div class="article-meta">
         
@@ -370,17 +370,19 @@
             
             <a class="color3">github pages</a>
             
+            <a class="color3">sitemap</a>
+            
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2023-11-20 22:05:23'>2023-11-20 00:00</time>
+            发布时间 : <time class="date" title='最后更新: 2023-11-21 10:13:47'>2023-11-21 20:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:271</span>
+        <span>字数:366</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -399,7 +401,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%85%8D%E7%BD%AE%E4%B8%AD%E6%96%87%E6%98%BE%E7%A4%BA"><span class="toc-text">一、配置中文显示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE%E6%97%B6%E5%8C%BA"><span class="toc-text">二、配置时区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%BC%80%E5%90%AF%E5%AD%97%E6%95%B0%E7%BB%9F%E8%AE%A1"><span class="toc-text">三、开启字数统计</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BF%AE%E6%94%B9%E5%A4%B4%E5%83%8F"><span class="toc-text">四、修改头像</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-text">站点地图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%B7%BB%E5%8A%A0sitemap"><span class="toc-text">一、添加sitemap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-text">1. 安装插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9-config-yml%E9%85%8D%E7%BD%AE"><span class="toc-text">2. 修改_config.yml配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BC%96%E8%AF%91%E5%8D%9A%E5%AE%A2"><span class="toc-text">3. 编译博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%9F%A5%E7%9C%8Bsitemap%E6%96%87%E4%BB%B6"><span class="toc-text">4. 查看sitemap文件</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-text">参考链接</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -418,41 +420,33 @@
         <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
 <p>系统 : Windows 10</p>
 <p>NodeJS : 14.21.3</p>
-<p>Git : 2.3.8</p>
-<p>使用主题 : <a target="_blank" rel="noopener" href="https://yelog.org/2017/03/07/3-hexo/">3-Hexo</a></p>
 </blockquote>
-<h1 id="一、配置中文显示"><a href="#一、配置中文显示" class="headerlink" title="一、配置中文显示"></a>一、配置中文显示</h1><p>修改 _config.yml，位置 博客根路径\_config.yml</p>
-<pre><code class="highlight yaml"><span class="attr">language:</span> <span class="string">zh-CN</span></code></pre>
-
-<p>之所以可以使用 <code>zh-CN</code> 这个语言编码，是因为 3-Hexo 主题支持该编码，在 <code>博客根路径\themes\3-hexo\languages</code> 下有 <code>zh-CN.yml</code> 文件。</p>
-<p>保存配置后，重新部署看查看效果。</p>
-<h1 id="二、配置时区"><a href="#二、配置时区" class="headerlink" title="二、配置时区"></a>二、配置时区</h1><p>修改 _config.yml，位置 博客根路径\_config.yml 。</p>
-<p>中国地区使用 Asia&#x2F;Shanghai </p>
-<pre><code class="highlight plaintext">timezone: Asia/Shanghai</code></pre>
-
-
-
-<h1 id="三、开启字数统计"><a href="#三、开启字数统计" class="headerlink" title="三、开启字数统计"></a>三、开启字数统计</h1><ul>
-<li>使用npm安装字数统计插件</li>
-</ul>
-<p>因为 3-hexo 这个主题使用了这个插件，所以必须装。</p>
-<pre><code class="highlight shell">npm i hexo-wordcount --save</code></pre>
+<h1 id="站点地图"><a href="#站点地图" class="headerlink" title="站点地图"></a>站点地图</h1><p>站点地图是一个网站所有链接的容器。很多网站的连接层次比较深，爬虫很难抓取到，站点地图可以方便爬虫抓取网站页面，通过抓取网站页面，清晰了解网站的架构，网站地图一般存放在根目录下并命名 sitemap，为爬虫指路，增加网站重要内容页面的收录。</p>
+<p>站点地图就是根据网站的结构、框架、内容，生成的导航网页文件。站点地图对于提高用户体验有好处，它们为网站访问者指明方向，并帮助迷失的访问者找到他们想看的页面。</p>
+<h1 id="一、添加sitemap"><a href="#一、添加sitemap" class="headerlink" title="一、添加sitemap"></a>一、添加sitemap</h1><h2 id="1-安装插件"><a href="#1-安装插件" class="headerlink" title="1. 安装插件"></a>1. 安装插件</h2><p>打开命令行工具，进入博客根目录，使用npm执行如下命令</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">谷歌、Bing 网站地图插件</span>
+npm install hexo-generator-sitemap --save
+<span class="meta prompt_"># </span><span class="language-bash">百度网站地图插件</span>
+npm install hexo-generator-baidu-sitemap --save</code></pre>
 
 
 
-<ul>
-<li>修改主题配置文件</li>
-</ul>
-<p>位置：博客根路径\themes\3-hexo_config.yml </p>
-<pre><code class="highlight yaml"><span class="attr">word_count:</span> <span class="literal">true</span></code></pre>
+<h2 id="2-修改-config-yml配置"><a href="#2-修改-config-yml配置" class="headerlink" title="2. 修改_config.yml配置"></a>2. 修改_config.yml配置</h2><p>修改博客根目录下的 _config.yml 文件,添加如下配置。</p>
+<pre><code class="highlight yaml"><span class="comment"># 配置后自动生成sitemap</span>
+<span class="attr">sitemap:</span>
+    <span class="attr">path:</span> <span class="string">sitemap.xml</span>
+<span class="attr">baidusitemap:</span>
+    <span class="attr">path:</span> <span class="string">baidusitemap.xml</span></code></pre>
 
-<p>保存配置后，重新部署看查看效果。</p>
-<h1 id="四、修改头像"><a href="#四、修改头像" class="headerlink" title="四、修改头像"></a>四、修改头像</h1><p>修改头像需要修改 3-hexo主题的配置文件，路径 : 博客根路径\themes\3-hexo_config.yml </p>
-<pre><code class="highlight yaml"><span class="comment"># 你的头像url</span>
-<span class="attr">avatar:</span> <span class="string">/img/avatar.jpg</span>
-<span class="attr">favicon:</span> <span class="string">/img/favicon.png</span></code></pre>
 
-<p>图片存放路径：博客根路径\themes\3-hexo\source\img\</p>
+
+<h2 id="3-编译博客"><a href="#3-编译博客" class="headerlink" title="3. 编译博客"></a>3. 编译博客</h2><pre><code class="highlight shell">hexo clean &amp; hexo g</code></pre>
+
+
+
+<h2 id="4-查看sitemap文件"><a href="#4-查看sitemap文件" class="headerlink" title="4. 查看sitemap文件"></a>4. 查看sitemap文件</h2><p>进入博客根目录下的 <code>public</code> 文件夹下，发现已经生成了 <code>sitemap.xml</code> 和 <code>baidusitemap.xml</code> 两个文件，表示添加网站地图文件操作成功！</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/21/20231121-101144.png" alt="image-20231121101143695"></p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://jueee.github.io/2020/08/2020-08-09-%E5%8D%9A%E5%AE%A2%E7%BD%91%E5%9D%80%E5%A2%9E%E5%8A%A0%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BEsitemap/">博客网址增加站点地图 sitemap</a></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
