@@ -785,13 +785,42 @@ function bind() {
  */
 function copyCode(e) {
     $(e).parent().prev().text()
-    if (copy($(e).parent().prev().text())) {
+    if (copyToClipboard($(e).parent().prev().text())) {
         $(e).html('复制成功')
         setTimeout(function () {
             $(e).html('复制代码')
         }, 1000)
     }
 }
+
+/**
+ * 复制代码
+ * George：解决复制代码失去缩进格式的问题
+ */
+function copyToClipboard(textToCopy) {
+            // navigator clipboard 需要https等安全上下文
+            if (navigator.clipboard && window.isSecureContext) {
+                // navigator clipboard 向剪贴板写文本
+                return navigator.clipboard.writeText(textToCopy);
+            } else {
+                // 创建text area
+                let textArea = document.createElement("textarea");
+                textArea.value = textToCopy;
+                // 使text area不在viewport，同时设置不可见
+                textArea.style.position = "absolute";
+                textArea.style.opacity = 0;
+                textArea.style.left = "-999999px";
+                textArea.style.top = "-999999px";
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                return new Promise((res, rej) => {
+                    // 执行复制命令并移除文本框
+                    document.execCommand('copy') ? res() : rej();
+                    textArea.remove();
+                });
+            }
+        }
 
 // 复制功能1
 function copy (text) {
@@ -802,6 +831,7 @@ function copy (text) {
         target.id = 'tempTarget';
         target.style.opacity = '0';
         target.innerText = text;
+		target.innerHTML = text;
         document.body.appendChild(target);
     } else {
         target = document.querySelector('#' + id);
