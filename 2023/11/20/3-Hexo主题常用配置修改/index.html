@@ -9,12 +9,12 @@
   <meta name="keywords" content=" hexo , github pages ">
   <meta name="description" content="Hexo主题常用配置 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介陈姚志 目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#x67;&#101;&#x5f;&#57;&#53;&#64;&#x31;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介陈姚志 目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#114;&#103;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#x36;&#46;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="about">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介陈姚志 目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#x67;&#101;&#x5f;&#57;&#53;&#64;&#x31;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介陈姚志 目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#114;&#103;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#x36;&#46;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2023-11-21T02:35:14.136Z">
@@ -387,6 +387,17 @@
         </span>
         
         
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
     </div>
     
     <div class="toc-ref">
@@ -453,6 +464,27 @@
 
 
 
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
 
 
 
