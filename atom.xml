@@ -6,7 +6,7 @@
   <link href="https://georgechan95.github.io/atom.xml" rel="self"/>
   
   <link href="https://georgechan95.github.io/"/>
-  <updated>2023-12-20T12:09:51.659Z</updated>
+  <updated>2023-12-20T12:21:17.414Z</updated>
   <id>https://georgechan95.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第九章-对象的实例化内存布局与访问定位</title>
+    <link href="https://georgechan95.github.io/2023/12/20/jvm/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E4%B8%8E%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D/"/>
+    <id>https://georgechan95.github.io/2023/12/20/jvm/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E4%B8%8E%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D/</id>
+    <published>2023-12-20T09:03:00.000Z</published>
+    <updated>2023-12-20T12:21:17.414Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote><p>系统 : Windows 10<br>JDK : 1.8</p></blockquote>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;环境&quot;&gt;&lt;a href=&quot;#环境&quot; class=&quot;headerlink&quot; title=&quot;环境&quot;&gt;&lt;/a&gt;环境&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;系统 : Windows 10&lt;br&gt;JDK : 1.8&lt;/p&gt;
+&lt;/blockquote&gt;
+</summary>
+      
+    
+    
+    
+    <category term="JVM" scheme="https://georgechan95.github.io/categories/JVM/"/>
+    
+    
+    <category term="jvm" scheme="https://georgechan95.github.io/tags/jvm/"/>
+    
+    <category term="java" scheme="https://georgechan95.github.io/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>第八章-直接内存</title>
