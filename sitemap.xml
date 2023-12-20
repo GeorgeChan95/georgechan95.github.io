@@ -160,6 +160,13 @@
   </url>
   
   <url>
+    <loc>https://georgechan95.github.io/tags/sitemap/</loc>
+    <lastmod>2023-12-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://georgechan95.github.io/tags/typora/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -168,13 +175,6 @@
   
   <url>
     <loc>https://georgechan95.github.io/tags/github/</loc>
-    <lastmod>2023-12-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/tags/sitemap/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -211,14 +211,14 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/JVM/</loc>
+    <loc>https://georgechan95.github.io/categories/Hexo/Typora/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/Hexo/Typora/</loc>
+    <loc>https://georgechan95.github.io/categories/JVM/</loc>
     <lastmod>2023-12-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
