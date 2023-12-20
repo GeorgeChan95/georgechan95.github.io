@@ -6,7 +6,7 @@
   <link href="https://georgechan95.github.io/atom.xml" rel="self"/>
   
   <link href="https://georgechan95.github.io/"/>
-  <updated>2023-12-20T06:24:16.963Z</updated>
+  <updated>2023-12-20T12:06:22.441Z</updated>
   <id>https://georgechan95.github.io/</id>
   
   <author>
@@ -15,6 +15,35 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>第八章-直接内存</title>
+    <link href="https://georgechan95.github.io/2023/12/20/jvm/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98/"/>
+    <id>https://georgechan95.github.io/2023/12/20/jvm/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98/</id>
+    <published>2023-12-20T09:03:00.000Z</published>
+    <updated>2023-12-20T12:06:22.441Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote><p>系统 : Windows 10<br>JDK : 1.8</p></blockquote><h1 id="一、直接内存概述"><a href="#一、直接内存概述" class="headerlink" title="一、直接内存概述"></a>一、直接内存概述</h1><ul><li>不是虚拟机运行时数据区的一部分，也不是《Java虚拟机规范》中定义的内存区域。</li><li>直接内存是在Java堆外的、直接向系统申请的内存区间。</li><li>来源于NIO，通过存在堆中的DirectByteBuffer操作Native内存</li><li>通常，访问直接内存的速度会优于Java堆。即读写性能高。<ul><li>因此出于性能考虑，读写频繁的场合可能会考虑使用直接内存。</li><li>Java的NIO库允许Java程序使用直接内存，用于数据缓冲区</li></ul></li></ul><blockquote><p>代码示例</p></blockquote><pre><code class="highlight java"><span class="comment">/**</span><span class="comment"> *  IO                  NIO (New IO / Non-Blocking IO)</span><span class="comment"> *  byte[] / char[]     Buffer</span><span class="comment"> *  Stream              Channel</span><span class="comment"> *</span><span class="comment"> * 查看直接内存的占用与释放</span><span class="comment"> */</span><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BufferTest</span> &#123;    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">BUFFER</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;<span class="comment">//1GB</span>    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;        <span class="comment">//直接分配本地内存空间</span>        <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(BUFFER);        System.out.println(<span class="string">&quot;直接内存分配完毕，请求指示！&quot;</span>);        <span class="type">Scanner</span> <span class="variable">scanner</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);        scanner.next();        System.out.println(<span class="string">&quot;直接内存开始释放！&quot;</span>);        byteBuffer = <span class="literal">null</span>;        System.gc();        scanner.next();    &#125;&#125;</code></pre><p>直接占用了 1G 的本地内存</p><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/12/20/20231220-193801.png" alt="image-20231220193601231"></p><h1 id="二、BIO-与-NIO"><a href="#二、BIO-与-NIO" class="headerlink" title="二、BIO 与 NIO"></a>二、BIO 与 NIO</h1><h2 id="1-非直接缓存区（BIO）"><a href="#1-非直接缓存区（BIO）" class="headerlink" title="1. 非直接缓存区（BIO）"></a>1. 非直接缓存区（BIO）</h2><p>原来采用BIO的架构，在读写本地文件时，我们需要从用户态切换成内核态</p><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/12/20/20231220-194244.png" alt="image-20231220194157794"></p><h2 id="2-直接缓冲区（NIO）"><a href="#2-直接缓冲区（NIO）" class="headerlink" title="2. 直接缓冲区（NIO）"></a>2. 直接缓冲区（NIO）</h2><p>NIO 直接操作物理磁盘，省去了中间过程</p><p><img src="C:/Users/George/AppData/Roaming/Typora/typora-user-images/image-20231220200446807.png" alt="image-20231220200446807"></p><h2 id="3-直接内存与-OOM"><a href="#3-直接内存与-OOM" class="headerlink" title="3. 直接内存与 OOM"></a>3. 直接内存与 OOM</h2><ul><li>直接内存也可能导致OutofMemoryError异常</li><li>由于直接内存在Java堆外，因此它的大小不会直接受限于-Xmx指定的最大堆大小，但是系统内存是有限的，Java堆和直接内存的总和依然受限于操作系统能给出的最大内存。</li><li>直接内存的缺点为：<ul><li>分配回收成本较高</li><li>不受JVM内存回收管理</li></ul></li><li>直接内存大小可以通过 <code>-XX:MaxDirectMemorySize</code> 设置</li><li>如果不指定，默认与堆的最大值-Xmx参数值一致</li></ul><pre><code class="highlight java"><span class="comment">/**</span><span class="comment"> * 本地内存的OOM:  OutOfMemoryError: Direct buffer memory</span><span class="comment"> *</span><span class="comment"> */</span><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BufferTest2</span> &#123;    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">BUFFER</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">20</span>;<span class="comment">//20MB</span>    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;        ArrayList&lt;ByteBuffer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;        <span class="keyword">try</span> &#123;            <span class="keyword">while</span>(<span class="literal">true</span>)&#123;                <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(BUFFER);                list.add(byteBuffer);                count++;                <span class="keyword">try</span> &#123;                    Thread.sleep(<span class="number">100</span>);                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;                    e.printStackTrace();                &#125;            &#125;        &#125; <span class="keyword">finally</span> &#123;            System.out.println(count);        &#125;    &#125;&#125;</code></pre><blockquote><p>控制台错误信息如下：</p><p>直接内存溢出</p></blockquote><pre><code class="highlight plaintext">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Direct buffer memoryat java.nio.Bits.reserveMemory(Bits.java:694)at java.nio.DirectByteBuffer.&lt;init&gt;(DirectByteBuffer.java:123)at java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:311)at com.atguigu.java.BufferTest2.main(BufferTest2.java:19)</code></pre>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;环境&quot;&gt;&lt;a href=&quot;#环境&quot; class=&quot;headerlink&quot; title=&quot;环境&quot;&gt;&lt;/a&gt;环境&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;系统 : Windows 10&lt;br&gt;JDK : 1.8&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h1 id=&quot;一、</summary>
+      
+    
+    
+    
+    <category term="JVM" scheme="https://georgechan95.github.io/categories/JVM/"/>
+    
+    
+    <category term="jvm" scheme="https://georgechan95.github.io/tags/jvm/"/>
+    
+    <category term="java" scheme="https://georgechan95.github.io/tags/java/"/>
+    
+  </entry>
   
   <entry>
     <title>第七章-方法区</title>
