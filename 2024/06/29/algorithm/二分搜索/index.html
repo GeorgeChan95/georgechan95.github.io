@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>关于 | George&#39;s Blog</title>
+  <title>二分搜索 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content="">
-  <meta name="description" content="关于 | George&#39;s Blog">
+  <meta name="keywords" content=" 算法 , 二分法 ">
+  <meta name="description" content="二分搜索 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#x67;&#x65;&#95;&#x39;&#53;&#64;&#x31;&#50;&#x36;&#x2e;&#x63;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -564,24 +564,41 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="page-" class="article article-type-page" itemscope itemprop="blogPost">
+        <article id="post-algorithm/二分搜索" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">关于</h1>
+        <h1 class="article-title">二分搜索</h1>
     
     <div class="article-meta">
         
         
         
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="算法">算法</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color3">算法</a>
+            
+            <a class="color4">二分法</a>
+            
+        </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-06-20 21:44:04'>2023-11-21 10:29</time>
+            发布时间 : <time class="date" title='最后更新: 2024-06-30 15:04:47'>2024-06-29 10:04</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:60</span>
+        <span>字数:2.6k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -611,7 +628,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link"><span class="toc-text"></span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%AA%E4%BA%BA%E7%AE%80%E4%BB%8B"><span class="toc-text">个人简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%81%94%E7%B3%BB%E6%96%B9%E5%BC%8F"><span class="toc-text">联系方式</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-text">1. 二分搜索的概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%9C%A8%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE-num-%E6%98%AF%E5%90%A6%E5%AD%98%E5%9C%A8"><span class="toc-text">2. 在有序数组中查找 num 是否存在</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%9C%A8%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE-num-%E7%9A%84%E6%9C%80%E5%B7%A6%E4%BD%8D%E7%BD%AE"><span class="toc-text">3. 在有序数组中查找 &gt;&#x3D;num 的最左位置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%9C%A8%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE"><span class="toc-text">4. 在有序数组中查找 &lt;&#x3D;num 的最右位置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%97%A0%E5%BA%8F%E6%95%B0%E7%BB%84%E4%BD%BF%E7%94%A8%E4%BA%8C%E5%88%86%E6%B3%95%E5%AF%BB%E6%89%BE%E5%B3%B0%E5%80%BC"><span class="toc-text">5. 无序数组使用二分法寻找峰值</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E6%8A%80%E5%B7%A7"><span class="toc-text">6. 技巧</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -627,11 +644,251 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id=""><a href="#" class="headerlink" title=""></a></h3><h3 id="个人简介"><a href="#个人简介" class="headerlink" title="个人简介"></a>个人简介</h3><p>目前人在合肥，从事后端开发工作。</p>
-<h3 id="联系方式"><a href="#联系方式" class="headerlink" title="联系方式"></a>联系方式</h3><ul>
-<li>邮箱：<a href="mailto:&#x67;&#101;&#x6f;&#x72;&#x67;&#x65;&#95;&#x39;&#53;&#64;&#x31;&#50;&#x36;&#x2e;&#x63;&#111;&#109;">&#x67;&#101;&#x6f;&#x72;&#x67;&#x65;&#95;&#x39;&#53;&#64;&#x31;&#50;&#x36;&#x2e;&#x63;&#111;&#109;</a></li>
+        <h1 id="1-二分搜索的概念"><a href="#1-二分搜索的概念" class="headerlink" title="1. 二分搜索的概念"></a>1. 二分搜索的概念</h1><ul>
+<li><p>二分查找是一种在有序数组中查找某一特定元素的搜索算法。</p>
+</li>
+<li><p>二分查找的原理是，将目标元素和查找范围的中间值做比较，如果目标元素等于中间值，则查找结束；如果目标元素大于或小于中间元素，则在数组大于或小于中间元素的那一半中查找，而且跟开始一样从中间元素开始比较。这样每一次比较都使搜索范围缩小一半。</p>
+</li>
 </ul>
-<p>邮件可能几天才看一次，如有联系，请耐心等待。</p>
+<h1 id="2-在有序数组中查找-num-是否存在"><a href="#2-在有序数组中查找-num-是否存在" class="headerlink" title="2. 在有序数组中查找 num 是否存在"></a>2. 在有序数组中查找 num 是否存在</h1><ul>
+<li><p>需求</p>
+<p>给定一个有序数组 <code>arr</code> , 给定一个目标值 <code>target</code> , 查找 <code>target</code> 在 <code>arr</code> 中是否存在.</p>
+</li>
+<li><p>思路</p>
+<p>对于有序数组中的数值查找, 首先想到使用二分法实现.</p>
+</li>
+<li><p>关键代码</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 查找target在arr中是否存在</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span> arr    有序数组</span>
+<span class="comment"> * <span class="doctag">@param</span> target 目标值</span>
+<span class="comment"> * <span class="doctag">@return</span> true:表示target在arr中存在, false表示不存在</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">exist</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> target)</span> &#123;
+    <span class="keyword">if</span> (arr == <span class="literal">null</span> || arr.length == <span class="number">0</span>) &#123; <span class="comment">// 当数组为空时,无需查找,返回false.</span>
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    &#125;
+
+    <span class="type">int</span> <span class="variable">L</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// 查找范围区间左侧的元素的下标,从0开始</span>
+    <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> arr.length - <span class="number">1</span>; <span class="comment">// 查找范围区间右侧元素的下标,从arr的末尾开始</span>
+    <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// 中间元素的位置,默认是0</span>
+
+    <span class="comment">// &lt;= 表示这是一个 [左闭,右闭] 的区间范围.</span>
+    <span class="comment">// 不使用 &lt; 是考虑到在查找的过程中会动态调整L和R的值,有可能出现 L和R 重合的情况,即区间范围只有一个值的情况.</span>
+    <span class="keyword">while</span> (L &lt;= R) &#123;
+        M = (L + R) / <span class="number">2</span>; <span class="comment">// 获取查询区间的中点</span>
+        <span class="comment">// 下面这种方式计算结果与上面相同,但是可以避免 L + R 溢出的问题</span>
+        <span class="comment">// M = L + ((R-L)&gt;&gt;1);</span>
+
+        <span class="keyword">if</span> (arr[M] == target) &#123; <span class="comment">// 中点的值正好等于target,找找到了该元素,返回true.</span>
+            <span class="keyword">return</span> <span class="literal">true</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[M] &lt; target) &#123; <span class="comment">// 目标值大于中点的值,则从中点+1的位置往右查找</span>
+            L = M + <span class="number">1</span>;
+        &#125; <span class="keyword">else</span> &#123; <span class="comment">// 目标值小于中点的值,则从中点-1的位置往左查找</span>
+            R = M - <span class="number">1</span>;
+        &#125;
+    &#125;
+
+    <span class="comment">// 如果while循环没有找到target,则返回false;</span>
+    <span class="keyword">return</span> <span class="literal">false</span>;
+&#125;</code></pre>
+</li>
+<li><p>完整测试代码</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/binarySearch/FindNumber.java">https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/binarySearch/FindNumber.java</a></p>
+</li>
+</ul>
+<h1 id="3-在有序数组中查找-num-的最左位置"><a href="#3-在有序数组中查找-num-的最左位置" class="headerlink" title="3. 在有序数组中查找 &gt;&#x3D;num 的最左位置"></a>3. 在有序数组中查找 &gt;&#x3D;num 的最左位置</h1><ul>
+<li><p>需求</p>
+<p>给定一个从小到大的有序数组 arr, 给定一个目标值 target, 查找在这个数组中 &gt;&#x3D;target的 最左侧的元素的下标值.</p>
+</li>
+<li><p>实现思路</p>
+<ul>
+<li>有序数组中的操作,首先考虑二分查找.找到数组中间位置的数据,比较中间值是否大于等于目标值, 如果是则表明目标值一定在中间元素的左边.此时就需要向左查找.</li>
+<li>如果中间值小于目标值,则表明目标值在中间值的右边,此时就需要往右查找.</li>
+</ul>
+</li>
+<li><p>关键代码</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 使用二分查找法,获取 &gt;=target 的最左边的数的下标</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span> arr    目标数组, 例如: [1,2,3,4,5,6,7,8,9]</span>
+<span class="comment"> * <span class="doctag">@param</span> target 目标值, 例如: 2</span>
+<span class="comment"> * <span class="doctag">@return</span></span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">findLeft</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> target)</span> &#123;
+    <span class="type">int</span> <span class="variable">L</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// 查找范围区间左侧的元素的下标,从0开始</span>
+    <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> arr.length - <span class="number">1</span>; <span class="comment">// 查找范围区间右侧元素的下标,从arr的末尾开始</span>
+    <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// 中间元素的位置,默认是0</span>
+    <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> -<span class="number">1</span>; <span class="comment">// 查找到的目标值的下标,没有找到则返回-1</span>
+    <span class="keyword">if</span> (arr == <span class="literal">null</span> || arr.length == <span class="number">0</span>) &#123; <span class="comment">// 当数组为空时,无需查找,返回 -1.</span>
+        <span class="keyword">return</span> ans;
+    &#125;
+    <span class="keyword">while</span> (L &lt;= R) &#123; <span class="comment">// 确保查找范围区间元素数量 &gt;=1 个</span>
+        M = (L + R) / <span class="number">2</span>; <span class="comment">// 获取查询区间的中点</span>
+        <span class="comment">// 下面这种方式计算结果与上面相同,但是可以避免 L + R 溢出的问题</span>
+        <span class="comment">// M = L + ((R-L)&gt;&gt;1);</span>
+
+        <span class="keyword">if</span> (arr[M] &gt;= target) &#123; <span class="comment">// 如果中点元素值 &gt;=target 说明中点往左可能还有别的数也 &gt;=target,此时记录下标值,继续向中点左侧找,直到找到最左边 &gt;=target 的值.</span>
+            R = M - <span class="number">1</span>; <span class="comment">// 区间往左搜小</span>
+            ans = M; <span class="comment">// 记录当前下标值</span>
+        &#125; <span class="keyword">else</span> &#123; <span class="comment">// 如果中点元素值 &lt;target, 说明目标元素在中点往右的位置,则需要向右查找</span>
+            L = M + <span class="number">1</span>;
+        &#125;
+    &#125;
+    <span class="comment">// &gt;=target最左边的数的下标</span>
+    <span class="keyword">return</span> ans;
+&#125;</code></pre>
+</li>
+<li><p>完整测试代码</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/binarySearch/FindLeft.java">https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/binarySearch/FindLeft.java</a></p>
+</li>
+</ul>
+<h1 id="4-在有序数组中查找"><a href="#4-在有序数组中查找" class="headerlink" title="4. 在有序数组中查找 &lt;&#x3D;num 的最右位置"></a>4. 在有序数组中查找 &lt;&#x3D;num 的最右位置</h1><ul>
+<li><p>需求</p>
+<p>给定一个从小到大的有序数组 arr, 给定一个目标值 target, 查找在arr数组中 &lt;&#x3D;target 的最右侧(最大)的元素的下标值.</p>
+</li>
+<li><p>思路</p>
+<ul>
+<li>有序数组中的操作,首先考虑二分查找.找到数组中间位置的数据,比较中间值是否小于等于目标值, 如果是则表明目标值一定在中间元素的右边.此时就需要向右查找.</li>
+<li>如果中间值大于目标值,则表明目标值在中间值的左边,此时就需要往左查找.</li>
+</ul>
+</li>
+<li><p>关键代码</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment">  * 使用二分查找，数组arr中 &lt;=num 最右边的数的下标值</span>
+<span class="comment">  *</span>
+<span class="comment">  * <span class="doctag">@param</span> arr    从小到大的有序数组</span>
+<span class="comment">  * <span class="doctag">@param</span> target 要查询的目标值</span>
+<span class="comment">  * <span class="doctag">@return</span></span>
+<span class="comment">  */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">findRight</span><span class="params">(<span class="type">int</span>[] arr, <span class="type">int</span> target)</span> &#123;
+    <span class="type">int</span> <span class="variable">L</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// 数组中查找的左侧区间范围，从0开始</span>
+    <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> arr.length - <span class="number">1</span>; <span class="comment">// 数组中查找的右侧区间范围,从数组的末尾开始</span>
+    <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// 初始中间位置</span>
+    <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> -<span class="number">1</span>; <span class="comment">// 响应结果,-1表示没有找到该元素</span>
+
+    <span class="keyword">if</span> (arr == <span class="literal">null</span> || arr.length == <span class="number">0</span>) &#123; <span class="comment">// 数组为空,不再继续查找</span>
+        <span class="keyword">return</span> ans;
+    &#125;
+
+    <span class="keyword">while</span> (L &lt;= R) &#123; <span class="comment">// 确保查找范围区间元素数量 &gt;=1 个</span>
+        M = L + (R - L) / <span class="number">2</span>; <span class="comment">// 获取中间位置</span>
+        <span class="keyword">if</span> (arr[M] &lt;= target) &#123; <span class="comment">// 中间值与目标值进行比较,如果&lt;=target,则标记下当前位置,继续向右查找,如果 &gt;target则向左继续查找</span>
+            ans = M; <span class="comment">// 标记当前下标</span>
+            L = M + <span class="number">1</span>; <span class="comment">// 左侧查询区间移动到 M+1 位置,继续往右查找</span>
+        &#125; <span class="keyword">else</span> &#123;
+            R = M - <span class="number">1</span>; <span class="comment">// 右侧查询区间移动到 M-1 位置,继续往左查找</span>
+        &#125;
+    &#125;
+    <span class="comment">// 返回查询结果</span>
+    <span class="keyword">return</span> ans;
+&#125;</code></pre>
+</li>
+<li><p>完整测试代码</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/binarySearch/FindRight.java">https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/binarySearch/FindRight.java</a></p>
+</li>
+</ul>
+<h1 id="5-无序数组使用二分法寻找峰值"><a href="#5-无序数组使用二分法寻找峰值" class="headerlink" title="5. 无序数组使用二分法寻找峰值"></a>5. 无序数组使用二分法寻找峰值</h1><ul>
+<li><p><strong>题目描述</strong></p>
+<ul>
+<li><p>峰值元素是指其值严格大于左右相邻值的元素。</p>
+</li>
+<li><p>给你一个整数数组 <code>nums</code>，找到峰值元素并返回其索引。数组可能包含多个峰值，在这种情况下，返回 <strong>任何一个峰值</strong> 所在位置即可。</p>
+</li>
+<li><p>你可以假设 <code>nums[-1] = nums[n] = -∞</code> 。</p>
+</li>
+<li><p>你必须实现时间复杂度为 <code>O(log n)</code> 的算法来解决此问题。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>示例 1：</strong></p>
+<ul>
+<li>输入：nums &#x3D; [1,2,3,1]</li>
+<li>输出：2</li>
+<li>解释：3 是峰值元素，你的函数应该返回其索引 2。</li>
+</ul>
+</li>
+<li><p><strong>示例 2：</strong></p>
+<ul>
+<li>输入：nums &#x3D; [1,2,1,3,5,6,4]</li>
+<li>输出：1 或 5 </li>
+<li>解释：你的函数可以返回索引 1，其峰值元素为 2；<br> 或者返回索引 5， 其峰值元素为 6。</li>
+</ul>
+</li>
+<li><p><strong>提示：</strong></p>
+<ul>
+<li>1 &lt;&#x3D; nums.length &lt;&#x3D; 1000 (数组长度在 1~1000范围内)</li>
+<li>-2<sup>31</sup>  &lt;&#x3D; nums[i]  &lt;&#x3D; 2<sup>31-1</sup>  (数组元素值不超过int最大值)</li>
+<li>对于所有有效的 i 都有 nums[i] !&#x3D; nums[i + 1] (数组中任意相邻的两个数不相等)</li>
+</ul>
+</li>
+<li><p><strong>思路</strong></p>
+<ul>
+<li><p>虽然寻找峰值这样的题目,不是在有序数组中,但具体题目的要求,依然可以使用二分查找解决这个问题.</p>
+</li>
+<li><p>如果一个数组中存在峰值,那么从这个数组的第0个位置到最后一个位置所经过的数值,连成线一定是时高时低(想象着把数值连城折线图). </p>
+</li>
+<li><p>可以先从中间位置开始找峰值, 如果中间位置的数比左右两侧的数都要大,则找到峰值.</p>
+</li>
+<li><p>如果中间位置比左侧的数据小,则表示在左边一定至少存在一个峰值. 因为哪怕是最极端的情况, 从0位置到中间位置数据是逐个减小的,那么0位置就是峰值. 所以至少会有一个峰值. 按照这个思路继续使用二分法向左边查找峰值,直到找到一个峰值.</p>
+</li>
+<li><p>如果中间位置比右侧的数据小,则表示在右边至少存在一个峰值,理由和上一条相同.</p>
+</li>
+</ul>
+</li>
+<li><p><strong>关键代码</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment">  * 使用二分查找,找到数组中的峰值</span>
+<span class="comment">  * <span class="doctag">@param</span> arr 数组</span>
+<span class="comment">  * <span class="doctag">@return</span></span>
+<span class="comment">  */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">findPeak</span><span class="params">(<span class="type">int</span>[] arr)</span> &#123;
+    <span class="type">int</span> <span class="variable">n</span> <span class="operator">=</span> arr.length; <span class="comment">// 数组的长度</span>
+    <span class="keyword">if</span> (n == <span class="number">1</span>) &#123; <span class="comment">// 数组长度为1,那么这个元素就是峰值,因为: arr[-1] = arr[n] = 无穷小</span>
+        <span class="keyword">return</span> <span class="number">0</span>;
+    &#125;
+
+    <span class="keyword">if</span> (arr[<span class="number">0</span>] &gt; arr[<span class="number">1</span>]) &#123; <span class="comment">// 满足条件: arr[-1] = 无穷小</span>
+        <span class="keyword">return</span> <span class="number">0</span>;
+    &#125;
+
+    <span class="keyword">if</span> (arr[n - <span class="number">1</span>] &gt; arr[n - <span class="number">2</span>]) &#123; <span class="comment">// 满足条件: arr[n] = 无穷小</span>
+        <span class="keyword">return</span> n - <span class="number">1</span>;
+    &#125;
+
+    <span class="type">int</span> <span class="variable">L</span> <span class="operator">=</span> <span class="number">1</span>; <span class="comment">// 二分查找的左侧区间范围, 从 1 开始</span>
+    <span class="type">int</span> <span class="variable">R</span> <span class="operator">=</span> n - <span class="number">2</span>; <span class="comment">// 二分查找的右侧区间范围, 从 n-2 开始</span>
+    <span class="type">int</span> <span class="variable">M</span> <span class="operator">=</span> <span class="number">0</span>; <span class="comment">// 中间索引,默认:0</span>
+    <span class="type">int</span> <span class="variable">ans</span> <span class="operator">=</span> -<span class="number">1</span>; <span class="comment">// 峰值所在位置索引</span>
+
+    <span class="keyword">while</span> (L &lt;= R) &#123;
+        M = L + ((R - L) / <span class="number">2</span>); <span class="comment">// 计算中间值索引</span>
+        <span class="keyword">if</span> (arr[M + <span class="number">1</span>] &gt; arr[M]) &#123; <span class="comment">// M到n-1区域一定存在峰值,向右查找</span>
+            L = M + <span class="number">1</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[M - <span class="number">1</span>] &gt; arr[M]) &#123; <span class="comment">// 0到M区域一定存在峰值,向左查找</span>
+            R = M - <span class="number">1</span>;
+        &#125; <span class="keyword">else</span> &#123;
+            ans = M; <span class="comment">// 找到峰值, 跳出循环</span>
+            <span class="keyword">break</span>;
+        &#125;
+    &#125;
+    <span class="keyword">return</span> ans;
+&#125;</code></pre>
+</li>
+<li><p>测试地址</p>
+<p><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/find-peak-element/">https://leetcode.cn/problems/find-peak-element/</a></p>
+</li>
+</ul>
+<h1 id="6-技巧"><a href="#6-技巧" class="headerlink" title="6. 技巧"></a>6. 技巧</h1><ul>
+<li><p>二分查找需要根据左右两个查询区间找到中间位置的下标, 但是当查询范围特别大时,比如数组长度: 2<sup>31</sup> , 左右区间相加就会溢出,导致计算出错. 为了避免数值溢出, 不能使用 <code>(L+R)/2</code> 的方式计算中间值, 需要用 <code>L+(R-L)/2</code> 的方式.</p>
+</li>
+<li><p>L + ((R-L) &gt;&gt; 1) 也等同于 L+(R-L)&#x2F;2 , 样做是利用了位运算 &gt;&gt; 的特点, 右移1位, 就等于除以2</p>
+</li>
+<li><p>找峰值点</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/06/29/20240629-095254.png" alt="image-20240629095253438"></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
