@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>第五章-本地方法接口 | George&#39;s Blog</title>
+  <title>合并两个有序链表 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" jvm , java ">
-  <meta name="description" content="第五章-本地方法接口 | George&#39;s Blog">
+  <meta name="keywords" content=" 算法 , 合并有序链表 ">
+  <meta name="description" content="合并两个有序链表 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#114;&#103;&#x65;&#x5f;&#57;&#53;&#x40;&#49;&#x32;&#x36;&#x2e;&#99;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -611,9 +611,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-jvm/第五章-本地方法接口" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-algorithm/合并两个有序链表" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">第五章-本地方法接口</h1>
+        <h1 class="article-title">合并两个有序链表</h1>
     
     <div class="article-meta">
         
@@ -623,7 +623,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JVM">JVM</a>
+            <a  data-rel="算法">算法</a>
             
         </span>
         
@@ -631,21 +631,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color4">jvm</a>
+            <a class="color3">算法</a>
             
-            <a class="color5">java</a>
+            <a class="color2">合并有序链表</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-06-22 18:36:12'>2023-11-30 17:55</time>
+            发布时间 : <time class="date" title='最后更新: 2024-07-06 14:05:05'>2024-07-06 09:11</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.6k</span>
+        <span>字数:833</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -675,7 +675,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95"><span class="toc-text">一、什么是本地方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-Native-Method"><span class="toc-text">二、为什么要使用 Native Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8EJava%E7%8E%AF%E5%A2%83%E5%A4%96%E4%BA%A4%E4%BA%92"><span class="toc-text">1. 与Java环境外交互</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%8E%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%BA%A4%E4%BA%92"><span class="toc-text">2. 与操作系统的交互</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Sun%E2%80%99s-Java"><span class="toc-text">3. Sun’s Java</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E7%9A%84%E7%8E%B0%E7%8A%B6"><span class="toc-text">4. 本地方法的现状</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-text">三、本地方法栈</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81JVM%E6%80%8E%E6%A0%B7%E4%BD%BFNative-Method%E8%B7%91%E8%B5%B7%E6%9D%A5"><span class="toc-text">四、JVM怎样使Native Method跑起来</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">五、注意事项</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-text">1. 题目描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="toc-text">2. 解决思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81"><span class="toc-text">3. 关键代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="toc-text">4. 复杂度分析</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -691,65 +691,78 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
-<p>系统 : Windows 10<br>JDK : 1.8</p>
-</blockquote>
-<h1 id="一、什么是本地方法"><a href="#一、什么是本地方法" class="headerlink" title="一、什么是本地方法"></a>一、什么是本地方法</h1><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/30/20231130-195918.png" alt="image-20231130195914842" style="zoom:67%;" />
-
-<ul>
-<li>简单地讲，<strong>一个Native Method是一个Java调用非Java代码的接囗</strong>一个Native Method是这样一个Java方法：该方法的实现由非Java语言实现，比如C。这个特征并非Java所特有，很多其它的编程语言都有这一机制，比如在C++中，你可以用extern 告知C++编译器去调用一个C的函数。</li>
-<li>“A native method is a Java method whose implementation is provided by non-java code.”（本地方法是一个非Java的方法，它的具体实现是非Java代码的实现）</li>
-<li>在定义一个native method时，并不提供实现体（有些像定义一个Java interface），因为其实现体是由非java语言在外面实现的。</li>
-<li>本地接口的作用是融合不同的编程语言为Java所用，它的初衷是融合C&#x2F;C++程序。</li>
-</ul>
-<img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/30/20231130-172423.png" alt="本地方法接口" style="zoom: 67%;" />
-
+        <h1 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1. 题目描述"></a>1. 题目描述</h1><p>将两个升序链表合并为一个新的 <strong>升序</strong> 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 </p>
+<p><strong>示例 1：</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/06/20240706-125245.jpg" alt="img"></p>
 <blockquote>
-<p>示例</p>
+<p><strong>输入：</strong>l1 &#x3D; [1,2,4], l2 &#x3D; [1,3,4]<br><strong>输出：</strong>[1,1,2,3,4,4]</p>
 </blockquote>
-<p>需要注意的是：标识符native可以与其它java标识符连用，但是abstract除外</p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IHaveNatives</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">Native1</span><span class="params">(<span class="type">int</span> x)</span>;
+<p><strong>示例 2：</strong></p>
+<blockquote>
+<p><strong>输入：</strong>l1 &#x3D; [], l2 &#x3D; []<br><strong>输出：</strong>[]</p>
+</blockquote>
+<p><strong>示例 3：</strong></p>
+<blockquote>
+<p><strong>输入：</strong>l1 &#x3D; [], l2 &#x3D; [0]<br><strong>输出：</strong>[0]</p>
+</blockquote>
+<h1 id="2-解决思路"><a href="#2-解决思路" class="headerlink" title="2. 解决思路"></a>2. 解决思路</h1><p>可以使用迭代方法来实现有序链表的合并.</p>
+<p>假设有两个有序链表 list1和list2, 当这两个链表都不是空链表时,选择头节点中较小的一个作为合并链表的头节点,.</p>
+<p>移动有序链表的指针,比较list1和list2最新的头节点, 添加到合并链表中.</p>
+<h1 id="3-关键代码"><a href="#3-关键代码" class="headerlink" title="3. 关键代码"></a>3. 关键代码</h1><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 合并两个有序列表</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span> list1 有序链表1, 顺序: 由小到大</span>
+<span class="comment"> * <span class="doctag">@param</span> list2 有序链表2, 顺序: 由小到大</span>
+<span class="comment"> * <span class="doctag">@return</span> ListNode 合并后的有序链表</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> ListNode <span class="title function_">merge</span><span class="params">(ListNode list1, ListNode list2)</span> &#123;
+    <span class="comment">// 极值判断</span>
+    <span class="keyword">if</span> (list1 == <span class="literal">null</span> || list2 == <span class="literal">null</span>) &#123;
+        <span class="keyword">return</span> list1 == <span class="literal">null</span> ? list2 : list1;
+    &#125;
 
-    <span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">static</span> <span class="type">long</span> <span class="title function_">Native2</span><span class="params">()</span>;
+    <span class="type">ListNode</span> <span class="variable">cur1</span> <span class="operator">=</span> list1; <span class="comment">// list1中当前正在比较的头节点</span>
+    <span class="type">ListNode</span> <span class="variable">cur2</span> <span class="operator">=</span> list2; <span class="comment">// list2中当前正在比较的头节点</span>
+    <span class="type">ListNode</span> <span class="variable">head</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 已完成合并操作的链表(默认头节点是两个有序链表头节点中较小的一个)</span>
+    <span class="keyword">if</span> (cur1.val &lt;= cur2.val) &#123;
+        head = cur1;
+        cur1 = cur1.next; <span class="comment">// 更新cur1的头节点</span>
+    &#125; <span class="keyword">else</span> &#123;
+        head = cur2;
+        cur2 = cur2.next; <span class="comment">// 更新cur2的头节点</span>
+    &#125;
 
-    <span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">synchronized</span> <span class="type">float</span> <span class="title function_">Native3</span><span class="params">(Object o)</span>;
+    <span class="type">ListNode</span> <span class="variable">pre</span> <span class="operator">=</span> head; <span class="comment">// 临时节点,开始指向head, 后面通过pre不断调整head节点的next属性的引用</span>
 
-    <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">Native4</span><span class="params">(<span class="type">int</span>[] ary)</span> <span class="keyword">throws</span> Exception;
+    <span class="keyword">while</span> (cur1 != <span class="literal">null</span> &amp;&amp; cur2 != <span class="literal">null</span>) &#123; <span class="comment">// 仅当两个队列当前操作的节点都不为空时,才需要进行比较与合并操作</span>
+        <span class="keyword">if</span> (cur1.val &lt;= cur2.val) &#123;
+            pre.next = cur1; <span class="comment">// 当cur1的值小于cur2时,next指向cur1</span>
+            cur1 = cur1.next; <span class="comment">// cur1节点后移,继续后面节点的比较</span>
+        &#125; <span class="keyword">else</span> &#123;
+            pre.next = cur2; <span class="comment">// 当cur2的值小于cur1时,将cur2作为待合并的节点</span>
+            cur2 = cur2.next; <span class="comment">// cur2节点后移,继续后面节点的比较</span>
+        &#125;
 
+        <span class="comment">// 这一行同时也不断调整了head节点的next属性,扩充了head链表</span>
+        pre = pre.next; <span class="comment">// 链表指针后移</span>
+    &#125;
+
+    <span class="comment">// 当其中一个链表(假设是cur1)的最后一个节点完成了合并操作,而另一个链表(假设是cur2)还有剩余节点未合并,</span>
+    <span class="comment">// 此时就需要将最后完成合并的节点(pre节点)的next指向还有节点未合并的链表(不为空的链表).</span>
+    <span class="comment">// 这一步是必须存在的,因为两个有序链表合并,必然会存在其中一个节点先完成合并.</span>
+    pre.next = cur1 != <span class="literal">null</span> ? cur1 : cur2;
+
+    <span class="comment">// 返回合并后,完整的有序链表</span>
+    <span class="keyword">return</span> head;
 &#125;</code></pre>
 
-
-
-<h1 id="二、为什么要使用-Native-Method"><a href="#二、为什么要使用-Native-Method" class="headerlink" title="二、为什么要使用 Native Method"></a>二、为什么要使用 Native Method</h1><p>Java使用起来非常方便，当某些任务使用Java实现比较困难，或者对性能有更高的要求是，使用Native Method 会更合适。</p>
-<h2 id="1-与Java环境外交互"><a href="#1-与Java环境外交互" class="headerlink" title="1. 与Java环境外交互"></a>1. 与Java环境外交互</h2><p><strong>有时Java应用需要与Java外面的硬件环境交互，这是本地方法存在的主要原因</strong>。你可以想想Java需要与一些<strong>底层系统</strong>，如操作系统或某些硬件交换信息时的情况。本地方法正是这样一种交流机制：它为我们提供了一个非常简洁的接口，而且我们无需去了解Java应用之外的繁琐的细节。</p>
-<h2 id="2-与操作系统的交互"><a href="#2-与操作系统的交互" class="headerlink" title="2. 与操作系统的交互"></a>2. 与操作系统的交互</h2><p>JVM 支持着 Java 语言本身和运行时库，它是 Java 程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。然而不管怎样，它毕竟不是一个完整的系统，它经常依赖于一些底层系统的支持。这些底层系统常常是强大的操作系统。<strong>通过使用本地方法，我们得以用 Java 实现了 jre 与底层系统的交互，甚至 JVM 的一些部分就是用 C 写的。</strong>还有，如果我们要使用一些 Java 语言本身没有提供封装的操作系统的特性时，我们也需要使用本地方法。</p>
-<h2 id="3-Sun’s-Java"><a href="#3-Sun’s-Java" class="headerlink" title="3. Sun’s Java"></a>3. Sun’s Java</h2><p>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互。jre大部分是用Java实现的，它也通过一些本地方法与外界交互。</p>
-<p>例如：类java.lang.Thread的setPriority()方法是用Java实现的，但是它实现调用的是该类里的本地方法setPriority0()。这个本地方法是用C实现的，并被植入JVM内部在Windows 95的平台上，这个本地方法最终将调用Win32 setpriority() API。这是一个本地方法的具体实现由JVM直接提供，更多的情况是本地方法由外部的动态链接库（external dynamic link library）提供，然后被JVM调用。</p>
-<h2 id="4-本地方法的现状"><a href="#4-本地方法的现状" class="headerlink" title="4. 本地方法的现状"></a>4. 本地方法的现状</h2><p>目前该方法使用的越来越少了，除非是与硬件有关的应用，比如通过Java程序驱动打印机或者Java系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间的通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
-<h1 id="三、本地方法栈"><a href="#三、本地方法栈" class="headerlink" title="三、本地方法栈"></a>三、本地方法栈</h1><ul>
-<li><strong>Java虚拟机栈于管理Java方法的调用，而本地方法栈用于管理本地方法的调用</strong>。</li>
-<li>本地方法栈，也是线程私有的。</li>
-<li>允许被实现成固定或者是可动态扩展的内存大小（在内存溢出方面和虚拟机栈相同）<ul>
-<li>如果线程请求分配的栈容量超过本地方法栈允许的最大容量，Java虚拟机将会抛出一个stackoverflowError 异常。</li>
-<li>如果本地方法栈可以动态扩展，并且在尝试扩展的时候无法申请到足够的内存，或者在创建新的线程时没有足够的内存去创建对应的本地方法栈，那么Java虚拟机将会抛出一个outofMemoryError异常。</li>
-</ul>
+<p>完整测试代码:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/mergeTwoList/MergeTwoList.java">https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/mergeTwoList/MergeTwoList.java</a></p>
+<h1 id="4-复杂度分析"><a href="#4-复杂度分析" class="headerlink" title="4. 复杂度分析"></a>4. 复杂度分析</h1><ul>
+<li><p>时间复杂度：O(n+m)，其中 n 和 m 分别为两个链表的长度。因为每次循环迭代中，l1 和 l2 只有一个元素会被放进合并链表中， 因此 while 循环的次数不会超过两个链表的长度之和。所有其他操作的时间复杂度都是常数级别的，因此总的时间复杂度为 O(n+m)。</p>
 </li>
-<li>本地方法一般是使用C语言或C++语言实现的。</li>
-<li>具体做法是Native Method Stack中登记native方法，在Execution Engine 执行时加载本地方法库。</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/30/20231130-201221.png" alt="image-20231130201219877"></p>
-<h1 id="四、JVM怎样使Native-Method跑起来"><a href="#四、JVM怎样使Native-Method跑起来" class="headerlink" title="四、JVM怎样使Native Method跑起来"></a>四、JVM怎样使Native Method跑起来</h1><p> 我们知道，当一个类第一次被使用到时，这个类的字节码会被加载到内存，并且只会回载一次。在这个被加载的字节码的入口维持着一个该类所有方法描述符的 list，这些方法描述符包含这样一些信息：方法代码存于何处，它有哪些参数，方法的描述符（public之类）等等。</p>
-<p> 如果一个方法描述符内有 native，这个描述符块将有一个指向该方法的实现的指针。这些实现在一些DLL文件内，但是它们会被操作系统加载到java程序的地址空间。当一个带有本地方法的类被加载时，其相关的DLL并未被加载，因此指向方法实现的指针并不会被设置。当本地方法被调用之前，这些DLL才会被加载，这是通过调用<code>java.system.loadLibrary()</code> 实现的。</p>
-<h1 id="五、注意事项"><a href="#五、注意事项" class="headerlink" title="五、注意事项"></a>五、注意事项</h1><ul>
-<li>当某个线程调用一个本地方法时，它就进入了一个全新的并且不再受虚拟机限制的世界。它和虚拟机拥有同样的权限。<ul>
-<li>本地方法可以通过本地方法接口来访问虚拟机内部的运行时数据区</li>
-<li>它甚至可以直接使用本地处理器中的寄存器</li>
-<li>直接从本地内存的堆中分配任意数量的内存</li>
-</ul>
+<li><p>空间复杂度：O(1)。我们只需要常数的空间存放若干变量。</p>
 </li>
-<li>并不是所有的JVM都支持本地方法。因为Java虚拟机规范并没有明确要求本地方法栈的使用语言、具体实现方式、数据结构等。如果JVM产品不打算支持native方法，也可以无需实现本地方法栈。</li>
-<li>在Hotspot JVM中，直接将本地方法栈和虚拟机栈合二为一。</li>
 </ul>
 
       
