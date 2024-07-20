@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>George&#39;s Blog</title>
+  <title>第十五章-GC日志分析 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content="">
-  <meta name="description" content="George&#39;s Blog">
+  <meta name="keywords" content=" jvm , java ">
+  <meta name="description" content="第十五章-GC日志分析 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#114;&#103;&#101;&#95;&#x39;&#53;&#x40;&#x31;&#50;&#x36;&#46;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -60,7 +60,7 @@
 
 
 <body>
-<aside class="nav mobile">
+<aside class="nav">
     <div class="nav-left">
         <a href="/"
    class="avatar_target">
@@ -636,12 +636,73 @@
         </div>
     </div>
 </aside>
-<div id="post" class="index">
+<div id="post">
     <div class="pjax">
-        <article class="index">
-            <div class="toc-ref">
+        <article id="post-jvm/第十五章-GC日志分析" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#George%E2%80%99s-Blog"><span class="toc-text">George’s Blog</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E4%BA%8EGeorge"><span class="toc-text">关于George</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%9A%E5%AE%A2%E5%B9%B3%E5%8F%B0"><span class="toc-text">博客平台</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86"><span class="toc-text">使用代理</span></a></li></ol></li></ol>
+        <h1 class="article-title">第十五章-GC日志分析</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="JVM">JVM</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">jvm</a>
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-07-15 19:53:27'>2024-07-13 08:34</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:1.8k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81GC%E6%97%A5%E5%BF%97%E5%8F%82%E6%95%B0"><span class="toc-text">一、GC日志参数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%9E%E4%BE%8B1"><span class="toc-text">1. 实例1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%9E%E4%BE%8B2"><span class="toc-text">2. 实例2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%9E%E4%BE%8B3"><span class="toc-text">3. 实例3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%97%A5%E5%87%BA%E8%BE%93%E5%87%BAlog"><span class="toc-text">4. 日出输出log</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%97%A5%E5%BF%97%E8%A1%A5%E5%85%85%E8%AF%B4%E6%98%8E"><span class="toc-text">5. 日志补充说明</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Minor-GC%E6%97%A5%E5%BF%97"><span class="toc-text">二、Minor GC日志</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Full-GC%E6%97%A5%E5%BF%97"><span class="toc-text">三、Full GC日志</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%B8%BE%E4%BE%8B"><span class="toc-text">四、举例</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -654,18 +715,201 @@
     }
 </style>
 </div>
-            <h1 id="George’s-Blog"><a href="#George’s-Blog" class="headerlink" title="George’s Blog"></a>George’s Blog</h1><p>没什么好说的，写博客只是为了技术积累和分享。</p>
-<h2 id="关于George"><a href="#关于George" class="headerlink" title="关于George"></a>关于George</h2><p>本人在安徽合肥，从事后端开发。</p>
-<p>到目前为止已经写了<code class="article_number"></code>篇文章， 共<code class="site_word_count"></code>字。</p>
-<p>本站访问人数：<code class="site_uv"></code>人次 ， 访问量：<code class="site_pv"></code>次</p>
-<h2 id="博客平台"><a href="#博客平台" class="headerlink" title="博客平台"></a>博客平台</h2><p>这个博客通过 <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a> 生成，部署在 <a target="_blank" rel="noopener" href="https://pages.github.com/">GitHub Pages</a>，使用的主题是 <a target="_blank" rel="noopener" href="https://github.com/yelog/hexo-theme-3-hexo">3-hexo</a> </p>
-<h2 id="使用代理"><a href="#使用代理" class="headerlink" title="使用代理"></a>使用代理</h2><p>博客内容及图片上传使用的图床均使用了Github，国内访问速度较慢，尤其是图片容易出现加载不出来的情况，推荐使用代理访问。</p>
-<p>个人使用的代理：<a target="_blank" rel="noopener" href="https://av1.wtf/auth/register?code=tGfK">注册地址</a> ，邀请码：<code>tGfK</code></p>
-<p>特点：节点多，流量大，速度稳定，我从2018年注册一直用到现在。</p>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、GC日志参数"><a href="#一、GC日志参数" class="headerlink" title="一、GC日志参数"></a>一、GC日志参数</h1><p>通过阅读Gc日志，我们可以了解Java虚拟机内存分配与回收策略。 内存分配与垃圾回收的参数列表.</p>
+<ul>
+<li><p><code>-XX:+PrintGC</code> 输出GC日志。类似：<code>-verbose:gc</code></p>
+</li>
+<li><p><code>-XX:+PrintGCDetails</code> 输出GC的详细日志</p>
+</li>
+<li><p><code>-XX:+PrintGCTimestamps</code> 输出GC的时间戳（以基准时间的形式）</p>
+</li>
+<li><p><code>-XX:+PrintGCDatestamps</code> 输出GC的时间戳（以日期的形式，如2013-05-04T21：53：59.234+0800）</p>
+</li>
+<li><p><code>-XX:+PrintHeapAtGC</code> 在进行GC的前后打印出堆的信息</p>
+</li>
+<li><p><code>-Xloggc:../logs/gc.log</code> 日志文件的输出路径</p>
+</li>
+</ul>
+<h2 id="1-实例1"><a href="#1-实例1" class="headerlink" title="1. 实例1"></a>1. 实例1</h2><p>打开GC日志</p>
+<pre><code class="highlight shell">-verbose:gc</code></pre>
 
-        </article>
-        
-        
+
+
+<p>这个只会显示总的GC堆的变化，如下：</p>
+<pre><code class="highlight shell">[GC (Allocation Failure) 80832K-&gt;19298K(227840K),0.0084018 secs]
+[GC (Metadata GC Threshold) 109499K-&gt;21465K(228352K),0.0184066 secs]
+[Full GC (Metadata GC Threshold) 21465K-&gt;16716K(201728K),0.0619261 secs]</code></pre>
+
+
+
+<p>参数解析</p>
+<pre><code class="highlight shell">GC、Full GC：GC的类型，GC只在新生代上进行，Full GC包括永生代，新生代，老年代。
+Allocation Failure：GC发生的原因。
+<span class="meta prompt_">80832K-&gt;</span><span class="language-bash">19298K：堆在GC前的大小和GC后的大小。</span>
+227840k：现在的堆大小。
+0.0084018 secs：GC持续的时间。</code></pre>
+
+
+
+<h2 id="2-实例2"><a href="#2-实例2" class="headerlink" title="2. 实例2"></a>2. 实例2</h2><p>查看GC日志详细</p>
+<pre><code class="highlight shell">-verbose:gc -XX:+PrintGCDetails</code></pre>
+
+
+
+<p>输出信息如下</p>
+<pre><code class="highlight shell">[GC (Allocation Failure) [PSYoungGen:70640K-&gt;10116K(141312K)] 80541K-&gt;20017K(227328K),0.0172573 secs] [Times:user=0.03 sys=0.00,real=0.02 secs]
+[GC (Metadata GC Threshold) [PSYoungGen:98859K-&gt;8154K(142336K)] 108760K-&gt;21261K(228352K),0.0151573 secs] [Times:user=0.00 sys=0.01,real=0.02 secs]
+[Full GC (Metadata GC Threshold)[PSYoungGen:8154K-&gt;0K(142336K)]
+[ParOldGen:13107K-&gt;16809K(62464K)] 21261K-&gt;16809K(204800K),[Metaspace:20599K-&gt;20599K(1067008K)],0.0639732 secs]
+[Times:user=0.14 sys=0.00,real=0.06 secs]</code></pre>
+
+
+
+<p>参数解析</p>
+<pre><code class="highlight java">GC，Full FC：同样是GC的类型
+Allocation Failure：GC原因
+PSYoungGen：使用了Parallel Scavenge并行垃圾收集器的新生代GC前后大小的变化
+ParOldGen：使用了Parallel Old并行垃圾收集器的老年代GC前后大小的变化
+Metadata：元数据区GC前后大小的变化，JDK1<span class="number">.8</span>中引入了元数据区以替代永久代
+xxx secs：指GC花费的时间
+Times：user：指的是垃圾收集器花费的所有CPU时间，sys：花费在等待系统调用或系统事件的时间，real：GC从开始到结束的时间，包括其他进程占用时间片的实际时间。</code></pre>
+
+
+
+<h2 id="3-实例3"><a href="#3-实例3" class="headerlink" title="3. 实例3"></a>3. 实例3</h2><p>打开GC日志</p>
+<pre><code class="highlight shell">-verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimestamps -XX:+PrintGCDatestamps</code></pre>
+
+
+
+<p>输出信息如下</p>
+<pre><code class="highlight shell">2019-09-24T22:15:24.518+0800: 3.287: [GC (Allocation Failure) [PSYoungGen:136162K-&gt;5113K(136192K)] 141425K-&gt;17632K(222208K),0.0248249 secs] [Times:user=0.05 sys=0.00,real=0.03 secs]
+
+2019-09-24T22:15:25.559+0800: 4.329: [GC (Metadata GC Threshold) [PSYoungGen:97578K-&gt;10068K(274944K)] 110096K-&gt;22658K(360960K),0.0094071 secs] [Times: user=0.00 sys=0.00,real=0.01 secs]
+
+2019-09-24T22:15:25.569+0800: 4.338: [Full GC (Metadata GC Threshold) [PSYoungGen:10068K-&gt;0K(274944K)][ParoldGen:12590K-&gt;13564K(56320K)] 22658K-&gt;13564K(331264K),[Metaspace:20590K-&gt;20590K(1067008K)],0.0494875 secs] [Times: user=0.17 sys=0.02,real=0.05 secs]</code></pre>
+
+<p>说明：带上了日期和时间</p>
+<h2 id="4-日出输出log"><a href="#4-日出输出log" class="headerlink" title="4. 日出输出log"></a>4. 日出输出log</h2><p>如果想把GC日志存到文件的话，是下面的参数：</p>
+<pre><code class="highlight shell">-Xloggc:/path/to/gc.log</code></pre>
+
+
+
+
+
+<h2 id="5-日志补充说明"><a href="#5-日志补充说明" class="headerlink" title="5. 日志补充说明"></a>5. 日志补充说明</h2><ul>
+<li><p>“<code>[GC</code>“和”<code>[Full GC</code>“说明了这次垃圾收集的停顿类型，如果有”Full”则说明GC发生了”Stop The World” </p>
+</li>
+<li><p>使用Serial收集器在新生代的名字是Default New Generation，因此显示的是”<code>[DefNew</code>“ </p>
+</li>
+<li><p>使用ParNew收集器在新生代的名字会变成”<code>[ParNew</code>“，意思是”Parallel New Generation” </p>
+</li>
+<li><p>使用Parallel scavenge收集器在新生代的名字是”<code>[PSYoungGen</code>“ </p>
+</li>
+<li><p>老年代的收集和新生代道理一样，名字也是收集器决定的 </p>
+</li>
+<li><p>使用G1收集器的话，会显示为”garbage-first heap” </p>
+</li>
+<li><p>Allocation Failure<br>  表明本次引起GC的原因是因为在年轻代中没有足够的空间能够存储新的数据了。 </p>
+</li>
+<li><p>[PSYoungGen：5986K-&gt;696K(8704K) ] 5986K-&gt;704K(9216K)<br>  中括号内：GC回收前年轻代大小，回收后大小，（年轻代总大小）<br>  括号外：GC回收前年轻代和老年代大小，回收后大小，（年轻代和老年代总大小） </p>
+</li>
+<li><p>user代表用户态回收耗时，sys内核态回收耗时，real实际耗时。由于多核的原因，时间总和可能会超过real时间</p>
+</li>
+</ul>
+<pre><code class="highlight java">Heap（堆）
+PSYoungGen（Parallel Scavenge收集器新生代）total 9216K，used 6234K [<span class="number">0x00000000ff600000</span>,<span class="number">0x0000000100000000</span>,<span class="number">0x0000000100000000</span>)
+eden space（堆中的Eden区默认占比是<span class="number">8</span>）8192K，<span class="number">768</span> used [<span class="number">0x00000000ff600000</span>,<span class="number">0x00000000ffc16b08</span>,<span class="number">0x00000000ffe00000</span>)
+from space（堆中的Survivor，这里是From Survivor区默认占比是<span class="number">1</span>）1024K， <span class="number">0</span>% used [<span class="number">0x00000000fff00000</span>,<span class="number">0x00000000fff00000</span>,<span class="number">0x0000000100000000</span>)
+to space（堆中的Survivor，这里是to Survivor区默认占比是<span class="number">1</span>，需要先了解一下堆的分配策略）1024K, <span class="number">0</span>% used [<span class="number">0x00000000ffe00000</span>,<span class="number">0x00000000ffe00000</span>,<span class="number">0x00000000fff00000</span>)
+                                                                         
+ParOldGen（老年代总大小和使用大小）total 10240K， used 7001K ［<span class="number">0x00000000fec00000</span>,<span class="number">0x00000000ff600000</span>,<span class="number">0x00000000ff600000</span>)
+object space（显示个使用百分比）10240K，<span class="number">688</span> used [<span class="number">0x00000000fec00000</span>,<span class="number">0x00000000ff2d6630</span>,<span class="number">0x00000000ff600000</span>)
+
+PSPermGen（永久代总大小和使用大小）total 21504K， used 4949K [<span class="number">0x00000000f9a00000</span>,<span class="number">0x00000000faf00000</span>,<span class="number">0x00000000fec00000</span>)
+object space（显示个使用百分比，自己能算出来）21504K， <span class="number">238</span> used [<span class="number">0x00000000f9a00000</span>,<span class="number">0x00000000f9ed55e0</span>,<span class="number">0x00000000faf00000</span>)</code></pre>
+
+
+
+
+
+<h1 id="二、Minor-GC日志"><a href="#二、Minor-GC日志" class="headerlink" title="二、Minor GC日志"></a>二、Minor GC日志</h1><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/13/20240713-172009.png" alt="Minor GC"></p>
+<h1 id="三、Full-GC日志"><a href="#三、Full-GC日志" class="headerlink" title="三、Full GC日志"></a>三、Full GC日志</h1><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/13/20240713-192253.png" alt="Full GC日志"></p>
+<h1 id="四、举例"><a href="#四、举例" class="headerlink" title="四、举例"></a>四、举例</h1><p>**代码如下: **</p>
+<pre><code class="highlight shell">private static final int _1MB = 1024 * 1024;
+
+public static void testAllocation() &#123;
+    byte [] allocation1, allocation2, allocation3, allocation4;
+    allocation1 = new byte[2 *_1MB];
+    allocation2 = new byte[2 *_1MB];
+    allocation3 = new byte[2 *_1MB];
+    allocation4 = new byte[4 *_1MB];
+&#125;
+
+public static void main(String[] args) &#123;
+    testAllocation();
+&#125;</code></pre>
+
+<p><strong>设置JVM参数(使用SerialGC)</strong></p>
+<p><strong>JDK8环境</strong></p>
+<pre><code class="highlight shell">-verbose:gc -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8 -XX:+UseSerialGC</code></pre>
+
+
+
+<p>打印GC日志如下:</p>
+<pre><code class="highlight shell">[GC (Allocation Failure) [DefNew: 7953K-&gt;624K(9216K), 0.0043498 secs] 7953K-&gt;6768K(19456K), 0.0043857 secs] [Times: user=0.00 sys=0.00, real=0.00 secs] 
+Heap
+ def new generation   total 9216K, used 4802K [0x00000000fec00000, 0x00000000ff600000, 0x00000000ff600000)
+  eden space 8192K,  51% used [0x00000000fec00000, 0x00000000ff014930, 0x00000000ff400000)
+  from space 1024K,  60% used [0x00000000ff500000, 0x00000000ff59c198, 0x00000000ff600000)
+  to   space 1024K,   0% used [0x00000000ff400000, 0x00000000ff400000, 0x00000000ff500000)
+ tenured generation   total 10240K, used 6144K [0x00000000ff600000, 0x0000000100000000, 0x0000000100000000)
+   the space 10240K,  60% used [0x00000000ff600000, 0x00000000ffc00030, 0x00000000ffc00200, 0x0000000100000000)
+ Metaspace       used 3222K, capacity 4496K, committed 4864K, reserved 1056768K
+  class space    used 348K, capacity 388K, committed 512K, reserved 1048576K</code></pre>
+
+
+
+<p><strong>解析:</strong></p>
+<p>使用Serial GC, 当需要分配4MB的对象 allocation4 时, 此时年轻代的内存不足了, 这时先将年轻代的数据移动到老年代,然后再将 allocation4 对象放到年轻代. 从日志可以看出来, eden 内存使用了约51%, eden又占整个年轻代的80%(8MB), 老年代GC后使用了 6144K (约6MB) . 从日志中这里也能看出来, Serial GC 的内存分配逻辑.</p>
+<p><strong>图示</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/13/20240713-192925.png" alt="d95ef629-b9fa-43d7-86d2-d1cc26ca9c61"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/13/20240713-192946.png" alt="bd35738f-276b-4a8c-8d28-cb24aaa99503"></p>
+<p><strong>重新设置JVM参数:</strong></p>
+<p><strong>JDK8环境, 使用默认的Parallel GC</strong></p>
+<pre><code class="highlight shell">-verbose:gc -Xms20M -Xmx20M -Xmn10M -XX:+PrintGCDetails -XX:SurvivorRatio=8</code></pre>
+
+
+
+<p>打印日志如下:</p>
+<pre><code class="highlight shell">Heap
+ PSYoungGen      total 9216K, used 8118K [0x00000000ff600000, 0x0000000100000000, 0x0000000100000000)
+  eden space 8192K, 99% used [0x00000000ff600000,0x00000000ffded800,0x00000000ffe00000)
+  from space 1024K, 0% used [0x00000000fff00000,0x00000000fff00000,0x0000000100000000)
+  to   space 1024K, 0% used [0x00000000ffe00000,0x00000000ffe00000,0x00000000fff00000)
+ ParOldGen       total 10240K, used 4096K [0x00000000fec00000, 0x00000000ff600000, 0x00000000ff600000)
+  object space 10240K, 40% used [0x00000000fec00000,0x00000000ff000010,0x00000000ff600000)
+ Metaspace       used 3221K, capacity 4496K, committed 4864K, reserved 1056768K
+  class space    used 348K, capacity 388K, committed 512K, reserved 1048576K</code></pre>
+
+
+
+<p><strong>解析:</strong></p>
+<p>当不指定垃圾收集器时,默认使用的是 Parallel GC. 当需要给 allocation4 分配内存空间时, 此时年轻代的空间已经不够了, 年轻代发生了一次 Minor GC, 由于 allocation1, allocation2, allocation3 没有被释放掉, 年龄也不到默认的阈值 15, 所以只能往 Survivor 区移动,但是 Survivor 区的空间又不够,只能回退到 Eden区. 这样就导致了 allocation4 对象被直接分配到了老年代. 所以老年代使用了 40% 的空间(老年代共10MB). </p>
+<p>至于为什么年轻代使用了99%, 这是由于在分配<code>allocation4</code>时，JVM触发了Minor GC，但并未完全清理Eden区，导致一些对象仍然保留在Eden区。</p>
+<p>这也是 Parallel GC 与 Serial GC 的不同之处.</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
     <div id="comments"></div>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
 
@@ -687,6 +931,13 @@
 </script>
 
 
+
+
+    
+
+
+
+
     </div>
     <div class="copyright">
         <p class="footer-entry">
@@ -695,11 +946,11 @@
 <p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
 
     </div>
-</div>
-<div class="full-toc">
-    <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
 <a class="" id="rocket" ></a>
 
+    </div>
 </div>
 
 </body>
