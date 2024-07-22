@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>合并两个有序链表 | George&#39;s Blog</title>
+  <title>第十七章-使用javap指令解析class文件 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 算法 , 合并有序链表 ">
-  <meta name="description" content="合并两个有序链表 | George&#39;s Blog">
+  <meta name="keywords" content=" jvm , java ">
+  <meta name="description" content="第十七章-使用javap指令解析class文件 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#114;&#103;&#101;&#x5f;&#57;&#53;&#x40;&#49;&#50;&#54;&#x2e;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -647,9 +647,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-algorithm/合并两个有序链表" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-jvm/第十七章-使用javap指令解析class文件" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">合并两个有序链表</h1>
+        <h1 class="article-title">第十七章-使用javap指令解析class文件</h1>
     
     <div class="article-meta">
         
@@ -659,7 +659,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="算法">算法</a>
+            <a  data-rel="JVM">JVM</a>
             
         </span>
         
@@ -667,21 +667,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color3">算法</a>
+            <a class="color4">jvm</a>
             
-            <a class="color2">合并有序链表</a>
+            <a class="color5">java</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-07-06 14:05:05'>2024-07-06 09:11</time>
+            发布时间 : <time class="date" title='最后更新: 2024-07-22 10:14:17'>2024-07-22 23:54</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:833</span>
+        <span>字数:2.2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -711,7 +711,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-text">1. 题目描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="toc-text">2. 解决思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81"><span class="toc-text">3. 关键代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="toc-text">4. 复杂度分析</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%A7%A3%E6%9E%90%E5%AD%97%E8%8A%82%E7%A0%81%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">一、解析字节码的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81javac-g-%E6%93%8D%E4%BD%9C"><span class="toc-text">二、javac -g 操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81javap-%E7%9A%84%E7%94%A8%E6%B3%95"><span class="toc-text">三、javap 的用法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BD%BF%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="toc-text">四、使用举例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%A3%E7%A0%81"><span class="toc-text">1. 代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">2. 字节码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%BD%BF%E7%94%A8-javap-%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90class%E6%96%87%E4%BB%B6"><span class="toc-text">2.1 使用 javap 命令解析class文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-text">2.2 版本信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">2.3 常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%AD%97%E6%AE%B5%E8%A1%A8%E9%9B%86%E5%90%88%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">2.4 字段表集合的信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E6%96%B9%E6%B3%95%E8%A1%A8%E9%9B%86%E5%90%88%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">2.5 方法表集合的信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-jclasslib%E5%B1%95%E7%A4%BA%E7%9A%84%E5%86%85%E5%AE%B9%EF%BC%9A"><span class="toc-text">2.6 jclasslib展示的内容：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">五、总结</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -727,77 +727,334 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1. 题目描述"></a>1. 题目描述</h1><p>将两个升序链表合并为一个新的 <strong>升序</strong> 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 </p>
-<p><strong>示例 1：</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/06/20240706-125245.jpg" alt="img"></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [1,2,4], l2 &#x3D; [1,3,4]<br><strong>输出：</strong>[1,1,2,3,4,4]</p>
-</blockquote>
-<p><strong>示例 2：</strong></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [], l2 &#x3D; []<br><strong>输出：</strong>[]</p>
-</blockquote>
-<p><strong>示例 3：</strong></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [], l2 &#x3D; [0]<br><strong>输出：</strong>[0]</p>
-</blockquote>
-<h1 id="2-解决思路"><a href="#2-解决思路" class="headerlink" title="2. 解决思路"></a>2. 解决思路</h1><p>可以使用迭代方法来实现有序链表的合并.</p>
-<p>假设有两个有序链表 list1和list2, 当这两个链表都不是空链表时,选择头节点中较小的一个作为合并链表的头节点,.</p>
-<p>移动有序链表的指针,比较list1和list2最新的头节点, 添加到合并链表中.</p>
-<h1 id="3-关键代码"><a href="#3-关键代码" class="headerlink" title="3. 关键代码"></a>3. 关键代码</h1><pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 合并两个有序列表</span>
-<span class="comment"> *</span>
-<span class="comment"> * <span class="doctag">@param</span> list1 有序链表1, 顺序: 由小到大</span>
-<span class="comment"> * <span class="doctag">@param</span> list2 有序链表2, 顺序: 由小到大</span>
-<span class="comment"> * <span class="doctag">@return</span> ListNode 合并后的有序链表</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> ListNode <span class="title function_">merge</span><span class="params">(ListNode list1, ListNode list2)</span> &#123;
-    <span class="comment">// 极值判断</span>
-    <span class="keyword">if</span> (list1 == <span class="literal">null</span> || list2 == <span class="literal">null</span>) &#123;
-        <span class="keyword">return</span> list1 == <span class="literal">null</span> ? list2 : list1;
+        <h1 id="一、解析字节码的作用"><a href="#一、解析字节码的作用" class="headerlink" title="一、解析字节码的作用"></a>一、解析字节码的作用</h1><p>通过反编译生成的字节码文件，我们可以深入的了解java代码的工作机制。但是，自己分析类文件结构太麻烦了! 除了使用第三方的jclasslib工具之外，oracle官方也提供了工具: <code>javap</code> 。<br>javap 是jdk自带的反解析工具。它的作用就是根据class字节码文件，反解析出当前类对应的code区(字节码指令)局部变量表、异常表和代码行偏移量映射表、常量池等信息。<br>通过局部变量表，我们可以查看局部变量的作用域范围、所在槽位等信息，甚至可以看到槽位复用等信息。</p>
+<h1 id="二、javac-g-操作"><a href="#二、javac-g-操作" class="headerlink" title="二、javac -g 操作"></a>二、javac -g 操作</h1><p>解析字节码文件得到的信息中，有些信息(如局部变量表、指令和代码行偏移量映射表、常量池中方法的参数名称等等)需要在使用javac编译成class文件时，指定参数才能输出。<br>比如，你直接javac xx.java，就不会在生成对应的局部变量表等信息，如果你使用javac -g xx.java就可以生成所有相关信息了。如果你使用的eclipse或 IDEA，则默认情况下，eclipse、IDEA在编译时会帮你生成局部变量表、指令和代码行偏移量映射表等信息的。</p>
+<h1 id="三、javap-的用法"><a href="#三、javap-的用法" class="headerlink" title="三、javap 的用法"></a>三、javap 的用法</h1><p>javap的用法格式:</p>
+<ul>
+<li><p>javap <options> <classes></p>
+<ul>
+<li><p>其中，classes就是你要反编译的class文件。</p>
+</li>
+<li><p>在命令行中直接输入javap或javap -help可以看到javap的options有如下选项:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/22/20240722-094028.png" alt="javap"></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>一般常用的是 -v -l -c三个选项。</p>
+<ul>
+<li>javap -l 会输出行号和本地变量表信息。</li>
+<li>javap -c 会对当前class字节码进行反编译生成汇编代码。</li>
+<li>javap -v classxx 除了包含-c内容外，还会输出行号、局部变量表信息、常量池等信息。</li>
+</ul>
+<p><strong>注意：</strong></p>
+<p>① -v 相当于 -c -l </p>
+<p>② -v 也不会输出私有的字段、方法等信息，所以如果想输出私有的信息，那需要在 -v 后面加上 -p 才行</p>
+<h1 id="四、使用举例"><a href="#四、使用举例" class="headerlink" title="四、使用举例"></a>四、使用举例</h1><h2 id="1-代码"><a href="#1-代码" class="headerlink" title="1. 代码"></a>1. 代码</h2><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JavapTest</span> &#123;
+    <span class="keyword">private</span> <span class="type">int</span> num;
+    <span class="type">boolean</span> flag;
+    <span class="keyword">protected</span> <span class="type">char</span> gender;
+    <span class="keyword">public</span> String info;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">COUNTS</span> <span class="operator">=</span> <span class="number">1</span>;
+    <span class="keyword">static</span>&#123;
+        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;www.atguigu.com&quot;</span>;
     &#125;
-
-    <span class="type">ListNode</span> <span class="variable">cur1</span> <span class="operator">=</span> list1; <span class="comment">// list1中当前正在比较的头节点</span>
-    <span class="type">ListNode</span> <span class="variable">cur2</span> <span class="operator">=</span> list2; <span class="comment">// list2中当前正在比较的头节点</span>
-    <span class="type">ListNode</span> <span class="variable">head</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 已完成合并操作的链表(默认头节点是两个有序链表头节点中较小的一个)</span>
-    <span class="keyword">if</span> (cur1.val &lt;= cur2.val) &#123;
-        head = cur1;
-        cur1 = cur1.next; <span class="comment">// 更新cur1的头节点</span>
-    &#125; <span class="keyword">else</span> &#123;
-        head = cur2;
-        cur2 = cur2.next; <span class="comment">// 更新cur2的头节点</span>
+    &#123;
+        info = <span class="string">&quot;java&quot;</span>;
     &#125;
+    <span class="keyword">public</span> <span class="title function_">JavapTest</span><span class="params">()</span>&#123;
 
-    <span class="type">ListNode</span> <span class="variable">pre</span> <span class="operator">=</span> head; <span class="comment">// 临时节点,开始指向head, 后面通过pre不断调整head节点的next属性的引用</span>
-
-    <span class="keyword">while</span> (cur1 != <span class="literal">null</span> &amp;&amp; cur2 != <span class="literal">null</span>) &#123; <span class="comment">// 仅当两个队列当前操作的节点都不为空时,才需要进行比较与合并操作</span>
-        <span class="keyword">if</span> (cur1.val &lt;= cur2.val) &#123;
-            pre.next = cur1; <span class="comment">// 当cur1的值小于cur2时,next指向cur1</span>
-            cur1 = cur1.next; <span class="comment">// cur1节点后移,继续后面节点的比较</span>
-        &#125; <span class="keyword">else</span> &#123;
-            pre.next = cur2; <span class="comment">// 当cur2的值小于cur1时,将cur2作为待合并的节点</span>
-            cur2 = cur2.next; <span class="comment">// cur2节点后移,继续后面节点的比较</span>
-        &#125;
-
-        <span class="comment">// 这一行同时也不断调整了head节点的next属性,扩充了head链表</span>
-        pre = pre.next; <span class="comment">// 链表指针后移</span>
     &#125;
+    <span class="keyword">private</span> <span class="title function_">JavapTest</span><span class="params">(<span class="type">boolean</span> flag)</span>&#123;
+        <span class="built_in">this</span>.flag = flag;
+    &#125;
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">methodPrivate</span><span class="params">()</span>&#123;
 
-    <span class="comment">// 当其中一个链表(假设是cur1)的最后一个节点完成了合并操作,而另一个链表(假设是cur2)还有剩余节点未合并,</span>
-    <span class="comment">// 此时就需要将最后完成合并的节点(pre节点)的next指向还有节点未合并的链表(不为空的链表).</span>
-    <span class="comment">// 这一步是必须存在的,因为两个有序链表合并,必然会存在其中一个节点先完成合并.</span>
-    pre.next = cur1 != <span class="literal">null</span> ? cur1 : cur2;
-
-    <span class="comment">// 返回合并后,完整的有序链表</span>
-    <span class="keyword">return</span> head;
+    &#125;
+    <span class="type">int</span> <span class="title function_">getNum</span><span class="params">(<span class="type">int</span> i)</span>&#123;
+        <span class="keyword">return</span> num + i;
+    &#125;
+    <span class="keyword">protected</span> <span class="type">char</span> <span class="title function_">showGender</span><span class="params">()</span>&#123;
+        <span class="keyword">return</span> gender;
+    &#125;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">showInfo</span><span class="params">()</span>&#123;
+        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;
+        System.out.println(info + i);
+    &#125;
 &#125;</code></pre>
 
-<p>完整测试代码:</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/mergeTwoList/MergeTwoList.java">https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/mergeTwoList/MergeTwoList.java</a></p>
-<h1 id="4-复杂度分析"><a href="#4-复杂度分析" class="headerlink" title="4. 复杂度分析"></a>4. 复杂度分析</h1><ul>
-<li><p>时间复杂度：O(n+m)，其中 n 和 m 分别为两个链表的长度。因为每次循环迭代中，l1 和 l2 只有一个元素会被放进合并链表中， 因此 while 循环的次数不会超过两个链表的长度之和。所有其他操作的时间复杂度都是常数级别的，因此总的时间复杂度为 O(n+m)。</p>
+
+
+<h2 id="2-字节码分析"><a href="#2-字节码分析" class="headerlink" title="2. 字节码分析"></a>2. 字节码分析</h2><h3 id="2-1-使用-javap-命令解析class文件"><a href="#2-1-使用-javap-命令解析class文件" class="headerlink" title="2.1 使用 javap 命令解析class文件"></a>2.1 使用 <code>javap</code> 命令解析class文件</h3><pre><code class="highlight shell">javap -v -p JavapTest</code></pre>
+
+
+
+<h3 id="2-2-版本信息"><a href="#2-2-版本信息" class="headerlink" title="2.2 版本信息"></a>2.2 版本信息</h3><pre><code class="highlight shell">警告: 二进制文件JavapTest包含com.atguigu.java1.JavapTest
+Classfile /E:/testWorkspace/jvm-demo-mid/out/production/chapter01/com/atguigu/java1/JavapTest.class   // 字节码文件所属的路径
+  Last modified 2024-7-22; size 1358 bytes  // 最后修改时间，字节码文件的大小
+  MD5 checksum 526b4a845e4d98180438e4c5781b7e88 // MD5散列值
+  Compiled from &quot;JavapTest.java&quot;   // 源文件的名称
+public class com.atguigu.java1.JavapTest
+  minor version: 0 // 副版本
+  major version: 52 // 主版本
+  flags: ACC_PUBLIC, ACC_SUPER // 访问标识</code></pre>
+
+
+
+<h3 id="2-3-常量池"><a href="#2-3-常量池" class="headerlink" title="2.3 常量池"></a>2.3 常量池</h3><pre><code class="highlight shell">Constant pool:
+<span class="meta prompt_">   #</span><span class="language-bash">1 = Methodref          <span class="comment">#16.#46        // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">2 = String             <span class="comment">#47            // java</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">3 = Fieldref           <span class="comment">#15.#48        // com/atguigu/java1/JavapTest.info:Ljava/lang/String;</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">4 = Fieldref           <span class="comment">#15.#49        // com/atguigu/java1/JavapTest.flag:Z</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">5 = Fieldref           <span class="comment">#15.#50        // com/atguigu/java1/JavapTest.num:I</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">6 = Fieldref           <span class="comment">#15.#51        // com/atguigu/java1/JavapTest.gender:C</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">7 = Fieldref           <span class="comment">#52.#53        // java/lang/System.out:Ljava/io/PrintStream;</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">8 = Class              <span class="comment">#54            // java/lang/StringBuilder</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">9 = Methodref          <span class="comment">#8.#46         // java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">10 = Methodref          <span class="comment">#8.#55         // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">11 = Methodref          <span class="comment">#8.#56         // java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">12 = Methodref          <span class="comment">#8.#57         // java/lang/StringBuilder.toString:()Ljava/lang/String;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">13 = Methodref          <span class="comment">#58.#59        // java/io/PrintStream.println:(Ljava/lang/String;)V</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">14 = String             <span class="comment">#60            // www.atguigu.com</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">15 = Class              <span class="comment">#61            // com/atguigu/java1/JavapTest</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">16 = Class              <span class="comment">#62            // java/lang/Object</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">17 = Utf8               num</span>
+<span class="meta prompt_">  #</span><span class="language-bash">18 = Utf8               I</span>
+<span class="meta prompt_">  #</span><span class="language-bash">19 = Utf8               flag</span>
+<span class="meta prompt_">  #</span><span class="language-bash">20 = Utf8               Z</span>
+<span class="meta prompt_">  #</span><span class="language-bash">21 = Utf8               gender</span>
+<span class="meta prompt_">  #</span><span class="language-bash">22 = Utf8               C</span>
+<span class="meta prompt_">  #</span><span class="language-bash">23 = Utf8               info</span>
+<span class="meta prompt_">  #</span><span class="language-bash">24 = Utf8               Ljava/lang/String;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">25 = Utf8               COUNTS</span>
+<span class="meta prompt_">  #</span><span class="language-bash">26 = Utf8               ConstantValue</span>
+<span class="meta prompt_">  #</span><span class="language-bash">27 = Integer            1</span>
+<span class="meta prompt_">  #</span><span class="language-bash">28 = Utf8               &lt;init&gt;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">29 = Utf8               ()V</span>
+<span class="meta prompt_">  #</span><span class="language-bash">30 = Utf8               Code</span>
+<span class="meta prompt_">  #</span><span class="language-bash">31 = Utf8               LineNumberTable</span>
+<span class="meta prompt_">  #</span><span class="language-bash">32 = Utf8               LocalVariableTable</span>
+<span class="meta prompt_">  #</span><span class="language-bash">33 = Utf8               this</span>
+<span class="meta prompt_">  #</span><span class="language-bash">34 = Utf8               Lcom/atguigu/java1/JavapTest;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">35 = Utf8               (Z)V</span>
+<span class="meta prompt_">  #</span><span class="language-bash">36 = Utf8               methodPrivate</span>
+<span class="meta prompt_">  #</span><span class="language-bash">37 = Utf8               getNum</span>
+<span class="meta prompt_">  #</span><span class="language-bash">38 = Utf8               (I)I</span>
+<span class="meta prompt_">  #</span><span class="language-bash">39 = Utf8               i</span>
+<span class="meta prompt_">  #</span><span class="language-bash">40 = Utf8               showGender</span>
+<span class="meta prompt_">  #</span><span class="language-bash">41 = Utf8               ()C</span>
+<span class="meta prompt_">  #</span><span class="language-bash">42 = Utf8               showInfo</span>
+<span class="meta prompt_">  #</span><span class="language-bash">43 = Utf8               &lt;clinit&gt;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">44 = Utf8               SourceFile</span>
+<span class="meta prompt_">  #</span><span class="language-bash">45 = Utf8               JavapTest.java</span>
+<span class="meta prompt_">  #</span><span class="language-bash">46 = NameAndType        <span class="comment">#28:#29        // &quot;&lt;init&gt;&quot;:()V</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">47 = Utf8               java</span>
+<span class="meta prompt_">  #</span><span class="language-bash">48 = NameAndType        <span class="comment">#23:#24        // info:Ljava/lang/String;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">49 = NameAndType        <span class="comment">#19:#20        // flag:Z</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">50 = NameAndType        <span class="comment">#17:#18        // num:I</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">51 = NameAndType        <span class="comment">#21:#22        // gender:C</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">52 = Class              <span class="comment">#63            // java/lang/System</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">53 = NameAndType        <span class="comment">#64:#65        // out:Ljava/io/PrintStream;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">54 = Utf8               java/lang/StringBuilder</span>
+<span class="meta prompt_">  #</span><span class="language-bash">55 = NameAndType        <span class="comment">#66:#67        // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">56 = NameAndType        <span class="comment">#66:#68        // append:(I)Ljava/lang/StringBuilder;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">57 = NameAndType        <span class="comment">#69:#70        // toString:()Ljava/lang/String;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">58 = Class              <span class="comment">#71            // java/io/PrintStream</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">59 = NameAndType        <span class="comment">#72:#73        // println:(Ljava/lang/String;)V</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">60 = Utf8               www.atguigu.com</span>
+<span class="meta prompt_">  #</span><span class="language-bash">61 = Utf8               com/atguigu/java1/JavapTest</span>
+<span class="meta prompt_">  #</span><span class="language-bash">62 = Utf8               java/lang/Object</span>
+<span class="meta prompt_">  #</span><span class="language-bash">63 = Utf8               java/lang/System</span>
+<span class="meta prompt_">  #</span><span class="language-bash">64 = Utf8               out</span>
+<span class="meta prompt_">  #</span><span class="language-bash">65 = Utf8               Ljava/io/PrintStream;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">66 = Utf8               append</span>
+<span class="meta prompt_">  #</span><span class="language-bash">67 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">68 = Utf8               (I)Ljava/lang/StringBuilder;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">69 = Utf8               toString</span>
+<span class="meta prompt_">  #</span><span class="language-bash">70 = Utf8               ()Ljava/lang/String;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">71 = Utf8               java/io/PrintStream</span>
+<span class="meta prompt_">  #</span><span class="language-bash">72 = Utf8               println</span>
+<span class="meta prompt_">  #</span><span class="language-bash">73 = Utf8               (Ljava/lang/String;)V</span></code></pre>
+
+
+
+<h3 id="2-4-字段表集合的信息"><a href="#2-4-字段表集合的信息" class="headerlink" title="2.4 字段表集合的信息"></a>2.4 字段表集合的信息</h3><pre><code class="highlight shell">&#123;
+  private int num; // 字段名
+    descriptor: I // 字段表集合的信息
+    flags: ACC_PRIVATE // 字段的访问标识
+
+  boolean flag;
+    descriptor: Z
+    flags:
+
+  protected char gender;
+    descriptor: C
+    flags: ACC_PROTECTED
+
+  public java.lang.String info;
+    descriptor: Ljava/lang/String;
+    flags: ACC_PUBLIC
+
+  public static final int COUNTS;
+    descriptor: I
+    flags: ACC_PUBLIC, ACC_STATIC, ACC_FINAL
+    ConstantValue: int 1 // 常量字段的属性：ConstantValue</code></pre>
+
+
+
+<h3 id="2-5-方法表集合的信息"><a href="#2-5-方法表集合的信息" class="headerlink" title="2.5 方法表集合的信息"></a>2.5 方法表集合的信息</h3><pre><code class="highlight shell">  public com.atguigu.java1.JavapTest(); // 无参构造器方法信息
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
+         4: aload_0
+         5: ldc           #2                  // String java
+         7: putfield      #3                  // Field info:Ljava/lang/String;
+        10: return
+      LineNumberTable:
+        line 20: 0
+        line 18: 4
+        line 22: 10
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      11     0  this   Lcom/atguigu/java1/JavapTest;
+
+private com.atguigu.java1.JavapTest(boolean); // 单个参数构造器方法信息
+    descriptor: (Z)V
+    flags: ACC_PRIVATE
+    Code:
+      stack=2, locals=2, args_size=2
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
+         4: aload_0
+         5: ldc           #2                  // String java
+         7: putfield      #3                  // Field info:Ljava/lang/String;
+        10: aload_0
+        11: iload_1
+        12: putfield      #4                  // Field flag:Z
+        15: return
+      LineNumberTable:
+        line 23: 0
+        line 18: 4
+        line 24: 10
+        line 25: 15
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      16     0  this   Lcom/atguigu/java1/JavapTest;
+            0      16     1  flag   Z
+
+  private void methodPrivate();
+    descriptor: ()V
+    flags: ACC_PRIVATE
+    Code:
+      stack=0, locals=1, args_size=1
+         0: return
+      LineNumberTable:
+        line 28: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/atguigu/java1/JavapTest;
+
+  int getNum(int);
+    descriptor: (I)I
+    flags:
+    Code:
+      stack=2, locals=2, args_size=2
+         0: aload_0
+         1: getfield      #5                  // Field num:I
+         4: iload_1
+         5: iadd
+         6: ireturn
+      LineNumberTable:
+        line 30: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       7     0  this   Lcom/atguigu/java1/JavapTest;
+            0       7     1     i   I
+
+  protected char showGender();
+    descriptor: ()C
+    flags: ACC_PROTECTED
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: getfield      #6                  // Field gender:C
+         4: ireturn
+      LineNumberTable:
+        line 33: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/atguigu/java1/JavapTest;
+
+  public void showInfo();
+    descriptor: ()V  // 方法的描述符：方法的形参列表、返回值类型
+    flags: ACC_PUBLIC // 方法的访问标识
+    Code: // 方法的Code属性
+      stack=3, locals=2, args_size=1  // stack：操作数栈的最大深度   locals：局部变量表的长度   args_size：方法接受参数的个数
+      // 偏移量  操作码   操作数
+         0: bipush        10
+         2: istore_1
+         3: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+         6: new           #8                  // class java/lang/StringBuilder
+         9: dup
+        10: invokespecial #9                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V
+        13: aload_0
+        14: getfield      #3                  // Field info:Ljava/lang/String;
+        17: invokevirtual #10                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        20: iload_1
+        21: invokevirtual #11                 // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+        24: invokevirtual #12                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        27: invokevirtual #13                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        30: return
+        
+      // 行号表：指明字节码指令的偏移量与java源代码中代码的行号的一一对应关系
+      LineNumberTable:
+        line 36: 0
+        line 37: 3
+        line 38: 30
+        
+      // 局部变量表：描述内部局部变量的相关信息
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      31     0  this   Lcom/atguigu/java1/JavapTest;
+            3      28     1     i   I
+
+  static &#123;&#125;;
+    descriptor: ()V
+    flags: ACC_STATIC
+    Code:
+      stack=1, locals=1, args_size=0
+         0: ldc           #14                 // String www.atguigu.com
+         2: astore_0
+         3: return
+      LineNumberTable:
+        line 15: 0
+        line 16: 3
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+&#125;
+
+ // 附加属性：指明当前字节码文件对应的源程序文件名
+SourceFile: &quot;JavapTest.java&quot;</code></pre>
+
+
+
+<h3 id="2-6-jclasslib展示的内容："><a href="#2-6-jclasslib展示的内容：" class="headerlink" title="2.6 jclasslib展示的内容："></a>2.6 jclasslib展示的内容：</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/22/20240722-100533.png" alt="jclasslib"></p>
+<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><ul>
+<li><p>通过 javap 命令可以査看一个java类反汇编得到的class文件版本号、常量池、访问标识、变量表、指令代码行号表等等信息。不显示类索引、父类索引、接口索引集合、<clinit>()、<init>()等结构</p>
 </li>
-<li><p>空间复杂度：O(1)。我们只需要常数的空间存放若干变量。</p>
+<li><p>通过对前面例子代码反汇编文件的简单分析，可以发现，一个方法的执行通常会涉及下面几块内存的操作:</p>
+<ul>
+<li>java栈中:局部变量表、操作数栈。</li>
+<li>java堆。通过对象的地址引用去操作。</li>
+<li>常量池。</li>
+<li>其他如帧数据区、方法区的剩余部分等情况，测试中没有显示出来，这里说明一下。</li>
+</ul>
+</li>
+<li><p>平常，我们比较关注的是java类中每个方法的反汇编中的指令操作过程，这些指令都是顺序执行的，可以参考官方文档查看每个指令的含义，很简单: <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html">https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html</a></p>
 </li>
 </ul>
 
