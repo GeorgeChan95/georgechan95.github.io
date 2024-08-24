@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>第二十一章-性能监控与调优概述 | George&#39;s Blog</title>
+  <title>第二十三章-使用OQL语言查询对象信息 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
   <meta name="keywords" content=" jvm , java ">
-  <meta name="description" content="第二十一章-性能监控与调优概述 | George&#39;s Blog">
+  <meta name="description" content="第二十三章-使用OQL语言查询对象信息 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#x72;&#103;&#101;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#x36;&#46;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -719,9 +719,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-jvm/第二十一章-性能监控与调优概述" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-jvm/第二十三章-使用OQL语言查询对象信息" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">第二十一章-性能监控与调优概述</h1>
+        <h1 class="article-title">第二十三章-使用OQL语言查询对象信息</h1>
     
     <div class="article-meta">
         
@@ -748,12 +748,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-12 19:33:13'>2024-08-12 19:13</time>
+            发布时间 : <time class="date" title='最后更新: 2024-08-24 15:24:01'>2024-08-24 15:02</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:834</span>
+        <span>字数:651</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -783,7 +783,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%83%8C%E6%99%AF%E8%AF%B4%E6%98%8E"><span class="toc-text">一、背景说明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%94%9F%E4%BA%A7%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">1. 生产环境中的问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%B0%83%E4%BC%98"><span class="toc-text">2. 为什么要调优</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%8D%E5%90%8C%E9%98%B6%E6%AE%B5%E7%9A%84%E8%80%83%E8%99%91"><span class="toc-text">3. 不同阶段的考虑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%B0%83%E4%BC%98%E6%A6%82%E8%BF%B0"><span class="toc-text">二、调优概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%9B%91%E6%8E%A7%E7%9A%84%E4%BE%9D%E6%8D%AE"><span class="toc-text">1. 监控的依据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%B0%83%E4%BC%98%E7%9A%84%E5%A4%A7%E6%96%B9%E5%90%91"><span class="toc-text">2. 调优的大方向</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="toc-text">三、性能优化的步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC1%E6%AD%A5%EF%BC%9A%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7"><span class="toc-text">第1步：性能监控</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC2%E6%AD%A5%EF%BC%9A%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="toc-text">第2步：性能分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC3%E6%AD%A5%EF%BC%9A%E6%80%A7%E8%83%BD%E8%B0%83%E4%BC%98"><span class="toc-text">第3步：性能调优</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%80%A7%E8%83%BD%E8%AF%84%E4%BB%B7-%E6%B5%8B%E8%AF%95%E6%8C%87%E6%A0%87"><span class="toc-text">四、性能评价&#x2F;测试指标</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%81%9C%E9%A1%BF%E6%97%B6%E9%97%B4%EF%BC%88%E6%88%96%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4%EF%BC%89"><span class="toc-text">1. 停顿时间（或响应时间）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%9E%E5%90%90%E9%87%8F"><span class="toc-text">2. 吞吐量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B9%B6%E5%8F%91%E6%95%B0"><span class="toc-text">3. 并发数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%86%85%E5%AD%98%E5%8D%A0%E7%94%A8"><span class="toc-text">4. 内存占用</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-SELECT%E5%AD%90%E5%8F%A5"><span class="toc-text">1. SELECT子句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-FROM%E5%AD%90%E5%8F%A5"><span class="toc-text">2. FROM子句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-WHERE%E5%AD%90%E5%8F%A5"><span class="toc-text">3. WHERE子句</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%86%85%E7%BD%AE%E5%AF%B9%E8%B1%A1%E4%B8%8E%E6%96%B9%E6%B3%95"><span class="toc-text">4. 内置对象与方法</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -799,170 +799,82 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、背景说明"><a href="#一、背景说明" class="headerlink" title="一、背景说明"></a>一、背景说明</h1><h2 id="1-生产环境中的问题"><a href="#1-生产环境中的问题" class="headerlink" title="1. 生产环境中的问题"></a>1. 生产环境中的问题</h2><ul>
-<li><p>生产环境发生了内存溢出该如何处理？</p>
-</li>
-<li><p>生产环境应该给服务器分配多少内存合适？</p>
-</li>
-<li><p>如何对垃圾回收器的性能进行调优？</p>
-</li>
-<li><p>生产环境CPU负载飙高该如何处理？</p>
-</li>
-<li><p>生产环境应该给应用分配多少线程合适？</p>
-</li>
-<li><p>不加log，如何确定请求是否执行了某一行代码？</p>
-</li>
-<li><p>不加log，如何实时查看某个方法的入参与返回值？</p>
-</li>
-</ul>
-<h2 id="2-为什么要调优"><a href="#2-为什么要调优" class="headerlink" title="2. 为什么要调优"></a>2. 为什么要调优</h2><ul>
-<li><p>防止出现OOM</p>
-</li>
-<li><p>解决OOM</p>
-</li>
-<li><p>减少Full GC出现的频率</p>
-</li>
-</ul>
-<h2 id="3-不同阶段的考虑"><a href="#3-不同阶段的考虑" class="headerlink" title="3. 不同阶段的考虑"></a>3. 不同阶段的考虑</h2><ul>
-<li><p>上线前</p>
-</li>
-<li><p>项目运行阶段</p>
-</li>
-<li><p>线上出现OOM</p>
-</li>
-</ul>
-<h1 id="二、调优概述"><a href="#二、调优概述" class="headerlink" title="二、调优概述"></a>二、调优概述</h1><h2 id="1-监控的依据"><a href="#1-监控的依据" class="headerlink" title="1. 监控的依据"></a>1. 监控的依据</h2><ul>
-<li><p>运行日志</p>
-</li>
-<li><p>异常堆栈</p>
-</li>
-<li><p>GC日志</p>
-</li>
-<li><p>线程快照</p>
-</li>
-<li><p>堆转储快照</p>
-</li>
-</ul>
-<h2 id="2-调优的大方向"><a href="#2-调优的大方向" class="headerlink" title="2. 调优的大方向"></a>2. 调优的大方向</h2><ul>
-<li><p>合理地编写代码</p>
-</li>
-<li><p>充分并合理的使用硬件资源</p>
-</li>
-<li><p>合理地进行JVM调优</p>
-</li>
-</ul>
-<h1 id="三、性能优化的步骤"><a href="#三、性能优化的步骤" class="headerlink" title="三、性能优化的步骤"></a>三、性能优化的步骤</h1><h2 id="第1步：性能监控"><a href="#第1步：性能监控" class="headerlink" title="第1步：性能监控"></a>第1步：性能监控</h2><ul>
-<li><p>GC频繁</p>
-</li>
-<li><p>cpu load过高</p>
-</li>
-<li><p>OOM</p>
-</li>
-<li><p>内存泄露</p>
-</li>
-<li><p>死锁</p>
-</li>
-<li><p>程序响应时间较长</p>
-</li>
-</ul>
-<h2 id="第2步：性能分析"><a href="#第2步：性能分析" class="headerlink" title="第2步：性能分析"></a>第2步：性能分析</h2><ul>
-<li><p>打印GC日志，通过 GCviewer 或者 <a target="_blank" rel="noopener" href="http://gceasy.io/">http://gceasy.io</a> 来分析异常信息</p>
-</li>
-<li><p>灵活运用命令行工具、jstack、jmap、jinfo等</p>
-</li>
-<li><p>dump出堆文件，使用内存分析工具分析文件</p>
-</li>
-<li><p>使用阿里Arthas、jconsole、JVisualVM来实时查看JVM状态</p>
-</li>
-<li><p>jstack查看堆栈信息</p>
-</li>
-</ul>
-<h2 id="第3步：性能调优"><a href="#第3步：性能调优" class="headerlink" title="第3步：性能调优"></a>第3步：性能调优</h2><ul>
-<li><p>适当增加内存，根据业务背景选择垃圾回收器</p>
-</li>
-<li><p>优化代码，控制内存使用</p>
-</li>
-<li><p>增加机器，分散节点压力</p>
-</li>
-<li><p>合理设置线程池线程数量</p>
-</li>
-<li><p>使用中间件提高程序效率，比如缓存、消息队列等</p>
-</li>
-<li><p>其他……</p>
-</li>
-</ul>
-<h1 id="四、性能评价-测试指标"><a href="#四、性能评价-测试指标" class="headerlink" title="四、性能评价&#x2F;测试指标"></a>四、性能评价&#x2F;测试指标</h1><h2 id="1-停顿时间（或响应时间）"><a href="#1-停顿时间（或响应时间）" class="headerlink" title="1. 停顿时间（或响应时间）"></a>1. 停顿时间（或响应时间）</h2><p>提交请求和返回该请求的响应之间使用的时间，一般比较关注平均响应时间。常用操作的响应时间列表：</p>
-<table>
-<thead>
-<tr>
-<th>操作</th>
-<th>响应时间</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>打开一个站点</td>
-<td>几秒</td>
-</tr>
-<tr>
-<td>数据库查询一条记录（有索引）</td>
-<td>十几毫秒</td>
-</tr>
-<tr>
-<td>机械磁盘一次寻址定位</td>
-<td>4毫秒</td>
-</tr>
-<tr>
-<td>从机械磁盘顺序读取1M数据</td>
-<td>2毫秒</td>
-</tr>
-<tr>
-<td>从SSD磁盘顺序读取1M数据</td>
-<td>0.3毫秒</td>
-</tr>
-<tr>
-<td>从远程分布式换成Redis 读取一个数据</td>
-<td>0.5毫秒</td>
-</tr>
-<tr>
-<td>从内存读取 1M数据</td>
-<td>十几微妙</td>
-</tr>
-<tr>
-<td>Java程序本地方法调用</td>
-<td>几微妙</td>
-</tr>
-<tr>
-<td>网络传输2Kb数据</td>
-<td>1 微妙</td>
-</tr>
-</tbody></table>
-<p>在垃圾回收环节中：</p>
-<ul>
-<li><p>暂停时间：执行垃圾收集时，程序的工作线程被暂停的时间。</p>
-</li>
-<li><p>-XX:MaxGCPauseMillis (设置最大暂停时间)</p>
-</li>
-</ul>
-<h2 id="2-吞吐量"><a href="#2-吞吐量" class="headerlink" title="2. 吞吐量"></a>2. 吞吐量</h2><ul>
-<li><p>对单位时间内完成的工作量（请求）的量度</p>
-</li>
-<li><p>在GC中：运行用户代码的事件占总运行时间的比例（总运行时间：程序的运行时间+内存回收的时间）</p>
-</li>
-<li><p>吞吐量为1-1&#x2F;(1+n)，其中-XX::GCTimeRatio&#x3D;n</p>
-<ul>
-<li>parallel scavenge 收集器参数, 即: 垃圾收集时间占总时间的比率, 默认值: 99</li>
-</ul>
-</li>
-</ul>
-<h2 id="3-并发数"><a href="#3-并发数" class="headerlink" title="3. 并发数"></a>3. 并发数</h2><ul>
-<li>同一时刻，对服务器有实际交互的请求数<ul>
-<li>1000个人同时在线，估计并发数在5%-15%之间，也就是同时并发量：50-150之间。</li>
-</ul>
-</li>
-</ul>
-<h2 id="4-内存占用"><a href="#4-内存占用" class="headerlink" title="4. 内存占用"></a>4. 内存占用</h2><ul>
-<li>Java堆区所占的内存大小</li>
-</ul>
+        <p>MAT支持一种类似于SQL的查询语言OQL（Object Query Language）。OQL使用类SQL语法，可以在堆中进行对象的查找和筛选。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-150903.png" alt="在MAT中使用OQL语句"></p>
+<h2 id="1-SELECT子句"><a href="#1-SELECT子句" class="headerlink" title="1. SELECT子句"></a>1. SELECT子句</h2><p>在MAT中，Select子句的格式与SQL基本一致，用于指定要显示的列。Select子句中可以使用“＊”，查看结果对象的引用实例（相当于outgoing references）。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> java.util.Vector v</code></pre>
+
+<p>使用“OBJECTS”关键字，可以将返回结果集中的项以对象的形式显示。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> objects v.elementData <span class="keyword">FROM</span> java.util.Vector v
+
+<span class="keyword">SELECT</span> OBJECTS s.value <span class="keyword">FROM</span> java.lang.String s</code></pre>
+
+<p>在Select子句中，使用“AS RETAINED SET”关键字可以得到所得对象的保留集。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="keyword">AS</span> RETAINED <span class="keyword">SET</span> <span class="operator">*</span><span class="keyword">FROM</span> com.atguigu.mat.Student</code></pre>
+
+<p>“DISTINCT”关键字用于在结果集中去除重复对象。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="keyword">DISTINCT</span> OBJECTS classof(s) <span class="keyword">FROM</span> java.lang.String s</code></pre>
+
+
+
+
+
+<h2 id="2-FROM子句"><a href="#2-FROM子句" class="headerlink" title="2. FROM子句"></a>2. FROM子句</h2><p>From子句用于指定查询范围，它可以指定类名、正则表达式或者对象地址。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> java.lang.String s</code></pre>
+
+<p>使用正则表达式，限定搜索范围，输出所有com.atguigu包下所有类的实例</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> &quot;com\.atguigu\..*&quot;</code></pre>
+
+<p>使用类的地址进行搜索。使用类的地址的好处是可以区分被不同ClassLoader加载的同一种类型。</p>
+<pre><code class="highlight sql"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> <span class="number">0x37a0b4d</span></code></pre>
+
+
+
+<h2 id="3-WHERE子句"><a href="#3-WHERE子句" class="headerlink" title="3. WHERE子句"></a>3. WHERE子句</h2><p>Where子句用于指定OQL的查询条件。OQL查询将只返回满足Where子句指定条件的对象。Where子句的格式与传统SQL极为相似。</p>
+<p>返回长度大于1000的byte[]数组。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> byte[] s <span class="keyword">WHERE</span> s.<span class="variable">@length</span><span class="operator">&gt;</span><span class="number">1000</span></code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-151855.png" alt="长度大于1000的byte[]数组"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-151942.png" alt="查看对象被谁引用"></p>
+<p>返回包含“java”子字符串的所有字符串，使用“LIKE”操作符，“LIKE”操作符的操作参数为正则表达式。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> java.lang.String s <span class="keyword">WHERE</span> toString(s) <span class="keyword">LIKE</span> &quot;.*java.*&quot;</code></pre>
+
+
+
+<p>返回所有value域不为null的字符串，使用“＝”操作符。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> java.lang.String s <span class="keyword">where</span> s.value<span class="operator">!=</span><span class="keyword">null</span></code></pre>
+
+
+
+<p>返回数组长度大于15，并且深堆大于1000字节的所有Vector对象。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> java.util.Vector v <span class="keyword">WHERE</span> v.elementData.<span class="variable">@length</span><span class="operator">&gt;</span><span class="number">15</span> <span class="keyword">AND</span> v.<span class="variable">@retainedHeapSize</span><span class="operator">&gt;</span><span class="number">1000</span></code></pre>
+
+
+
+<h2 id="4-内置对象与方法"><a href="#4-内置对象与方法" class="headerlink" title="4. 内置对象与方法"></a>4. 内置对象与方法</h2><p>OQL中可以访问堆内对象的属性，也可以访问堆内代理对象的属性。访问堆内对象的属性时，格式如下，其中alias为对象名称：</p>
+<p><code>[ &lt;alias&gt;. ] &lt;field&gt; . &lt;field&gt;. &lt;field&gt;</code></p>
+<p>访问java.io.File对象的path属性，并进一步访问path的value属性：</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> toString(f.path.value) <span class="keyword">FROM</span> java.io.File f</code></pre>
+
+<p>显示String对象的内容、objectid和objectAddress。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> s.toString(),s.<span class="variable">@objectId</span>, s.<span class="variable">@objectAddress</span> <span class="keyword">FROM</span> java.lang.String s</code></pre>
+
+<p>显示java.util.Vector内部数组的长度。</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> v.elementData.<span class="variable">@length</span> <span class="keyword">FROM</span> java.util.Vector v</code></pre>
+
+<p>显示所有的java.util.Vector对象及其子类型</p>
+<pre><code class="highlight sql"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> INSTANCEOF java.util.Vector</code></pre>
+
+
+
+
+
+
+
+
+
+
+
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
