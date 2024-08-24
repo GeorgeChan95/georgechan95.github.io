@@ -9,12 +9,12 @@
   <meta name="keywords" content=" jvm , java ">
   <meta name="description" content="第二十章-再谈类的加载器 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#103;&#101;&#95;&#57;&#53;&#64;&#49;&#x32;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#95;&#x39;&#x35;&#x40;&#49;&#50;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#103;&#101;&#95;&#57;&#53;&#64;&#49;&#x32;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#95;&#x39;&#x35;&#x40;&#49;&#50;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
@@ -249,7 +249,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="34">
-<input type="hidden" id="yelog_site_word_count" value="168.8k">
+<input type="hidden" id="yelog_site_word_count" value="184.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -730,12 +730,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-10 18:00:50'>2024-08-10 13:43</time>
+            发布时间 : <time class="date" title='最后更新: 2024-08-20 12:15:29'>2024-08-10 13:43</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:10k</span>
+        <span>字数:12.7k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -765,7 +765,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-text">一、概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">1. 类加载器的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7"><span class="toc-text">2. 类加载器的必要性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="toc-text">3. 命名空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%89%B9%E5%BE%81"><span class="toc-text">4. 类加载机制的基本特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">5. 类加载器之间的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-Launcher%E7%B1%BB%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-text">5.1 Launcher类核心代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">5.2 关键代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-1-ExtClassLoader%E7%9A%84Parent%E7%B1%BB%E6%98%AFnull"><span class="toc-text">5.2.1 ExtClassLoader的Parent类是null</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-2-AppClassLoader%E7%9A%84Parent%E7%B1%BB%E6%98%AFExtClassLoader"><span class="toc-text">5.2.2 AppClassLoader的Parent类是ExtClassLoader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-3-%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%9A%84ClassLoader%E6%98%AFAppClassLoader"><span class="toc-text">5.2.3  当前线程的ClassLoader是AppClassLoader</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-text">二、类的加载器分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BC%95%E5%AF%BC%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">1. 引导类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%89%A9%E5%B1%95%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">2. 扩展类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">3. 系统类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">4. 用户自定义类加载器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B5%8B%E8%AF%95%E4%B8%8D%E5%90%8C%E7%9A%84%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">三、测试不同的类的加载器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81ClassLoader%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="toc-text">四、ClassLoader源码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ClassLoader%E7%9A%84%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95"><span class="toc-text">1. ClassLoader的主要方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-SecureClassLoader%E4%B8%8EURLClassLoader"><span class="toc-text">2. SecureClassLoader与URLClassLoader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-ExtClassLoader%E4%B8%8EAppClassLoader"><span class="toc-text">3. ExtClassLoader与AppClassLoader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Class-forName-%E4%B8%8EClassLoader-loadClass"><span class="toc-text">4. Class.forName()与ClassLoader.loadClass()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B"><span class="toc-text">五、双亲委派模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E4%B8%8E%E6%9C%AC%E8%B4%A8"><span class="toc-text">1. 定义与本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">2. 优势与劣势</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E4%BC%98%E5%8A%BF"><span class="toc-text">2.1 双亲委派机制优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BB%A3%E7%A0%81%E6%94%AF%E6%8C%81"><span class="toc-text">2.2 代码支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E4%B8%BE%E4%BE%8B"><span class="toc-text">2.3 举例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E6%80%9D%E8%80%83"><span class="toc-text">2.4 思考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%BC%8A%E7%AB%AF"><span class="toc-text">2.5 弊端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E7%BB%93%E8%AE%BA"><span class="toc-text">2.6 结论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6"><span class="toc-text">3. 破坏双亲委派机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B61"><span class="toc-text">3.1 破坏双亲委派机制1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B61"><span class="toc-text">3.2 破坏双亲委派机制1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B61"><span class="toc-text">3.3 破坏双亲委派机制1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%83%AD%E6%9B%BF%E6%8D%A2%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text">4. 热替换的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E7%90%86%E8%AE%BA%E6%A6%82%E8%BF%B0"><span class="toc-text">4.1 理论概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">4.2 代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BB%A3%E7%A0%81%E6%B5%8B%E8%AF%95"><span class="toc-text">4.3 代码测试</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-text">一、概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E5%88%86%E7%B1%BB"><span class="toc-text">1. 类加载器的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E7%9A%84%E5%BF%85%E8%A6%81%E6%80%A7"><span class="toc-text">2. 类加载器的必要性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%91%BD%E5%90%8D%E7%A9%BA%E9%97%B4"><span class="toc-text">3. 命名空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%89%B9%E5%BE%81"><span class="toc-text">4. 类加载机制的基本特征</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">5. 类加载器之间的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-Launcher%E7%B1%BB%E6%A0%B8%E5%BF%83%E4%BB%A3%E7%A0%81"><span class="toc-text">5.1 Launcher类核心代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">5.2 关键代码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-1-ExtClassLoader%E7%9A%84Parent%E7%B1%BB%E6%98%AFnull"><span class="toc-text">5.2.1 ExtClassLoader的Parent类是null</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-2-AppClassLoader%E7%9A%84Parent%E7%B1%BB%E6%98%AFExtClassLoader"><span class="toc-text">5.2.2 AppClassLoader的Parent类是ExtClassLoader</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-3-%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%9A%84ClassLoader%E6%98%AFAppClassLoader"><span class="toc-text">5.2.3  当前线程的ClassLoader是AppClassLoader</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-text">二、类的加载器分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%BC%95%E5%AF%BC%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">1. 引导类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%89%A9%E5%B1%95%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">2. 扩展类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%B3%BB%E7%BB%9F%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">3. 系统类加载器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%94%A8%E6%88%B7%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">4. 用户自定义类加载器</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B5%8B%E8%AF%95%E4%B8%8D%E5%90%8C%E7%9A%84%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">三、测试不同的类的加载器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81ClassLoader%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="toc-text">四、ClassLoader源码解析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ClassLoader%E7%9A%84%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95"><span class="toc-text">1. ClassLoader的主要方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-SecureClassLoader%E4%B8%8EURLClassLoader"><span class="toc-text">2. SecureClassLoader与URLClassLoader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-ExtClassLoader%E4%B8%8EAppClassLoader"><span class="toc-text">3. ExtClassLoader与AppClassLoader</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Class-forName-%E4%B8%8EClassLoader-loadClass"><span class="toc-text">4. Class.forName()与ClassLoader.loadClass()</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%9E%8B"><span class="toc-text">五、双亲委派模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E4%B8%8E%E6%9C%AC%E8%B4%A8"><span class="toc-text">1. 定义与本质</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BC%98%E5%8A%BF%E4%B8%8E%E5%8A%A3%E5%8A%BF"><span class="toc-text">2. 优势与劣势</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6%E4%BC%98%E5%8A%BF"><span class="toc-text">2.1 双亲委派机制优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BB%A3%E7%A0%81%E6%94%AF%E6%8C%81"><span class="toc-text">2.2 代码支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E4%B8%BE%E4%BE%8B"><span class="toc-text">2.3 举例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E6%80%9D%E8%80%83"><span class="toc-text">2.4 思考</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%BC%8A%E7%AB%AF"><span class="toc-text">2.5 弊端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E7%BB%93%E8%AE%BA"><span class="toc-text">2.6 结论</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6"><span class="toc-text">3. 破坏双亲委派机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B61"><span class="toc-text">3.1 破坏双亲委派机制1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B61"><span class="toc-text">3.2 破坏双亲委派机制1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E7%A0%B4%E5%9D%8F%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B61"><span class="toc-text">3.3 破坏双亲委派机制1</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%83%AD%E6%9B%BF%E6%8D%A2%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text">4. 热替换的实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E7%90%86%E8%AE%BA%E6%A6%82%E8%BF%B0"><span class="toc-text">4.1 理论概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">4.2 代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BB%A3%E7%A0%81%E6%B5%8B%E8%AF%95"><span class="toc-text">4.3 代码测试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%B2%99%E7%AE%B1%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6"><span class="toc-text">六、沙箱安全机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-JDK1-0%E6%97%B6%E6%9C%9F"><span class="toc-text">1. JDK1.0时期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-JDK1-1%E6%97%B6%E6%9C%9F"><span class="toc-text">2. JDK1.1时期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-JDK1-2%E6%97%B6%E6%9C%9F"><span class="toc-text">3. JDK1.2时期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-JDK1-6%E6%97%B6%E6%9C%9F"><span class="toc-text">4. JDK1.6时期</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="toc-text">七、自定义类的加载器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E8%87%AA%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8%EF%BC%9F"><span class="toc-text">1. 为什么要自定义类加载器？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%9E%E7%8E%B0%E6%96%B9%E5%BC%8F"><span class="toc-text">2. 实现方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%96%B9%E6%B3%95%E6%A6%82%E8%BF%B0"><span class="toc-text">2.1 方法概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">2.2 代码示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81Java9%E6%96%B0%E7%89%B9%E6%80%A7"><span class="toc-text">八、Java9新特性</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1414,9 +1414,213 @@ System.out.println(Thread.currentThread().getContextClassLoader()); <span class=
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/10/20240810-175845.png" alt="热替换后"></p>
 </li>
 </ul>
-<p>六、沙箱安全机制</p>
-<p>七、自定义类的加载器</p>
-<p>八、Java9新特性</p>
+<h1 id="六、沙箱安全机制"><a href="#六、沙箱安全机制" class="headerlink" title="六、沙箱安全机制"></a>六、沙箱安全机制</h1><ul>
+<li><p>保证程序安全</p>
+</li>
+<li><p>保护Java原生的JDK代码</p>
+</li>
+</ul>
+<p>安全模型的核心就是Java沙箱（sandbox）。什么是沙箱？沙箱是一个限制程序运行的环境。</p>
+<p><strong>沙箱机制就是将Java代码限定在虚拟机（JVM）特定的运行范围中，并且严格限制代码对本地系统资源访问。通过这样的措施来保证对代码的有限隔离，防止对本地系统造成破坏。</strong></p>
+<p>沙箱主要限制系统资源访问，那系统资源包括什么？CPU、内存、文件系统、网络。不同级别的沙箱对这些资源访问的限制也可以不一样。</p>
+<p>所有的Java程序运行都可以指定沙箱，可以定制安全策略。</p>
+<h2 id="1-JDK1-0时期"><a href="#1-JDK1-0时期" class="headerlink" title="1. JDK1.0时期"></a>1. JDK1.0时期</h2><p>在Java中将执行程序分成本地代码和远程代码两种，本地代码默认视为可信任的，而远程代码则被看作是不受信的。对于授信的本地代码，可以访问一切本地资源。而对于非授信的远程代码在早期的Java实现中，安全依赖于沙箱（Sandbox）机制。如下图所示JDK1.0安全模型</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/11/20240811-092543.png" alt="JDK1.0时期"></p>
+<h2 id="2-JDK1-1时期"><a href="#2-JDK1-1时期" class="headerlink" title="2. JDK1.1时期"></a>2. JDK1.1时期</h2><p>JDK1.0中如此严格的安全机制也给程序的功能扩展带来障碍，比如当用户希望远程代码访问本地系统的文件时候，就无法实现。</p>
+<p>因此在后续的Java1.1版本中，针对安全机制做了改进，增加了<strong>安全策略</strong>。允许用户指定代码对本地资源的访问权限。</p>
+<p>如下图所示JDK1.1安全模型</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/11/20240811-092849.png" alt="JDK1.1安全模型"></p>
+<h2 id="3-JDK1-2时期"><a href="#3-JDK1-2时期" class="headerlink" title="3. JDK1.2时期"></a>3. JDK1.2时期</h2><p>在Java1.2版本中，再次改进了安全机制，增加了<strong>代码签名</strong>。不论本地代码或是远程代码，都会按照用户的安全策略设定，由类加载器加载到虚拟机中权限不同的运行空间，来实现差异化的代码执行权限控制。如下图所示JDK1.2安全模型：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/11/20240811-093040.png" alt="JDK1.2安全模型"></p>
+<h2 id="4-JDK1-6时期"><a href="#4-JDK1-6时期" class="headerlink" title="4. JDK1.6时期"></a>4. JDK1.6时期</h2><p>当前最新的安全机制实现，则引入了<strong>域（Domain）</strong>的概念。</p>
+<p>虚拟机会把所有代码加载到不同的系统域和应用域。系统域部分专门负责与关键资源进行交互，而各个应用域部分则通过系统域的部分代理来对各种需要的资源进行访问。虚拟机中不同的受保护域（Protected Domain），对应不一样的权限（Permission）。存在于不同域中的类文件就具有了当前域的全部权限，如下图所示，最新的安全模型（jdk1.6）</p>
+<p><img src="C:/Users/George/Desktop/jdk1.6%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B.png" alt="jdk1.6安全模型"></p>
+<h1 id="七、自定义类的加载器"><a href="#七、自定义类的加载器" class="headerlink" title="七、自定义类的加载器"></a>七、自定义类的加载器</h1><h2 id="1-为什么要自定义类加载器？"><a href="#1-为什么要自定义类加载器？" class="headerlink" title="1. 为什么要自定义类加载器？"></a>1. 为什么要自定义类加载器？</h2><ul>
+<li><p>隔离加载类</p>
+<p>在某些框架内进行中间件与应用的模块隔离，把类加载到不同的环境。比如:阿里内某容器框架通过自定义类加载器确保应用中依赖的jar包不会影响到中间件运行时使用的jar包。再比如:Tomcat这类Web应用服务器，内部自定义了好几种类加载器，用于隔离同一个Web应用服务器上的不同应用程序。 </p>
+</li>
+<li><p>修改类加载的方式</p>
+<p>类的加载模型并非强制，除Bootstrap外，其他的加载并非一定要引入，或者根据实际情况在某个时间点进行按需进行动态加载 </p>
+</li>
+<li><p>扩展加载源</p>
+<p>比如从数据库、网络、甚至是电视机机顶盒进行加载 </p>
+</li>
+<li><p>防止源码泄漏</p>
+<p>Java代码容易被编译和篡改，可以进行编译加密。那么类加载也需要自定义，还原加密的字节码。</p>
+</li>
+</ul>
+<p><strong>常见的场景</strong></p>
+<ul>
+<li><p>实现类似进程内隔离，类加载器实际上用作不同的命名空间，以提供类似容器、模块化的效果。例如，两个模块依赖于某个类库的不同版本，如果分别被不同的容器加载，就可以互不干扰。这个方面的集大成者是JavaEE和OSGI、JPMS等框架。</p>
+</li>
+<li><p>应用需要从不同的数据源获取类定义信息，例如网络数据源，而不是本地文件系统。或者是需要自己操纵字节码，动态修改或者生成类型。</p>
+</li>
+</ul>
+<p><strong>注意</strong></p>
+<p>在一般情况下，使用不同的类加载器去加载不同的功能模块，会提高应用程序的安全性。但是，如果涉及Java类型转换，则加载器反而容易产生不美好的事情。在做Java类型转换时，只有两个类型都是由同一个加载器所加载，才能进行类型转换，否则转换时会发生异常。</p>
+<h2 id="2-实现方式"><a href="#2-实现方式" class="headerlink" title="2. 实现方式"></a>2. 实现方式</h2><h3 id="2-1-方法概述"><a href="#2-1-方法概述" class="headerlink" title="2.1 方法概述"></a>2.1 方法概述</h3><p>Java提供了抽象类java.lang.ClassLoader，<strong>所有用户自定义的类加载器都应该继承ClassLoader类</strong>。</p>
+<p>在自定义ClassLoader的子类时候，我们常见的会有两种做法:</p>
+<ul>
+<li><p>方式一:重写loadClass()方法</p>
+</li>
+<li><p>方式二:重写findclass()方法</p>
+</li>
+</ul>
+<p><strong>对比</strong></p>
+<ul>
+<li>这两种方法本质上差不多，毕竟loadClass()也会调用findClass()，但是从逻辑上讲我们最好不要直接修改loadClass()的内部逻辑。建议的做法是只在findClass()里重写自定义类的加载方法，根据参数指定类的名字，返回对应的Class对象的引用。</li>
+<li>loadclass()这个方法是实现双亲委派模型逻辑的地方，擅自修改这个方法会导致模型被破坏，容易造成问题。因此我们最好是在双亲委派模型框架内进行小范围的改动，不破坏原有的稳定结构。同时，也避免了自己重写loadClass()方法的过程中必须写双亲委托的重复代码，从代码的复用性来看，不直接修改这个方法始终是比较好的选择。</li>
+<li>当编写好自定义类加载器后，便可以在程序中调用loadClass()方法来实现类加载操作。</li>
+</ul>
+<p><strong>说明</strong></p>
+<ul>
+<li><p>其父类加载器是系统类加载器</p>
+</li>
+<li><p>JVM中的所有类加载都会使用java.lang.ClassLoader.loadClass(String)接口(自定义类加载器并重写java.lang.ClassLoader.loadClass(String)接口的除外)，连JDK的核心类库也不能例外。</p>
+</li>
+</ul>
+<h3 id="2-2-代码示例"><a href="#2-2-代码示例" class="headerlink" title="2.2 代码示例"></a>2.2 代码示例</h3><p><strong>定义要加载的类和方法</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Demo1</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">hot</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;OldDemo1----&gt;NEW CLASS&quot;</span>);
+    &#125;
+&#125;</code></pre>
+
+<p>使用 <code>javac Demo1.java</code> 编译该类,并将编译后的生成的 .class 文件放到任意目录下.</p>
+<p><strong>自定义类加载器</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClassLoader</span> <span class="keyword">extends</span> <span class="title class_">ClassLoader</span> &#123;
+    <span class="keyword">private</span> String byteCodePath;
+
+    <span class="keyword">public</span> <span class="title function_">MyClassLoader</span><span class="params">(String byteCodePath)</span> &#123;
+        <span class="built_in">this</span>.byteCodePath = byteCodePath;
+    &#125;
+
+    <span class="keyword">public</span> <span class="title function_">MyClassLoader</span><span class="params">(ClassLoader parent, String byteCodePath)</span> &#123;
+        <span class="built_in">super</span>(parent);
+        <span class="built_in">this</span>.byteCodePath = byteCodePath;
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> Class&lt;?&gt; findClass(String className) <span class="keyword">throws</span> ClassNotFoundException &#123;
+        <span class="type">BufferedInputStream</span> <span class="variable">bis</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="type">ByteArrayOutputStream</span> <span class="variable">baos</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="keyword">try</span> &#123;
+            <span class="comment">//获取字节码文件的完整路径</span>
+            <span class="type">String</span> <span class="variable">fileName</span> <span class="operator">=</span> byteCodePath + className + <span class="string">&quot;.class&quot;</span>;
+            <span class="comment">//获取一个输入流</span>
+            bis = <span class="keyword">new</span> <span class="title class_">BufferedInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(fileName));
+            <span class="comment">//获取一个输出流</span>
+            baos = <span class="keyword">new</span> <span class="title class_">ByteArrayOutputStream</span>();
+            <span class="comment">//具体读入数据并写出的过程</span>
+            <span class="type">int</span> len;
+            <span class="type">byte</span>[] data = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span>];
+            <span class="keyword">while</span> ((len = bis.read(data)) != -<span class="number">1</span>) &#123;
+                baos.write(data, <span class="number">0</span>, len);
+            &#125;
+            <span class="comment">//获取内存中的完整的字节数组的数据</span>
+            <span class="type">byte</span>[] byteCodes = baos.toByteArray();
+            <span class="comment">//调用defineClass()，将字节数组的数据转换为Class的实例。</span>
+            <span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> defineClass(<span class="literal">null</span>, byteCodes, <span class="number">0</span>, byteCodes.length);
+            <span class="keyword">return</span> clazz;
+        &#125; <span class="keyword">catch</span> (IOException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">finally</span> &#123;
+            <span class="keyword">try</span> &#123;
+                <span class="keyword">if</span> (baos != <span class="literal">null</span>)
+                    baos.close();
+            &#125; <span class="keyword">catch</span> (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+            <span class="keyword">try</span> &#123;
+                <span class="keyword">if</span> (bis != <span class="literal">null</span>)
+                    bis.close();
+            &#125; <span class="keyword">catch</span> (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+
+        <span class="keyword">return</span> <span class="literal">null</span>;
+
+
+    &#125;
+&#125;</code></pre>
+
+
+
+<p><strong>测试自定义类加载器</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyClassLoaderTest</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">MyClassLoader</span> <span class="variable">loader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyClassLoader</span>(<span class="string">&quot;F:/&quot;</span>);
+
+        <span class="keyword">try</span> &#123;
+            <span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> loader.loadClass(<span class="string">&quot;Demo1&quot;</span>);
+            System.out.println(<span class="string">&quot;加载此类的类的加载器为：&quot;</span> + clazz.getClassLoader().getClass().getName());
+
+            System.out.println(<span class="string">&quot;加载当前Demo1类的类的加载器的父类加载器为：&quot;</span> + clazz.getClassLoader().getParent().getClass().getName());
+
+            <span class="comment">// 创建运行时类的实例</span>
+            <span class="type">Object</span> <span class="variable">instance</span> <span class="operator">=</span> clazz.newInstance();
+            <span class="comment">//4. 获取运行时类中指定的方法</span>
+            <span class="type">Method</span> <span class="variable">m</span> <span class="operator">=</span> clazz.getMethod(<span class="string">&quot;hot&quot;</span>);
+            <span class="comment">//5. 调用指定的方法</span>
+            m.invoke(instance);
+        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">catch</span> (IllegalAccessException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">catch</span> (InstantiationException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">catch</span> (NoSuchMethodException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">catch</span> (InvocationTargetException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+
+
+<p><strong>启动测试类</strong></p>
+<p>打印结果如下:</p>
+<pre><code class="highlight shell">加载此类的类的加载器为：com.atguigu.java2.MyClassLoader
+加载当前Demo1类的类的加载器的父类加载器为：sun.misc.Launcher$AppClassLoader
+<span class="meta prompt_">OldDemo1----&gt;</span><span class="language-bash">NEW CLASS</span></code></pre>
+
+
+
+<h1 id="八、Java9新特性"><a href="#八、Java9新特性" class="headerlink" title="八、Java9新特性"></a>八、Java9新特性</h1><p>为了保证兼容性，JDK9没有从根本上改变三层类加载器架构和双亲委派模型，但为了模块化系统的顺利运行，仍然发生了一些值得被注意的变动。</p>
+<ol>
+<li>扩展机制被移除，扩展类加载器由于向后兼容性的原因被保留，不过被重命名为平台类加载器(platform class loader)。可以通过classLoader的新方法getPlatformClassLoader()来获取。<br>  JDK9时基于模块化进行构建(原来的rt.jar和tools.jar被拆分成数十个JMOD文件)，其中的Java类库就已天然地满足了可扩展的需求，那自然无须再保留<JAVA_HOME>\lib\ext目录，此前使用这个目录或者java.ext.dirs系统变量来扩展JDK功能的机制已经没有继续存在的价值了。 </li>
+<li>平台类加载器和应用程序类加载器都不再继承自java.net.URLClassLoader。<br>现在启动类加载器、平台类加载器、应用程序类加载器全都继承于jdk.internal.loader.BuiltinClassLoader。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/11/20240811-100028.png" alt="JDK9类加载器继承关系图"></p>
+<p>​	如果有程序直接依赖了这种继承关系，或者依赖了URLClassLoader类的特定方法，那代码很可能会在JDK9及更高版本的JDK中崩溃。</p>
+<ol start="3">
+<li>在Java9中，类加载器有了名称。该名称在构造方法中指定，可以通过getName()方法来获取。平台类加载器的名称是platform，应用类加载器的名称是app。类加载器的名称在调试与类加载器相关的问题时会非常有用。</li>
+<li>启动类加载器现在是在jvm内部和java类库共同协作实现的类加载器（以前是C++实现），但为了与之前代码兼容，在获取启动类加载器的场景中仍然会返回null，而不会得到BootClassLoader实例。</li>
+<li>类加载的委派关系也发生了变动。当平台及应用程序类加载器收到类加载请求，在委派给父加载器加载前，要先判断该类是否能够归属到某一个系统模块中，如果可以找到这样的归属关系，就要优先委派给负责那个模块的加载器完成加载。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/11/20240811-100139.png" alt="JDK9双亲委派模式"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/11/20240811-100236.png" alt="jdk9模块化1"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/11/20240811-100301.png" alt="jdk9模块化2"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/11/20240811-100347.png" alt="jdk9模块化3"></p>
+<p><strong>示例代码：</strong></p>
+<p>需要在JDK9环境下执行</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ClassLoaderTest</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        System.out.println(ClassLoaderTest.class.getClassLoader());
+        System.out.println(ClassLoaderTest.class.getClassLoader().getParent());
+        System.out.println(ClassLoaderTest.class.getClassLoader().getParent().getParent());
+
+        <span class="comment">//获取系统类加载器</span>
+        System.out.println(ClassLoader.getSystemClassLoader());
+        <span class="comment">//获取平台类加载器</span>
+        System.out.println(ClassLoader.getPlatformClassLoader());
+        <span class="comment">//获取类的加载器的名称</span>
+        System.out.println(ClassLoaderTest.class.getClassLoader().getName());
+    &#125;
+&#125;</code></pre>
+
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>

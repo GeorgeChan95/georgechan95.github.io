@@ -9,12 +9,12 @@
   <meta name="keywords" content=" jvm , java ">
   <meta name="description" content="第二十三章-JVM监控及诊断工具-GUI篇 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#103;&#101;&#95;&#57;&#53;&#64;&#49;&#x32;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#95;&#x39;&#x35;&#x40;&#49;&#50;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#103;&#101;&#95;&#57;&#53;&#64;&#49;&#x32;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#95;&#x39;&#x35;&#x40;&#49;&#50;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
@@ -249,7 +249,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="34">
-<input type="hidden" id="yelog_site_word_count" value="168.8k">
+<input type="hidden" id="yelog_site_word_count" value="184.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -730,12 +730,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-16 16:50:41'>2024-08-16 21:00</time>
+            发布时间 : <time class="date" title='最后更新: 2024-08-24 12:08:23'>2024-08-16 21:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:532</span>
+        <span>字数:13.4k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -765,7 +765,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%B7%A5%E5%85%B7%E6%A6%82%E8%BF%B0"><span class="toc-text">一、工具概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-JDK%E8%87%AA%E5%B8%A6%E7%9A%84%E5%B7%A5%E5%85%B7"><span class="toc-text">1. JDK自带的工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%AC%AC%E4%B8%89%E6%96%B9%E5%B7%A5%E5%85%B7"><span class="toc-text">2. 第三方工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%BC%80%E5%90%AF%E8%BF%9C%E7%A8%8B%E7%9B%91%E6%8E%A7"><span class="toc-text">3. 服务端开启远程监控</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-JMX"><span class="toc-text">3.1 JMX</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-%E6%97%A0%E5%AF%86%E7%A0%81%E6%96%B9%E5%BC%8F%E5%BC%80%E5%90%AFJMX%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5"><span class="toc-text">3.1.1  无密码方式开启JMX远程连接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-%E6%9C%89%E5%AF%86%E7%A0%81%E6%96%B9%E5%BC%8F%E5%BC%80%E5%90%AFJMX%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5"><span class="toc-text">3.1.2  有密码方式开启JMX远程连接</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81JConsole"><span class="toc-text">二、JConsole</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0"><span class="toc-text">1. 基本概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8"><span class="toc-text">2. 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%BF%9E%E6%8E%A5"><span class="toc-text">3. 连接</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%9C%AC%E5%9C%B0%E8%BF%9E%E6%8E%A5"><span class="toc-text">3.1 本地连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5"><span class="toc-text">3.2 远程连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-Advanced"><span class="toc-text">3.3  Advanced</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%B8%BB%E8%A6%81%E4%BD%9C%E7%94%A8"><span class="toc-text">4. 主要作用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%A6%82%E8%A7%88"><span class="toc-text">4.1 概览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%86%85%E5%AD%98"><span class="toc-text">4.2 内存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E7%BA%BF%E7%A8%8B"><span class="toc-text">4.3 线程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-%E6%A0%B9%E6%8D%AE%E7%BA%BF%E7%A8%8B%E6%A3%80%E6%B5%8B%E6%AD%BB%E9%94%81"><span class="toc-text">4.3.1 根据线程检测死锁</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%8A%A0%E8%BD%BD%E7%9A%84%E7%B1%BB"><span class="toc-text">4.4 加载的类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-VM%E6%A6%82%E8%A6%81"><span class="toc-text">4.5 VM概要</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Visual-VM"><span class="toc-text">三、Visual VM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0-1"><span class="toc-text">1. 基本概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F%EF%BC%9A"><span class="toc-text">2. 使用方式：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="toc-text">3. 主要功能</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%8F%92%E4%BB%B6%E7%9A%84%E5%AE%89%E8%A3%85"><span class="toc-text">2. 插件的安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%BF%9E%E6%8E%A5%E6%96%B9%E5%BC%8F"><span class="toc-text">3. 连接方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%9C%AC%E5%9C%B0%E8%BF%9E%E6%8E%A5-1"><span class="toc-text">3.1 本地连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5-1"><span class="toc-text">3.2 远程连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="toc-text">4. 主要功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E7%94%9F%E6%88%90-%E8%AF%BB%E5%8F%96%E5%A0%86%E5%86%85%E5%AD%98%E5%BF%AB%E7%85%A7"><span class="toc-text">4.1 生成&#x2F;读取堆内存快照</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-1-%E7%94%9F%E6%88%90dump%E6%96%87%E4%BB%B6"><span class="toc-text">4.1.1 生成dump文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1-2-%E5%AF%BC%E5%85%A5dump%E6%96%87%E4%BB%B6"><span class="toc-text">4.1.2 导入dump文件</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%9F%A5%E7%9C%8BJVM%E5%8F%82%E6%95%B0%E5%92%8C%E7%B3%BB%E7%BB%9F%E5%B1%9E%E6%80%A7"><span class="toc-text">4.2 查看JVM参数和系统属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E6%9F%A5%E7%9C%8B%E8%BF%90%E8%A1%8C%E4%B8%AD%E7%9A%84%E8%99%9A%E6%8B%9F%E6%9C%BA%E8%BF%9B%E7%A8%8B"><span class="toc-text">4.3 查看运行中的虚拟机进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E7%94%9F%E6%88%90-%E8%AF%BB%E5%8F%96%E7%BA%BF%E7%A8%8B%E5%BF%AB%E7%85%A7"><span class="toc-text">4.4 生成&#x2F;读取线程快照</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-1-%E7%94%9F%E6%88%90%E7%BA%BF%E7%A8%8B%E5%BF%AB%E7%85%A7"><span class="toc-text">4.4.1 生成线程快照</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-2-%E8%A3%85%E5%85%A5%E7%BA%BF%E7%A8%8B%E5%BF%AB%E7%85%A7"><span class="toc-text">4.4.2 装入线程快照</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E7%A8%8B%E5%BA%8F%E8%B5%84%E6%BA%90%E7%9A%84%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7"><span class="toc-text">4.5 程序资源的实时监控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E5%85%B6%E4%BB%96%E5%8A%9F%E8%83%BD"><span class="toc-text">4.6 其他功能</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Eclipse-MAT"><span class="toc-text">四、Eclipse MAT</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0-2"><span class="toc-text">1. 基本概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%AE%89%E8%A3%85MAT"><span class="toc-text">1.1 安装MAT</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%8E%B7%E5%8F%96%E5%A0%86dump%E6%96%87%E4%BB%B6"><span class="toc-text">2. 获取堆dump文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%94%9F%E6%88%90dump%E6%96%87%E4%BB%B6"><span class="toc-text">2.1 生成dump文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%86%E6%9E%90%E5%A0%86dump%E6%96%87%E4%BB%B6"><span class="toc-text">3. 分析堆dump文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-histogram-%E7%9B%B4%E6%96%B9%E5%9B%BE"><span class="toc-text">3.1 histogram(直方图)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-thread-overview"><span class="toc-text">3.2 thread overview</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E8%8E%B7%E5%BE%97%E5%AF%B9%E8%B1%A1%E4%BA%92%E7%9B%B8%E5%BC%95%E7%94%A8%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">3.3 获得对象互相引用的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%B5%85%E5%A0%86%E4%B8%8E%E6%B7%B1%E5%A0%86"><span class="toc-text">3.4 浅堆与深堆</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-shallow-heap-%E6%B5%85%E5%A0%86"><span class="toc-text">3.4.1 shallow heap(浅堆)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-retained-heap-%E4%BF%9D%E7%95%99%E9%9B%86"><span class="toc-text">3.4.2 retained heap(保留集)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-3-%E8%A1%A5%E5%85%85%EF%BC%9A%E5%AF%B9%E8%B1%A1%E5%AE%9E%E9%99%85%E5%A4%A7%E5%B0%8F"><span class="toc-text">3.4.3 补充：对象实际大小</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-4-%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90%EF%BC%9AStudentTrace"><span class="toc-text">3.4.4 案例分析：StudentTrace</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E6%94%AF%E9%85%8D%E6%A0%91"><span class="toc-text">3.5 支配树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%A1%88%E4%BE%8B%EF%BC%9ATomcat%E5%A0%86%E6%BA%A2%E5%87%BA%E5%88%86%E6%9E%90"><span class="toc-text">4. 案例：Tomcat堆溢出分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E8%AF%B4%E6%98%8E"><span class="toc-text">4.1 说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%88%86%E6%9E%90%E8%BF%87%E7%A8%8B"><span class="toc-text">4.2 分析过程</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81JProfiler"><span class="toc-text">五、JProfiler</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0-3"><span class="toc-text">1. 基本概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BB%8B%E7%BB%8D"><span class="toc-text">1.1 介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E7%89%B9%E7%82%B9"><span class="toc-text">1.2 特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E4%B8%BB%E8%A6%81%E5%8A%9F%E8%83%BD"><span class="toc-text">1.3 主要功能</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE"><span class="toc-text">2. 安装与配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="toc-text">2.1 下载与安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-JProfiler-%E4%B8%AD%E9%85%8D%E7%BD%AE-IDEA"><span class="toc-text">2.2 JProfiler 中配置 IDEA</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-IDEA%E9%9B%86%E6%88%90JProfiler"><span class="toc-text">2.3 IDEA集成JProfiler</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%B7%E4%BD%93%E4%BD%BF%E7%94%A8"><span class="toc-text">3. 具体使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%95%B0%E6%8D%AE%E9%87%87%E9%9B%86%E6%96%B9%E5%BC%8F"><span class="toc-text">3.1 数据采集方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E9%81%A5%E6%84%9F%E7%9B%91%E6%B5%8B-Telemetries"><span class="toc-text">3.2 遥感监测 Telemetries</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E6%A6%82%E8%A7%88"><span class="toc-text">3.2.1 概览</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-%E5%86%85%E5%AD%98"><span class="toc-text">3.2.2 内存</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-%E8%AE%B0%E5%BD%95%E7%9A%84%E5%AF%B9%E8%B1%A1"><span class="toc-text">3.2.3 记录的对象</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-%E8%AE%B0%E5%BD%95%E7%9A%84%E5%90%9E%E5%90%90%E9%87%8F"><span class="toc-text">3.2.4 记录的吞吐量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-5-GC%E6%B4%BB%E5%8A%A8"><span class="toc-text">3.2.5 GC活动</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-6-%E7%B1%BB"><span class="toc-text">3.2.6 类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-7-%E7%BA%BF%E7%A8%8B"><span class="toc-text">3.2.7 线程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-8-CPU%E8%B4%9F%E8%BD%BD"><span class="toc-text">3.2.8 CPU负载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%86%85%E5%AD%98%E8%A7%86%E5%9B%BE-Live-Memory"><span class="toc-text">3.3 内存视图 Live Memory</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-%E6%89%80%E6%9C%89%E5%AF%B9%E8%B1%A1-All-Objects"><span class="toc-text">3.3.1 所有对象 All Objects</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-%E8%AE%B0%E5%BD%95%E5%AF%B9%E8%B1%A1Recorded-Objects"><span class="toc-text">3.3.2 记录对象Recorded Objects</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-3-%E5%88%86%E9%85%8D%E8%AE%BF%E9%97%AE%E6%A0%91-Allocation-Call-Tree"><span class="toc-text">3.3.3 分配访问树 Allocation Call Tree</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-4-%E5%88%86%E9%85%8D%E7%83%AD%E7%82%B9-Allocation-Hot-Spots"><span class="toc-text">3.3.4 分配热点 Allocation Hot Spots</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-5-%E7%B1%BB%E8%BF%BD%E8%B8%AA%E5%99%A8-Class-Tracker"><span class="toc-text">3.3.5 类追踪器 Class Tracker</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%A0%86%E9%81%8D%E5%8E%86-heap-walker"><span class="toc-text">3.4 堆遍历 heap walker</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-cpu%E8%A7%86%E5%9B%BE-cpu-views"><span class="toc-text">3.5  cpu视图 cpu views</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E7%BA%BF%E7%A8%8B%E8%A7%86%E5%9B%BE-threads"><span class="toc-text">3.6  线程视图 threads</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E7%9B%91%E8%A7%86%E5%99%A8-%E9%94%81-Monitors-locks"><span class="toc-text">3.7 监视器&amp;锁 Monitors&amp;locks</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-text">4. 案例分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81Arthas"><span class="toc-text">六、Arthas</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0-4"><span class="toc-text">1. 基本概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E8%83%8C%E6%99%AF"><span class="toc-text">1.1 背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A6%82%E8%BF%B0"><span class="toc-text">1.2 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%9F%BA%E4%BA%8E%E5%93%AA%E4%BA%9B%E5%B7%A5%E5%85%B7%E5%BC%80%E5%8F%91%E8%80%8C%E6%9D%A5"><span class="toc-text">1.3 基于哪些工具开发而来</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E5%AE%98%E6%96%B9%E4%BD%BF%E7%94%A8%E6%96%87%E6%A1%A3"><span class="toc-text">1.4 官方使用文档</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8"><span class="toc-text">2. 安装与使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%AE%89%E8%A3%85"><span class="toc-text">2.1 安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%B7%A5%E7%A8%8B%E7%9B%AE%E5%BD%95"><span class="toc-text">2.2 工程目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%90%AF%E5%8A%A8"><span class="toc-text">2.3 启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E6%9F%A5%E7%9C%8B%E8%BF%9B%E7%A8%8B"><span class="toc-text">2.4 查看进程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97"><span class="toc-text">2.5 查看日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E5%8F%82%E7%9C%8B%E5%B8%AE%E5%8A%A9"><span class="toc-text">2.6 参看帮助</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-web-console"><span class="toc-text">2.7 web console</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-%E9%80%80%E5%87%BA"><span class="toc-text">2.8 退出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%9B%B8%E5%85%B3%E8%AF%8A%E6%96%AD%E6%8C%87%E4%BB%A4"><span class="toc-text">3. 相关诊断指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%9F%BA%E7%A1%80%E6%8C%87%E4%BB%A4"><span class="toc-text">3.1 基础指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-jvm%E7%9B%B8%E5%85%B3"><span class="toc-text">3.2 jvm相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-class-classloader%E7%9B%B8%E5%85%B3"><span class="toc-text">3.3 class&#x2F;classloader相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-monitor-watch-trace%E7%9B%B8%E5%85%B3"><span class="toc-text">3.4 monitor&#x2F;watch&#x2F;trace相关</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%85%B6%E4%BB%96"><span class="toc-text">3.5 其他</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81Java-Misssion-Control"><span class="toc-text">七、Java Misssion Control</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8E%86%E5%8F%B2"><span class="toc-text">1. 历史</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A6%82%E8%BF%B0"><span class="toc-text">2. 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%90%AF%E5%8A%A8"><span class="toc-text">3. 启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8A%9F%E8%83%BD%EF%BC%9A%E5%AE%9E%E6%97%B6%E7%9B%91%E6%8E%A7JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-text">4. 功能：实时监控JVM运行时的状态</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Java-Flight-Recorder"><span class="toc-text">5. Java Flight Recorder</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="toc-text">5.1 事件类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-text">5.2 启动方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Java-Flight-Recorder-%E5%8F%96%E6%A0%B7%E5%88%86%E6%9E%90"><span class="toc-text">5.3 Java Flight Recorder 取样分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="toc-text">八、其他工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Flame-Graphs%EF%BC%88%E7%81%AB%E7%84%B0%E5%9B%BE%EF%BC%89"><span class="toc-text">1. Flame Graphs（火焰图）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Tprofiler"><span class="toc-text">2. Tprofiler</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Btrace"><span class="toc-text">3. Btrace</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-YourKit"><span class="toc-text">3. YourKit</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-JProbe"><span class="toc-text">4. JProbe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Spring-Insight"><span class="toc-text">5. Spring Insight</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -781,30 +781,1057 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>一、</p>
-<pre><code class="highlight plaintext">关于P332案例分析的几个问题解答,首先老师讲错了一点，普通Java对象头的大小为12字节或16字节
-默认采用了指针压缩则为12字节，没有采用则为16字节（数组还需要加上数组长度）。详情参考我的博客。
-	1.为什么有152字节和144字节：因为我们的URL和content存在两种情况
-		URL:&quot;http://www.7.com&quot;、content:&quot;7&quot;-----URL:&quot;http://www.14.com&quot;、content:&quot;14&quot;
-		第一种URL长度为16，底层的char数组的占用空间为(【】方括号里面整个都属于对象头，分开写方便大家理解)
-			【普通对象头(12) + 数组长度(4)】 + 16个字符(32) = 48字节，符合8字节对齐
-			同理content 占用 【普通对象头(12) +数组长度(4)】+ 一个字符(2) = 18字节,八字节对齐=24字节
-		第二种URL长度为17，底层的插入数组的占用空间为
-			【普通对象头(12) + 数组长度(4)】 + 17个字符(34) = 50字节，不符合8字节对齐，对齐为56
-			同理content 占用 【普通对象头(12) +数组长度(4)】+ 两个字符(4) = 20字节,八字节对齐=24字节
-		所以第一种总字节为48 + 24 = 72,第二种总字节为56 + 24 = 80
-		因此第二种比第一种多了8字节，所以是152和144。
-		(为什么总大小是152而不是72是因为我们只计算了String底层的char数组的区别没有计算各变量本身的浅堆,
-		因为结构都想相同，所以差别就差在内容的占用上)
-	2.为什么最终结果是1288
-		首先ElementData数组本身的浅堆大小为 
-		【普通对象头(12) + 数组长度(4)】 + 数组内容【15个Obejct引用=16*4】 = 76,八字节对齐=80字节
-		15个Object分为13个152字节+2个144字节，总大小为=2264字节
-		7号和其他student重复的有0、21、42、63、84、35、70总计6个152和1一个144
-		所以2264 - 6 * 152 - 144 = 1208字节
-	所以ElementData本身的浅堆80 + 仅能通过它到达的浅堆1208 = 1288</code></pre>
+        <h1 id="一、工具概述"><a href="#一、工具概述" class="headerlink" title="一、工具概述"></a>一、工具概述</h1><p>使用命令行工具或组合能帮您获取目标Java应用性能相关的基础信息，但它们存在下列局限：</p>
+<ul>
+<li><p>无法获取方法级别的分析数据，如方法间的调用关系、各方法的调用次数和调用时间等（这对定位应用性能瓶颈至关重要）。</p>
+</li>
+<li><p>要求用户登录到目标 Java 应用所在的宿主机上，使用起来不是很方便。</p>
+</li>
+<li><p>分析数据通过终端输出，结果展示不够直观。</p>
+</li>
+</ul>
+<p>为此，JDK提供了一些内存泄漏的分析工具，如 jconsole，jvisualvm 等，用于辅助开发人员定位问题，但是这些工具很多时候并不足以满足快速定位的需求。所以这里我们介绍的工具相对多一些、丰富一些。</p>
+<h2 id="1-JDK自带的工具"><a href="#1-JDK自带的工具" class="headerlink" title="1. JDK自带的工具"></a>1. JDK自带的工具</h2><ul>
+<li><p>jconsole：JDK自带的可视化监控工具。查看Java应用程序的运行概况、监控堆信息、永久区（或元空间）使用情况、类加载情况等 </p>
+</li>
+<li><p>Visual VM：Visual VM是一个工具，它提供了一个可视界面，用于查看Java虚拟机上运行的基于Java技术的应用程序的详细信息。 </p>
+</li>
+<li><p>JMC：Java Mission Control，内置Java Flight Recorder。能够以极低的性能开销收集Java虚拟机的性能数据。</p>
+</li>
+</ul>
+<h2 id="2-第三方工具"><a href="#2-第三方工具" class="headerlink" title="2. 第三方工具"></a>2. 第三方工具</h2><ul>
+<li><p>MAT：MAT（Memory Analyzer Tool）是基于 Eclipse 的内存分析工具，是一个快速、功能丰富的 Java heap 分析工具，它可以帮助我们查找内存泄漏和减少内存消耗 </p>
+</li>
+<li><p>JProfiler：商业软件，需要付费。功能强大。 </p>
+</li>
+<li><p>Arthas：Alibaba 开源的 java 诊断工具。</p>
+</li>
+<li><p>Btrace：java 运行时追踪工具。</p>
+</li>
+</ul>
+<h2 id="3-服务端开启远程监控"><a href="#3-服务端开启远程监控" class="headerlink" title="3. 服务端开启远程监控"></a>3. 服务端开启远程监控</h2><p>Jconsole、JVisual、JMC 可视化工具，调用本地监控直接使用对应的命令行即可，但 Linux 无法使用可视化工具，Java 程序基本都部署到 Linux 服务器。需要开启 <strong>远程调用服务器</strong>，可以使用JMX代理实现.</p>
+<h3 id="3-1-JMX"><a href="#3-1-JMX" class="headerlink" title="3.1 JMX"></a>3.1 JMX</h3><p>JMX (Java Management Extensions) 是 Java 提供的一套标准 API,用于管理和监控 Java 应用程序的各种性能指标和使用情况。这里主要使用远程访问的功能。</p>
+<p><strong>JMX 启动参数：</strong></p>
+<ul>
+<li>-Dcom.sun.management.jmxremote 远程开启开关</li>
+<li>-Dcom.sun.management.jmxremote.port&#x3D;1808 jmx远程调用端口</li>
+<li>-Dcom.sun.management.jmxremote.rmi.port&#x3D;1808 添加 rmi 端口<ul>
+<li>JMX 和 RMI，是两种相关联的技术，JMX 使用 RMI 作为远程管理工具来管理和监控 Java 程序，RMI 为 JMX 提供了远程连接所需的远程调用和通信机制。</li>
+</ul>
+</li>
+<li>-Dcom.sun.management.jmxremote.authenticate&#x3D;false 不开启验证</li>
+<li>-Dcom.sun.management.jmxremote.ssl&#x3D;false 不为ssl连接</li>
+<li>-Djava.rmi.server.hostname&#x3D;192.168.6.203 服务器所在ip或者域名</li>
+<li>-Dcom.sun.management.jmxremote.pwd.file&#x3D;&#x2F;opt&#x2F;module&#x2F;jdk1.8.0_261&#x2F;jre&#x2F;lib&#x2F;management&#x2F;jmxremote.password 配置JMX远程连接用户名和密码</li>
+</ul>
+<h4 id="3-1-1-无密码方式开启JMX远程连接"><a href="#3-1-1-无密码方式开启JMX远程连接" class="headerlink" title="3.1.1  无密码方式开启JMX远程连接"></a>3.1.1  无密码方式开启JMX远程连接</h4><p>jar 包程序启动一般为：</p>
+<pre><code class="highlight shell">java -jar xxx.jar</code></pre>
+
+<p>添加参数后：</p>
+<pre><code class="highlight shell">java -Xmx512m -Xms512m -Xmn512m \
+	-Dcom.sun.management.jmxremote \
+	-Dcom.sun.management.jmxremote.port=1808 \
+	-Dcom.sun.management.jmxremote.rmi.port=1808 \
+	-Dcom.sun.management.jmxremote.authenticate=false \
+	-Dcom.sun.management.jmxremote.ssl=false \
+	-Djava.rmi.server.hostname=192.168.6.203 \
+	-jar xxx.jar \
+	--spring.profiles.active=prod</code></pre>
 
 
+
+<p>启动服务后,使用 Jconsole、Visual VM、JProfiler 等连接服务端, 这里以 Jconsole 连接监控远程服务举例:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-143557.png" alt="Jconsole无密码远程连接"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-143715.png" alt="Jconsole无密码远程连接2"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-143747.png" alt="Jconsole无密码远程连接3"></p>
+<h4 id="3-1-2-有密码方式开启JMX远程连接"><a href="#3-1-2-有密码方式开启JMX远程连接" class="headerlink" title="3.1.2  有密码方式开启JMX远程连接"></a>3.1.2  有密码方式开启JMX远程连接</h4><p><strong>配置JMX密码文件</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">进入JMX配置文件目录</span>
+cd /opt/module/jdk1.8.0_261/jre/lib/management
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">复制JMX密码文件</span>
+cp jmxremote.password.template jmxremote.password
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">编辑密码文件, 修改 连接用户名/密码(这里设置为 controlRole / 123456)</span>
+vim jmxremote.password
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">保存密码配置文件</span>
+wq!
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">配置权限文件为600</span>
+chmod 600 jmxremote.password jmxremote.access</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-144220.png" alt="jmxremote.password"></p>
+<p>到这里密码配置就结束了</p>
+<p><strong>启动Java服务</strong></p>
+<pre><code class="highlight shell">java -Xmx512m -Xms512m -Xmn512m \
+	-Dcom.sun.management.jmxremote \
+	-Dcom.sun.management.jmxremote.port=1808 \	
+	-Dcom.sun.management.jmxremote.rmi.port=1808 \
+	-Dcom.sun.management.jmxremote.authenticate=true \
+	-Dcom.sun.management.jmxremote.ssl=false \
+	-Djava.rmi.server.hostname=192.168.6.203 \
+	-Dcom.sun.management.jmxremote.pwd.file=/opt/module/jdk1.8.0_261/jre/lib/management/jmxremote.password \
+	-jar ioms-ums.jar \
+	--spring.profiles.active=dev</code></pre>
+
+<p><strong>使用Jconsole、Visual VM、JProfiler 等连接服务端,</strong> 这里以 Jconsole 连接监控远程服务举例:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-144556.png" alt="Jconsole有密码远程连接"></p>
+<p><strong>注意: 服务器防火墙要开放JMX监控端口</strong></p>
+<h1 id="二、JConsole"><a href="#二、JConsole" class="headerlink" title="二、JConsole"></a>二、JConsole</h1><h2 id="1-基本概述"><a href="#1-基本概述" class="headerlink" title="1. 基本概述"></a>1. 基本概述</h2><ul>
+<li><p>jconsole：从Java5开始，在JDK中自带的 java 监控和管理控制台。</p>
+</li>
+<li><p>用于对JVM中内存、线程和类等的监控，是一个基于JMX（java management extensions）的GUI性能监控工具。</p>
+</li>
+<li><p>官方地址：<a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/7/docs/technotes/guides/management/jconsole.html">https://docs.oracle.com/javase/7/docs/technotes/guides/management/jconsole.html</a></p>
+</li>
+</ul>
+<h2 id="2-启动"><a href="#2-启动" class="headerlink" title="2. 启动"></a>2. 启动</h2><ul>
+<li>方式一: 在jdk安装目录中找到jconsole.exe，双击该可执行文件就可以</li>
+<li>方式二: 打开DOS窗口，直接输入jconsole就可以了</li>
+</ul>
+<h2 id="3-连接"><a href="#3-连接" class="headerlink" title="3. 连接"></a>3. 连接</h2><h3 id="3-1-本地连接"><a href="#3-1-本地连接" class="headerlink" title="3.1 本地连接"></a>3.1 本地连接</h3><p><strong>注意：本地连接要求 启动jconsole的用户 和 运行当前程序的用户 是同一个用户</strong></p>
+<p>具体操作如下：</p>
+<ol>
+<li>在jdk的 bin 目录下,双击 jconsole.exe , 即可启动 jconsole</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-150254.png" alt="启动jconsole"></p>
+<ol start="2">
+<li>选择 <code>本地进程</code> , 选择要监控的程序 <code>PID</code> , 点击 <code>连接</code></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-150504.png" alt="选择本地进程"></p>
+<ol start="3">
+<li>点击 <code>不安全的连接</code></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-150632.png" alt="不安全的连接"></p>
+<ol start="4">
+<li>进入控制台页面</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-150830.png" alt="控制台页面"></p>
+<h3 id="3-2-远程连接"><a href="#3-2-远程连接" class="headerlink" title="3.2 远程连接"></a>3.2 远程连接</h3><p>见上一章节,第三部分 : <strong>服务端开启远程监控</strong></p>
+<h3 id="3-3-Advanced"><a href="#3-3-Advanced" class="headerlink" title="3.3  Advanced"></a>3.3  Advanced</h3><p>使用一个特殊的URL连接JMX代理。一般情况使用自己定制的连接器而不是RMI提供的连接器来连接JMX代理，或者是一个使用JDK1.4的实现了JMX和JMX Rmote的应用</p>
+<h2 id="4-主要作用"><a href="#4-主要作用" class="headerlink" title="4. 主要作用"></a>4. 主要作用</h2><h3 id="4-1-概览"><a href="#4-1-概览" class="headerlink" title="4.1 概览"></a>4.1 概览</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-152123.png" alt="概览"></p>
+<h3 id="4-2-内存"><a href="#4-2-内存" class="headerlink" title="4.2 内存"></a>4.2 内存</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-152302.png" alt="内存"></p>
+<p>可以在这里点 <code>执行GC</code> 手动进行一次 GC操作.</p>
+<h3 id="4-3-线程"><a href="#4-3-线程" class="headerlink" title="4.3 线程"></a>4.3 线程</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-152336.png" alt="监控程序线程"></p>
+<h4 id="4-3-1-根据线程检测死锁"><a href="#4-3-1-根据线程检测死锁" class="headerlink" title="4.3.1 根据线程检测死锁"></a>4.3.1 根据线程检测死锁</h4><p>在线程监控中点击 <code>检测死锁</code> 检查程序中是否线程发生了 <code>死锁</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-152513.png" alt="检测死锁"></p>
+<h3 id="4-4-加载的类"><a href="#4-4-加载的类" class="headerlink" title="4.4 加载的类"></a>4.4 加载的类</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-152534.png" alt="加载的类"></p>
+<h3 id="4-5-VM概要"><a href="#4-5-VM概要" class="headerlink" title="4.5 VM概要"></a>4.5 VM概要</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-152015.png" alt="VM概要"></p>
+<h1 id="三、Visual-VM"><a href="#三、Visual-VM" class="headerlink" title="三、Visual VM"></a>三、Visual VM</h1><ul>
+<li><p>jvisualvm和visual vm的区别：</p>
+<p>visual vm 是单独下载的工具，然后将 visual vm 结合到 jdk 中就变成了 jvisualvm，仅仅是添加了一个j而已，这个j应该是 java 的用处，所以说 jvisualvm 其实就是 visual vm</p>
+</li>
+</ul>
+<h2 id="1-基本概述-1"><a href="#1-基本概述-1" class="headerlink" title="1. 基本概述"></a>1. 基本概述</h2><ul>
+<li>Visual VM是一个功能强大的多合一故障诊断和性能监控的可视化工具。</li>
+<li>它集成了多个JDK命令行工具，使用 Visual VM 可用于显示虚拟机进程及进程的配置和环境信息( jps,jinfo )，监视应用程序的CPU、GC、堆、方法区及线程的信息( jstat、jstack )等，甚至代替 JConsole。</li>
+<li>在JDK6 Update 7以后，Visua1 VM 便作为JDK的一部分发布( Visual VM 在 JDK&#x2F;bin 目录下)，即:它完全免费。</li>
+<li>此外，Visual VM 也可以作为独立的软件安装:</li>
+</ul>
+<p>首页: <a target="_blank" rel="noopener" href="https://visualvm.github.io/index.html">https://visualvm.github.io/index.html</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-155000.png" alt="Visual VM 官网"></p>
+<h2 id="2-使用方式："><a href="#2-使用方式：" class="headerlink" title="2. 使用方式："></a>2. 使用方式：</h2><ul>
+<li><p>方式一: 在jdk安装目录中找到 <code>jvisualvm.exe</code> ，然后双击执行即可</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-155239.png" alt="jvisualvm.exe"></p>
+</li>
+<li><p>方式二: 打开DOS窗口，输入 <code>jvisualvm</code> 就可以打开该软件</p>
+</li>
+</ul>
+<h2 id="3-主要功能"><a href="#3-主要功能" class="headerlink" title="3. 主要功能"></a>3. 主要功能</h2><ul>
+<li><p>生成&#x2F;读取堆内存&#x2F;线程快照</p>
+</li>
+<li><p>查看JVM参数和系统属性</p>
+</li>
+<li><p>查看运行中的虚拟机进程</p>
+</li>
+<li><p>程序资源的实时监控</p>
+</li>
+<li><p>JMX代理连接、远程环境监控、CPU分析和内存分析</p>
+</li>
+</ul>
+<h2 id="2-插件的安装"><a href="#2-插件的安装" class="headerlink" title="2. 插件的安装"></a>2. 插件的安装</h2><p>Visual VM 的一大特点是支持插件扩展，并且插件安装非常方便。我们既可以通过离线下载插件文件 *.nbm，然后在Plugin对话框的已下载页面下，添加已下载的插件。也可以在可用插件页面下,在线安装插件。(这里建议安装上: VisualGc )</p>
+<ul>
+<li><strong>离线安装</strong></li>
+</ul>
+<p>插件地址 : <a target="_blank" rel="noopener" href="https://visualvm.github.io/pluginscenters.html">https://visualvm.github.io/pluginscenters.html</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-160134.png" alt="选择Visual VM 版本"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-160236.png" alt="插件下载中心"></p>
+<p>点击需要的插件, 即可下载.</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-160649.png" alt="点击添加插件"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-161349.png" alt="选择插件"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-161450.png" alt="点击安装"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-161516.png" alt="安装成功"></p>
+<ul>
+<li><strong>在线安装</strong></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-160540.png" alt="在线安装"></p>
+<ul>
+<li><strong>IDEA 安装 VisualVM Launcher 插件</strong></li>
+</ul>
+<p>“File” →→ “Settings” →→ “Plugins” 打开插件安装界面。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-090501.png" alt="安装VisualVM插件"></p>
+<p>插件安装好之后，重启IDEA，然后再打开 “Settings” 配置界面，找到 “VisualVM Launcher”，配置 Visual VM 的路径和JDK，如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-091155.png" alt="配置Visual VM 插件"></p>
+<p><strong>IDEA 启动并连接 Visual VM</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-091648.png" alt="IDEA 启动并连接 Visual VM"></p>
+<h2 id="3-连接方式"><a href="#3-连接方式" class="headerlink" title="3. 连接方式"></a>3. 连接方式</h2><h3 id="3-1-本地连接-1"><a href="#3-1-本地连接-1" class="headerlink" title="3.1 本地连接"></a>3.1 本地连接</h3><p>打开 Visual VM , 选择一个运行中的本地进程即可.</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-165644.png" alt="Visual VM 本地连接"></p>
+<h3 id="3-2-远程连接-1"><a href="#3-2-远程连接-1" class="headerlink" title="3.2 远程连接"></a>3.2 远程连接</h3><ul>
+<li>1-确定远程服务器的ip地址</li>
+<li>2-添加JMX（通过JMX技术具体监控远程服务器哪个Java进程）</li>
+<li>3-修改bin&#x2F;catalina.sh文件，连接远程的tomcat</li>
+<li>4-在 ..&#x2F;conf 中添加 jmxremote.access 和 jmxremote.password 文件</li>
+<li>5-将服务器地址改成公网ip地址</li>
+<li>6-设置阿里云安全策略和防火墙策略</li>
+<li>7-启动tomcat，查看tomcat启动日志和端口监听</li>
+<li>8-JMX中输入端口号、用户名、密码登录</li>
+</ul>
+<p><strong>实操远程连接</strong></p>
+<ul>
+<li><p>服务器设置开启 JMX 远程监控端口</p>
+<ul>
+<li>具体参考 第一章节: <strong>服务端开启远程监控</strong></li>
+</ul>
+</li>
+<li><p>Visual VM 添加远程连接</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-170109.png" alt="添加JMX连接"></p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-170302.png" alt="设置JMX连接参数"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/17/20240817-170434.png" alt="JMX连接成功"></p>
+<h2 id="4-主要功能"><a href="#4-主要功能" class="headerlink" title="4. 主要功能"></a>4. 主要功能</h2><h3 id="4-1-生成-读取堆内存快照"><a href="#4-1-生成-读取堆内存快照" class="headerlink" title="4.1 生成&#x2F;读取堆内存快照"></a>4.1 生成&#x2F;读取堆内存快照</h3><h4 id="4-1-1-生成dump文件"><a href="#4-1-1-生成dump文件" class="headerlink" title="4.1.1 生成dump文件"></a>4.1.1 生成dump文件</h4><ul>
+<li><p>方式一: 在左侧列表, 右击运行的进程, 直接生成 堆Dump</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-103735.png" alt="直接生成 堆Dump"></p>
+</li>
+<li><p>方式二: 在 监视器TAB 标签页中, 点击 <code>堆Dump</code> 生成dump文件</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-103929.png" alt="监视器生成dump"></p>
+</li>
+</ul>
+<p>注意：<br>生成堆内存快照如下图：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-104053.png" alt="生成的dump文件"></p>
+<p>这些快照存储在内存中，当线程停止的时候快照就会丢失，如果还想利用，可以将快照进行另存为操作，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-104222.png" alt="导出dump文件"></p>
+<h4 id="4-1-2-导入dump文件"><a href="#4-1-2-导入dump文件" class="headerlink" title="4.1.2 导入dump文件"></a>4.1.2 导入dump文件</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-104415.png" alt="导入dump文件"></p>
+<p>选择要导入的dump文件</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-104701.png" alt="选择dump文件"></p>
+<h3 id="4-2-查看JVM参数和系统属性"><a href="#4-2-查看JVM参数和系统属性" class="headerlink" title="4.2 查看JVM参数和系统属性"></a>4.2 查看JVM参数和系统属性</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-105215.png" alt="JVM参数和系统属性"></p>
+<h3 id="4-3-查看运行中的虚拟机进程"><a href="#4-3-查看运行中的虚拟机进程" class="headerlink" title="4.3 查看运行中的虚拟机进程"></a>4.3 查看运行中的虚拟机进程</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-105620.png" alt="查看进程"></p>
+<p>其中每个进程号都代表一个进程</p>
+<h3 id="4-4-生成-读取线程快照"><a href="#4-4-生成-读取线程快照" class="headerlink" title="4.4 生成&#x2F;读取线程快照"></a>4.4 生成&#x2F;读取线程快照</h3><h4 id="4-4-1-生成线程快照"><a href="#4-4-1-生成线程快照" class="headerlink" title="4.4.1 生成线程快照"></a>4.4.1 生成线程快照</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-105802.png" alt="生成线程快照"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-105902.png" alt="生成线程快照结果"></p>
+<h4 id="4-4-2-装入线程快照"><a href="#4-4-2-装入线程快照" class="headerlink" title="4.4.2 装入线程快照"></a>4.4.2 装入线程快照</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-110025.png" alt="装入线程快照"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-110101.png" alt="选择快照文件"></p>
+<h3 id="4-5-程序资源的实时监控"><a href="#4-5-程序资源的实时监控" class="headerlink" title="4.5 程序资源的实时监控"></a>4.5 程序资源的实时监控</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-110304.png" alt="程序资源的实时监控"></p>
+<ul>
+<li>可以同时查看 CPU、线程、堆 的使用情况</li>
+<li>可以查看类的加载数量</li>
+<li>可以手动点击进行一次 GC</li>
+</ul>
+<h3 id="4-6-其他功能"><a href="#4-6-其他功能" class="headerlink" title="4.6 其他功能"></a>4.6 其他功能</h3><ul>
+<li>JMX代理连接</li>
+<li>远程环境监控</li>
+<li>CPU分析和内存分析</li>
+</ul>
+<h1 id="四、Eclipse-MAT"><a href="#四、Eclipse-MAT" class="headerlink" title="四、Eclipse MAT"></a>四、Eclipse MAT</h1><h2 id="1-基本概述-2"><a href="#1-基本概述-2" class="headerlink" title="1. 基本概述"></a>1. 基本概述</h2><p>MAT（Memory Analyzer Tool）工具是一款功能强大的Java堆内存分析器。可以用于查找内存泄漏以及查看内存消耗情况。</p>
+<p>MAT是基于Eclipse开发的，不仅可以单独使用，还可以作为插件的形式嵌入在Eclipse中使用。是一款免费的性能分析工具，使用起来非常方便。大家可以在 <a target="_blank" rel="noopener" href="https://www.eclipse.org/mat/downloads.php">https://www.eclipse.org/mat/downloads.php</a> 下载并使用MAT</p>
+<h3 id="1-1-安装MAT"><a href="#1-1-安装MAT" class="headerlink" title="1.1 安装MAT"></a>1.1 安装MAT</h3><ul>
+<li>打开官网, 下载 MAT, 注意: 我的JDK是 1.8版本的, 需要下载 MAT 1.11.0 版本</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-124733.png" alt="image-20240818124732612"></p>
+<ul>
+<li><p>解压安装包, 双击 <code>MemoryAnalyzer.exe</code> 即可启动</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-125715.png" alt="启动MAT"></p>
+</li>
+<li><p>解决JDK版本不兼容问题</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-125807.png" alt="JDK版本不兼容"></p>
+<p>打开MAT的安装目录，找到配置文件 <code>MemoryAnalyzer.ini</code>：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-142434.png" alt="MemoryAnalyzer.ini"></p>
+<p>打开这个文件，在文件中如下两行,指定jdk版本。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-142411.png" alt="指定jdk版本"></p>
+<p><strong>注意事项</strong></p>
+<ul>
+<li>写在开头</li>
+<li>必须小写-vm</li>
+<li>必须 换行 写成2行</li>
+</ul>
+<p>保存之后，再次尝试，顺利启动。</p>
+</li>
+</ul>
+<p><strong>还可以在 Eclipse 中以插件的方式安装</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/18/20240818-123902.png" alt="eclipse安装MAT插件"></p>
+<h2 id="2-获取堆dump文件"><a href="#2-获取堆dump文件" class="headerlink" title="2. 获取堆dump文件"></a>2. 获取堆dump文件</h2><p>MAT可以分析heap dump文件。在进行内存分析时，只要获得了反映当前设备内存映像的 hprof 文件,通过 MAT 打开就可以直观地看到当前的内存信息。</p>
+<p>一般说来，这些内存信息包含：</p>
+<ul>
+<li>所有的对象信息，包括对象实例、成员变量、存储于栈中的基本类型值和存储于堆中的其他对象的引用值。</li>
+<li>所有的类信息，包括 classloader、类名称、父类、静态变量等</li>
+<li>GCRoot 到所有的这些对象的引用路径</li>
+<li>线程信息，包括线程的调用栈及此线程的线程局部变量(TLS)</li>
+</ul>
+<p><strong>两点说明：</strong></p>
+<ul>
+<li><p>说明1：</p>
+<p>缺点: MAT 不是一个万能工具，它并不能处理所有类型的堆存储文件。但是比较主流的厂家和格式，例如 Sun，HP，SAP 所采用的 HPROF 二进制堆存储文件，以及 IBM 的 PHD 堆存储文件等都能被很好的解析。</p>
+</li>
+<li><p>说明2:</p>
+<p>最吸引人的还是能够快速为开发人员生成<strong>内存泄漏报表</strong>，方便定位问题和分析问题。虽然MAT有如此强大的功能，但是内存分析也没有简单到一键完成的程度，很多内存问题还是需要我们从MAT展现给我们的信息当中通过经验和直觉来判断才能发现。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-183317.png" alt="生成内存泄漏报表"></p>
+</li>
+</ul>
+<h3 id="2-1-生成dump文件"><a href="#2-1-生成dump文件" class="headerlink" title="2.1 生成dump文件"></a>2.1 生成dump文件</h3><ul>
+<li><p>方法一: 通过 jmap 工具生成，可以生成任意一个java进程的 dump 文件;</p>
+</li>
+<li><p>方法二: 通过配置JVM参数生成。</p>
+<ul>
+<li>选项 “ -XX:+HeapDumpOn0utOfMemoryError “或” -XX:+HeapDumpBeforeFullGc “</li>
+<li>选项 “ -XX:HeapDumpPath “ 所代表的含义就是当程序出现 OutofMemory 时，将会在相应的目录下生成一份 dump 文件。如果不指定选项 “ -XX:HeapDumpPath ”则在当前目录下生成dump文件。</li>
+</ul>
+<p>对比:考虑到生产环境中几乎不可能在线对其进行分析，大都是采用离线分析，因此使用 jmap + MAT 工具是最常见的组合。</p>
+</li>
+<li><p>方法三: 使用 VisualVM 可以导出堆dump文件</p>
+</li>
+<li><p>方法四: 使用MAT既可以打开一个已有的堆快照，也可以通过MAT直接从活动Java程序中导出堆快照该功能将借助jps列出当前正在运行的 Java 进程，以供选择并获取快照。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-184556.png" alt="MAT导出dump文件"></p>
+</li>
+</ul>
+<h2 id="3-分析堆dump文件"><a href="#3-分析堆dump文件" class="headerlink" title="3. 分析堆dump文件"></a>3. 分析堆dump文件</h2><h3 id="3-1-histogram-直方图"><a href="#3-1-histogram-直方图" class="headerlink" title="3.1 histogram(直方图)"></a>3.1 histogram(直方图)</h3><p>展示了各个类的实例数目以及这些实例的 Shallow heap 或者 Retained heap 的总和</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-190530.png" alt="生成直方图"></p>
+<p>点击上面两个红框其中任意一个，都可以生成直方图，生成具体内容：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-190927.png" alt="直方图内容"></p>
+<h3 id="3-2-thread-overview"><a href="#3-2-thread-overview" class="headerlink" title="3.2 thread overview"></a>3.2 thread overview</h3><ul>
+<li>查看系统中的Java线程</li>
+<li>查看局部变量的信息</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-191717.png" alt="线程概览"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-192456.png" alt="线程明细"></p>
+<h3 id="3-3-获得对象互相引用的关系"><a href="#3-3-获得对象互相引用的关系" class="headerlink" title="3.3 获得对象互相引用的关系"></a>3.3 获得对象互相引用的关系</h3><ul>
+<li><p>with outgoing references 变量引用了谁</p>
+<p>​	<img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-193043.png" alt="outgoing"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-193139.png" alt="引用结果"></p>
+</li>
+<li><p>with incoming references 谁引用了该变量</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-193245.png" alt="incoming"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-193409.png" alt="引用结果"></p>
+</li>
+</ul>
+<h3 id="3-4-浅堆与深堆"><a href="#3-4-浅堆与深堆" class="headerlink" title="3.4 浅堆与深堆"></a>3.4 浅堆与深堆</h3><h4 id="3-4-1-shallow-heap-浅堆"><a href="#3-4-1-shallow-heap-浅堆" class="headerlink" title="3.4.1 shallow heap(浅堆)"></a>3.4.1 shallow heap(浅堆)</h4><p>shallow heap是对象本身的大小，不包括其引用的对象。<br>对于非数组类型：shallow heap就是对象与其成员变量加在一起的大小。<br>对于数组类型：shallow heap就是数组各个元素大小之和。</p>
+<h4 id="3-4-2-retained-heap-保留集"><a href="#3-4-2-retained-heap-保留集" class="headerlink" title="3.4.2 retained heap(保留集)"></a>3.4.2 retained heap(保留集)</h4><p>对象remainder heap 大小 &#x3D; 对象shallow heap大小 + 对象直接或者间接引用的对象大小（排除被GC ROOT直接引用的对象）。<br>如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-194720.png" alt="对象引用关系"></p>
+<p><strong>对象引用关系</strong><br>OBJECT A 的 remainder heap &#x3D; OBJECT A 的 shallow heap<br>OBJECT B的 remainder heap &#x3D; OBJECT B 的 shallow heap + OBJECT C 的对象大小 + OBJECT E 的对象大小</p>
+<p>所以对象的remainder heap其实接近进行垃圾回收时，清除该对象时所能获取的堆内存大小（有的对象可能还被其他对象引用，垃圾回收时，不能清除）。</p>
+<p>下面是用mat对从服务器上面dump出来Java虚拟机内存进行解析之后的结果：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-194952.png" alt="内存分析"></p>
+<p><strong>Java内存解析结果</strong></p>
+<p>其中，Objects为类的对象的个数。Shallow Heap是这些对象自身大小之和，Remainder Heap是这些对象自身以及这些对象直接或者间接引用的对象大小总和。</p>
+<h4 id="3-4-3-补充：对象实际大小"><a href="#3-4-3-补充：对象实际大小" class="headerlink" title="3.4.3 补充：对象实际大小"></a>3.4.3 补充：对象实际大小</h4><p>另外一个常用的概念是对象的实际大小。这里，对象的实际大小定义为一个对象所能触及的所有对象的浅堆大小之和，也就是通常意义上我们说的对象大小。与深堆相比，似乎这个在日常开发中更为直观和被人接受，但实际上，<strong>这个概念和垃圾回收无关</strong>。</p>
+<p>下图显示了一个简单的对象引用关系图，对象A引用了C和D，对象B引用了C和E。那么对象A的浅堆大小只是A本身，不含C和D，而A的实际大小为A、C、D三者之和。而A的深堆大小为A与D之和，由于对象C还可以通过对象B访问到，因此不在对象A的深堆范围内。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-195149.png" alt="对象引用关系"></p>
+<h4 id="3-4-4-案例分析：StudentTrace"><a href="#3-4-4-案例分析：StudentTrace" class="headerlink" title="3.4.4 案例分析：StudentTrace"></a>3.4.4 案例分析：StudentTrace</h4><p><strong>案例代码</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 有一个学生浏览网页的记录程序，它将记录 每个学生访问过的网站地址。</span>
+<span class="comment"> * 它由三个部分组成：Student、WebPage和StudentTrace三个类</span>
+<span class="comment"> *</span>
+<span class="comment"> *  -XX:+HeapDumpBeforeFullGC -XX:HeapDumpPath=d:\student.hprof</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StudentTrace</span> &#123;
+    <span class="keyword">static</span> List&lt;WebPage&gt; webpages = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;WebPage&gt;();
+
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">createWebPages</span><span class="params">()</span> &#123;
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
+            <span class="type">WebPage</span> <span class="variable">wp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">WebPage</span>();
+            wp.setUrl(<span class="string">&quot;http://www.&quot;</span> + Integer.toString(i) + <span class="string">&quot;.com&quot;</span>);
+            wp.setContent(Integer.toString(i));
+            webpages.add(wp);
+        &#125;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        createWebPages();<span class="comment">//创建了100个网页</span>
+        <span class="comment">//创建3个学生对象</span>
+        <span class="type">Student</span> <span class="variable">st3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="number">3</span>, <span class="string">&quot;Tom&quot;</span>);
+        <span class="type">Student</span> <span class="variable">st5</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="number">5</span>, <span class="string">&quot;Jerry&quot;</span>);
+        <span class="type">Student</span> <span class="variable">st7</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Student</span>(<span class="number">7</span>, <span class="string">&quot;Lily&quot;</span>);
+
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; webpages.size(); i++) &#123;
+            <span class="keyword">if</span> (i % st3.getId() == <span class="number">0</span>)
+                st3.visit(webpages.get(i));
+            <span class="keyword">if</span> (i % st5.getId() == <span class="number">0</span>)
+                st5.visit(webpages.get(i));
+            <span class="keyword">if</span> (i % st7.getId() == <span class="number">0</span>)
+                st7.visit(webpages.get(i));
+        &#125;
+        webpages.clear();
+        System.gc();
+
+    &#125;
+&#125;
+
+<span class="keyword">class</span> <span class="title class_">Student</span> &#123;
+    <span class="keyword">private</span> <span class="type">int</span> id;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> List&lt;WebPage&gt; history = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    <span class="keyword">public</span> <span class="title function_">Student</span><span class="params">(<span class="type">int</span> id, String name)</span> &#123;
+        <span class="built_in">super</span>();
+        <span class="built_in">this</span>.id = id;
+        <span class="built_in">this</span>.name = name;
+    &#125;
+
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getId</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> id;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setId</span><span class="params">(<span class="type">int</span> id)</span> &#123;
+        <span class="built_in">this</span>.id = id;
+    &#125;
+
+    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> name;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setName</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+    &#125;
+
+    <span class="keyword">public</span> List&lt;WebPage&gt; <span class="title function_">getHistory</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> history;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setHistory</span><span class="params">(List&lt;WebPage&gt; history)</span> &#123;
+        <span class="built_in">this</span>.history = history;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">visit</span><span class="params">(WebPage wp)</span> &#123;
+        <span class="keyword">if</span> (wp != <span class="literal">null</span>) &#123;
+            history.add(wp);
+        &#125;
+    &#125;
+&#125;
+
+
+<span class="keyword">class</span> <span class="title class_">WebPage</span> &#123;
+    <span class="keyword">private</span> String url;
+    <span class="keyword">private</span> String content;
+
+    <span class="keyword">public</span> String <span class="title function_">getUrl</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> url;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setUrl</span><span class="params">(String url)</span> &#123;
+        <span class="built_in">this</span>.url = url;
+    &#125;
+
+    <span class="keyword">public</span> String <span class="title function_">getContent</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> content;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setContent</span><span class="params">(String content)</span> &#123;
+        <span class="built_in">this</span>.content = content;
+    &#125;
+&#125;
+</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/20/20240820-200332.png" alt="线程对象追踪"></p>
+<p><strong>结论：</strong><br>elementData 数组的浅堆是80个字节，而 elementData 数组中的所有 WebPage 对象的深堆之和是1208个字节，所以加在一起就是 elementData 数组的深堆之和，也就是1288个字节</p>
+<p><strong>解析：</strong></p>
+<p>默认采用了指针压缩则为12字节，没有采用则为16字节（数组还需要加上数组长度）。</p>
+<p>1.为什么有152字节和144字节：因为我们的URL和content存在两种情况<br>        URL:”<a target="_blank" rel="noopener" href="http://www.7.com"、content:"7"-----URL:"http://www.14.com"、content:"14">http://www.7.com&quot;、content:&quot;7&quot;-----URL:&quot;http://www.14.com&quot;、content:&quot;14</a>“<br>        第一种URL长度为16，底层的char数组的占用空间为(【】方括号里面整个都属于对象头，分开写方便大家理解)<br>            【普通对象头(12) + 数组长度(4)】 + 16个字符(32) &#x3D; 48字节，符合8字节对齐<br>            同理content 占用 【普通对象头(12) +数组长度(4)】+ 一个字符(2) &#x3D; 18字节,八字节对齐&#x3D;24字节<br>        第二种URL长度为17，底层的插入数组的占用空间为<br>            【普通对象头(12) + 数组长度(4)】 + 17个字符(34) &#x3D; 50字节，不符合8字节对齐，对齐为56<br>            同理content 占用 【普通对象头(12) +数组长度(4)】+ 两个字符(4) &#x3D; 20字节,八字节对齐&#x3D;24字节<br>        所以第一种总字节为48 + 24 &#x3D; 72,第二种总字节为56 + 24 &#x3D; 80<br>        因此第二种比第一种多了8字节，所以是152和144。<br>        (为什么总大小是152而不是72是因为我们只计算了String底层的char数组的区别没有计算各变量本身的浅堆,<br>        因为结构都相同，所以差别就差在内容的占用上)</p>
+<p>2.为什么最终结果是1288<br>        首先ElementData数组本身的浅堆大小为<br>        【普通对象头(12) + 数组长度(4)】 + 数组内容【15个Obejct引用&#x3D;16*4】 &#x3D; 76,八字节对齐&#x3D;80字节<br>        15个Object分为13个152字节+2个144字节，总大小为&#x3D;2264字节<br>        7号和其他student重复的有0、21、42、63、84、35、70总计6个152和1一个144<br>        所以2264 - 6 * 152 - 144 &#x3D; 1208字节<br>    所以ElementData本身的浅堆80 + 仅能通过它到达的浅堆1208 &#x3D; 1288</p>
+<h3 id="3-5-支配树"><a href="#3-5-支配树" class="headerlink" title="3.5 支配树"></a>3.5 支配树</h3><p>支配树的概念源自<strong>图论</strong>。</p>
+<p>MAT提供了一个称为<strong>支配树</strong>（Dominator Tree)的对象图。支配树体现了<strong>对象实例</strong>间的支配关系。在对象引用图中，所有指向对象B的路径都经过对象A , 则认为对象A支配对象B。如果对象A是离对象B最近的一个支配对象 ，则认为对象A为对象B的<strong>直接支配者</strong>。支配树是基于<strong>对象间的引用图</strong>所建立的，它有以下基本性质：</p>
+<ul>
+<li>对象A的子树（所有被对象A支配的对象集合）表示对象A的保留集（retained set) , 即深堆</li>
+<li>如果对象A支配对象B , 那么对象A的直接支配者也支配对象B</li>
+<li>支配树的边与对象引用图的边不直接对应</li>
+</ul>
+<p>如下图所示：</p>
+<p>左图表示<strong>对象引用图</strong>，右图表示左图所对应的<strong>支配树</strong>。</p>
+<p>对象A和B由根对象直接支配，由于在到对象C的路径中，可以经过A , 也可以经过B , 因此对象C的直接支配者也是根对象。<br>对象F与对象D相互引用 ，因为到对象F的所有路径必然经过对象D , 因此，对象D是对象F的直接支配者 。<br>而到对象D的所有路径中，必然经过对象C , 即使是从对象F到对象D的引用 ，从根节点出发，也是经过对象C的，所以 ，对象D的直接支配者为对象C。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-184127.png" alt="支配树"></p>
+<p>同理，对象E支配对象G。到达对象H的可以通过对象D , 也可以通过对象E , 因此对象D和E都不能支配对象H , 而经过对象C既可以到达D也可以到达E , 因此<strong>对象C为对象H的直接支配者</strong>。</p>
+<p>在MAT中，单击工具栏上的对象支配树按钮，可以打开<strong>对象支配树</strong>视图。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-184933.png" alt="MAT通过dump文件查看对象支配树"></p>
+<p>下图显示了对象支配树视图的一部分。该截图显示部分Lily学生的history队列的直接支配对象。即当Lily对象被回收，也会一并回收的所有对象。显然能被3或者5整除的网页不会出现在该列表中，因为它们同时被另外两名学生对象引用。</p>
+<h2 id="4-案例：Tomcat堆溢出分析"><a href="#4-案例：Tomcat堆溢出分析" class="headerlink" title="4. 案例：Tomcat堆溢出分析"></a>4. 案例：Tomcat堆溢出分析</h2><h3 id="4-1-说明"><a href="#4-1-说明" class="headerlink" title="4.1 说明"></a>4.1 说明</h3><p>Tomcat是最常用的Java Servlet容器之一，同时也可以当做单独的Web服务器使用。<br> Tomcat本身使用Java实现，并运行于Java虚拟机之上。在大规模请求时，Tomcat有可能会因为无法承受压力而发生内存溢出错误。这里根据一个被压垮的Tomcat的堆快照文件，来分析Tomcat在崩溃时的内部情况。</p>
+<h3 id="4-2-分析过程"><a href="#4-2-分析过程" class="headerlink" title="4.2 分析过程"></a>4.2 分析过程</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191115.png" alt="Tomcat溢出分析图1"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191318.png" alt="Tomcat溢出分析图2"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191325.png" alt="Tomcat溢出分析图3"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191331.png" alt="Tomcat溢出分析图4"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191337.png" alt="Tomcat溢出分析图5"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191343.png" alt="Tomcat溢出分析图6"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191350.png" alt="Tomcat溢出分析图6-2"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191356.png" alt="Tomcat溢出分析图7"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-191405.png" alt="Tomcat溢出分析图8"></p>
+<h1 id="五、JProfiler"><a href="#五、JProfiler" class="headerlink" title="五、JProfiler"></a>五、JProfiler</h1><h2 id="1-基本概述-3"><a href="#1-基本概述-3" class="headerlink" title="1. 基本概述"></a>1. 基本概述</h2><h3 id="1-1-介绍"><a href="#1-1-介绍" class="headerlink" title="1.1 介绍"></a>1.1 介绍</h3><p>在运行Java的时候有时候想测试运行时占用内存情况，这时候就需要使用测试工具查看了。在eclipse里面有 Eclipse Memory Analyzer tool (MAT) 插件可以测试，而在IDEA中也有这么一个插件，就是JProfiler。</p>
+<p>JProfiler 是由 ej-technologies 公司开发的一款 Java 应用性能诊断工具。功能强大，但是收费。</p>
+<p>官网下载地址：<a target="_blank" rel="noopener" href="https://www.ej-technologies.com/jprofiler">https://www.ej-technologies.com/jprofiler</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-194145.png" alt="JProfiler 官网"></p>
+<h3 id="1-2-特点"><a href="#1-2-特点" class="headerlink" title="1.2 特点"></a>1.2 特点</h3><ul>
+<li><p>使用方便、界面操作友好（简单且强大）</p>
+</li>
+<li><p>对被分析的应用影响小（提供模板）</p>
+</li>
+<li><p>CPU，Thread，Memory分析功能尤其强大</p>
+</li>
+<li><p>支持对jdbc，noSql，jsp，servlet，socket等进行分析</p>
+</li>
+<li><p>支持多种模式（离线，在线）的分析</p>
+</li>
+<li><p>支持监控本地、远程的JVM</p>
+</li>
+<li><p>跨平台，拥有多种操作系统的安装版本</p>
+</li>
+</ul>
+<h3 id="1-3-主要功能"><a href="#1-3-主要功能" class="headerlink" title="1.3 主要功能"></a>1.3 主要功能</h3><ul>
+<li>1-方法调用：对方法调用的分析可以帮助您了解应用程序正在做什么，并找到提高其性能的方法</li>
+<li>2-内存分配：通过分析堆上对象、引用链和垃圾收集能帮您修复内存泄露问题，优化内存使用</li>
+<li>3-线程和锁：JProfiler 提供多种针对线程和锁的分析视图助您发现多线程问题</li>
+<li>4-高级子系统：许多性能问题都发生在更高的语义级别上。例如，对于JDBC调用，您可能希望找出执行最慢的SQL语句。JProfiler支持对这些子系统进行集成分析</li>
+</ul>
+<h2 id="2-安装与配置"><a href="#2-安装与配置" class="headerlink" title="2. 安装与配置"></a>2. 安装与配置</h2><h3 id="2-1-下载与安装"><a href="#2-1-下载与安装" class="headerlink" title="2.1 下载与安装"></a>2.1 下载与安装</h3><p>下载地址：<a target="_blank" rel="noopener" href="https://www.ej-technologies.com/jprofiler/download">https://www.ej-technologies.com/jprofiler/download</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-195531.png" alt="下载 JProfiler"></p>
+<p>选择一个版版本，点击下载后，安装。（收费软件，下载安装后有试用期）</p>
+<p>或者下载使用破解版本：<a target="_blank" rel="noopener" href="https://downloadlynet.ir/2020/12/1885/03/jprofiler/00/#/1885-ej-techn-152438080522.html">https://downloadlynet.ir/2020/12/1885/03/jprofiler/00/?#/1885-ej-techn-152438080522.html</a></p>
+<h3 id="2-2-JProfiler-中配置-IDEA"><a href="#2-2-JProfiler-中配置-IDEA" class="headerlink" title="2.2 JProfiler 中配置 IDEA"></a>2.2 JProfiler 中配置 IDEA</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-201609.png" alt="IDEA集成"></p>
+<p>点击选择 <code>IDEA Integrations</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-202323.png" alt="选择IDEA，点击 Integrate"></p>
+<p>选择 <code>IntelliJ IDEA</code> ， 点击 <code>Integrate</code>,  再点击 OK</p>
+<h3 id="2-3-IDEA集成JProfiler"><a href="#2-3-IDEA集成JProfiler" class="headerlink" title="2.3 IDEA集成JProfiler"></a>2.3 IDEA集成JProfiler</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-202123.png" alt="安装 JProfiler 插件"></p>
+<p>IDEA 安装 JProfiler 插件</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-202816.png" alt="image-20240822202816158"></p>
+<p>Tool 中配置 JProfiler 的执行exe文件路径。</p>
+<p>安装并配置完成后，IDEA工具栏会出现这两个图标，点击可以直接启动一个进程，或者追踪一个运行中的进程。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/22/20240822-203121.png" alt="image-20240822203120430"></p>
+<h2 id="3-具体使用"><a href="#3-具体使用" class="headerlink" title="3. 具体使用"></a>3. 具体使用</h2><h3 id="3-1-数据采集方式"><a href="#3-1-数据采集方式" class="headerlink" title="3.1 数据采集方式"></a>3.1 数据采集方式</h3><ul>
+<li>Instrumentation：这是 JProfiler 全功能模式。在 class 加载之前，JProfier 把相关功能代码写入到需要分析的 class 的 bytecode 中，对正在运行的 jvm 有一定影响。<ul>
+<li>优点：功能强大。在此设置中，调用堆栈信息是准确的。</li>
+<li>缺点：若要分析的 class 较多，则对应用的性能影响较大，CPU 开销可能很高（取决于 Filter 的控制）。因此使用此模式一般配合 Filter 使用，只对特定的类或包进行分析</li>
+</ul>
+</li>
+<li>Sampling：类似于样本统计，每隔一定时间（5ms）将每个线程栈中方法栈中的信息统计出来。<ul>
+<li>优点：对 CPU 的开销非常低，对应用影响小（即使你不配置任何 Filter）</li>
+<li>缺点：一些数据／特性不能提供（例如：方法的调用次数、执行时间）</li>
+</ul>
+</li>
+</ul>
+<p>注：JProfiler 本身没有指出数据的采集类型，这里的采集类型是针对方法调用的采集类型。因为 JProfiler 的绝大多数核心功能都依赖方法调用采集的数据，所以可以直接认为是 JProfiler 的数据采集类型。</p>
+<h3 id="3-2-遥感监测-Telemetries"><a href="#3-2-遥感监测-Telemetries" class="headerlink" title="3.2 遥感监测 Telemetries"></a>3.2 遥感监测 Telemetries</h3><h4 id="3-2-1-概览"><a href="#3-2-1-概览" class="headerlink" title="3.2.1 概览"></a>3.2.1 概览</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-082049.png" alt="概览"></p>
+<h4 id="3-2-2-内存"><a href="#3-2-2-内存" class="headerlink" title="3.2.2 内存"></a>3.2.2 内存</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-083632.png" alt="内存"></p>
+<p>内存占用持续飙升，存在OOM风险</p>
+<h4 id="3-2-3-记录的对象"><a href="#3-2-3-记录的对象" class="headerlink" title="3.2.3 记录的对象"></a>3.2.3 记录的对象</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-083819.png" alt="记录的对象"></p>
+<h4 id="3-2-4-记录的吞吐量"><a href="#3-2-4-记录的吞吐量" class="headerlink" title="3.2.4 记录的吞吐量"></a>3.2.4 记录的吞吐量</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-083914.png" alt="记录的吞吐量"></p>
+<h4 id="3-2-5-GC活动"><a href="#3-2-5-GC活动" class="headerlink" title="3.2.5 GC活动"></a>3.2.5 GC活动</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-084559.png" alt="GC活动"></p>
+<h4 id="3-2-6-类"><a href="#3-2-6-类" class="headerlink" title="3.2.6 类"></a>3.2.6 类</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-084628.png" alt="类"></p>
+<h4 id="3-2-7-线程"><a href="#3-2-7-线程" class="headerlink" title="3.2.7 线程"></a>3.2.7 线程</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-084653.png" alt="线程"></p>
+<h4 id="3-2-8-CPU负载"><a href="#3-2-8-CPU负载" class="headerlink" title="3.2.8 CPU负载"></a>3.2.8 CPU负载</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-084722.png" alt="CPU负载"></p>
+<h3 id="3-3-内存视图-Live-Memory"><a href="#3-3-内存视图-Live-Memory" class="headerlink" title="3.3 内存视图 Live Memory"></a>3.3 内存视图 Live Memory</h3><p><code>Live memory</code> 内存剖析：<code>class/class instance</code> 的相关信息。例如对象的个数，大小，对象创建的方法执行栈，对象创建的热点。</p>
+<h4 id="3-3-1-所有对象-All-Objects"><a href="#3-3-1-所有对象-All-Objects" class="headerlink" title="3.3.1 所有对象 All Objects"></a>3.3.1 所有对象 All Objects</h4><p>显示所有加载的类的列表和在堆上分配的实例数。只有Java 1.5(JVMTI)才会显示此视图。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-085930.png" alt="Live Memory"></p>
+<p>通过内存标记，可以查看到 Picture 持续增加，程序存在内存泄漏。</p>
+<h4 id="3-3-2-记录对象Recorded-Objects"><a href="#3-3-2-记录对象Recorded-Objects" class="headerlink" title="3.3.2 记录对象Recorded Objects"></a>3.3.2 记录对象Recorded Objects</h4><p>查看特定时间段对象的分配，并记录分配的调用堆栈。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-091046.png" alt="Recorded Objects"></p>
+<p>可以看到Picture类占用了过多的内存，需要重点查看</p>
+<h4 id="3-3-3-分配访问树-Allocation-Call-Tree"><a href="#3-3-3-分配访问树-Allocation-Call-Tree" class="headerlink" title="3.3.3 分配访问树 Allocation Call Tree"></a>3.3.3 分配访问树 Allocation Call Tree</h4><p>显示一棵请求树或者方法、类、包或对已选择类有带注释的分配信息的J2EE组件。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-091415.png" alt="分配访问树"></p>
+<h4 id="3-3-4-分配热点-Allocation-Hot-Spots"><a href="#3-3-4-分配热点-Allocation-Hot-Spots" class="headerlink" title="3.3.4 分配热点 Allocation Hot Spots"></a>3.3.4 分配热点 Allocation Hot Spots</h4><p>显示一个列表，包括方法、类、包或分配已选类的J2EE组件。你可以标注当前值并且显示差异值。对于每个热点都可以显示它的跟踪记录树。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-092146.png" alt="Allocation Hot Spots"></p>
+<h4 id="3-3-5-类追踪器-Class-Tracker"><a href="#3-3-5-类追踪器-Class-Tracker" class="headerlink" title="3.3.5 类追踪器 Class Tracker"></a>3.3.5 类追踪器 Class Tracker</h4><p>类跟踪视图可以包含任意数量的图表，显示选定的类和包的实例与时间。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-093043.png" alt="Class Tracker"></p>
+<p>分析：内存中的对象的情况</p>
+<ul>
+<li>频繁创建的Java对象：死循环、循环次数过多</li>
+<li>存在大的对象：读取文件时，byte[]应该边读边写。如果长时间不写出的话，导致byte[]过大</li>
+<li>存在内存泄漏</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li>All Objects后面的Size大小是浅堆大小</li>
+<li>Record Objects 在判断内存泄露的时候使用，可以通过观察Telemetries中的Memory，如果里面出现垃圾回收之后的内存占用逐步提高，这就有可能出现内存泄露问题，所以可以使用Record Objects查看，但是该分析默认不开启，毕竟占用CPU性能太多</li>
+</ul>
+<h3 id="3-4-堆遍历-heap-walker"><a href="#3-4-堆遍历-heap-walker" class="headerlink" title="3.4 堆遍历 heap walker"></a>3.4 堆遍历 heap walker</h3><p>如果通过内存视图 Live Memory已经分析出哪个类的对象不能进行垃圾回收，并且有可能导致内存溢出，如果想进一步分析，我们可以在该对象上点击右键，选择Show Selection In Heap Walker，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-122458.png" alt="Show Selection In Heap Walker"></p>
+<p>进入堆遍历视图，如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-123008.png" alt="image-20240823123007846"></p>
+<p>查看对象的引用关系，如下图：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-123505.png" alt="对象引用关系"></p>
+<ul>
+<li><p>Outgoing references 对象引用了谁</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-123700.png" alt="Outgoing references"></p>
+</li>
+<li><p>Incoming references 谁引用了自己</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-123821.png" alt="Incoming references"></p>
+</li>
+<li><p>Show In Graph 通过图表形式查看对象引用关系</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-124144.png" alt="image-20240823124143505"></p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-124442.png" alt="引用关系图"></p>
+<h3 id="3-5-cpu视图-cpu-views"><a href="#3-5-cpu视图-cpu-views" class="headerlink" title="3.5  cpu视图 cpu views"></a>3.5  cpu视图 cpu views</h3><p><code>JProfiler</code> 提供不同的方法来记录访问树以优化性能和细节。线程或者线程组以及线程状况可以被所有的视图选择。所有的视图都可以聚集到方法、类、包或J2EE组件等不同层上。</p>
+<ul>
+<li><p><strong>访问树 Call Tree</strong></p>
+<p>显示一个积累的自顶向下的树，树中包含所有在JVM中已记录的访问队列。JDBC,JMS和JNDI服务请求都被注释在请求树中。请求树可以根据Servlet和JSP对URL的不同需要进行拆分。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-195001.png" alt="访问树"></p>
+</li>
+</ul>
+<p>上面的 100% 表示该方法会100%调用下面的方法, 276s 表示方法调用一共花费了276秒, 再往下就是方法的全名称.</p>
+<p>左上角可以筛选展示: Package, Class, Method</p>
+<ul>
+<li><p><strong>热点 Hot Spots</strong></p>
+<p>显示消耗时间最多的方法的列表。对每个热点都能够显示回溯树。该热点可以按照方法请求，JDBC,JMS和JNDI服务请求以及按照URL请求来进行计算。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-195125.png" alt="热点"></p>
+</li>
+<li><p><strong>访问图 Call Graph</strong></p>
+<p>显示一个从已选方法、类、包或]2EE组件开始的访问队列的图。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-195416.png" alt="访问图"></p>
+</li>
+<li><p><strong>方法检测 Outlier Detection</strong></p>
+<p>显示一段时间内记录的方法的调用时间细节。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-200246.png" alt="image-20240823200244805"></p>
+</li>
+<li><p><strong>调用栈追踪 Call Tracer</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-200527.png" alt="image-20240823200526033"></p>
+</li>
+</ul>
+<h3 id="3-6-线程视图-threads"><a href="#3-6-线程视图-threads" class="headerlink" title="3.6  线程视图 threads"></a>3.6  线程视图 threads</h3><p>JProfiler通过对线程历史的监控判断其运行状态，并监控是否有线程阻塞产生，还能将一个线程所管理的方法以树状形式呈现。对线程剖析。</p>
+<ul>
+<li><p><strong>线程历史 Thread History</strong></p>
+<p>显示一个与线程活动和线程状态在一起的活动时间表。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-202059.png" alt="线程历史"></p>
+</li>
+<li><p><strong>线程监控 Thread Monitor</strong></p>
+<p>显示一个列表，包括所有的活动线程以及它们目前的活动状况。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-202149.png" alt="线程监控"></p>
+</li>
+<li><p><strong>线程转储 Thread Dumps</strong></p>
+<p>显示所有线程的堆栈跟踪。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-202330.png" alt="线程转储"></p>
+</li>
+</ul>
+<p>线程分析主要关心三个方面：</p>
+<ul>
+<li>web容器的线程最大数。比如：Tomcat的线程容量应该略大于最大并发数。</li>
+<li>线程阻塞</li>
+<li>线程死锁</li>
+</ul>
+<h3 id="3-7-监视器-锁-Monitors-locks"><a href="#3-7-监视器-锁-Monitors-locks" class="headerlink" title="3.7 监视器&amp;锁 Monitors&amp;locks"></a>3.7 监视器&amp;锁 Monitors&amp;locks</h3><p>监控和锁 <code>Monitors &amp; Locks</code> 所有线程持有<strong>锁</strong>的情况以及锁的信息. 观察JVM的内部线程并查看状态：</p>
+<ul>
+<li><p><strong>死锁探测图表 Current Locking Graph</strong></p>
+<p>显示JVM中的当前<strong>死锁</strong>图表</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-202629.png" alt="死锁探测图表"></p>
+</li>
+<li><p><strong>监测器 Current Monitors</strong></p>
+<p>显示目前使用的监测器并且包括它们的<strong>关联线程</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-203056.png" alt="Current Monitors"></p>
+</li>
+<li><p><strong>锁定历史图表 Locking History Graph</strong></p>
+<p>显示记录在JVM中的<strong>锁定历史</strong></p>
+</li>
+<li><p><strong>历史检测记录Monitor History</strong></p>
+<p>显示重大的<strong>等待事件</strong>和<strong>阻塞事件</strong>的历史记录</p>
+</li>
+<li><p><strong>监控器使用统计 Monitor Usage Statistics</strong></p>
+<p>显示分组监测，线程和监测类的<strong>统计监测数据</strong></p>
+</li>
+</ul>
+<h2 id="4-案例分析"><a href="#4-案例分析" class="headerlink" title="4. 案例分析"></a>4. 案例分析</h2><ul>
+<li><p>代码</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MemoryLeak</span> &#123;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;
+            <span class="type">ArrayList</span> <span class="variable">beanList</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();
+            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">500</span>; i++) &#123;
+                <span class="type">Bean</span> <span class="variable">data</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Bean</span>();
+                data.list.add(<span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span> * <span class="number">10</span>]);<span class="comment">//10kb</span>
+                beanList.add(data);
+            &#125;
+            <span class="keyword">try</span> &#123;
+                TimeUnit.MILLISECONDS.sleep(<span class="number">500</span>);
+            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+    &#125;
+
+&#125;
+
+<span class="keyword">class</span> <span class="title class_">Bean</span> &#123;
+    <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> <span class="number">10</span>;
+    <span class="type">String</span> <span class="variable">info</span> <span class="operator">=</span> <span class="string">&quot;hello,atguigu&quot;</span>;
+<span class="comment">//     ArrayList list = new ArrayList();</span>
+    <span class="keyword">static</span> <span class="type">ArrayList</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();
+&#125;</code></pre>
+
+
+</li>
+<li><p>使用JProfiler进行分析</p>
+<ul>
+<li><p>我们通过JProfiler来看一下，如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-204502.png" alt="查看内存"></p>
+<p>你可以看到内存一个劲的往上涨，但是就是没有下降的趋势，说明这肯定有问题，过不了多久就会出现OOM，我们来到Live memory中，先标记看一下到底是哪些对象在进行内存增长，等一小下看看会不会触发垃圾回收，如果不触发的话，我们自己来触发垃圾回收，之后观察哪些对象没有被回收掉，如下：</p>
+</li>
+<li><p>查看Live Memory, 标记内存, 手动进行GC</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-204649.png" alt="查看活动的内存"></p>
+<p>我上面点击了Mark Current，发现有些对象在持续增长，然后点击了一下Run GC，发现 byte[] 并没有被回收</p>
+</li>
+<li><p>点击Show Selection In Heap Walker，如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-204856.png" alt="右键,点击 Heap Walker"></p>
+</li>
+<li><p>然后看一下该对象被谁引用，如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-205031.png" alt="Incoming reference"></p>
+<p>结果如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-205343.png" alt="image-20240823205342532"></p>
+</li>
+</ul>
+</li>
+<li><p>结论</p>
+<p>可以看出byte[]来自于Bean类是的list中，并且这个list是ArrayList类型的静态集合，所以找到了：static ArrayList list &#x3D; new ArrayList();<br>发现list是静态的，这不妥，因为我们的目的是while结束之后Bean对象被回收，并且Bena对象中的所有字段都被回收，但是list是静态的，那就是类的，众所周知，类变量随类而生，随类而灭，因此每次我们往list中添加值，都是往同一个list中添加值，这会造成list不断增大，并且不能回收，所以最终会导致OOM</p>
+</li>
+</ul>
+<h1 id="六、Arthas"><a href="#六、Arthas" class="headerlink" title="六、Arthas"></a>六、Arthas</h1><h2 id="1-基本概述-4"><a href="#1-基本概述-4" class="headerlink" title="1. 基本概述"></a>1. 基本概述</h2><h3 id="1-1-背景"><a href="#1-1-背景" class="headerlink" title="1.1 背景"></a>1.1 背景</h3><p>前面，我们介绍了jdk自带的 <code>jvisualvm</code> 等免费工具，以及商业化工具<code>Jprofiler</code>。</p>
+<p>这两款工具在业界知名度也比较高，他们的优点是可以<strong>图形界面</strong>上看到各维度的性能数据，使用者根据这些数据进行综合分析，然后判断哪里出现了性能问题。</p>
+<p>但是这两款工具也有个缺点，都必须在<strong>服务端</strong>项目进程中配置相关的监控参数。然后工具通过远程连接到项目进程，获取相关的数据。这样就会带来一些不便，比如线上环境的网络是<strong>隔离</strong>的，本地的监控工具根本连不上线上环境。并且类似于<code>Jprofiler</code>这样的商业工具，是需要付费的。</p>
+<p>阿里巴巴开源的<strong>性能分析神器</strong>Arthas(阿尔萨斯）不需要远程连接，也不需要配置监控参数，并且提供了丰富的性能监控数据.</p>
+<h3 id="1-2-概述"><a href="#1-2-概述" class="headerlink" title="1.2 概述"></a>1.2 概述</h3><p>Arthas支持JDK6+,支持 <code>Linux</code> &#x2F; <code>Mac</code> &#x2F; <code>Windows</code>,采用命令行交互模式，同时提供丰富的<code>Tab</code>自动补全功能，进一步方便进行问题的定位和诊断。</p>
+<p>当你遇到以下类似问题而束手无策时，Arthas可以帮助你解决：</p>
+<ul>
+<li><p>这个类从哪个jar包加载的？为什么会报各种类相关的Exception?</p>
+</li>
+<li><p>我改的代码为什么没有执行到？难道是我没commit?分支搞错了？</p>
+</li>
+<li><p>遇到问题无法在线上 debug , 难道只能通过加日志再重新发布吗？</p>
+</li>
+<li><p>线上遇到某个用户的数据处理有问题，但线上同样无法 debug,线下无法重现！</p>
+</li>
+<li><p>是否有一个全局视角来查看系统的运行状况？</p>
+</li>
+<li><p>有什么办法可以监控到JVM的实时运行状态？</p>
+</li>
+<li><p>怎么快速定位应用的热点，生成火焰图？</p>
+</li>
+</ul>
+<h3 id="1-3-基于哪些工具开发而来"><a href="#1-3-基于哪些工具开发而来" class="headerlink" title="1.3 基于哪些工具开发而来"></a>1.3 基于哪些工具开发而来</h3><ul>
+<li>greys-anatomy:Arthas代码基于Greys二次开发而来，非常感谢Greys之前所有的工作，以及Greys原作者对Arthas提出的意见和建议！</li>
+<li>termd:Arthas的命令行实现基于termd开发，是一款优秀的命令行程序开发框架，感谢termd提供了优秀的框架。</li>
+<li>crash:Arthas的文本渲染功能基于crash中的文本渲染功能开发，可以从这里看到源码，感谢crash在这方面所做的优秀工作。</li>
+<li>cli:Arthas的命令行界面基于vert.x提供的cli库进行开发，感谢vert.x在这方面做的优秀工作。</li>
+<li>compiler Arthas里的内存编绎器代码来源</li>
+<li>Apache Commons Net Arthas里的Telnet Client代码来源</li>
+<li>JavaAgent:运行在main方法之前的拦截器，它内定的方法名叫premain,也就是说先执行premain方法然后再执行main方法</li>
+<li>ASM:一个通用的Java字节码操作和分析框架。它可以用于修改现有的类或直接以二进制形式动态生成类。ASM提供了一些常见的字节码转换和分析算法，可以从它们构建定制的复杂转换和代码分析工具。ASM提供了与其他Java字节码框架类似的功能，但是主要关注性能。因为它被设计和实现得尽可能小和快，所以非常适合在动态系统中使用（当然也可以以静态方式使用，例如在编译器中）</li>
+</ul>
+<h3 id="1-4-官方使用文档"><a href="#1-4-官方使用文档" class="headerlink" title="1.4 官方使用文档"></a>1.4 官方使用文档</h3><p><a target="_blank" rel="noopener" href="https://arthas.aliyun.com/">https://arthas.aliyun.com/</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/23/20240823-210407.png" alt="官网"></p>
+<h2 id="2-安装与使用"><a href="#2-安装与使用" class="headerlink" title="2. 安装与使用"></a>2. 安装与使用</h2><h3 id="2-1-安装"><a href="#2-1-安装" class="headerlink" title="2.1 安装"></a>2.1 安装</h3><p><strong>安装方式一:</strong> 可以直接在Linux上通过命令下载</p>
+<p>可以在官方 Github 上进行下载，如果速度较慢，可以尝试国内的码云 Gitee 下载。</p>
+<ul>
+<li><p>Github下载</p>
+<pre><code class="highlight shell">wget https://alibaba.github.io/arthas/arthas-boot.jar</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-082939.png" alt="从Github下载"></p>
+</li>
+<li><p>Gitee 下载</p>
+<pre><code class="highlight shell">wget https://arthas.gitee.io/arthas-boot.jar</code></pre></li>
+</ul>
+<p><strong>安装方式二:</strong></p>
+<p>也可以在浏览器直接访问 <a target="_blank" rel="noopener" href="https://alibaba.github.io/arthas/arthas-boot.jar">https://alibaba.github.io/arthas/arthas-boot.jar</a> ，等待下载完后，上传到Linux服务器上。</p>
+<p><strong>卸载</strong></p>
+<p>在 Linux&#x2F;Unix&#x2F;Mac 平台，删除下面的文件：</p>
+<pre><code class="highlight shell">rm -rf ~/.arthas
+rm -rf ~/logs/arthas</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-083154.png" alt="image-20240824083153843"></p>
+<p>Windows 平台直接删除 <code>&lt;User_Home&gt;</code> 下的 .arthas 和 logs&#x2F;arthas 目录</p>
+<h3 id="2-2-工程目录"><a href="#2-2-工程目录" class="headerlink" title="2.2 工程目录"></a>2.2 工程目录</h3><ul>
+<li><strong>arthas-agent</strong>: 基于 JavaAgent 技术的代理</li>
+<li><strong>bin</strong>: 一些启动脚本</li>
+<li><strong>arthas-boot</strong>: Java 版本的一键安装启动脚本</li>
+<li><strong>arthas-client</strong>: telnet client 代码</li>
+<li><strong>arthas-common</strong>: 一些共用的工具类和枚举类</li>
+<li><strong>arthas-core</strong>: 核心库，各种 arthas 命令的交互和实现</li>
+<li><strong>arthas-demo</strong>: 示例代码</li>
+<li><strong>arthas-memorycompiler</strong>: 内存编绎器代码，Fork from <a target="_blank" rel="noopener" href="https://github.com/skalogs/SkaETL/tree/master/compiler">https://github.com/skalogs/SkaETL/tree/master/compiler</a></li>
+<li><strong>arthas-packaging</strong>: maven 打包相关的</li>
+<li><strong>arthas-site</strong>: arthas 站点</li>
+<li><strong>arthas-spy</strong>: 编织到目标类中的各个功面</li>
+<li><strong>static</strong>: 静态资源</li>
+<li><strong>arthas-testcase</strong>: 测试</li>
+</ul>
+<h3 id="2-3-启动"><a href="#2-3-启动" class="headerlink" title="2.3 启动"></a>2.3 启动</h3><p>Arthas 只是一个 Java 程序，所以可以直接用 <code>java -jar</code> 运行。</p>
+<ul>
+<li><p>执行成功后，arthas 提供了一种命令行方式的交互方式，arthas 会检测当前服务器上的 Java 进程并将进程列表展示出来，用户输入对应的编号 (1、2、3、4…) 进行选择，然后回车。</p>
+<p>选择进程（输入[]内编号（不是PID)回车）</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-083713.png" alt="启动方式一"></p>
+<ul>
+<li>方式2: 运行时选择 Java 进程 PID</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-083826.png" alt="启动方式二"></p>
+<h3 id="2-4-查看进程"><a href="#2-4-查看进程" class="headerlink" title="2.4 查看进程"></a>2.4 查看进程</h3><p>查看运行中的程序进程号，使用命令：<code>jps</code> 或者 <code>jps -l</code></p>
+<h3 id="2-5-查看日志"><a href="#2-5-查看日志" class="headerlink" title="2.5 查看日志"></a>2.5 查看日志</h3><pre><code class="highlight shell">cat ~/logs/arthas/arthas.log</code></pre>
+
+
+
+<h3 id="2-6-参看帮助"><a href="#2-6-参看帮助" class="headerlink" title="2.6 参看帮助"></a>2.6 参看帮助</h3><pre><code class="highlight shell">java -jar arthas-boot.jar -h</code></pre>
+
+
+
+<h3 id="2-7-web-console"><a href="#2-7-web-console" class="headerlink" title="2.7 web console"></a>2.7 web console</h3><p>除了在命令行查看外，<code>Arthas</code>目前还支持 <code>Web Console</code> 。在成功启动连接进程之后就已经自动启动，可以直接访问 <code>http://127.0.0.1:8563/</code> 访问，页面上的操作模式和控制台完全一样。</p>
+<h3 id="2-8-退出"><a href="#2-8-退出" class="headerlink" title="2.8 退出"></a>2.8 退出</h3><ul>
+<li>使用 <code>quit/exit</code>：退出当前客户端</li>
+<li>使用 <code>stop/shutdown</code>：关闭 arthas 服务端，并退出所有客户端。</li>
+</ul>
+<h2 id="3-相关诊断指令"><a href="#3-相关诊断指令" class="headerlink" title="3. 相关诊断指令"></a>3. 相关诊断指令</h2><p>官方文档: <a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/commands.html">https://arthas.aliyun.com/doc/commands.html</a></p>
+<h3 id="3-1-基础指令"><a href="#3-1-基础指令" class="headerlink" title="3.1 基础指令"></a>3.1 基础指令</h3><ul>
+<li><code>help</code>：查看命令帮助信息</li>
+<li><code>cat</code>：打印文件内容，和 linux 里的 cat 命令类似</li>
+<li><code>echo</code>：打印参数，和 linux 里的 echo 命令类似</li>
+<li><code>grep</code>：匹配查找，和 linux 里的 grep 命令类似</li>
+<li><code>tee</code>：复制标准输入到标准输出和指定的文件，和 linux 里的 tee 命令类似</li>
+<li><code>pwd</code>：返回当前的工作目录，和 linux 命令类似</li>
+<li><code>cls</code>：清空当前屏幕区域</li>
+<li><code>session</code>：查看当前会话的信息</li>
+<li><code>reset</code>：重置增强类，将被 Arthas 增强过的类全部还原，Arthas 服务端关闭时会重置所有增强过的类</li>
+<li><code>version</code>：输出当前目标 Java 进程所加戟的 Arthas 版本号</li>
+<li><code>history</code>：打印命令历史</li>
+<li><code>quit</code>：退出当前 Arthas 客户端，其他 Arthas 客户端不受影响</li>
+<li><code>stop</code>：关闭 Arthas 服务端，所有 Arthas 客户端全部退出</li>
+<li><code>keymap</code>：Arthas 快捷键列表及自定义快捷键</li>
+</ul>
+<h3 id="3-2-jvm相关"><a href="#3-2-jvm相关" class="headerlink" title="3.2 jvm相关"></a>3.2 jvm相关</h3><p><a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/commands.html">https://arthas.aliyun.com/doc/commands.html</a></p>
+<ul>
+<li><code>dashboard</code>: 当前系统的实时数据面板</li>
+<li><code>thread</code>: 查看当前 JVM 的线程堆栈信息</li>
+<li><code>jvm</code>: 查看当前 JVM 的信息</li>
+<li><code>sysenv</code>: 查看 JVM 的环境变量</li>
+<li><code>sysprop</code>: 查看和修改 JVM 的系统属性</li>
+<li><code>sysem</code>: 查看 JVM 的环境变量</li>
+<li><code>vmoption</code>: 查看和修改 JVM 里诊断相关的 option</li>
+<li><code>perfcounter</code>: 查看当前 JVM 的 Perf Counter 信息</li>
+<li><code>logger</code>: 查看和修改 logger</li>
+<li><code>getstatic</code>: 查看类的静态属性</li>
+<li><code>ognl</code>: 执行 ognl 表达式</li>
+<li><code>mbean</code>: 查看 Mbean 的信息</li>
+<li><code>heapdump</code>: dump java heap，类似 jmap 命令的 heap dump 功能</li>
+</ul>
+<h3 id="3-3-class-classloader相关"><a href="#3-3-class-classloader相关" class="headerlink" title="3.3 class&#x2F;classloader相关"></a>3.3 class&#x2F;classloader相关</h3><ul>
+<li><code>sc</code>: 查看 JVM 已加载的类信息</li>
+<li><code>sm</code>: 查看已加载类的方法信息</li>
+<li><code>jad</code>: 反编译指定已加载类的源码</li>
+<li><code>mc</code>: 内存编译器，内存编译.java 文件为.class 文件</li>
+<li><code>retransform</code>: 加载外部的.class 文件，retransform 到 JVM 里</li>
+<li><code>redefine</code>: 加载外部的.class 文件，redefine 到 JVM 里</li>
+<li><code>dump</code>: dump 已加载类的 byte code 到特定目录</li>
+<li><code>classloader</code>: 查看 classloader 的继承树，urls，类加载信息，使用 classloader 去 getResource</li>
+</ul>
+<h3 id="3-4-monitor-watch-trace相关"><a href="#3-4-monitor-watch-trace相关" class="headerlink" title="3.4 monitor&#x2F;watch&#x2F;trace相关"></a>3.4 monitor&#x2F;watch&#x2F;trace相关</h3><p>请注意，这些命令，都通过字节码增强技术来实现的，会在指定类的方法中插入一些切面来实现数据统计和观测，因此在线上、预发使用时，请尽量明确需要观测的类、方法以及条件，诊断结束要执行 stop 或将增强过的类执行 reset 命令。</p>
+<ul>
+<li>monitor 对匹配 <code>class-pattern／method-pattern／condition-express</code> 的类、方法的调用进行监控。</li>
+<li>watch: 让你能方便的观察到指定函数的调用情况。能观察到的范围为：返回值、抛出异常、入参，通过编写 OGNL 表达式进行对应变量的查看。</li>
+<li>trace: <code>trace</code> 命令能主动搜索 <code>class-pattern</code>／<code>method-pattern</code> 对应的方法调用路径，渲染和统计整个调用链路上的所有性能开销和追踪调用链路。</li>
+<li>stack: 很多时候我们都知道一个方法被执行，但这个方法被执行的路径非常多，或者你根本就不知道这个方法是从那里被执行了，此时你需要的是 <code>stack</code> 命令。</li>
+<li>tt: 方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测</li>
+</ul>
+<h3 id="3-5-其他"><a href="#3-5-其他" class="headerlink" title="3.5 其他"></a>3.5 其他</h3><ul>
+<li><p>profiler&#x2F;火焰图: <a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/profiler.html">https://arthas.aliyun.com/doc/profiler.html</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-093316.jpg" alt="火焰图"></p>
+</li>
+<li><p>options: <a target="_blank" rel="noopener" href="https://arthas.aliyun.com/doc/options.html">https://arthas.aliyun.com/doc/options.html</a></p>
+</li>
+</ul>
+<h1 id="七、Java-Misssion-Control"><a href="#七、Java-Misssion-Control" class="headerlink" title="七、Java Misssion Control"></a>七、Java Misssion Control</h1><h2 id="1-历史"><a href="#1-历史" class="headerlink" title="1. 历史"></a>1. 历史</h2><p>在 Oracle 收购 Sun 之前，Oracle 的 JRockit 虚拟机提供了一款叫做 JRockit Mission Control 的虚拟机诊断工具。</p>
+<p>在 Oracle 收购 sun 之后，Oracle 公司同时拥有了 Hotspot 和 JRockit 两款虚拟机。根据 Oracle 对于 Java 的战略，在今后的发展中，会将 JRokit 的优秀特性移植到 Hotspot 上。其中一个重要的改进就是在 Sun 的 JDK 中加入了 JRockit 的支持。</p>
+<p>在 Oracle JDK 7u40 之后，Mission Control 这款工具己经绑定在 Oracle JDK 中发布。</p>
+<p>自 Java11 开始，本节介绍的 JFR 己经开源。但在之前的 Java 版本，JFR 属于 Commercial Feature 通过 Java 虚拟机参数 <code>-XX:+UnlockCommercialFeatures</code> 开启。</p>
+<ul>
+<li>官方地址：<a target="_blank" rel="noopener" href="https://openjdk.org/projects/jmc">https://openjdk.org/projects/jmc</a></li>
+<li>Github项目地址：<a target="_blank" rel="noopener" href="https://github.com/openjdk/jmc">https://github.com/openjdk/jmc</a></li>
+</ul>
+<h2 id="2-概述"><a href="#2-概述" class="headerlink" title="2. 概述"></a>2. 概述</h2><p>Java Mission Control（简称 JMC) ， Java 官方提供的性能强劲的工具，是一个用于对 Java 应用程序进行管理、监视、概要分析和故障排除的工具套件。</p>
+<p>它包含一个 GUI 客户端以及众多用来收集 Java 虚拟机性能数据的插件如 JMX Console（能够访问用来存放虚拟机各个子系统运行数据的 MXBeans）以及虚拟机内置的高效 profiling 工具 Java Flight Recorder（JFR）。</p>
+<p>JMC 的另一个优点就是：采用取样，而不是传统的代码植入技术，对应用性能的影响非常非常小，完全可以开着 JMC 来做压测（唯一影响可能是 full gc 多了）。</p>
+<h2 id="3-启动"><a href="#3-启动" class="headerlink" title="3. 启动"></a>3. 启动</h2><p>Mission Control 位于 <code>%JAVA_HOME%/bin/jmc.exe</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-094004.png" alt="jmc.exe"></p>
+<h2 id="4-功能：实时监控JVM运行时的状态"><a href="#4-功能：实时监控JVM运行时的状态" class="headerlink" title="4. 功能：实时监控JVM运行时的状态"></a>4. 功能：实时监控JVM运行时的状态</h2><p>如果是远程服务器，使用前要开 JMX。</p>
+<p><strong>JMX 启动参数：</strong></p>
+<ul>
+<li>-Dcom.sun.management.jmxremote 远程开启开关</li>
+<li>-Dcom.sun.management.jmxremote.port&#x3D;1808 jmx远程调用端口</li>
+<li>-Dcom.sun.management.jmxremote.rmi.port&#x3D;1808 添加 rmi 端口<ul>
+<li>JMX 和 RMI，是两种相关联的技术，JMX 使用 RMI 作为远程管理工具来管理和监控 Java 程序，RMI 为 JMX 提供了远程连接所需的远程调用和通信机制。</li>
+</ul>
+</li>
+<li>-Dcom.sun.management.jmxremote.authenticate&#x3D;false 不开启验证</li>
+<li>-Dcom.sun.management.jmxremote.ssl&#x3D;false 不为ssl连接</li>
+<li>-Djava.rmi.server.hostname&#x3D;192.168.6.203 服务器所在ip或者域名</li>
+<li>-Dcom.sun.management.jmxremote.pwd.file&#x3D;&#x2F;opt&#x2F;module&#x2F;jdk1.8.0_261&#x2F;jre&#x2F;lib&#x2F;management&#x2F;jmxremote.password 配置JMX远程连接用户名和密码</li>
+</ul>
+<p><strong>服务端启动示例</strong></p>
+<pre><code class="highlight shell">java -Xmx512m -Xms512m -Xmn512m \
+	-XX:+UnlockCommercialFeatures -XX:+FlightRecorder \
+	-Dcom.sun.management.jmxremote \
+	-Dcom.sun.management.jmxremote.port=1808 \
+	-Dcom.sun.management.jmxremote.rmi.port=1808 \
+	-Dcom.sun.management.jmxremote.authenticate=false \
+	-Dcom.sun.management.jmxremote.ssl=false \
+	-Djava.rmi.server.hostname=192.168.6.203 \
+	-jar ioms-ums.jar \
+	--spring.profiles.active=dev</code></pre>
+
+<p><em>注意：启动时，要在关闭用户校验的情况下启动JMX：<code>-Dcom.sun.management.jmxremote.authenticate=false</code>，并且添加参数 <code>-XX:+UnlockCommercialFeatures -XX:+FlightRecorder</code> 开启飞行记录仪；</em></p>
+<p><strong>另外说明一点：</strong></p>
+<p>这里需要注意的一点是，JMC可以用于java7以上的所有版本，而飞行记录器，只能用于oracle jre，且是java7及以上的版本，因为要使用飞行记录器，需要开启jvm的商业特性，也就是在启动的时候加上参数：”-XX:+UnlockCommercialFeatures”,”-XX:+FlightRecorder”。如果是open jdk，尝试加这两个参数的时候，会直接导致虚拟机终止，无法正常启动。所以，飞行记录器只能局限在oracle jdk里面使用。</p>
+<p><strong>JMC连接监控进程</strong></p>
+<p>文件 -&gt;连接 -&gt;创建新连接， 填入上面 JMX 参数的 host 和 port, 具体参考：第一章第3节：服务端开启远程监控</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-094752.png" alt="远程连接JMC"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-095059.png" alt="连接JMC成功"></p>
+<h2 id="5-Java-Flight-Recorder"><a href="#5-Java-Flight-Recorder" class="headerlink" title="5. Java Flight Recorder"></a>5. Java Flight Recorder</h2><p>Java Flight Recorder 是 JMC 的其中一个组件。</p>
+<p>Java Flight Recorder 能够以极低的性能开销收集 Java 虚拟机的性能数据。</p>
+<p>JFR 的性能开销很小，在默认配置下平均低于 1%。与其他工具相比，JFR 能够直接访问虚拟机内的数据，并且不会影响虚拟机的优化。因此，它非常适用于生产环境下满负荷运行的 Java 程序。</p>
+<p>Java Flight Recorder 和 JDK Mission Control 共同创建了一个完整的工具链。JDKMission Control 可对 Java Flight Recorder 连续收集低水平和详细的运行时信息进行高效详细的分析。</p>
+<h3 id="5-1-事件类型"><a href="#5-1-事件类型" class="headerlink" title="5.1 事件类型"></a>5.1 事件类型</h3><p>当启用时 JFR将记录运行过程中发生的一系列事件。其中包括Java层面的事件如线程事件、锁事件，以及Java虚拟机内部的事件，如新建对象，垃圾回收和即时编译事件。</p>
+<p>按照发生时机以及持续时间来划分，JFR的事件共有四种类型，它们分别为以下四种：</p>
+<ul>
+<li>瞬时事件（Instant Event) ，用户关心的是它们发生与否，例如异常、线程启动事件。</li>
+<li>持续事件(Duration Event) ，用户关心的是它们的持续时间，例如垃圾回收事件。</li>
+<li>计时事件(Timed Event) ，是时长超出指定阈值的持续事件。</li>
+<li>取样事件（Sample Event)，是周期性取样的事件。</li>
+</ul>
+<p>取样事件的其中一个常见例子便是方法抽样（Method Sampling），即每隔一段时问统计各个线程的栈轨迹。如果在这些抽样取得的栈轨迹中存在一个反复出现的方法，那么我们可以推测该方法是热点方法</p>
+<h3 id="5-2-启动方式"><a href="#5-2-启动方式" class="headerlink" title="5.2 启动方式"></a>5.2 启动方式</h3><p><strong>方式1：使用 <code>-XX:StartFlightRecording=参数</code></strong></p>
+<p>第一种是在运行目标 Java 程序时添加 <code>-XX:startFlightRecording=参数</code>。</p>
+<p>比如: 下面命令中，JFR 将会在 Java 虚拟机启动 5s 后 (对应 <code>delay=5s</code>) 收集数据，持续 20s(对应 <code>duration=28s</code>)。当收集完毕后，JFR 会将收集得到的数据保存至指定的文件中(对应 <code>filename=myrecording.jfr</code>)</p>
+<pre><code class="highlight shell">java -Xmx512m -Xms512m -Xmn512m \
+	-XX:+UnlockCommercialFeatures -XX:+FlightRecorder \
+	-XX:StartFlightRecording=delay=5s,duration=20s,filename=myrecording.jfr,settings=profile \
+	-Dcom.sun.management.jmxremote \
+	-Dcom.sun.management.jmxremote.port=1808 \
+	-Dcom.sun.management.jmxremote.rmi.port=1808 \
+	-Dcom.sun.management.jmxremote.authenticate=false \
+	-Dcom.sun.management.jmxremote.ssl=false \
+	-Djava.rmi.server.hostname=192.168.6.203 \
+	-jar ioms-ums.jar \
+	--spring.profiles.active=dev</code></pre>
+
+<p>由于 JFR 将持续收集数据，如果不加以限制，那么 JFR 可能会填满硬盘的所有空间。因此，我们有必要对这种模式下所收集的数据进行限制。</p>
+<p>比如:</p>
+<pre><code class="highlight shell">java -Xmx512m -Xms512m -Xmn512m \
+	-XX:+UnlockCommercialFeatures -XX:+FlightRecorder \
+	-XX:StartFlightRecording=delay=5s,,duration=20s,maxage=10m,maxsize=100m,name=SomeLabel,filename=myrecording.jfr,settings=profile \
+	-Dcom.sun.management.jmxremote \
+	-Dcom.sun.management.jmxremote.port=1808 \
+	-Dcom.sun.management.jmxremote.rmi.port=1808 \
+	-Dcom.sun.management.jmxremote.authenticate=false \
+	-Dcom.sun.management.jmxremote.ssl=false \
+	-Djava.rmi.server.hostname=192.168.6.203 \
+	-jar ioms-ums.jar \
+	--spring.profiles.active=dev</code></pre>
+
+
+
+<p><strong>方式2：使用 jcmd 的JFR.*子命令</strong></p>
+<p>通过 jcmd 来让 JFR 开始收集数据、停止收集数据，或者保存所收集的数据，对应的子命令分别为JFR.start, JFR.stop，以及JFR.dump。</p>
+<ul>
+<li><p>启动java程序</p>
+<pre><code class="highlight shell">java -Xmx512m -Xms512m -Xmn512m \
+	-XX:+UnlockCommercialFeatures -XX:+FlightRecorder \
+	-jar ioms-ums.jar \
+	--spring.profiles.active=dev</code></pre>
+</li>
+<li><p>查看程序进程</p>
+<pre><code class="highlight shell">root@ubuntu:/opt/module/ioms/ioms-ums# jps -l
+29318 ioms-gateway.jar
+29272 ioms-eureka.jar
+27116 ioms-ums.jar
+27228 sun.tools.jps.Jps
+29422 ioms-auth.ja</code></pre>
+</li>
+<li><p>通过jcmd来让 JFR 开始收集数据</p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">jcmd &lt;PID&gt; JFR.start settings=profile maxage=10m maxsize=150m name=SomeLabel</span></code></pre>
+
+<p>示例：</p>
+<pre><code class="highlight shell">jcmd 27116 JFR.start settings=profile maxage=10m maxsize=100m name=test-jfr</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-111447.png" alt="JFR 开始收集数据"></p>
+</li>
+<li><p>保存所收集的数据</p>
+<pre><code class="highlight shell">jcmd &lt;PID&gt; JFR.dump name=SomeLabel filename=myrecording.jfr</code></pre>
+
+<p>示例：</p>
+<pre><code class="highlight shell">jcmd 27116 JFR.dump name=test-jfr filename=myrecording.jfr</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-111612.png" alt="保存所收集的数据"></p>
+</li>
+<li><p>关闭目标进程中的 JFR</p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">jcmd &lt;PID&gt; JFR.stop name=SomeLabel</span></code></pre>
+
+<p>示例:</p>
+<pre><code class="highlight shell">jcmd 27116 JFR.stop name=test-jfr</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-111828.png" alt="关闭目标进程中的 JFR"></p>
+</li>
+</ul>
+<p><strong>配置飞行记录仪监测</strong></p>
+<ol>
+<li>启动飞行记录仪</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-112403.png" alt="启动飞行记录仪"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-113110.png" alt="启动飞行记录仪"></p>
+<p>2.正式启动</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-113329.png" alt="正式启动"></p>
+<p>启动 Object Count 和 Object Count after GC </p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-113508.png" alt="正式启动"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-115346.png" alt="正式启动"></p>
+<h3 id="5-3-Java-Flight-Recorder-取样分析"><a href="#5-3-Java-Flight-Recorder-取样分析" class="headerlink" title="5.3 Java Flight Recorder 取样分析"></a>5.3 Java Flight Recorder 取样分析</h3><p>要采用取样，必须先添加参数:</p>
+<ul>
+<li><code>-XX:+UnlockCommercialFeatures</code></li>
+<li><code>-XX:+FlightRecorder</code></li>
+</ul>
+<p>JDK9及更高版本</p>
+<ul>
+<li><code>-XX:+UnlockCommercialFeatures</code></li>
+<li><code>-XX:+StartFlightRecording</code></li>
+</ul>
+<p>如：<code>-XX:+UnlockCommercialFeatures -XX:+FlightRecorder -XX:StartFlightRecording=duration=200s</code></p>
+<p>否则:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-114008.png" alt="img"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-114015.png" alt="img"></p>
+<p>取样时间默认 1 分钟，可自行按需调整，事件设置选为profiling，然后可以设置取样 profile哪些信息，比如:</p>
+<ul>
+<li>加上对象数量的统计: Java Virtual Machine →→ Gc →→ Detailed →→ ObjectCount&#x2F;Object Count after GC</li>
+<li>方法调用采样的间隔从 10ms 改为 1ms(但不能低于 1ms，否则会影响性能了): JavaVirtual Machine →→ Profiling →→ Method Profiling Sample&#x2F;Method SamplingInformation</li>
+<li>Socket 与 File 采样，10ms 太久，但即使改为 1ms 也未必能抓住什么，可以干脆取消掉:Java Application →→ File Read&#x2F;FileWrite&#x2F;Socket Read&#x2F;Socket Write</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-115458.png" alt="img"></p>
+<p>然后就开始 Profile，到时间后 Profile 结束，会自动把记录下载回来，在 JMC 中展示。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-120314.png" alt="JMC分析文件"></p>
+<h1 id="八、其他工具"><a href="#八、其他工具" class="headerlink" title="八、其他工具"></a>八、其他工具</h1><h2 id="1-Flame-Graphs（火焰图）"><a href="#1-Flame-Graphs（火焰图）" class="headerlink" title="1. Flame Graphs（火焰图）"></a>1. Flame Graphs（火焰图）</h2><p>在追求极致性能的场景下，了解你的程序运行过程中cpu在干什么很重要，火焰图就是一种非常直观的展示CPU在程序整个生命周期过程中时间分配的工具。火焰图对于现代的程序员不应该陌生，这个工具可以非常直观的显示出调用找中的CPU消耗瓶颈。</p>
+<p>网上的关于Java火焰图的讲解大部分来自于Brenden Gregg的博客 <a target="_blank" rel="noopener" href="http://new.brendangregg.com/flamegraphs.html">http://new.brendangregg.com/flamegraphs.html</a></p>
+<p><strong>CPU Flame Graphs</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-120453.svg" alt="CPU Flame Graphs"></p>
+<p>Memory Flame Graph</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/24/20240824-120514.svg" alt="Memory Flame Graph"></p>
+<p>火焰图，简单通过x轴横条宽度来度量时间指标，y轴代表线程栈的层次。</p>
+<h2 id="2-Tprofiler"><a href="#2-Tprofiler" class="headerlink" title="2. Tprofiler"></a>2. Tprofiler</h2><ul>
+<li><p><strong>案例：</strong></p>
+<p>使用 JDK 自身提供的工具进行 JVM 调优可以将下 TPS 由 2.5 提升到 20（提升了 7 倍），并准确 定位系统瓶颈。</p>
+<p>系统瓶颈有：应用里释态对象不是太多、有大量的业务线程在频繁创建一些生命周期很长的临时对象，代码里有问题。</p>
+<p>那么，如何在海量业务代码里边准确定位这些性能代码？这里使用阿里开源工具 Tprofiler 来定位 这些性能代码，成功解决掉了 GC 过于频繁的性能瓶预，并最终在上次优化的基础上将 TPS 再提升了 4 倍，即提升到 100。</p>
+</li>
+<li><p>Tprofiler 配置部署、远程操作、 日志阅谈都不太复杂，操作还是很简单的。但是其却是能够 起到一针见血、立竿见影的效果，帮我们解决了 GC 过于频繁的性能瓶预。</p>
+</li>
+<li><p>Tprofiler 最重要的特性就是能够统汁出你指定时间段内 JVM 的 top method 这些 top method 极有可能就是造成你 JVM 性能瓶颈的元凶。这是其他大多数 JVM 调优工具所不具备的，包括 JRockit Mission Control。JRokit 首席开发者 Marcus Hirt 在其私人博客《 Lom Overhead Method Profiling cith Java Mission Control》下的评论中曾明确指出 JRMC 井不支持 TOP 方法的统计。</p>
+</li>
+</ul>
+<p>Github地址：<a target="_blank" rel="noopener" href="http://github.com/alibaba/Tprofiler">http://github.com/alibaba/Tprofiler</a></p>
+<h2 id="3-Btrace"><a href="#3-Btrace" class="headerlink" title="3. Btrace"></a>3. Btrace</h2><p>常见的动态追踪工具有BTrace、HouseHD（该项目己经停止开发）、Greys-Anatomy（国人开发 个人开发者）、Byteman（JBoss出品），注意Java运行时追踪工具井不限干这几种，但是这几个是相对比较常用的。</p>
+<p>BTrace是SUN Kenai 云计算开发平台下的一个开源项目，旨在为java提供安全可靠的动态跟踪分析工具。先看一卜日Trace的官方定义：</p>
+<blockquote>
+<p>BTrace is a safe, dynamic tracing tool for the Java platform. BTrace can be used to dynamically trace a running Java program(similar to DTrace for OpenSolaris applications and 0s). BTrace dynamically instruments the classes of the target application to inject tracing code (“bytecode tracing” ).</p>
+</blockquote>
+<p>大概意思是一个 Java 平台的安全的动态追踪工具，可以用来动态地追踪一个运行的 Java 程序。BTrace动态调整目标应用程序的类以注入跟踪代码（“字节码跟踪“）。</p>
+<h2 id="3-YourKit"><a href="#3-YourKit" class="headerlink" title="3. YourKit"></a>3. YourKit</h2><h2 id="4-JProbe"><a href="#4-JProbe" class="headerlink" title="4. JProbe"></a>4. JProbe</h2><h2 id="5-Spring-Insight"><a href="#5-Spring-Insight" class="headerlink" title="5. Spring Insight"></a>5. Spring Insight</h2>
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
     </div>
