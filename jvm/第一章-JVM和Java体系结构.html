@@ -1,0 +1,1298 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>第一章-JVM和Java体系结构 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" jvm , java ">
+  <meta name="description" content="第一章-JVM和Java体系结构 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#x5f;&#x39;&#x35;&#x40;&#x31;&#x32;&#54;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#x5f;&#x39;&#x35;&#x40;&#x31;&#x32;&#54;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(37)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(26)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="37">
+<input type="hidden" id="yelog_site_word_count" value="196.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%9B%9B%E7%AB%A0-JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8F%82%E6%95%B0.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8OQL%E8%AF%AD%E8%A8%80%E6%9F%A5%E8%AF%A2%E5%AF%B9%E8%B1%A1%E4%BF%A1%E6%81%AF.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-%E6%B5%85%E5%A0%86-%E6%B7%B1%E5%A0%86-%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-JVM%E7%9B%91%E6%8E%A7%E5%8F%8A%E8%AF%8A%E6%96%AD%E5%B7%A5%E5%85%B7-GUI%E7%AF%87.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0-JVM%E7%9B%91%E6%8E%A7%E5%8F%8A%E8%AF%8A%E6%96%AD%E5%B7%A5%E5%85%B7-%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%AF%87.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0-%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%B0%83%E4%BC%98%E6%A6%82%E8%BF%B0.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E7%AB%A0-%E5%86%8D%E8%B0%88%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%B9%9D%E7%AB%A0-%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0-%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86%E4%B8%8E%E8%A7%A3%E6%9E%90%E4%B8%BE%E4%BE%8B.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0-%E4%BD%BF%E7%94%A8javap%E6%8C%87%E4%BB%A4%E8%A7%A3%E6%9E%90class%E6%96%87%E4%BB%B6.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-GC%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E9%93%BE%E8%A1%A8%E5%8F%8D%E8%BD%AC.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E9%80%89%E6%8B%A9-%E5%86%92%E6%B3%A1-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8C%E4%BD%8D%E8%BF%90%E7%AE%97.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%A6%82%E8%BF%B0.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/linux/Jenkins%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-StringTable.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E7%AB%A0-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E4%B8%8E%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%96%B9%E6%B3%95%E5%8C%BA.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%85%AD%E7%AB%A0-JVM%E5%A0%86.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%8E%A5%E5%8F%A3.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F.html"
+           data-tag="jvm,java,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%B8%80%E7%AB%A0-JVM%E5%92%8CJava%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/hexo/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0Sitemap.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/hexo/Typora%E8%AE%BE%E7%BD%AE%E5%9B%BE%E7%89%87%E8%87%AA%E5%8A%A8%E4%B8%8A%E4%BC%A0Github.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/hexo/Hexo%E5%8D%9A%E5%AE%A2%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/hexo/3-Hexo%E4%B8%BB%E9%A2%98%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/hexo/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub-Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-jvm/第一章-JVM和Java体系结构" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">第一章-JVM和Java体系结构</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="JVM">JVM</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">jvm</a>
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-06-22 18:36:12'>2023-11-25 10:00</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:4.5k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%88%91%E4%BB%AC%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AD%A6%E4%B9%A0JVM"><span class="toc-text">我们为什么要学习JVM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-VS-C"><span class="toc-text">Java VS C++</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java%E5%AE%98%E6%96%B9%E6%96%87%E6%A1%A3"><span class="toc-text">Java官方文档</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Open-JDK%E5%92%8COracle-JDK"><span class="toc-text">Open JDK和Oracle JDK</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">什么是虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A6%82%E5%BF%B5"><span class="toc-text">虚拟机概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Java%E8%99%9A%E6%8B%9F%E6%9C%BA"><span class="toc-text">Java虚拟机</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%9C%E7%94%A8"><span class="toc-text">作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%89%B9%E7%82%B9"><span class="toc-text">特点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="toc-text">JVM的位置</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM%E7%9A%84%E6%95%B4%E4%BD%93%E7%BB%93%E6%9E%84"><span class="toc-text">JVM的整体结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Java-%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-text">Java 代码执行流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM%E7%9A%84%E6%9E%B6%E6%9E%84%E6%A8%A1%E5%9E%8B"><span class="toc-text">JVM的架构模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%E7%89%B9%E7%82%B9"><span class="toc-text">架构特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AD%97%E8%8A%82%E7%A0%81%E5%AF%B9%E6%AF%94"><span class="toc-text">字节码对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM%E6%9E%B6%E6%9E%84%E6%80%BB%E7%BB%93"><span class="toc-text">JVM架构总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">JVM的生命周期</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="toc-text">虚拟机的启动</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E6%89%A7%E8%A1%8C"><span class="toc-text">虚拟机的执行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%9A%84%E9%80%80%E5%87%BA"><span class="toc-text">虚拟机的退出</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#JVM%E5%8F%91%E5%B1%95%E5%8E%86%E7%A8%8B"><span class="toc-text">JVM发展历程</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
+<p>系统 : Windows 10</p>
+<p>JDK : 1.8</p>
+</blockquote>
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>大部分Java开发人员，除了会在项目中使用到与Java平台相关的各种高精尖技术，对于Java技术的核心Java虚拟机了解甚少。在项目的开发过程中，可能会遇到虾米那这些问题。</p>
+<ul>
+<li>运行着的线上系统突然卡死，系统无法访问，甚至直接OOM！</li>
+<li>想解决线上JVM GC问题，但却无从下手。</li>
+<li>新项目上线，对各种JVM参数设置一脸茫然，只好使用默认配置。</li>
+<li>每次面试之前都要重新背一遍JVM的一些原理概念性的东西，然而面试官却经常问你在实际项目中如何调优VM参数，如何解决GC、OOM等问题，一脸懵逼。</li>
+</ul>
+<h1 id="我们为什么要学习JVM"><a href="#我们为什么要学习JVM" class="headerlink" title="我们为什么要学习JVM"></a>我们为什么要学习JVM</h1><ul>
+<li>面试的需要（BATJ、TMD，PKQ等面试都爱问）</li>
+<li>中高级程序员必备技能</li>
+<li>项目管理、调优的需要</li>
+<li>追求极客的精神<ul>
+<li>比如：垃圾回收算法、JIT、底层原理</li>
+</ul>
+</li>
+</ul>
+<h1 id="Java-VS-C"><a href="#Java-VS-C" class="headerlink" title="Java VS C++"></a>Java VS C++</h1><ol>
+<li>Java的垃圾收集机制为我们打理了很多繁琐的工作，大大提高了开发的效率，但是，垃圾收集也不是万能的，懂得JVM内部的内存结构、工作机制，是设计高扩展性应用和诊断运行时问题的基础，也是Java工程师进阶的必备能力。</li>
+<li>C++语言需要程序员自己来分配内存和回收内存，对于高手来说可能更加舒服，但是对于普通开发者，如果技术实力不够，很容易造成内存泄漏。而Java全部交给JVM进行内存分配和回收，这也是一种趋势，减少程序员的工作量。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/25/20231125-104520.jpg" alt="Java-vs-C++"></p>
+<h1 id="Java官方文档"><a href="#Java官方文档" class="headerlink" title="Java官方文档"></a>Java官方文档</h1><p><a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/index.html">Java 语言和虚拟机规范</a> </p>
+<h1 id="Open-JDK和Oracle-JDK"><a href="#Open-JDK和Oracle-JDK" class="headerlink" title="Open JDK和Oracle JDK"></a>Open JDK和Oracle JDK</h1><p>在JDK11之前，Oracle JDK中还会存在一些Open JDK中没有的，闭源的功能。但在JDK11中，我们可以认为Open JDK和Oracle JDK代码实质上已经达到完全一致的程度了。主要的区别就是两者更新周期不一样</p>
+<h1 id="什么是虚拟机"><a href="#什么是虚拟机" class="headerlink" title="什么是虚拟机"></a>什么是虚拟机</h1><h2 id="虚拟机概念"><a href="#虚拟机概念" class="headerlink" title="虚拟机概念"></a>虚拟机概念</h2><p>所谓虚拟机（Virtual Machine），就是一台虚拟的计算机。它是一款软件，用来执行一系列虚拟计算机指令。大体上，虚拟机可以分为系统虚拟机和程序虚拟机。</p>
+<ul>
+<li>系统虚拟机<ul>
+<li>大名鼎鼎的Virtual Box，VMware就属于系统虚拟机，它们完全是对物理计算机硬件的仿真(模拟)，提供了一个可运行完整操作系统的软件平台。</li>
+</ul>
+</li>
+<li>程序虚拟机<ul>
+<li>程序虚拟机的典型代表就是Java虚拟机，它专门为执行单个计算机程序而设计，在Java虚拟机中执行的指令我们称为Java字节码指令。</li>
+</ul>
+</li>
+</ul>
+<p>无论是系统虚拟机还是程序虚拟机，在上面运行的软件都被限制于虚拟机提供的资源中。</p>
+<h2 id="Java虚拟机"><a href="#Java虚拟机" class="headerlink" title="Java虚拟机"></a>Java虚拟机</h2><ul>
+<li>Java虚拟机是一台执行Java字节码的虚拟计算机，它拥有独立的运行机制，其运行的Java字节码也未必由Java语言编译而成。</li>
+<li>JVM平台的各种语言可以共享Java虚拟机带来的跨平台性、优秀的垃圾回器，以及可靠的即时编译器。</li>
+<li><strong>Java技术的核心就是Java虚拟机</strong>（JVM，Java Virtual Machine），因为所有的Java程序都运行在Java虚拟机内部。</li>
+</ul>
+<h3 id="作用"><a href="#作用" class="headerlink" title="作用"></a>作用</h3><p>Java虚拟机就是二进制字节码的运行环境，负责装载字节码到其内部，解释&#x2F;编译为对应平台上的机器指令执行。每一条Java指令，Java虚拟机规范中都有详细定义，如怎么取操作数，怎么处理操作数，处理结果放在哪里。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>一次编译，到处运行</li>
+<li>自动内存管理</li>
+<li>自动垃圾回收功能</li>
+</ul>
+<h1 id="JVM的位置"><a href="#JVM的位置" class="headerlink" title="JVM的位置"></a>JVM的位置</h1><p>JVM是运行在操作系统之上的，它与硬件没有直接的交互</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/25/20231125-110500.jpg" alt="JVM所处位置"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/25/20231125-112429.png" alt="jvm的位置"></p>
+<h1 id="JVM的整体结构"><a href="#JVM的整体结构" class="headerlink" title="JVM的整体结构"></a>JVM的整体结构</h1><p>从整体上看，JVM内部被划分为一下五个部分：</p>
+<ol>
+<li>类加载子系统</li>
+<li>运行时数据区</li>
+<li>执行引擎</li>
+<li>本地方法接口</li>
+<li>本地方法库</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/25/20231125-110950.png" alt="image-20231125110949260"></p>
+<p><strong>备注：</strong></p>
+<ul>
+<li>HotSpot VM是目前市面上高性能虚拟机的代表作之一。</li>
+<li>它采用解释器与即时编译器并存的架构。</li>
+<li>在今天，Java程序的运行性能早已脱胎换骨，已经达到了可以和C&#x2F;C++程序一较高下的地步。</li>
+</ul>
+<h1 id="Java-代码执行流程"><a href="#Java-代码执行流程" class="headerlink" title="Java 代码执行流程"></a>Java 代码执行流程</h1><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/25/20231125-112820.png" alt="Java代码执行流程"></p>
+<h1 id="JVM的架构模型"><a href="#JVM的架构模型" class="headerlink" title="JVM的架构模型"></a>JVM的架构模型</h1><p><strong>Java 编译器输入的指令流基木上是一种基于栈的指令集架构</strong>，另外一种指令集架构则是<strong>基于寄存器的指令集架构</strong>。</p>
+<h2 id="架构特点"><a href="#架构特点" class="headerlink" title="架构特点"></a>架构特点</h2><p>具体来说，这两种架构之间的区别：</p>
+<ul>
+<li>基于栈式架构的特点<ul>
+<li>设计和实现更简单，适用于资源受限的系统；</li>
+<li>避开了寄存器的分配难题：<strong>使用零地址指令方式分配</strong>。</li>
+<li>指令流中的指令大部分是零地址指令，其执行过程依赖于操作栈。指令集更小，编译器容易实现。</li>
+<li>不需要硬件支持，可移植性更好，更好实现跨平台</li>
+</ul>
+</li>
+<li>基于寄存器架构的特点<ul>
+<li>典型的应用是 x86 的二进制指令集：比如传统的 PC 以及 Android 的 Davlik 虚拟机。</li>
+<li><strong>指令集架构则完全依赖硬件，可移植性差</strong></li>
+<li><strong>性能优秀和执行更高效</strong></li>
+<li>花费更少的指令去完成一项操作。</li>
+<li>在大部分情况下，基于寄存器架构的指令集往往都以一地址指令、二地址指令和三地址指令为主，而基于栈式架构的指令集却是以零地址指令为主。</li>
+</ul>
+</li>
+</ul>
+<h2 id="字节码对比"><a href="#字节码对比" class="headerlink" title="字节码对比"></a>字节码对比</h2><p>同样执行2+3这种逻辑操作，其指令分别如下：</p>
+<ul>
+<li><p><strong>基于栈的计算流程（以Java虚拟机为例）：</strong></p>
+<pre><code class="highlight plaintext">iconst_2 // 常量2入栈
+istore_1
+iconst_3 // 常量3入栈
+istore_2
+iload_1
+iload_2
+iadd // 常量2/3出栈，执行相加
+istore_0 // 结果5入栈</code></pre>
+
+<p>8个指令</p>
+</li>
+<li><p><strong>而基于寄存器的计算流程</strong></p>
+<pre><code class="highlight plaintext">mov eax,2 // 将eax寄存器的值设为1
+add eax,3 // 使eax寄存器的值加3</code></pre>
+
+<p>2个指令</p>
+</li>
+</ul>
+<h2 id="JVM架构总结"><a href="#JVM架构总结" class="headerlink" title="JVM架构总结"></a>JVM架构总结</h2><ul>
+<li><strong>由于跨平台性的设计，Java的指令都是根据栈来设计的</strong>。不同平台CPU架构不同，所以不能设计为基于寄存器的。栈的优点：跨平台，指令集小，编译器容易实现，缺点是性能比寄存器差一些。</li>
+<li>时至今日，尽管嵌入式平台已经不是Java程序的主流运行平台了（准确来说应该是HotSpot VM的宿主环境已经不局限于嵌入式平台了），那么为什么不将架构更换为基于寄存器的架构呢？因为基于栈的架构跨平台性好、指令集小，虽然相对于基于寄存器的架构来说，基于栈的架构编译得到的指令更多，执行性能也不如基于寄存器的架构好，但考虑到其跨平台性与移植性，我们还是选用栈的架构</li>
+</ul>
+<h1 id="JVM的生命周期"><a href="#JVM的生命周期" class="headerlink" title="JVM的生命周期"></a>JVM的生命周期</h1><h2 id="虚拟机的启动"><a href="#虚拟机的启动" class="headerlink" title="虚拟机的启动"></a>虚拟机的启动</h2><p>Java虚拟机的启动是通过引导类加载器（bootstrap class loader）创建一个初始类（initial class）来完成的，这个类是由虚拟机的具体实现指定的。</p>
+<h2 id="虚拟机的执行"><a href="#虚拟机的执行" class="headerlink" title="虚拟机的执行"></a>虚拟机的执行</h2><ul>
+<li>一个运行中的Java虚拟机有着一个清晰的任务：执行Java程序</li>
+<li>程序开始执行时他才运行，程序结束时他就停止</li>
+<li><strong>执行一个所谓的Java程序的时候，真真正正在执行的是一个叫做Java虚拟机的进程</strong></li>
+</ul>
+<h2 id="虚拟机的退出"><a href="#虚拟机的退出" class="headerlink" title="虚拟机的退出"></a>虚拟机的退出</h2><p>有如下的几种情况：</p>
+<ol>
+<li>程序正常执行结束</li>
+<li>程序在执行过程中遇到了异常或错误而异常终止</li>
+<li>由于操作系统用现错误而导致Java虚拟机进程终止</li>
+<li>某线程调用Runtime类或System类的exit()方法，或Runtime类的halt()方法，并且Java安全管理器也允许这次exit()或halt()操作。</li>
+<li>除此之外，JNI（Java Native Interface）规范描述了用JNI Invocation API来加载或卸载 Java虚拟机时，Java虚拟机的退出情况。</li>
+</ol>
+<h1 id="JVM发展历程"><a href="#JVM发展历程" class="headerlink" title="JVM发展历程"></a>JVM发展历程</h1><ul>
+<li><p>Sun Classic VM</p>
+<ul>
+<li>早在 1996 年 Java 1.0 版本的时候， Sun 公司发布了一款名为 Sun Classic VM 的 J ava 虚拟机，它同时也是世界上第一款商用 Java 虚拟机， JDK1.4 时完全被淘汰。</li>
+<li>这款虚拟机内部只提供解释器。如果使用 JIT 编译器，就需要进行外挂。但是一旦使用了 J 编译器， J エ T 就会接管虚拟机的执行系统。解释器就不再工作。解释器和编译器不能配合工作</li>
+<li>现在 hotspot 内置了此虚拟机。</li>
+</ul>
+</li>
+<li><p>Exact VM</p>
+<ul>
+<li>为了解決上一个虚拟机问题，jdk1.2 时， sun 提供了此虚拟机。</li>
+<li>Exact Memory Management ：准确式内存管理<ul>
+<li>也可以叫 Non-Conservative &#x2F; Accurate Memory Management</li>
+<li>虚拟机可以知道内存中某个位置的数据具体是什么类型。</li>
+</ul>
+</li>
+<li>具备现代高性能虚拟机的雏形<ul>
+<li>热点探测</li>
+<li>编译器与解释器混合工作模式</li>
+</ul>
+</li>
+<li>只在 Solaris 平台短暂使用，其他平台上还是 classic vm</li>
+<li>英雄气短，终被 Hotspot 虚拟机替换</li>
+</ul>
+</li>
+<li><p>SUN 公司的 Hotspot VM</p>
+<ul>
+<li>Hotspot 历史<ul>
+<li>最初由一家名为 “ Longview Technologies “ 的小公司设计</li>
+<li>1997 年，此公司被 Sun 收购； 2009 年， Sun 公司被甲骨文收购。</li>
+<li>JDK 1. 3 时， Hotspot VM 成为默认虚拟机</li>
+</ul>
+</li>
+<li>目前Hotspot 占有绝对的市场地位，称霸武林。<ul>
+<li>不管是现在仍在广泛使用的 JDK 6，还是使用比例较多的 JDK 8中，默认的虛拟机都是 Hotspot</li>
+<li>Sun &#x2F; Oracle JDK 和 OpenJDK 的默认虚拟机</li>
+<li>因此本课程中默认介绍的虚拟机都是 Hotspot，相关机制也主要是指 Hotspot 的 GC 机制。（比如其他两个商用虚拟机都没有方法区的概念）</li>
+</ul>
+</li>
+<li>从服务器、桌面到移动端、嵌入式都有应用。</li>
+<li>名称中的 Hotspot 指的就是它的热点代码探测技术。<ul>
+<li>通过计数器找到最具编译价值代码，触发即时编译或栈上替换</li>
+<li>通过编译器与解释器协同工作，在最优化的程序响应时间与最佳执行性能中取得平衡</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>BEA 的 JRockit</p>
+<ul>
+<li>专注于服务器端应用<ul>
+<li>它可以不太关注程序启动速度，因此 <strong>JRockit 内部不包含解析器实现</strong>，全部代码都靠即时编译器编译后执行。</li>
+</ul>
+</li>
+<li>大量的行业基准测试显示，JRockit JVM 是世界上最快的 JVM<ul>
+<li>使用 JRockit 产品，客户已经体验到了显著的性能提高（一些超过了 70%）和硬件成本的减少（达 50%）。</li>
+</ul>
+</li>
+<li>优势：全而的 Java 运行时解决方案组合<ul>
+<li>JRockit 面向延迟敏感型应用的解决方案 JRockit Real Time 提供以毫秒或微秒级的 JVM 响应时间，适合财务、军事指挥、电信网络的需要</li>
+<li>MissionControl 服务套件，它是一组以极低的开销来监控、管理和分析生产坏境中的应用程序的工具。</li>
+</ul>
+</li>
+<li>2008 年， BEA 被 Oracle 收购</li>
+<li>Oracle 表达了整合两大优秀虚拟机的工作，大致在 JDK8 中完成。整合的方式是在 Hotspot 的基础上，移植 JRockit的优秀特性。</li>
+<li>高斯林：目前就职于谷歌，研究人工智能和水下机器人</li>
+</ul>
+</li>
+<li><p>IBM 的 J9</p>
+<ul>
+<li>全称：IBM Technology for Java Virtual Machine ，简称 IT4J ，内部代号： J9</li>
+<li>市场定位与 Hotspot 接近，服务器端、桌而应用、嵌入式等多用途 VM</li>
+<li>广泛用于 IBM 的各种 Java 产品。</li>
+<li>目前，<strong>有影响力的三大商用虚拟机之一</strong>，也号称是世界上最快的Java虚拟机。</li>
+<li>2017 年左右，IBM 发布了开源 J9 VM ，命名为 OpenJ9，交给 Eclipse 基金会管理，也称为 Eclipse OpenJ9</li>
+</ul>
+</li>
+<li><p>KVM 和 CDC&#x2F;CLDC Hotspot</p>
+<ul>
+<li>Oracle 在 Java ME 产品线上的两款虛拟机为： CDC&#x2F;CLDC Hotspot Implementation VM</li>
+<li>KVM（Kilobyte ）是 CLDC-HI 早期产品</li>
+<li>目前移动领域地位尴尬，智能平机被 Android 和 IOS 二分天下。</li>
+<li>KVM 简单、轻量、高度可移植，面向更低端的设备上还维持自己的一片市场<ul>
+<li>智能控制器、传感器</li>
+<li>老人手机、经济欠发达地区的功能手机</li>
+</ul>
+</li>
+<li>所有的虛拟机的原则：一次编译，到处运行。</li>
+</ul>
+</li>
+<li><p>Azul VM</p>
+<ul>
+<li><p>前面三大 “高性能 Java 虚拟机” 使用在通用硬件平台上</p>
+</li>
+<li><p>这里 Azul VM 和 BEA Liquid VM 是</p>
+<p>与特定硬件平台绑定、软硬件配合的专有虚拟机</p>
+<ul>
+<li>高性能 Java 虚拟机中的战斗机。</li>
+</ul>
+</li>
+<li><p>Azul VM 是 Azul Systems 公司在 Hotspot 基础上进行大量改进，运行于 Azul Systems 公司的专有硬件 Vega 系统上的 Java 虚拟机。</p>
+</li>
+<li><p><strong>每个 Azul VM 实例都可以管理至少数十个 CPU 和数百 GB 内存的硬件资源，并提供在巨大内存范围内实现可控的 GC 时间的垃圾收集器、专有硬件优化的线程调度等优秀特性</strong></p>
+</li>
+<li><p>2010 年，Azul Systems 公司开始从硬件转向软件，发布了自己的 Zing JVM ，可以在通用 x86 平台上提供接近于 Vega 系统的特性。</p>
+</li>
+</ul>
+</li>
+<li><p>Liquid VM</p>
+<ul>
+<li>高性能 Java 虚拟机中的战斗机。</li>
+<li>BEA 公司开发的，直接运行在自家 Hypervisor 系统上</li>
+<li>Liquid VM 即是现在的 JRockit VE（ Virtual Edition ）， Liquid VM 不需要操作系统的支持，或者说它自己本身实现了一个专用操作系统的必要功能，如线程调度、文件系统、网络支持等。</li>
+<li>随着 JRockit 虚拟机终止开发， Liquid VM项目也停止了。</li>
+</ul>
+</li>
+<li><p>Apache Harmony</p>
+<ul>
+<li>Apache 也曾经推出过与 JDK 1.5 和 JDK 1.6 兼容的 Java 运行平台 Apache Harmony</li>
+<li>它是 IBM 和 Intel 联合开发的开源 JVM ，受到同样开源的 OpenJDK 的压制，Sun 坚决不让 Harmony 获得 JCP 认证，最终于 2011 年退役， IBM 转而参与 OpenJDK</li>
+<li>虽然目前并没有 Apache Harmony 被大规模商用的案例，但是它的 Java 类库代码吸纳进了 Android SDK。</li>
+</ul>
+</li>
+<li><p>Microsoft JVM</p>
+<ul>
+<li>微软为了在工 E3 浏览器中支持 Java Applets ，开发了 Microsoft JVM 。</li>
+<li>只能在 Windows 平台下运行。但确是当时 Windows 下性能最好的 Java VM 。</li>
+<li>1997 年， Sun 以侵犯商标、不正当竞争罪名指控微软成功，赔了 Sun 很多钱。微软在 Windows SP3 中抹掉了其 VM 。现在 Windows 上安装的 JDK 都是 Hotspot</li>
+</ul>
+</li>
+<li><p>TaobaoJVM</p>
+<ul>
+<li>由 Ali JVM团队发布。阿里，国内使用 Java 最强大的公司，覆盖云计算、金融、物流电商等众多领域，需要解决高并发、高可用、分布式的复合问题。有大量的开源产品</li>
+<li><strong>基于 OpenJDK 开发了自己的定制版本 AlibabaJDK</strong> ，简称 AJDK。是整个阿里 Java体系的基石。</li>
+<li>基于 OpenJDK Hotspot VM 发布的国内第一个优化、深度定制且开源的高性能服务器版 Java虚拟机<ul>
+<li>创新的 GCIH（ GC invisible heap ）技术实现了 off-heap ，<strong>即将生命周期较长的 Java对象从 heap 中移到heap 之外，并且 GC 不能管理 GCIH 内部的 Java对象，以此达到降低 GC 的回收频率和提升 GC 的回收效率的目的</strong></li>
+<li>GCIH 中的<strong>对象还能够在多个 Java虚拟机进程中实现共享</strong></li>
+<li>使用 crc32 指令实现 JVM intrinsic 降低 JNI 的调用开销 \</li>
+<li>PMU hardware 的 Java profiling tool 和诊断协助功能</li>
+<li>针对大数据场景的 ZenGC</li>
+</ul>
+</li>
+<li>taobao vm 应用在阿里产品上性能高，硬件严重依赖 intel 的 cpu损失了兼容性，但提高了性能<ul>
+<li>目前已经在淘宝、天猫上线，把 Oracle 官方 JVM版木全部替换了。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Dalvik VM</p>
+<ul>
+<li>谷歌开发的，应用于 Android 系统，并在 Android 2.2 中提供了 JIT ，发展迅猛。</li>
+<li><strong>Dalvik vm 只能称作虚拟机，而不能称作“Java虚拟机”</strong>，它没有遵循Java虚拟机规范</li>
+<li>不能直接执行 Java 的 Class 文件</li>
+<li>基于寄存器架构，不是 jvm 的栈架构</li>
+<li>执行的是编译以后的 dex（ Dalvik Executable ）文件。执行效率比较高<ul>
+<li>它执行的 dek（ Dalvik Executable ）文件可以通过 class 文件转化而来，使用 Java 语法编写应用程序，可以直接使用大部分的 Java api 等。</li>
+</ul>
+</li>
+<li>Android 5. 0 使用支持提前编译（ Ahead of Time Compilation ， AOT ）的 ART VM 替换 Dalvik VM 。</li>
+</ul>
+</li>
+<li><p>Graal VM</p>
+<ul>
+<li>2018 年 4 月， Oracle Labs 公开了 Graal VM，号称 “ <strong>Run Programs Faster Anywhere</strong> “，勃勃野心。</li>
+<li>与 1995 年 Java 的 “ write once, run anywhere “ 遥相呼应。</li>
+<li>Graal VM 在 Hotspot VM 基础上増强而成的<strong>跨语言全栈虚拟机，可以作为 “任何语言” 的运行平台使用</strong>。语言包括： Java 、Scala 、 Groovy 、 Kotlin ； C 、 C ++、 JavaScript、 Ruby、 Python 、 R 等</li>
+<li>支持不同语言中混用对方的接口和对象，支持这些语言使用已经编写好的本地库文件</li>
+<li>工作原理是将这些语言的源代码或源代码编译后的中间格式，通过解释器转换为能被 Graal VM 接受的中间表示。Graal VM 提供 Truffle 工具集快速构建面向一种新语言的解释器。在运行时还能进行即时编译优化，获得比原生编译器更优秀的执行效率。</li>
+<li><strong>如果说 HotSpot 有一天真的被取代，Graal VM 希望最大</strong>。但是 Java 的软件生态没有丝毫变化</li>
+</ul>
+</li>
+</ul>
+<p><strong>总结</strong></p>
+<p>具体JVM的内存结构，其实取决于其实现，不同厂商的JVM，或者同一厂商发布的不同版本，都有可能存在一定差异。主要以Oracle HotSpot VM为默认虚拟机。</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>

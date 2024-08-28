@@ -1,0 +1,1534 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Jenkins的安装和搭建自动化部署平台 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" linux , jenkins ">
+  <meta name="description" content="Jenkins的安装和搭建自动化部署平台 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#x5f;&#x39;&#x35;&#x40;&#x31;&#x32;&#54;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#x5f;&#x39;&#x35;&#x40;&#x31;&#x32;&#54;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(37)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(26)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="37">
+<input type="hidden" id="yelog_site_word_count" value="196.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E5%9B%9B%E7%AB%A0-JVM%E8%BF%90%E8%A1%8C%E6%97%B6%E5%8F%82%E6%95%B0.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-%E4%BD%BF%E7%94%A8OQL%E8%AF%AD%E8%A8%80%E6%9F%A5%E8%AF%A2%E5%AF%B9%E8%B1%A1%E4%BF%A1%E6%81%AF.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-%E6%B5%85%E5%A0%86-%E6%B7%B1%E5%A0%86-%E5%86%85%E5%AD%98%E6%B3%84%E6%BC%8F.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%89%E7%AB%A0-JVM%E7%9B%91%E6%8E%A7%E5%8F%8A%E8%AF%8A%E6%96%AD%E5%B7%A5%E5%85%B7-GUI%E7%AF%87.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%BA%8C%E7%AB%A0-JVM%E7%9B%91%E6%8E%A7%E5%8F%8A%E8%AF%8A%E6%96%AD%E5%B7%A5%E5%85%B7-%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%AF%87.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E4%B8%80%E7%AB%A0-%E6%80%A7%E8%83%BD%E7%9B%91%E6%8E%A7%E4%B8%8E%E8%B0%83%E4%BC%98%E6%A6%82%E8%BF%B0.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E5%8D%81%E7%AB%A0-%E5%86%8D%E8%B0%88%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%B9%9D%E7%AB%A0-%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E8%BF%87%E7%A8%8B%E8%AF%A6%E8%A7%A3.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E5%85%AB%E7%AB%A0-%E5%AD%97%E8%8A%82%E7%A0%81%E6%8C%87%E4%BB%A4%E9%9B%86%E4%B8%8E%E8%A7%A3%E6%9E%90%E4%B8%BE%E4%BE%8B.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%B8%83%E7%AB%A0-%E4%BD%BF%E7%94%A8javap%E6%8C%87%E4%BB%A4%E8%A7%A3%E6%9E%90class%E6%96%87%E4%BB%B6.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E5%85%AD%E7%AB%A0-Class%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%BA%94%E7%AB%A0-GC%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E5%9B%9B%E7%AB%A0-%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E9%93%BE%E8%A1%A8%E5%8F%8D%E8%BD%AC.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E9%80%89%E6%8B%A9-%E5%86%92%E6%B3%A1-%E6%8F%92%E5%85%A5%E6%8E%92%E5%BA%8F.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/algorithm/%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%92%8C%E4%BD%8D%E8%BF%90%E7%AE%97.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%B8%89%E7%AB%A0-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%BA%8C%E7%AB%A0-%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%A6%82%E8%BF%B0.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/linux/Jenkins%E7%9A%84%E5%AE%89%E8%A3%85%E5%92%8C%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E4%B8%80%E7%AB%A0-StringTable.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%8D%81%E7%AB%A0-%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%B9%9D%E7%AB%A0-%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9E%E4%BE%8B%E5%8C%96%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E4%B8%8E%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%85%AB%E7%AB%A0-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%B8%83%E7%AB%A0-%E6%96%B9%E6%B3%95%E5%8C%BA.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%85%AD%E7%AB%A0-JVM%E5%A0%86.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%8E%A5%E5%8F%A3.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%A0%88.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E8%BF%90%E8%A1%8C%E6%97%B6%E6%95%B0%E6%8D%AE%E5%8C%BA.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%AD%90%E7%B3%BB%E7%BB%9F.html"
+           data-tag="jvm,java,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/jvm/%E7%AC%AC%E4%B8%80%E7%AB%A0-JVM%E5%92%8CJava%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84.html"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/hexo/%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0Sitemap.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/hexo/Typora%E8%AE%BE%E7%BD%AE%E5%9B%BE%E7%89%87%E8%87%AA%E5%8A%A8%E4%B8%8A%E4%BC%A0Github.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/hexo/Hexo%E5%8D%9A%E5%AE%A2%E5%AE%89%E8%A3%85%E4%B8%BB%E9%A2%98.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/hexo/3-Hexo%E4%B8%BB%E9%A2%98%E5%B8%B8%E7%94%A8%E9%85%8D%E7%BD%AE%E4%BF%AE%E6%94%B9.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/hexo/%E5%9F%BA%E4%BA%8EHexo%E5%92%8CGithub-Pages%E6%90%AD%E5%BB%BA%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-linux/Jenkins的安装和基础使用" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">Jenkins的安装和搭建自动化部署平台</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="linux">linux</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">linux</a>
+            
+            <a class="color3">jenkins</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-06-22 18:36:12'>2024-01-05 16:00</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:3.4k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">Jenkins的安装和搭建自动化部署平台</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Jenkins%E5%AE%98%E7%BD%91"><span class="toc-text">一、Jenkins官网</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Jenkins%E6%A6%82%E8%BF%B0"><span class="toc-text">二、Jenkins概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Jenkins%E7%9A%84%E9%83%A8%E7%BD%B2"><span class="toc-text">三、Jenkins的部署</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Docker%E9%83%A8%E7%BD%B2Jenkins"><span class="toc-text">使用Docker部署Jenkins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AEJenkins"><span class="toc-text">浏览器访问Jenkins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Jenkins%E6%8F%92%E4%BB%B6"><span class="toc-text">安装Jenkins插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E7%AE%A1%E7%90%86%E5%91%98%E8%B4%A6%E6%88%B7"><span class="toc-text">创建管理员账户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%AE%9E%E4%BE%8B"><span class="toc-text">配置实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90"><span class="toc-text">安装完成</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Jenkins%E8%AE%BE%E7%BD%AE%E4%B8%AD%E6%96%87%E6%94%AF%E6%8C%81"><span class="toc-text">四、Jenkins设置中文支持</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%82%B9%E5%87%BB-Manage-Jenkins"><span class="toc-text">1. 点击 Manage Jenkins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%82%B9%E5%87%BBManage-Plugins"><span class="toc-text">2. 点击Manage Plugins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%90%9C%E7%B4%A2%E5%B9%B6%E5%AE%89%E8%A3%85-locale-%E6%8F%92%E4%BB%B6"><span class="toc-text">3. 搜索并安装 locale 插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%89%E8%A3%85%E5%AE%8C%E6%88%90%E5%90%8E%E9%87%8D%E5%90%AF-Jenkins"><span class="toc-text">4. 安装完成后重启 Jenkins</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E9%AA%8C%E8%AF%81"><span class="toc-text">5. 验证</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81Jenkins%E5%88%9D%E4%BD%93%E9%AA%8C"><span class="toc-text">五、Jenkins初体验</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%87%AA%E7%94%B1%E9%A3%8E%E6%A0%BC%E9%A1%B9%E7%9B%AE"><span class="toc-text">1. 自由风格项目</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B5%81%E6%B0%B4%E7%BA%BF%E9%A1%B9%E7%9B%AE"><span class="toc-text">2. 流水线项目</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-text">2.1 安装插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E9%85%8D%E7%BD%AE%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%BB%BB%E5%8A%A1"><span class="toc-text">2.2 配置流水线任务</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81Jenkins%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4%E5%90%8E%E7%AB%AF%E4%BB%A3%E7%A0%81"><span class="toc-text">六、Jenkins部署运维后端代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9%E9%85%8D%E7%BD%AE%E8%BD%AF%E8%BF%9E%E6%8E%A5"><span class="toc-text">1. 代理节点配置软连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B7%BB%E5%8A%A0%E4%BB%A3%E7%90%86%E8%8A%82%E7%82%B9"><span class="toc-text">2. 添加代理节点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E8%BF%9B%E5%85%A5%E8%8A%82%E7%82%B9%E5%88%97%E8%A1%A8%E9%A1%B5%E9%9D%A2"><span class="toc-text">2.1 进入节点列表页面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%B7%BB%E5%8A%A0%E8%8A%82%E7%82%B9"><span class="toc-text">2.2 添加节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E7%BC%96%E8%BE%91%E8%8A%82%E7%82%B9%E5%90%8D%E7%A7%B0%E5%92%8C%E5%B1%9E%E6%80%A7"><span class="toc-text">2.3 编辑节点名称和属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E9%85%8D%E7%BD%AE%E8%8A%82%E7%82%B9"><span class="toc-text">2.4 配置节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E6%B7%BB%E5%8A%A0%E5%87%AD%E6%8D%AE"><span class="toc-text">2.5 添加凭据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AEGitlab%E5%87%AD%E6%8D%AE"><span class="toc-text">3. 配置Gitlab凭据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%85%8D%E7%BD%AEPipeline%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%BB%BB%E5%8A%A1"><span class="toc-text">4. 配置Pipeline流水线任务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E6%96%B0%E5%BB%BA%E4%BB%BB%E5%8A%A1"><span class="toc-text">4.1 新建任务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E9%85%8D%E7%BD%AE%E4%BB%BB%E5%8A%A1"><span class="toc-text">4.2 配置任务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BC%96%E8%BE%91-Jenkinsfile-%E6%96%87%E4%BB%B6"><span class="toc-text">5. 编辑 Jenkinsfile 文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%B5%81%E6%B0%B4%E7%BA%BF%E8%AF%AD%E6%B3%95%E7%94%9F%E6%88%90%E5%99%A8"><span class="toc-text">5.1 流水线语法生成器</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-1-1-%E5%AE%9E%E4%BE%8B%EF%BC%9A%E7%94%9F%E6%88%90git-%E6%8B%89%E5%8F%96%E4%BB%A3%E7%A0%81%E6%8C%87%E4%BB%A4"><span class="toc-text">5.1.1 实例：生成git 拉取代码指令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Jenkinsfile-%E5%86%85%E5%AE%B9%E5%A6%82%E4%B8%8B"><span class="toc-text">5.2 Jenkinsfile 内容如下</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E8%BF%90%E8%A1%8CPipeline%E4%BB%BB%E5%8A%A1"><span class="toc-text">6. 运行Pipeline任务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E7%AB%8B%E5%8D%B3%E6%9E%84%E5%BB%BA"><span class="toc-text">6.1 立即构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E6%9F%A5%E7%9C%8B%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="toc-text">6.2 查看构建过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E9%AA%8C%E8%AF%81%E7%BB%93%E6%9E%9C"><span class="toc-text">6.3 验证结果</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%85%B6%E5%AE%83"><span class="toc-text">7. 其它</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81Jenkins%E9%83%A8%E7%BD%B2%E8%BF%90%E7%BB%B4%E7%B3%BB%E7%BB%9F%E5%89%8D%E7%AB%AF%E4%BB%A3%E7%A0%81"><span class="toc-text">七、Jenkins部署运维系统前端代码</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-text">1. 安装插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E8%BF%9E%E6%8E%A5"><span class="toc-text">2. 配置远程服务器的连接</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AENodeJS"><span class="toc-text">3. 配置NodeJS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%96%B0%E5%BB%BA%E6%B5%81%E6%B0%B4%E7%BA%BF%E4%BB%BB%E5%8A%A1"><span class="toc-text">4. 新建流水线任务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%96%B0%E5%BB%BA%E4%B8%80%E4%B8%AA%E8%87%AA%E7%94%B1%E9%A3%8E%E6%A0%BC%E9%A1%B9%E7%9B%AE"><span class="toc-text">3.1 新建一个自由风格项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E9%85%8D%E7%BD%AE%E4%BB%BB%E5%8A%A1"><span class="toc-text">3.2 配置任务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%89%A7%E8%A1%8C%E6%9E%84%E5%BB%BA%E4%BB%BB%E5%8A%A1"><span class="toc-text">5. 执行构建任务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E7%AB%8B%E5%8D%B3%E6%9E%84%E5%BB%BA"><span class="toc-text">5.1 立即构建</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E6%9F%A5%E7%9C%8B%E6%9E%84%E5%BB%BA%E8%BF%87%E7%A8%8B"><span class="toc-text">5.2 查看构建过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E9%AA%8C%E8%AF%81%E7%BB%93%E6%9E%9C"><span class="toc-text">5.3 验证结果</span></a></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 style="text-align: center;">Jenkins的安装和搭建自动化部署平台</h1>
+
+
+
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
+<p>操作系统：Ubuntu 18.04.6 LTS</p>
+<p>内核版本：5.4.0-149-generic</p>
+<p>Docker版本：24.0.2</p>
+<p>Docker Compose 版本：v2.18.0</p>
+<p>Jenkins 版本：2.393-alpine</p>
+<p>JDK 版本：java 11.0.19 2023-04-18 LTS</p>
+<p>Git 版本：2.28.0</p>
+<p>Maven 版本：3.6.3</p>
+<p>Node JS 版本：16.16.0</p>
+<p>Jenkins主节点：192.168.6.92</p>
+<p>Jenkins agent节点：192.168.6.91</p>
+</blockquote>
+<h1 id="一、Jenkins官网"><a href="#一、Jenkins官网" class="headerlink" title="一、Jenkins官网"></a>一、Jenkins官网</h1><ul>
+<li>英文官网<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jenkins.io/">https://www.jenkins.io/</a></li>
+</ul>
+</li>
+<li>英文官方文档<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jenkins.io/doc/">https://www.jenkins.io/doc/</a></li>
+</ul>
+</li>
+<li>中文官网<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jenkins.io/zh/">https://www.jenkins.io/zh/</a></li>
+</ul>
+</li>
+<li>中文官方文档<ul>
+<li><a target="_blank" rel="noopener" href="https://www.jenkins.io/zh/doc/">https://www.jenkins.io/zh/doc/</a></li>
+</ul>
+</li>
+<li>Docker Hub网址 (存放Jenkins官方镜像)<ul>
+<li><a target="_blank" rel="noopener" href="https://hub.docker.com/r/jenkins/jenkins">https://hub.docker.com/r/jenkins/jenkins</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="二、Jenkins概述"><a href="#二、Jenkins概述" class="headerlink" title="二、Jenkins概述"></a>二、Jenkins概述</h1><p>持续集成（CI）是一种开发实践，其中开发人员经常（最好每天几次）将代码集成到共享存储库中。然后可以通过自动构建和自动测试来验证每个集成。尽管自动化测试不是严格意义上的CI的一部分，但通常隐含了它。</p>
+<p>定期集成的主要好处之一是，您可以快速检测到错误并更轻松地定位它们。由于引入的每个更改通常很小，因此可以快速查明引入缺陷的特定更改。</p>
+<p>近年来，CI已成为软件开发的最佳实践，并遵循一系列关键原则。其中包括版本控制，构建自动化和自动化测试。</p>
+<p>此外，持续部署和持续交付已成为<strong>最佳实践</strong>，可让您随时随地部署应用程序，甚至在每次引入新更改时甚至将主代码库自动推入生产环境。这使您的团队可以快速行动，同时保持可以自动检查的高质量标准。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-155739.png" alt="image-20240105155737704"></p>
+<p>CI&#x2F;CD应用场景：</p>
+<ul>
+<li>开发人员将本地代码上传gitlab版本服务器</li>
+<li>jenkins通过webhook插件自动到gitlab服务器拉取最新代码</li>
+<li>通过docker-maven-plugin插件自动编译代码</li>
+<li>将自定义镜像上传docker私服仓库</li>
+<li>k8s集群自动拉取最新版本镜像</li>
+<li>自动化部署整个项目</li>
+<li>用户通过nginx负载均衡访问整个项目</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-155828.png" alt="image-20240105155826829"></p>
+<h1 id="三、Jenkins的部署"><a href="#三、Jenkins的部署" class="headerlink" title="三、Jenkins的部署"></a>三、Jenkins的部署</h1><h2 id="使用Docker部署Jenkins"><a href="#使用Docker部署Jenkins" class="headerlink" title="使用Docker部署Jenkins"></a>使用Docker部署Jenkins</h2><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">拉取镜像</span>
+docker pull jenkins/jenkins:2.393-alpine
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">创建映射目录，并给目录授权</span>
+mkdir -p /data/jenkins &amp;&amp; chown -R 1000:1000 /data/jenkins
+<span class="meta prompt_"></span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">运行容器</span>
+docker run -itd \
+    --name jenkins \
+	-p 8080:8080 \
+	-p 50000:50000 \
+	-u root \
+	-e JAVA_OPTS=-Duser.timezone=Asia/Shanghai \
+	--restart always \
+	-v /data/jenkins/:/var/jenkins_home/ \
+    jenkins/jenkins:2.393-alpine
+    
+<span class="meta prompt_"># </span><span class="language-bash">查看容器启动日志并找到jenkins初始化密码</span>
+docker logs -f jenkins</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-104424.png" alt="image-20240104104421050"></p>
+<h2 id="浏览器访问Jenkins"><a href="#浏览器访问Jenkins" class="headerlink" title="浏览器访问Jenkins"></a>浏览器访问Jenkins</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-104613.png" alt="image-20240104104612435"></p>
+<h2 id="安装Jenkins插件"><a href="#安装Jenkins插件" class="headerlink" title="安装Jenkins插件"></a>安装Jenkins插件</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-104738.png" alt="image-20240104104736736"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-104809.png" alt="image-20240104104807803"></p>
+<p><strong>插件安装完成</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-105110.png" alt="image-20240104105108610"></p>
+<h2 id="创建管理员账户"><a href="#创建管理员账户" class="headerlink" title="创建管理员账户"></a>创建管理员账户</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-105201.png" alt="image-20240104105159836"></p>
+<h2 id="配置实例"><a href="#配置实例" class="headerlink" title="配置实例"></a>配置实例</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-105233.png" alt="image-20240104105231800"></p>
+<h2 id="安装完成"><a href="#安装完成" class="headerlink" title="安装完成"></a><strong>安装完成</strong></h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-105249.png" alt="image-20240104105247735"></p>
+<h1 id="四、Jenkins设置中文支持"><a href="#四、Jenkins设置中文支持" class="headerlink" title="四、Jenkins设置中文支持"></a>四、Jenkins设置中文支持</h1><h2 id="1-点击-Manage-Jenkins"><a href="#1-点击-Manage-Jenkins" class="headerlink" title="1. 点击 Manage Jenkins"></a>1. 点击 Manage Jenkins</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-110445.png" alt="image-20240104110443683"></p>
+<h2 id="2-点击Manage-Plugins"><a href="#2-点击Manage-Plugins" class="headerlink" title="2. 点击Manage Plugins"></a>2. 点击Manage Plugins</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-110500.png" alt="image-20240104110458889"></p>
+<h2 id="3-搜索并安装-locale-插件"><a href="#3-搜索并安装-locale-插件" class="headerlink" title="3. 搜索并安装 locale 插件"></a>3. 搜索并安装 locale 插件</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-110604.png" alt="image-20240104110602657"></p>
+<h2 id="4-安装完成后重启-Jenkins"><a href="#4-安装完成后重启-Jenkins" class="headerlink" title="4. 安装完成后重启 Jenkins"></a>4. 安装完成后重启 Jenkins</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-110720.png" alt="image-20240104110719409"></p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">重启Jenkins</span>
+docker restart jenkins</code></pre>
+
+
+
+<h2 id="5-验证"><a href="#5-验证" class="headerlink" title="5. 验证"></a>5. 验证</h2><p><strong>此时再次重新登录Jenkins，发现已变成中文了，这是由于Locale插件自动根据浏览器语言设置，切换对应的语言支持。</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-111024.png" alt="image-20240104111022563"></p>
+<h1 id="五、Jenkins初体验"><a href="#五、Jenkins初体验" class="headerlink" title="五、Jenkins初体验"></a>五、Jenkins初体验</h1><h2 id="1-自由风格项目"><a href="#1-自由风格项目" class="headerlink" title="1. 自由风格项目"></a>1. 自由风格项目</h2><ol>
+<li>点击 <code>新建任务</code></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-135232.png" alt="image-20240104135230836"></p>
+<ol>
+<li>填写 <code>任务名称</code></li>
+<li>选择 <code>构建一个自由风格的软件项目</code></li>
+<li>点击 <code>确定</code></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-135331.png" alt="image-20240104135329889"></p>
+<ul>
+<li>添加构建步骤，选择 执行shell</li>
+<li>填写shell命令</li>
+<li>点击 保存</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-152628.png" alt="image-20240104152627088"></p>
+<ul>
+<li>点击 立即构建 ，查看执行结果</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-143757.png" alt="image-20240104143756241"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-152825.png" alt="image-20240104152823887"></p>
+<ul>
+<li>查看控制台输出</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-152843.png" alt="image-20240104152841553"></p>
+<p>这里需要了解一点：</p>
+<p>之所以可以执行 <code>java --version </code> 和 <code>git --version</code> 指令，是因为Jenkins容器内部已安装了该工具，没有安装了工具，执行就会报错，比如：<code>mvn --version</code>, Jenkins容器内部默认是没有安装Maven的。</p>
+<h2 id="2-流水线项目"><a href="#2-流水线项目" class="headerlink" title="2. 流水线项目"></a>2. 流水线项目</h2><h3 id="2-1-安装插件"><a href="#2-1-安装插件" class="headerlink" title="2.1 安装插件"></a>2.1 安装插件</h3><p>流水线任务需要**<code>Pipeline插件</code>**的支持，在创建流水线任务之前，先确保Jenkins已安装 <code>Pipeline插件</code> 。</p>
+<p>具体在：Dashboard –&gt; 系统管理 –&gt; 插件管理 中安装</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-154146.png" alt="image-20240104154145155"></p>
+<h3 id="2-2-配置流水线任务"><a href="#2-2-配置流水线任务" class="headerlink" title="2.2 配置流水线任务"></a>2.2 配置流水线任务</h3><ol>
+<li>填写 <code>任务名称</code></li>
+<li>选择 <code>构建一个Pipeline项目</code></li>
+<li>点击 <code>确定</code></li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-154701.png" alt="image-20240104154700551"></p>
+<pre><code class="highlight plaintext"></code></pre>
+
+
+
+<ul>
+<li>编辑脚本，点击 <code>保存</code></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-154520.png" alt="image-20240104154518639"></p>
+<ul>
+<li>运行任务，查看运行结果</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-154549.png" alt="image-20240104154548082"></p>
+<h1 id="六、Jenkins部署运维后端代码"><a href="#六、Jenkins部署运维后端代码" class="headerlink" title="六、Jenkins部署运维后端代码"></a>六、Jenkins部署运维后端代码</h1><blockquote>
+<p><strong>操作步骤</strong></p>
+<ul>
+<li>指定部署节点<ul>
+<li>部署节点为Jenkins服务所在节点的从节点，也叫：代理节点</li>
+<li>主节点与代理节点之间通过SSH方式连接</li>
+</ul>
+</li>
+<li>代理节点拉取代码<ul>
+<li>代理节点需要安装Git</li>
+</ul>
+</li>
+<li>代理节点将打包打成jar包<ul>
+<li>代理节点需要安装Maven、JDK</li>
+</ul>
+</li>
+<li>代理节点将Jar包制作成Docker镜像<ul>
+<li>代理节点需要安装Docker</li>
+</ul>
+</li>
+<li>代理节点运行docker镜像<ul>
+<li>通过shell命令行</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="1-代理节点配置软连接"><a href="#1-代理节点配置软连接" class="headerlink" title="1. 代理节点配置软连接"></a>1. 代理节点配置软连接</h2><p>master节点ssh连接agent节点时需要&#x2F;usr&#x2F;bin&#x2F;有java命令。配置java的软连接、同理配置maven、git的软连接。如果软件是yum安装的，则需要检查&#x2F;usr&#x2F;bin中是否有相关命令。如果没有,也需要做软连接。</p>
+<pre><code class="highlight shell">ln -s /opt/module/jdk-11.0.19/bin/java /usr/bin/
+ln -s /opt/module/apache-maven-3.6.3/bin/mvn /usr/bin/
+ln -s /opt/module/git/bin/git /usr/bin/</code></pre>
+
+
+
+<h2 id="2-添加代理节点"><a href="#2-添加代理节点" class="headerlink" title="2. 添加代理节点"></a>2. 添加代理节点</h2><h3 id="2-1-进入节点列表页面"><a href="#2-1-进入节点列表页面" class="headerlink" title="2.1 进入节点列表页面"></a>2.1 进入节点列表页面</h3><ul>
+<li>点击 <strong>系统管理</strong></li>
+<li>点击 <strong>节点列表</strong></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-160922.png" alt="image-20240104160920865"></p>
+<h3 id="2-2-添加节点"><a href="#2-2-添加节点" class="headerlink" title="2.2 添加节点"></a>2.2 添加节点</h3><ul>
+<li>点击 <strong>新建节点</strong></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-161402.png" alt="20240104-161007"></p>
+<h3 id="2-3-编辑节点名称和属性"><a href="#2-3-编辑节点名称和属性" class="headerlink" title="2.3 编辑节点名称和属性"></a>2.3 编辑节点名称和属性</h3><ul>
+<li>填写 <strong>节点名称</strong></li>
+<li>选择 <strong>固定节点</strong></li>
+<li>点击 <strong>创建</strong></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/04/20240104-161048.png" alt="image-20240104161046707"></p>
+<h3 id="2-4-配置节点"><a href="#2-4-配置节点" class="headerlink" title="2.4 配置节点"></a>2.4 配置节点</h3><ul>
+<li><p>名称：填写节点名称，用于展示</p>
+</li>
+<li><p>描述：填写节点描述，可不填</p>
+</li>
+<li><p>执行器数量：最小是1，建议跟服务器内核数一致。</p>
+</li>
+<li><p>远程工作目录：Jenkins运行的目录，提前在代理服务器上创建好</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">在代理节点上创建工作目录</span>
+mkdir -p /data/workspaces</code></pre>
+</li>
+<li><p>标签：代理节点的标签，也是代理节点的唯一标识</p>
+</li>
+<li><p>用法：选择 仅在此节点上运行</p>
+</li>
+<li><p>启动方式：选择 <code>Launch agents via SSH</code></p>
+<ul>
+<li>主机：代理节点IP</li>
+<li>凭据：选择给代理节点配置的凭据，没有则点击下方的 <code>添加</code> 按钮创建凭据</li>
+<li>主机验证方式：选择 <code>Non verifying Verification Strategy</code></li>
+</ul>
+</li>
+<li><p>可用性：选择 <code>尽可能在此节点上运行</code></p>
+</li>
+<li><p>点击 <code>保存</code></p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-094026.png" alt="image-20240105094022222"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-094041.png" alt="image-20240105094040027"></p>
+<h3 id="2-5-添加凭据"><a href="#2-5-添加凭据" class="headerlink" title="2.5 添加凭据"></a>2.5 添加凭据</h3><ol>
+<li><p>在节点配置页面点击 <code>添加</code> 按钮</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-095652.png" alt="image-20240105095650742"></p>
+</li>
+<li><p>点击 <code>Jenkins</code> 进入凭据配置页面</p>
+<ol>
+<li><p>作用域：选择 <code>全局凭据</code></p>
+</li>
+<li><p>类型：选择 <code>SSH Username with private key</code></p>
+</li>
+<li><p>范围：全局</p>
+</li>
+<li><p>ID：不用填，配置完成保存后会自动生成</p>
+</li>
+<li><p>描述：凭据的描述，可不填</p>
+</li>
+<li><p>Username：代理节点的root用户密码</p>
+</li>
+<li><p>Private Key：对应的就是Jenkins主节点生成的私钥信息</p>
+<ol>
+<li><p>勾选 <code>Enter directly</code></p>
+</li>
+<li><p>输入Jenkins主节点完整的私钥信息</p>
+</li>
+<li><p>这里首先要配置主节点与代理节点的免密登录，具体方式如下：</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">在master节点生成密钥</span>
+ssh-keygen -t rsa
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">复制公钥到agent节点</span>
+ssh-copy-id -i /root/.ssh/id_rsa.pub root@192.168.6.91
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">免密登录测试</span>
+ssh 192.168.6.91
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">查看私钥信息(主节点执行)</span>
+cat /root/.ssh/id_rsa</code></pre></li>
+</ol>
+</li>
+<li><p>密码：填写代理服务器root用户登录密码</p>
+</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-100853.png" alt="image-20240105100852505"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-100910.png" alt="image-20240105100909305"></p>
+</li>
+<li><p>点击 <code>添加</code>，保存凭据</p>
+<p>此时在 代理节点配置页面，就可以勾选刚才配置的凭据信息了</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-101018.png" alt="image-20240105101017536"></p>
+</li>
+</ol>
+<h2 id="3-配置Gitlab凭据"><a href="#3-配置Gitlab凭据" class="headerlink" title="3. 配置Gitlab凭据"></a>3. 配置Gitlab凭据</h2><p>Jenkins工作台 –&gt; 系统管理 –&gt; credentials –&gt; 在Stores scoped to Jenkins下的’全局’ –&gt; 添加凭据</p>
+<ul>
+<li>类型：Username with password </li>
+<li>范围：全局</li>
+<li>用户名：登录Gitlab的用户名 </li>
+<li>密码：登录Gitlab的密码 </li>
+<li>ID：不用填，自动生成 </li>
+<li>描述：可不填</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-104816.png" alt="image-20240105104814964"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-104854.png" alt="image-20240105104853462"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-105426.png" alt="image-20240105105424488"></p>
+<h2 id="4-配置Pipeline流水线任务"><a href="#4-配置Pipeline流水线任务" class="headerlink" title="4. 配置Pipeline流水线任务"></a>4. 配置Pipeline流水线任务</h2><h3 id="4-1-新建任务"><a href="#4-1-新建任务" class="headerlink" title="4.1 新建任务"></a>4.1 新建任务</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-110053.png" alt="image-20240105110052243"></p>
+<h3 id="4-2-配置任务"><a href="#4-2-配置任务" class="headerlink" title="4.2 配置任务"></a>4.2 配置任务</h3><ul>
+<li><p>定义：选择 <code>Pipeline script from SCM</code></p>
+<ul>
+<li>SCM: 选择 Git</li>
+<li>Repository URL：填写项目Git地址</li>
+<li>凭据：选择gitlab登录凭据，没有则添加</li>
+<li>构建分支：默认Master分支</li>
+<li>源码库浏览器：自动</li>
+</ul>
+</li>
+<li><p>脚本路径：Jenkinsfile (名称不要改，使用默认的)</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-135233.png" alt="image-20240105135231905"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-135247.png" alt="image-20240105135246088"></p>
+</li>
+<li><p>添加Gitlab凭据</p>
+<ul>
+<li><p>任务配置页面，<code>凭据</code> 下点击 <code>添加</code>  </p>
+</li>
+<li><p>凭据页面配置如下：</p>
+<ul>
+<li>Domain：全局</li>
+<li>类型：Username with password</li>
+<li>范围：全局</li>
+<li>用户名：root</li>
+<li>密码：root用户密码</li>
+<li>ID：不用填，会自动生成</li>
+<li>描述：可不填</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-135134.png" alt="image-20240105135133467"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-135150.png" alt="image-20240105135149397"></p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-编辑-Jenkinsfile-文件"><a href="#5-编辑-Jenkinsfile-文件" class="headerlink" title="5. 编辑 Jenkinsfile 文件"></a>5. 编辑 Jenkinsfile 文件</h2><ul>
+<li>该文件名称必须为 Jenkinsfile ,大小写要完全一致</li>
+<li>该文件要在项目的根路径下</li>
+<li>文件内容使用按照流水线格式，采用Groovy语法编写，可使用 <code>流水线语法</code> 生成器生成片段</li>
+</ul>
+<h3 id="5-1-流水线语法生成器"><a href="#5-1-流水线语法生成器" class="headerlink" title="5.1 流水线语法生成器"></a>5.1 流水线语法生成器</h3><p>在流水线任务配置页面，下拉到页面最下方，点击 <code>流水线语法</code> ，打开流水线语法生成页面。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-135904.png" alt="image-20240105135903283"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-135919.png" alt="image-20240105135918483"></p>
+<h4 id="5-1-1-实例：生成git-拉取代码指令"><a href="#5-1-1-实例：生成git-拉取代码指令" class="headerlink" title="5.1.1 实例：生成git 拉取代码指令"></a>5.1.1 实例：生成git 拉取代码指令</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-140209.png" alt="image-20240105140207616"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-140254.png" alt="image-20240105140253107"></p>
+<h3 id="5-2-Jenkinsfile-内容如下"><a href="#5-2-Jenkinsfile-内容如下" class="headerlink" title="5.2 Jenkinsfile 内容如下"></a>5.2 Jenkinsfile 内容如下</h3><pre><code class="highlight groovy">pipeline &#123;
+    agent &#123;
+        label <span class="string">&#x27;agent-6-91&#x27;</span>
+    &#125;
+
+    stages &#123;
+        stage(<span class="string">&#x27;检测环境&#x27;</span>) &#123;
+            steps &#123;
+                echo <span class="string">&#x27;开始检测环境&#x27;</span>
+                sh <span class="string">&#x27;&#x27;&#x27;java -version</span>
+<span class="string">                mvn -v</span>
+<span class="string">                docker -v</span>
+<span class="string">                git version&#x27;&#x27;&#x27;</span>
+            &#125;
+        &#125;
+        stage(<span class="string">&#x27;拉取代码&#x27;</span>) &#123;
+            steps &#123;
+                echo <span class="string">&#x27;开始拉取代码&#x27;</span>
+                checkout scmGit(<span class="attr">branches:</span> [[<span class="attr">name:</span> <span class="string">&#x27;*/master&#x27;</span>]], <span class="attr">extensions:</span> [], <span class="attr">userRemoteConfigs:</span> [[<span class="attr">credentialsId:</span> <span class="string">&#x27;5c2185ef-6204-4c3b-b6dc-92b0ea5e55a1&#x27;</span>, <span class="attr">url:</span> <span class="string">&#x27;http://192.168.6.211:3060/GeorgeChan/ioms-test.git&#x27;</span>]])
+            &#125;
+        &#125;
+        stage(<span class="string">&#x27;编译构建&#x27;</span>) &#123;
+            steps &#123;
+                echo <span class="string">&#x27;开始执行代码编译&#x27;</span>
+				sh <span class="string">&#x27;mvn clean package -pl ioms-eureka -am -Dmaven.test.skip=true -Ddockerfile.skip=true&#x27;</span>
+            &#125;
+        &#125;
+		stage(<span class="string">&#x27;登录Harbor&#x27;</span>) &#123;
+            steps &#123;
+                echo <span class="string">&#x27;开始执行登录Harbor&#x27;</span>
+                sh <span class="string">&#x27;docker login -u admin -p Harbor12345 192.168.6.201:5000&#x27;</span>
+            &#125;
+        &#125;
+        stage(<span class="string">&#x27;运行ioms-eureka&#x27;</span>) &#123;
+            steps &#123;
+                echo <span class="string">&#x27;开始执行ioms-eureka模块的镜像构建、容器运行&#x27;</span>
+
+                script &#123;
+                    <span class="comment">// 定义当前工作空间变量</span>
+                    <span class="keyword">def</span> currentWorkspace = env.WORKSPACE
+                    echo <span class="string">&quot;当前工作空间：$&#123;currentWorkspace&#125;&quot;</span>
+
+                    <span class="keyword">def</span> currentModule = <span class="string">&quot;ioms-eureka&quot;</span>
+
+                    <span class="comment">// 删除容器</span>
+                    sh <span class="string">&quot;&quot;&quot;</span>
+<span class="string">                        echo &quot;检查容器 $&#123;currentModule&#125; 是否存在&quot;</span>
+<span class="string">                        containerid=\$(docker ps -a | grep -w $&#123;currentModule&#125; | awk &#x27;&#123;print \$1&#125;&#x27;)</span>
+<span class="string">                        if [ &quot;\$containerid&quot; != &quot;&quot; ]; then</span>
+<span class="string">                            echo &#x27;容器存在，停止容器&#x27;</span>
+<span class="string">                            docker stop \$containerid</span>
+<span class="string">                            echo &#x27;删除容器&#x27;</span>
+<span class="string">                            docker rm \$containerid</span>
+<span class="string">                        fi</span>
+<span class="string">                    &quot;&quot;&quot;</span>
+
+                    <span class="comment">// 删除镜像</span>
+                    sh <span class="string">&quot;&quot;&quot;</span>
+<span class="string">                        echo &quot;检查镜像 $&#123;currentModule&#125; 是否存在&quot;</span>
+<span class="string">                        imageid=\$(docker images | grep $&#123;currentModule&#125; | awk &#x27;&#123;print \$3&#125;&#x27;)</span>
+<span class="string">                        if [ &quot;\$imageid&quot; != &quot;&quot; ]; then</span>
+<span class="string">                             echo &#x27;删除镜像&#x27;</span>
+<span class="string">                             docker rmi -f \$imageid</span>
+<span class="string">                        fi</span>
+<span class="string">                    &quot;&quot;&quot;</span>
+
+                    <span class="comment">// 执行 mvn dockerfile:build 命令</span>
+                    <span class="comment">// 构建镜像，并获取日志输出</span>
+                    <span class="keyword">def</span> buildOutput = sh(<span class="attr">returnStdout:</span> <span class="literal">true</span>, <span class="attr">script:</span> <span class="string">&quot;mvn dockerfile:build -pl ioms-eureka -DdockerfileDirectory=$&#123;currentWorkspace&#125;/$&#123;currentModule&#125;&quot;</span>)
+
+                    <span class="keyword">def</span> imageName = <span class="string">&quot;&quot;</span>
+                    <span class="keyword">def</span> tag = <span class="string">&quot;&quot;</span>
+
+                    <span class="comment">// 将日志用换行符切分</span>
+                    <span class="keyword">def</span> lines = buildOutput.split(<span class="string">&#x27;\n&#x27;</span>)
+
+                    <span class="comment">// 遍历日志，获取构建的镜像的名称</span>
+                    lines.each &#123; line -&gt;
+                        <span class="keyword">def</span> lineStr = line.toString()  <span class="comment">// 将列表元素转换为字符串</span>
+<span class="comment">//                        echo lineStr</span>
+                        <span class="keyword">if</span> (lineStr.startsWith(<span class="string">&quot;[INFO] Successfully tagged&quot;</span>)) &#123;
+                            imageName = lineStr.substring(lineStr.indexOf(<span class="string">&quot;[INFO] Successfully tagged&quot;</span>) + <span class="string">&quot;[INFO] Successfully tagged&quot;</span>.length()).trim()
+                            <span class="comment">// 192.168.6.201:5000/ioms-hf/ioms-eureka:1.0-SNAPSHOT</span>
+                            tag = imageName.split(<span class="string">&quot;:&quot;</span>)[<span class="number">2</span>];
+                        &#125;
+                    &#125;
+
+                    echo <span class="string">&quot;生成的镜像名称：$&#123;imageName&#125;&quot;</span>
+                    echo <span class="string">&quot;生成的镜像Tag：$&#123;tag&#125;&quot;</span>
+
+                    echo <span class="string">&quot;开始执行运行$&#123;currentModule&#125;容器&quot;</span>
+                    sh <span class="string">&quot;docker-compose up -d $&#123;currentModule&#125;&quot;</span>
+                &#125;
+            &#125;
+        &#125;
+        stage(<span class="string">&#x27;构建结束&#x27;</span>) &#123;
+            steps &#123;
+                echo <span class="string">&#x27;已成功构建所有模块&#x27;</span>
+            &#125;
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+
+
+<h2 id="6-运行Pipeline任务"><a href="#6-运行Pipeline任务" class="headerlink" title="6. 运行Pipeline任务"></a>6. 运行Pipeline任务</h2><h3 id="6-1-立即构建"><a href="#6-1-立即构建" class="headerlink" title="6.1 立即构建"></a>6.1 立即构建</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-143447.png" alt="image-20240105143445338"></p>
+<h3 id="6-2-查看构建过程"><a href="#6-2-查看构建过程" class="headerlink" title="6.2 查看构建过程"></a>6.2 查看构建过程</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-143514.png" alt="image-20240105143512649"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-143528.png" alt="image-20240105143526531"></p>
+<h3 id="6-3-验证结果"><a href="#6-3-验证结果" class="headerlink" title="6.3 验证结果"></a>6.3 验证结果</h3><p>浏览器打开eureka访问页面</p>
+<p><a target="_blank" rel="noopener" href="http://192.168.6.91:8761/">http://192.168.6.91:8761/</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-143710.png" alt="image-20240105143708987"></p>
+<h2 id="7-其它"><a href="#7-其它" class="headerlink" title="7. 其它"></a>7. 其它</h2><ul>
+<li>上述所有操作的前提是，要在代理节点安装JDK、Git、Maven，并正确配置环境变量。这些都比较基础，自行补充，这里不再重复。</li>
+<li>Jenkins的中文支持，有时候重启会失效，这个不影响操作。</li>
+</ul>
+<h1 id="七、Jenkins部署运维系统前端代码"><a href="#七、Jenkins部署运维系统前端代码" class="headerlink" title="七、Jenkins部署运维系统前端代码"></a>七、Jenkins部署运维系统前端代码</h1><h2 id="1-安装插件"><a href="#1-安装插件" class="headerlink" title="1. 安装插件"></a>1. 安装插件</h2><p>Jenkins要部署前端代码，需要安装两个必要的插件</p>
+<ul>
+<li>Publish Over SSH  用于登录远程服务器，和向远程服务器发送文件</li>
+<li>NodeJs  用于代码的打包</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-145120.png" alt="image-20240105145119424"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-145257.png" alt="image-20240105145255475"></p>
+<h2 id="2-配置远程服务器的连接"><a href="#2-配置远程服务器的连接" class="headerlink" title="2. 配置远程服务器的连接"></a>2. 配置远程服务器的连接</h2><p>1、打开“系统管理”–“系统设置” 找到 “Publish over SSH” 项 , 配置SSH Server</p>
+<ul>
+<li>Name：给要配置的服务器起个名字</li>
+<li>Hostname：服务器IP</li>
+<li>Username：登录用户名</li>
+<li>Remote Directory：登陆成功后默认进入的目录</li>
+<li>Password：登录用户密码</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-145822.png" alt="image-20240105145821255"></p>
+<p>2、点击 Test Configuration 按钮测试连接是否成功</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-150137.png" alt="image-20240105150135367"></p>
+<h2 id="3-配置NodeJS"><a href="#3-配置NodeJS" class="headerlink" title="3. 配置NodeJS"></a>3. 配置NodeJS</h2><p>打开“系统管理” –&gt; “全局工具配置”， 找到NodeJS， 新增NodeJS</p>
+<ul>
+<li>别名：NodeJS名称</li>
+<li>版本：选择适用的NodeJS版本</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-150653.png" alt="image-20240105150651858"></p>
+<h2 id="4-新建流水线任务"><a href="#4-新建流水线任务" class="headerlink" title="4. 新建流水线任务"></a>4. 新建流水线任务</h2><h3 id="3-1-新建一个自由风格项目"><a href="#3-1-新建一个自由风格项目" class="headerlink" title="3.1 新建一个自由风格项目"></a>3.1 新建一个自由风格项目</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-153628.png" alt="image-20240105153627066"></p>
+<h3 id="3-2-配置任务"><a href="#3-2-配置任务" class="headerlink" title="3.2 配置任务"></a>3.2 配置任务</h3><ul>
+<li><p>限制项目的运行节点：选择要部署的服务器</p>
+</li>
+<li><p>源码管理：选择Git</p>
+<ul>
+<li>Repository URL：前端代码Git地址</li>
+<li>Credentials：Gitlab登录凭证</li>
+<li>Branches to build：Git拉取的代码分支，默认Master</li>
+</ul>
+</li>
+<li><p>构建环境</p>
+<ul>
+<li>Provide Node &amp; npm bin&#x2F; folder to PATH：选择适配的NodeJS版本</li>
+</ul>
+</li>
+<li><p>Build Steps</p>
+<ul>
+<li><p>选择 <code>执行Shell</code></p>
+</li>
+<li><p>内容如下：</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">进入Jenkins工作空间下hxkj项目目录</span>
+cd /data/workspaces/workspace/ioms-html
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash"><span class="comment">##</span></span>
+<span class="meta prompt_"># </span><span class="language-bash">npm切换为淘宝源</span>
+npm config set registry http://registry.npm.taobao.org/
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">删除已有的构建包</span>
+rm -rf ./dist/
+rm -rf dist.tar.gz
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">安装依赖，跳过安全审计</span>
+npm --no-audit i --force
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">构建项目</span>
+npm run test
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">压缩方便移动到项目部署目录</span>
+tar -zcvf dist.tar.gz dist</code></pre></li>
+</ul>
+</li>
+<li><p>构建后操作</p>
+<ul>
+<li><p>配置SSH Server</p>
+<ul>
+<li><p>Name：选择部署的服务器</p>
+</li>
+<li><p>Transfer Set Source files：前端打包后的文件名</p>
+</li>
+<li><p>Remove prefix：要去除的文件前缀</p>
+</li>
+<li><p>Remote directory：要进入的远程服务器的文件夹路径</p>
+</li>
+<li><p>Exec command：进入文件夹后，执行的shell命令</p>
+<pre><code class="highlight shell">cd /usr/local/docker/data/nginx/html/dist-white/
+echo &quot;工作路径：&quot; $(pwd)
+mv ./dist ./dist$(date +&#x27;%Y%m%d%H%M&#x27;)
+tar -zxvf dist.tar.gz -C ./
+docker restart ioms-nginx
+rm -rf dist.tar.gz</code></pre></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-执行构建任务"><a href="#5-执行构建任务" class="headerlink" title="5. 执行构建任务"></a>5. 执行构建任务</h2><h3 id="5-1-立即构建"><a href="#5-1-立即构建" class="headerlink" title="5.1 立即构建"></a>5.1 立即构建</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-154823.png" alt="image-20240105154821435"></p>
+<h3 id="5-2-查看构建过程"><a href="#5-2-查看构建过程" class="headerlink" title="5.2 查看构建过程"></a>5.2 查看构建过程</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-154937.png" alt="image-20240105154935476"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-154947.png" alt="image-20240105154945457"></p>
+<h3 id="5-3-验证结果"><a href="#5-3-验证结果" class="headerlink" title="5.3 验证结果"></a>5.3 验证结果</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/01/05/20240105-155023.png" alt="image-20240105155022077"></p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
