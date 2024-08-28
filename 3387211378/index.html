@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>第十九章-类的加载过程详解 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" jvm , java ">
+  <meta name="description" content="第十九章-类的加载过程详解 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#114;&#103;&#x65;&#x5f;&#57;&#x35;&#64;&#49;&#x32;&#54;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#114;&#103;&#x65;&#x5f;&#57;&#x35;&#64;&#49;&#x32;&#54;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(37)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(26)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="37">
+<input type="hidden" id="yelog_site_word_count" value="196.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 JVM "
+           href="/944806143/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/490498600/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1471620196/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/971417975/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2165702380/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2681163762/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/3537043756/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/3387211378/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1107503247/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2772873157/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/143162370/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/309245330/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1750792302/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/484946532/"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/2929260443/"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/1403776474/"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/2561891005/"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/2224151177/"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2105268063/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/364508352/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/2050535563/"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2388209687/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/3385856233/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/4075763684/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/3720767522/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/105864584/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/543408063/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/554039338/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1123461525/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1626061462/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/222077543/"
+           data-tag="jvm,java,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1897413233/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/4179015178/"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/877664098/"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/2016918085/"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/3069199997/"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/3070587776/"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-jvm/第十九章-类的加载过程详解" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">第十九章-类的加载过程详解</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="JVM">JVM</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">jvm</a>
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-08-08 19:42:53'>2024-08-02 19:33</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:7.5k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A6%82%E8%BF%B0"><span class="toc-text">一、概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BF%87%E7%A8%8B%E4%B8%80-Loading-%E5%8A%A0%E8%BD%BD-%E9%98%B6%E6%AE%B5"><span class="toc-text">二、过程一: Loading (加载)阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8A%A0%E8%BD%BD%E5%AE%8C%E6%88%90%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">1. 加载完成的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%8A%A0%E8%BD%BD%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">1.1 加载的理解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%8A%A0%E8%BD%BD%E5%AE%8C%E6%88%90%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">1.2 加载完成的操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%B5%81%E7%9A%84%E8%8E%B7%E5%8F%96%E6%96%B9%E5%BC%8F"><span class="toc-text">2. 二进制流的获取方式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%B1%BB%E6%A8%A1%E5%9E%8B%E4%B8%8EClass%E5%AE%9E%E4%BE%8B%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="toc-text">3. 类模型与Class实例的位置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%B1%BB%E6%A8%A1%E5%9E%8B%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="toc-text">3.1 类模型的位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-Class%E5%AE%9E%E4%BE%8B%E7%9A%84%E4%BD%8D%E7%BD%AE"><span class="toc-text">3.2 Class实例的位置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%95%B0%E7%BB%84%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD"><span class="toc-text">4. 数组类的加载</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%BF%87%E7%A8%8B%E4%BA%8C-Linking-%E9%93%BE%E6%8E%A5-%E9%98%B6%E6%AE%B5"><span class="toc-text">三、过程二: Linking (链接)阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%8E%AF%E8%8A%821%EF%BC%9A%E9%93%BE%E6%8E%A5%E9%98%B6%E6%AE%B5%E4%B9%8BVerification%EF%BC%88%E9%AA%8C%E8%AF%81%EF%BC%89"><span class="toc-text">1. 环节1：链接阶段之Verification（验证）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%95%B4%E4%BD%93%E8%AF%B4%E6%98%8E"><span class="toc-text">1.1 整体说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%85%B7%E4%BD%93%E8%AF%B4%E6%98%8E"><span class="toc-text">1.2 具体说明</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%8E%AF%E8%8A%822%EF%BC%9A%E9%93%BE%E6%8E%A5%E9%98%B6%E6%AE%B5%E4%B9%8BPreparation%EF%BC%88%E5%87%86%E5%A4%87%EF%BC%89"><span class="toc-text">2. 环节2：链接阶段之Preparation（准备）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%8E%AF%E8%8A%823%EF%BC%9A%E9%93%BE%E6%8E%A5%E9%98%B6%E6%AE%B5%E4%B9%8BResolution%EF%BC%88%E8%A7%A3%E6%9E%90%EF%BC%89"><span class="toc-text">3. 环节3：链接阶段之Resolution（解析）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%BF%87%E7%A8%8B%E4%B8%89-Initialization-%E5%88%9D%E5%A7%8B%E5%8C%96-%E9%98%B6%E6%AE%B5"><span class="toc-text">四、过程三: Initialization (初始化)阶段</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-static%E4%B8%8Efinal%E7%9A%84%E6%90%AD%E9%85%8D%E9%97%AE%E9%A2%98"><span class="toc-text">1. static与final的搭配问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-clinit-%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-text">2. clinit 的线程安全性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%B1%BB%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%83%85%E5%86%B5%EF%BC%9A%E4%B8%BB%E5%8A%A8%E4%BD%BF%E7%94%A8vs%E8%A2%AB%E5%8A%A8%E4%BD%BF%E7%94%A8"><span class="toc-text">3. 类的初始化情况：主动使用vs被动使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E4%B8%BB%E5%8A%A8%E4%BD%BF%E7%94%A8"><span class="toc-text">3.1 主动使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%A2%AB%E5%8A%A8%E4%BD%BF%E7%94%A8"><span class="toc-text">3.2 被动使用</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E8%BF%87%E7%A8%8B%E5%9B%9B-%E7%B1%BB%E7%9A%84Using-%E4%BD%BF%E7%94%A8"><span class="toc-text">五、过程四: 类的Using (使用)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%BF%87%E7%A8%8B%E4%BA%94-%E7%B1%BB%E7%9A%84Unloading-%E5%8D%B8%E8%BD%BD"><span class="toc-text">六、过程五: 类的Unloading (卸载)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%B1%BB%E3%80%81%E7%B1%BB%E7%9A%84%E5%8A%A0%E8%BD%BD%E5%99%A8%E3%80%81%E7%B1%BB%E7%9A%84%E5%AE%9E%E4%BE%8B%E4%B9%8B%E9%97%B4%E7%9A%84%E5%BC%95%E7%94%A8%E5%85%B3%E7%B3%BB"><span class="toc-text">1. 类、类的加载器、类的实例之间的引用关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%B1%BB%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F"><span class="toc-text">2. 类的生命周期</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%B7%E4%BD%93%E4%BE%8B%E5%AD%90"><span class="toc-text">3. 具体例子</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%B1%BB%E7%9A%84%E5%8D%B8%E8%BD%BD"><span class="toc-text">4. 类的卸载</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E9%A1%BE%EF%BC%9A%E6%96%B9%E6%B3%95%E5%8C%BA%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6"><span class="toc-text">回顾：方法区的垃圾回收</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、概述"><a href="#一、概述" class="headerlink" title="一、概述"></a>一、概述</h1><p>在Java中数据类型分为基本数据类型和引用数据类型。<strong>基本数据类型由虚拟机预先定义，引用数据类型则需要进行类的加载。</strong></p>
+<p>按照Java虚拟机规范，从class文件到加载到内存中的类，到类卸载出内存为止，它的整个生命周期包括如下7个阶段：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/02/20240802-195737.png" alt="类的生命周期"></p>
+<p>其中，验证、准备、解析3个部分统称为链接（Linking）</p>
+<p>从程序中类的使用过程看</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/02/20240802-195857.png" alt="类的使用过程"></p>
+<p><strong>注意: 我们所说的加载完毕包括：加载、链接、初始化三个阶段都完成之后类进入方法区中</strong></p>
+<h1 id="二、过程一-Loading-加载-阶段"><a href="#二、过程一-Loading-加载-阶段" class="headerlink" title="二、过程一: Loading (加载)阶段"></a>二、过程一: Loading (加载)阶段</h1><h2 id="1-加载完成的操作"><a href="#1-加载完成的操作" class="headerlink" title="1. 加载完成的操作"></a>1. 加载完成的操作</h2><h3 id="1-1-加载的理解"><a href="#1-1-加载的理解" class="headerlink" title="1.1 加载的理解"></a>1.1 加载的理解</h3><p><strong>所谓加载，简而言之就是 JAVA类的字节码文件加载到机器内存中，并在内存中构建出JAVA类的原型——类模板对象。</strong></p>
+<p>所谓类模板对象，其实就是Java类在]VM内存中的一个快照，JVM将从字节码文件中解析出的常量池、类字段、类方法等信息存储到类模板中，这样]VM在运行期便能通过类模板而获取Java类中的任意信息，能够对Java类的成员变量进行遍历，也能进行Java方法的调用。</p>
+<p>反射的机制即基于这一基础。如果JVM没有将Java类的声明信息存储起来，则JVM在运行期也无法反射。</p>
+<h3 id="1-2-加载完成的操作"><a href="#1-2-加载完成的操作" class="headerlink" title="1.2 加载完成的操作"></a>1.2 加载完成的操作</h3><p><strong>加载阶段，简言之，查找并加载类的二进制数据，生成Class的实例</strong></p>
+<p>在加载类时，Java虚拟机必须完成以下3件事情：</p>
+<ul>
+<li>通过<em>类的全名</em>，获取类的二进制数据流。 </li>
+<li>解析类的二进制数据流为方法区内的数据结构（Java类模型） </li>
+<li>创建java.lang.Class类的实例，表示该类型。作为方法区这个类的各种数据的访问入口</li>
+</ul>
+<h2 id="2-二进制流的获取方式"><a href="#2-二进制流的获取方式" class="headerlink" title="2. 二进制流的获取方式"></a>2. 二进制流的获取方式</h2><p>对于类的二进制数据流，虚拟机可以通过多种途径产生或获得。（只要所读取的字节码符合JVM规范即可）</p>
+<ul>
+<li><p>虚拟机可能通过文件系统读入一个class后缀的文件（最常见)</p>
+</li>
+<li><p>读入jar、zip等归档数据包，提取类文件。</p>
+</li>
+<li><p>事先存放在数据库中的类的二进制数据</p>
+</li>
+<li><p>使用类似于HTTP之类的协议通过网络进行加载</p>
+</li>
+<li><p>在运行时生成一段class的二进制信息等</p>
+</li>
+<li><p>在获取到类的二进制信息后，Java虚拟机就会处理这些数据，并最终转为一个java.lang.Class的实例。</p>
+</li>
+</ul>
+<p><strong>如果输入数据不是ClassFile的结构，则会抛出ClassFormatError。</strong></p>
+<h2 id="3-类模型与Class实例的位置"><a href="#3-类模型与Class实例的位置" class="headerlink" title="3. 类模型与Class实例的位置"></a>3. 类模型与Class实例的位置</h2><h3 id="3-1-类模型的位置"><a href="#3-1-类模型的位置" class="headerlink" title="3.1 类模型的位置"></a>3.1 类模型的位置</h3><p><strong>加载的类在JVM中创建相应的类结构，类结构会存储在方法区</strong>（JDK1.8之前：永久代；JDK1.8及之后：元空间）。</p>
+<h3 id="3-2-Class实例的位置"><a href="#3-2-Class实例的位置" class="headerlink" title="3.2 Class实例的位置"></a>3.2 Class实例的位置</h3><p>类将.class文件加载至元空间后，会<strong>在堆中创建一个Java.lang.Class 对象</strong>，用来封装类位于方法区内的数据结构，该Class对象是在加载类的过程中创建的，每个类都对应有一个Class类型的对象。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/02/20240802-202716.png" alt="Class实例的位置"></p>
+<p><strong>示例:</strong></p>
+<p>通过Class类，获得了 java.lang.String 类的所有方法信息，并打印方法访问标识符、描述符</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 过程一：加载阶段</span>
+<span class="comment"> *</span>
+<span class="comment"> * 通过Class类，获得了java.lang.String类的所有方法信息，并打印方法访问标识符、描述符</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LoadingTest</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="keyword">try</span> &#123;
+            <span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> Class.forName(<span class="string">&quot;java.lang.String&quot;</span>);
+            <span class="comment">//获取当前运行时类声明的所有方法</span>
+            Method[] ms = clazz.getDeclaredMethods();
+            <span class="keyword">for</span> (Method m : ms) &#123;
+                <span class="comment">//获取方法的修饰符</span>
+                <span class="type">String</span> <span class="variable">mod</span> <span class="operator">=</span> Modifier.toString(m.getModifiers());
+                System.out.print(mod + <span class="string">&quot; &quot;</span>);
+                <span class="comment">//获取方法的返回值类型</span>
+                <span class="type">String</span> <span class="variable">returnType</span> <span class="operator">=</span> m.getReturnType().getSimpleName();
+                System.out.print(returnType + <span class="string">&quot; &quot;</span>);
+                <span class="comment">//获取方法名</span>
+                System.out.print(m.getName() + <span class="string">&quot;(&quot;</span>);
+                <span class="comment">//获取方法的参数列表</span>
+                Class&lt;?&gt;[] ps = m.getParameterTypes();
+                <span class="keyword">if</span> (ps.length == <span class="number">0</span>) System.out.print(<span class="string">&#x27;)&#x27;</span>);
+                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; ps.length; i++) &#123;
+                    <span class="type">char</span> <span class="variable">end</span> <span class="operator">=</span> (i == ps.length - <span class="number">1</span>) ? <span class="string">&#x27;)&#x27;</span> : <span class="string">&#x27;,&#x27;</span>;
+                    <span class="comment">//获取参数的类型</span>
+                    System.out.print(ps[i].getSimpleName() + end);
+                &#125;
+                System.out.println();
+            &#125;
+        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125;
+
+    &#125;
+&#125;</code></pre>
+
+
+
+<h2 id="4-数组类的加载"><a href="#4-数组类的加载" class="headerlink" title="4. 数组类的加载"></a>4. 数组类的加载</h2><p>创建数组类的情况稍微有些特殊，因为数组类本身并不是由类加载器负责创建，而是由JVM在运行时根据需要而直接创建的，但数组的元素类型仍然需要依靠类加载器去创建。创建数组类（下述简称A）的过程：</p>
+<ul>
+<li><p>如果数组的元素类型是引用类型，那么就遵循定义的加载过程递归加载和创建数组A的元素类型；</p>
+</li>
+<li><p>JVM使用指定的元素类型和数组维度来创建新的数组类。</p>
+</li>
+</ul>
+<p>如果数组的元素类型是引用类型，数组类的可访问性就由元素类型的可访问性决定。否则数组类的可访问性将被缺省定义为public。</p>
+<p><strong>详细解析:</strong></p>
+<ol>
+<li><strong>数组类的创建方式</strong>：<ul>
+<li>与普通类不同，数组类不是由类加载器（ClassLoader）创建的。</li>
+<li>数组类是由JVM（Java虚拟机）在运行时根据需要直接创建的。</li>
+</ul>
+</li>
+<li><strong>数组元素类型的依赖</strong>：<ul>
+<li>尽管数组类本身由JVM直接创建，数组的元素类型仍然需要类加载器来加载和创建。</li>
+</ul>
+</li>
+<li><strong>创建数组类的具体过程</strong>：<ul>
+<li>引用类型元素：<ul>
+<li>如果数组的元素是引用类型（例如对象），则按照Java类加载的常规流程递归地加载和创建这些元素类型。</li>
+<li>比如，创建一个<code>String</code>类型数组，JVM会首先确保<code>String</code>类已经加载。</li>
+</ul>
+</li>
+<li>JVM创建数组类：<ul>
+<li>JVM根据指定的元素类型和数组的维度来创建新的数组类。</li>
+<li>例如，对于一个二维整型数组<code>int[][]</code>，JVM会创建一个包含整型的二维数组类。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>数组类的可访问性</strong>：<ul>
+<li>引用类型元素：<ul>
+<li>如果数组的元素类型是引用类型，则数组类的可访问性由元素类型的可访问性决定。</li>
+<li>比如，如果一个数组包含的元素类是<code>private</code>的，那么这个数组类也会是<code>private</code>的。</li>
+</ul>
+</li>
+<li>基本类型元素：<ul>
+<li>如果数组的元素类型是基本类型（如<code>int</code>、<code>char</code>），数组类的可访问性默认为<code>public</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="三、过程二-Linking-链接-阶段"><a href="#三、过程二-Linking-链接-阶段" class="headerlink" title="三、过程二: Linking (链接)阶段"></a>三、过程二: Linking (链接)阶段</h1><h2 id="1-环节1：链接阶段之Verification（验证）"><a href="#1-环节1：链接阶段之Verification（验证）" class="headerlink" title="1. 环节1：链接阶段之Verification（验证）"></a>1. 环节1：链接阶段之Verification（验证）</h2><p>当类加载到系统后，就开始链接操作，验证是链接操作的第一步。</p>
+<p><strong>它的目的是保证加载的字节码是合法、合理并符合规范的.</strong></p>
+<p>验证的步骤比较复杂，实际要验证的项目也很繁多，大体上Java虚拟机需要做以下检查，如图所示。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/07/20240807-082017.png" alt="验证"></p>
+<h3 id="1-1-整体说明"><a href="#1-1-整体说明" class="headerlink" title="1.1 整体说明"></a>1.1 整体说明</h3><p>验证的内容则涵盖了类数据信息的格式验证、语义检查、字节码验证，以及符号引用验证等。</p>
+<ul>
+<li><strong>其中格式验证会和加载阶段一起执行。</strong>验证通过之后，类加载器才会成功将类的二进制数据信息加载到方法区中。</li>
+<li><strong>格式验证之外的验证操作将会在方法区中进行。</strong>(这是因为类数据模板已经被加载到方法区了)</li>
+</ul>
+<p>链接阶段的验证虽然拖慢了加载速度，但是它避免了在字节码运行时还需要进行各种检查。（磨刀不误砍柴工）</p>
+<h3 id="1-2-具体说明"><a href="#1-2-具体说明" class="headerlink" title="1.2 具体说明"></a>1.2 具体说明</h3><ul>
+<li><p>格式验证：是否以魔数<code>0XCAFEBABE</code>开头，主版本和副版本号是否在当前Java虚拟机的支持范围内，数据中每一个项是否都拥有正确的长度等。 </p>
+</li>
+<li><p>语义检查：Java虚拟机会进行字节码的语义检查，但凡在语义上不符合规范的，虚拟机也不会给予验证通过。比如： </p>
+</li>
+<li><ul>
+<li>是否所有的类都有父类的存在（在Java里，除了object外，其他类都应该有父类）</li>
+</ul>
+</li>
+<li><ul>
+<li>是否一些被定义为final的方法或者类被重写或继承了</li>
+</ul>
+</li>
+<li><ul>
+<li>非抽象类是否实现了所有抽象方法或者接口方法</li>
+</ul>
+</li>
+<li><p>字节码验证：Java虚拟机还会进行字节码验证，<strong>字节码验证也是验证过程中最为复杂的一个过程。</strong>它试图通过对字节码流的分析，判断字节码是否可以被正确地执行。比如： </p>
+<ul>
+<li>在字节码的执行过程中，是否会跳转到一条不存在的指令</li>
+<li>函数的调用是否传递了正确类型的参数</li>
+<li>变量的赋值是不是给了正确的数据类型等</li>
+</ul>
+<p>栈映射帧（StackMapTable）就是在这个阶段，用于检测在特定的字节码处，其局部变量表和操作数栈是否有着正确的数据类型。但遗憾的是，100%准确地判断一段字节码是否可以被安全执行是无法实现的，因此，该过程只是尽可能地检查出可以预知的明显的问题。如果在这个阶段无法通过检查，虚拟机也不会正确装载这个类。但是，如果通过了这个阶段的检查，也不能说明这个类是完全没有问题的。</p>
+<p><strong>在前面3次检查中，已经排除了文件格式错误、语义错误以及字节码的不正确性。但是依然不能确保类是没有问题的。</strong></p>
+</li>
+<li><p>符号引用的验证：校验器还将进符号引用的验证。Class文件在其常量池会通过字符串记录自己将要使用的其他类或者方法。因此，在验证阶段，虚拟机就会检查这些类或者方法确实是存在的，并且当前类有权限访问这些数据，如果一个需要使用类无法在系统中找到，则会抛出NoClassDefFoundError，如果一个方法无法被找到，则会抛出NoSuchMethodError。此阶段在解析环节才会执行。</p>
+</li>
+</ul>
+<h2 id="2-环节2：链接阶段之Preparation（准备）"><a href="#2-环节2：链接阶段之Preparation（准备）" class="headerlink" title="2. 环节2：链接阶段之Preparation（准备）"></a>2. 环节2：链接阶段之Preparation（准备）</h2><p>准备阶段（Preparation），简言之，为类的静态变量分配内存，并将其初始化为默认值。</p>
+<p>当一个类验证通过时，虚拟机就会进入准备阶段。在这个阶段，虚拟机就会为这个类分配相应的内存空间，并设置默认初始值。Java虚拟机为各类型变量默认的初始值如表所示。</p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>默认初始值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>byte</td>
+<td>(byte)0</td>
+</tr>
+<tr>
+<td>short</td>
+<td>(short)0</td>
+</tr>
+<tr>
+<td>int</td>
+<td>0</td>
+</tr>
+<tr>
+<td>long</td>
+<td>0L</td>
+</tr>
+<tr>
+<td>float</td>
+<td>0.0f</td>
+</tr>
+<tr>
+<td>double</td>
+<td>0.0</td>
+</tr>
+<tr>
+<td>char</td>
+<td>\u0000</td>
+</tr>
+<tr>
+<td>boolean</td>
+<td>false</td>
+</tr>
+<tr>
+<td>reference</td>
+<td>null</td>
+</tr>
+</tbody></table>
+<p>Java并不支持boolean类型，对于boolean类型，内部实现是int，由于int的默认值是0，故对应的，boolean的默认值就是false。</p>
+<p><strong>注意</strong></p>
+<ul>
+<li><p><strong>这里不包含基本数据类型的字段用staticfinal修饰的情况，因为final在编译的时候就会分配了，准备阶段会显式赋值。</strong></p>
+<pre><code class="highlight java"><span class="comment">// 一般情况：static final修饰的基本数据类型、字符串类型字面量会在准备阶段赋值</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">&quot;Hello world&quot;</span>;
+<span class="comment">// 特殊情况：static final修饰的引用类型不会在准备阶段赋值，而是在初始化阶段赋值</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;Hello world&quot;</span>);</code></pre>
+</li>
+<li><p>注意这里不会为实例变量分配初始化，类变量会分配在方法区中，而实例变量是会随着对象一起分配到Java堆中。 </p>
+</li>
+<li><p>在这个阶段并不会像初始化阶段中那样会有初始化或者代码被执行。</p>
+</li>
+<li><p>准备环节不会有代码执行，只是进行非final的数据类型的初始值赋值</p>
+</li>
+</ul>
+<p><strong>注意：以下前3点的前提都是字段已经完成显示赋值（定义的后面已经赋了值）的前提下进行的</strong><br>1、非final修饰的静态变量会在准备阶段赋初始值，然后在初始化中的<clinit>方法中显示赋值<br>2、静态常量（基本数据类型、String类型字面量（”XXX”这种情况））在编译阶段会初始化赋值，然后在准备阶段就会显示赋值<br>3、引用数据类型的静态常量，尤其是new String(“XXX”)这种形式，都是在初始化中的<clinit>中进行显示赋值的<br>4、如果在static静态代码块中具有显示赋值操作（定义的后面没有赋值），那肯定就是在初始化中的<clinit>方法中显示赋值</p>
+<h2 id="3-环节3：链接阶段之Resolution（解析）"><a href="#3-环节3：链接阶段之Resolution（解析）" class="headerlink" title="3. 环节3：链接阶段之Resolution（解析）"></a>3. 环节3：链接阶段之Resolution（解析）</h2><p>在准备阶段完成后，就进入了解析阶段。解析阶段（Resolution），简言之，将类、接口、字段和方法的符号引用转为直接引用。</p>
+<p><strong>具体描述</strong>：</p>
+<p>符号引用就是一些字面量的引用，和虚拟机的内部数据结构和和内存布局无关。比较容易理解的就是在Class类文件中，通过常量池进行了大量的符号引用。但是在程序实际运行时，只有符号引用是不够的，比如当如下println()方法被调用时，系统需要明确知道该方法的位置。</p>
+<p><strong>举例</strong>：</p>
+<p>输出操作System.out.println()对应的字节码：</p>
+<pre><code class="highlight txt">invokevirtual #24 &lt;java/io/PrintStream.println&gt;</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/07/20240807-092933.png" alt="符号引用"></p>
+<p>以方法为例，Java虚拟机为每个类都准备了一张方法表，将其所有的方法都列在表中，当需要调用一个类的方法的时候，只要知道这个方法在方法表中的偏移量就可以直接调用该方法。<br>通过解析操作，符号引用就可以转变为目标方法在类中方法表中的位置，从而使得方法被成功调用。</p>
+<h1 id="四、过程三-Initialization-初始化-阶段"><a href="#四、过程三-Initialization-初始化-阶段" class="headerlink" title="四、过程三: Initialization (初始化)阶段"></a>四、过程三: Initialization (初始化)阶段</h1><h2 id="1-static与final的搭配问题"><a href="#1-static与final的搭配问题" class="headerlink" title="1. static与final的搭配问题"></a>1. static与final的搭配问题</h2><p><strong>说明</strong>：使用static+ final修饰的字段的显式赋值的操作，到底是在哪个阶段进行的赋值？</p>
+<ul>
+<li><p>情况1：在链接阶段的准备环节赋值 </p>
+</li>
+<li><p>情况2：在初始化阶段<clinit>()中赋值</p>
+</li>
+</ul>
+<p><strong>结论</strong>： 在<strong>链接阶段</strong>的准备环节赋值的情况：</p>
+<ul>
+<li><p>对于基本数据类型的字段来说，如果使用static final修饰，则显式赋值(直接赋值常量，而非调用方法)通常是在链接阶段的准备环节进行 </p>
+</li>
+<li><p>对于String来说，如果使用字面量的方式赋值，使用static final修饰的话，则显式赋值通常是在链接阶段的准备环节进行 </p>
+</li>
+<li><p>在初始化阶段<clinit>()中赋值的情况： 排除上述的在准备环节赋值的情况之外的情况。</p>
+</li>
+</ul>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">1</span>;<span class="comment">//在初始化阶段&lt;clinit&gt;()中赋值</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">INT_CONSTANT</span> <span class="operator">=</span> <span class="number">10</span>;<span class="comment">//在链接阶段的准备环节赋值</span>
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Integer</span> <span class="variable">INTEGER_CONSTANT1</span> <span class="operator">=</span> Integer.valueOf(<span class="number">100</span>);<span class="comment">//在初始化阶段&lt;clinit&gt;()中赋值</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">Integer</span> <span class="variable">INTEGER_CONSTANT2</span> <span class="operator">=</span> Integer.valueOf(<span class="number">1000</span>);<span class="comment">//在初始化阶段&lt;clinit&gt;()中赋值</span>
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">s0</span> <span class="operator">=</span> <span class="string">&quot;helloworld0&quot;</span>;<span class="comment">//在链接阶段的准备环节赋值</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;helloworld1&quot;</span>);<span class="comment">//在初始化阶段&lt;clinit&gt;()中赋值</span>
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="string">&quot;helloworld2&quot;</span>; <span class="comment">// 在初始化阶段&lt;clinit&gt;()中赋值</span>
+
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">NUM1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>().nextInt(<span class="number">10</span>);<span class="comment">//在初始化阶段&lt;clinit&gt;()中赋值</span></code></pre>
+
+
+
+<p><strong>最终结论：使用static+final修饰，且显式赋值中不涉及到方法或构造器调用的基本数据类到或String类型的显式赋值，是在链接阶段的准备环节进行。</strong></p>
+<p>对于准备阶段就完成赋值的，其字段下面的有属性ConstantValue，否则是没有属性ConstantValue的，如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/08/20240808-125400.png" alt="准备阶段完成赋值"></p>
+<p>在初始化中的<clinit>方法中完成赋值的，引用类型静态常量的例子我就不举了，我举一个静态变量的例子吧，如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/08/20240808-125608.png" alt="clinit"></p>
+<h2 id="2-clinit-的线程安全性"><a href="#2-clinit-的线程安全性" class="headerlink" title="2. clinit 的线程安全性"></a>2. clinit 的线程安全性</h2><p>对于 <code>&lt;clinit&gt;()</code> 方法的调用，也就是类的初始化，虚拟机会在内部确保其多线程环境中的安全性。</p>
+<p>虚拟机会保证一个类的 <code>&lt;clinit&gt;()</code> 方法在多线程环境中被正确地加锁、同步，如果多个线程同时去初始化一个类，那么只会有一个线程去执行这个类的 <code>&lt;clinit&gt;()</code> 方法，其他线程都需要阻塞等待，直到活动线程执行 <code>&lt;clinit&gt;()</code> 方法完毕。</p>
+<p>正是因为函数 <code>&lt;clinit&gt;()</code> 带锁线程安全的，因此，如果在一个类的 <code>&lt;clinit&gt;()</code> 方法中有耗时很长的操作，就可能造成多个线程阻塞，引发死锁。并且这种死锁是很难发现的，因为看起来它们并没有可用的锁信息。</p>
+<p>如果之前的线程成功加载了类，则等在队列中的线程就没有机会再执行 <code>&lt;clinit&gt;()</code> 方法了。那么，当需要使用这个类时，虚拟机会直接返回给它已经准备好的信息。(这也说明了类的初始化只会执行一次)</p>
+<h2 id="3-类的初始化情况：主动使用vs被动使用"><a href="#3-类的初始化情况：主动使用vs被动使用" class="headerlink" title="3. 类的初始化情况：主动使用vs被动使用"></a>3. 类的初始化情况：主动使用vs被动使用</h2><p>Java程序对类的使用分为两种：主动使用和被动使用。</p>
+<h3 id="3-1-主动使用"><a href="#3-1-主动使用" class="headerlink" title="3.1 主动使用"></a>3.1 主动使用</h3><p>Class只有在必须要首次使用的时候才会被装载，Java虚拟机不会无条件地装载Class类型。Java虚拟机规定，一个类或接口在初次使用前，必须要进行初始化。这里指的“使用”，是指主动使用，主动使用只有下列几种情况：（即：如果出现如下的情况，则会对类进行初始化操作。而初始化操作之前的加载、验证、准备已经完成。</p>
+<ul>
+<li><p><strong>实例化</strong>：当创建一个类的实例时，比如使用new关键字，或者通过反射、克隆、反序列化。 </p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActiveUse1</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 1. 使用new关键字</span>
+        <span class="type">Order</span> <span class="variable">order</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Order</span>();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 2. 使用new关键字</span>
+<span class="comment">     * 序列化的过程</span>
+<span class="comment">     */</span>
+    <span class="meta">@Test</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span> &#123;
+        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="keyword">try</span> &#123;
+            oos = <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(<span class="keyword">new</span> <span class="title class_">FileOutputStream</span>(<span class="string">&quot;order.dat&quot;</span>));
+
+            oos.writeObject(<span class="keyword">new</span> <span class="title class_">Order</span>());
+        &#125; <span class="keyword">catch</span> (IOException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">finally</span> &#123;
+            <span class="keyword">try</span> &#123;
+                <span class="keyword">if</span> (oos != <span class="literal">null</span>)
+                    oos.close();
+            &#125; <span class="keyword">catch</span> (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 3.反序列化的过程：（验证）</span>
+<span class="comment">     */</span>
+    <span class="meta">@Test</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;
+        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="keyword">try</span> &#123;
+            ois = <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(<span class="keyword">new</span> <span class="title class_">FileInputStream</span>(<span class="string">&quot;order.dat&quot;</span>));
+
+            <span class="type">Order</span> <span class="variable">order</span> <span class="operator">=</span> (Order) ois.readObject();
+        &#125; <span class="keyword">catch</span> (IOException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">finally</span> &#123;
+            <span class="keyword">try</span> &#123;
+                <span class="keyword">if</span> (ois != <span class="literal">null</span>)
+                    ois.close();
+            &#125; <span class="keyword">catch</span> (IOException e) &#123;
+                e.printStackTrace();
+            &#125;
+        &#125;
+
+    &#125;
+
+&#125;
+
+<span class="keyword">class</span> <span class="title class_">Order</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span>&#123;
+    <span class="keyword">static</span> &#123;
+        System.out.println(<span class="string">&quot;Order类的初始化过程&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">()</span>&#123;
+        System.out.println(<span class="string">&quot;Order method()....&quot;</span>);
+    &#125;
+&#125;</code></pre>
+</li>
+<li><p><strong>静态方法</strong>：当调用类的静态方法时，即当使用了字节码invokestatic指令。 </p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActiveUse1</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 4. 静态方法调用</span>
+<span class="comment">     */</span>
+    <span class="meta">@Test</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test3</span><span class="params">()</span>&#123;
+        Order.method();
+    &#125;
+
+&#125;
+
+<span class="keyword">class</span> <span class="title class_">Order</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span>&#123;
+    <span class="keyword">static</span> &#123;
+        System.out.println(<span class="string">&quot;Order类的初始化过程&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method</span><span class="params">()</span>&#123;
+        System.out.println(<span class="string">&quot;Order method()....&quot;</span>);
+    &#125;
+&#125;</code></pre>
+</li>
+<li><p><strong>静态字段</strong>：当使用类、接口的静态字段时（final修饰特殊考虑），比如，使用getstatic或者putstatic指令。（对应访问变量、赋值变量操作）</p>
+<ul>
+<li><p>类使用静态字段触发初始化</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActiveUse2</span> &#123;
+    <span class="meta">@Test</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span>&#123;
+        System.out.println(User.num); <span class="comment">// 执行了 User 的初始化</span>
+        System.out.println(User.num1); <span class="comment">// 不执行 User 的初始化, 因为num1为static final修饰的常量</span>
+        System.out.println(User.num2); <span class="comment">// 执行了 User 的初始化</span>
+    &#125;
+&#125;
+
+<span class="keyword">class</span> <span class="title class_">User</span>&#123;
+    <span class="keyword">static</span>&#123;
+        System.out.println(<span class="string">&quot;User类的初始化过程&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span>;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">num1</span> <span class="operator">=</span> <span class="number">2</span>;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">num2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>().nextInt(<span class="number">10</span>);
+
+&#125;</code></pre>
+
+</li>
+<li><p>接口的初始化</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActiveUse2</span> &#123;
+    <span class="meta">@Test</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span>&#123;
+<span class="comment">//        System.out.println(CompareA.NUM1);</span>
+        System.out.println(CompareA.NUM2);
+    &#125;
+&#125;
+
+<span class="keyword">interface</span> <span class="title class_">CompareA</span>&#123;
+
+    <span class="comment">// 测试接口的初始化</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>()&#123;
+        &#123;
+            System.out.println(<span class="string">&quot;CompareA的初始化&quot;</span>);
+        &#125;
+    &#125;;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">NUM1</span> <span class="operator">=</span> <span class="number">1</span>; <span class="comment">// 不经过clinit防范</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">NUM2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>().nextInt(<span class="number">10</span>); <span class="comment">// 经过clinit方法,触发接口初始化</span>
+
+&#125;</code></pre></li>
+</ul>
+</li>
+<li><p><strong>反射</strong>：当使用java.lang.reflect包中的方法反射类的方法时。比如：Class.forName(“com.atguigu.java.Test”) </p>
+</li>
+<li><p><strong>继承</strong>：当初始化子类时，如果发现其父类还没有进行过初始化，则需要先触发其父类的初始化。</p>
+</li>
+</ul>
+<p>  当Java虚拟机初始化一个类时，要求它的所有父类都已经被初始化，但是这条规则并不适用于接口。可以使用 <code>-XX:+TraceClassLoading</code> 参数配置查看类加载路径</p>
+<ul>
+<li><p>在初始化一个类时，并不会先初始化它所实现的接口</p>
+</li>
+<li><p>在初始化一个接口时，并不会先初始化它的父接口</p>
+</li>
+<li><p>因此，一个父接口并不会因为它的子接口或者实现类的初始化而初始化。只有当程序首次使用特定接口的静态字段时，才会导致该接口的初始化。</p>
+</li>
+<li><p>default方法：如果一个接口定义了default方法，那么直接实现或者间接实现该接口的类的初始化，该接口要在其之前被初始化。 </p>
+<pre><code class="highlight java"><span class="keyword">interface</span> <span class="title class_">CompareB</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>() &#123;
+        &#123;
+            System.out.println(<span class="string">&quot;CompareB的初始化&quot;</span>);
+        &#125;
+    &#125;;
+    <span class="keyword">public</span> <span class="keyword">default</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span>&#123;
+        System.out.println(<span class="string">&quot;你好！&quot;</span>);
+    &#125;
+
+&#125;
+
+<span class="keyword">class</span> <span class="title class_">Father</span> &#123;
+    <span class="keyword">static</span> &#123;
+        System.out.println(<span class="string">&quot;Father类的初始化过程&quot;</span>);
+    &#125;
+&#125;
+
+<span class="keyword">class</span> <span class="title class_">Son</span> <span class="keyword">extends</span> <span class="title class_">Father</span> <span class="keyword">implements</span> <span class="title class_">CompareB</span>&#123;
+    <span class="keyword">static</span> &#123;
+        System.out.println(<span class="string">&quot;Son类的初始化过程&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span>;
+&#125;
+
+<span class="meta">@Test</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span> &#123;
+    System.out.println(Son.num);
+&#125;
+<span class="comment">// 打印结果:</span>
+Father类的初始化过程
+CompareB的初始化
+Son类的初始化过程
+<span class="number">1</span></code></pre>
+</li>
+<li><p>main方法：当虚拟机启动时，用户需要指定一个要执行的主类（包含main()方法的那个类），虚拟机会先初始化这个主类。</p>
+</li>
+</ul>
+<p>  JVM启动的时候通过引导类加载器加载一个初始类。这个类在调用public static void main(String[])方法之前被链接和初始化。这个方法的执行将依次导致所需的类的加载，链接和初始化。</p>
+<ul>
+<li>MethodHandle：当初次调用MethodHandle实例时，初始化该MethodHandle指向的方法所在的类。（涉及解析REF getStatic、REF_putStatic、REF invokeStatic方法句柄对应的类）</li>
+</ul>
+<h3 id="3-2-被动使用"><a href="#3-2-被动使用" class="headerlink" title="3.2 被动使用"></a>3.2 被动使用</h3><p>除了以上的情况属于主动使用，其他的情况均属于被动使用。<strong>被动使用不会引起类的初始化</strong>。</p>
+<p>也就是说：<strong>并不是在代码中出现的类，就一定会被加载或者初始化。</strong>如果不符合主动使用的条件，类就不会初始化。</p>
+<ul>
+<li><p><strong>静态字段</strong>：当通过子类引用父类的静态变量，不会导致子类初始化，只有真正声明这个字段的类才会被初始化。 </p>
+<pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">Parent</span>&#123;
+    <span class="keyword">static</span>&#123;
+        System.out.println(<span class="string">&quot;Parent的初始化过程&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">1</span>;
+&#125;
+
+<span class="keyword">class</span> <span class="title class_">Child</span> <span class="keyword">extends</span> <span class="title class_">Parent</span>&#123;
+    <span class="keyword">static</span>&#123;
+        System.out.println(<span class="string">&quot;Child的初始化过程&quot;</span>);
+    &#125;
+&#125;
+
+<span class="meta">@Test</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test1</span><span class="params">()</span>&#123;
+    System.out.println(Child.num);
+&#125;
+<span class="comment">// 打印结果: </span>
+Parent的初始化过程
+<span class="number">1</span></code></pre>
+</li>
+<li><p><strong>数组定义</strong>：通过数组定义类引用，不会触发此类的初始化 </p>
+<pre><code class="highlight java"><span class="meta">@Test</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span>&#123;
+    Parent[] parents = <span class="keyword">new</span> <span class="title class_">Parent</span>[<span class="number">10</span>];
+    System.out.println(parents.getClass()); <span class="comment">// class [Lcom.atguigu.java1.Parent;</span>
+    System.out.println(parents.getClass().getSuperclass()); <span class="comment">// class java.lang.Object</span>
+
+    parents[<span class="number">0</span>] = <span class="keyword">new</span> <span class="title class_">Parent</span>(); <span class="comment">// Parent的初始化过程</span>
+    parents[<span class="number">1</span>] = <span class="keyword">new</span> <span class="title class_">Parent</span>(); <span class="comment">// 没有打印任何东西,类仅初始化一次</span>
+&#125;</code></pre>
+</li>
+<li><p><strong>引用常量</strong>：引用常量不会触发此类或接口的初始化。因为常量在链接阶段就已经被显式赋值了。 </p>
+<pre><code class="highlight java"><span class="keyword">interface</span> <span class="title class_">SerialA</span>&#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Thread</span> <span class="variable">t</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>() &#123;
+        &#123;
+            System.out.println(<span class="string">&quot;SerialA的初始化&quot;</span>);
+        &#125;
+    &#125;;
+
+    <span class="type">int</span> <span class="variable">ID</span> <span class="operator">=</span> <span class="number">1</span>; <span class="comment">// 接口中默认就是常量, 不需要初始化</span>
+    <span class="type">int</span> <span class="variable">ID1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>().nextInt(<span class="number">10</span>); <span class="comment">//此时的赋值操作需要在&lt;clinit&gt;()中执行</span>
+&#125;
+
+<span class="meta">@Test</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test2</span><span class="params">()</span>&#123;
+    System.out.println(SerialA.ID); <span class="comment">// 打印: 1, 没有触发接口初始化</span>
+    System.out.println(SerialA.ID1); <span class="comment">// 打印: SerialA的初始化, 触发接口初始化</span>
+&#125;</code></pre>
+</li>
+<li><p><strong>loadClass方法</strong>：调用ClassLoader类的loadClass()方法加载一个类，并不是对类的主动使用，不会导致类的初始化。 </p>
+<pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">Person</span>&#123;
+    <span class="keyword">static</span>&#123;
+        System.out.println(<span class="string">&quot;Person类的初始化&quot;</span>);
+    &#125;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">NUM</span> <span class="operator">=</span> <span class="number">1</span>;<span class="comment">//在链接过程的准备环节就被赋值为1了。</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">NUM1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Random</span>().nextInt(<span class="number">10</span>);<span class="comment">//此时的赋值操作需要在&lt;clinit&gt;()中执行</span>
+&#125;
+
+<span class="meta">@Test</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">test3</span><span class="params">()</span>&#123;
+    <span class="keyword">try</span> &#123;
+        <span class="type">Class</span> <span class="variable">clazz</span> <span class="operator">=</span> ClassLoader.getSystemClassLoader().loadClass(<span class="string">&quot;com.atguigu.java1.Person&quot;</span>);
+    &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;
+        e.printStackTrace();
+    &#125;
+&#125;</code></pre></li>
+</ul>
+<blockquote>
+<p>**扩展: **  -XX:+TraceClassLoading：追踪打印类的加载信息</p>
+</blockquote>
+<h1 id="五、过程四-类的Using-使用"><a href="#五、过程四-类的Using-使用" class="headerlink" title="五、过程四: 类的Using (使用)"></a>五、过程四: 类的Using (使用)</h1><p>任何一个类型在使用之前都必须经历过完整的加载、链接和初始化3个类加载步骤。一旦一个类型成功经历过这3个步骤之后，便“厉事俱备只欠东风”，就等着开发者使用了。</p>
+<p>开发人员可以在程序中访问和调用它的静态类成员信息（比如：静态字段、静态方法），或者使用new关键字为其创建对象实例。</p>
+<h1 id="六、过程五-类的Unloading-卸载"><a href="#六、过程五-类的Unloading-卸载" class="headerlink" title="六、过程五: 类的Unloading (卸载)"></a>六、过程五: 类的Unloading (卸载)</h1><h2 id="1-类、类的加载器、类的实例之间的引用关系"><a href="#1-类、类的加载器、类的实例之间的引用关系" class="headerlink" title="1. 类、类的加载器、类的实例之间的引用关系"></a>1. 类、类的加载器、类的实例之间的引用关系</h2><p>在类加载器的内部实现中，用一个Java集合来存放所加载类的引用。另一方面，一个Class对象总是会引用它的类加载器，调用Class对象的getClassLoader()方法，就能获得它的类加载器。由此可见，代表某个类的Class实例与其类的加载器之间为双向关联关系。</p>
+<p>一个类的实例总是引用代表这个类的Class对象。在Object类中定义了getClass()方法，这个方法返回代表对象所属类的Class对象的引用。此外，所有的java类都有一个静态属性class，它引用代表这个类的Class对象。</p>
+<h2 id="2-类的生命周期"><a href="#2-类的生命周期" class="headerlink" title="2. 类的生命周期"></a>2. 类的生命周期</h2><p>当Sample类被加载、链接和初始化后，它的生命周期就开始了。当代表Sample类的Class对象不再被引用，即不可触及时，Class对象就会结束生命周期，Sample类在方法区内的数据也会被卸载，从而结束Sample类的生命周期。</p>
+<p><strong>一个类何时结束生命周期，取决于代表它的Class对象何时结束生命周期。</strong></p>
+<h2 id="3-具体例子"><a href="#3-具体例子" class="headerlink" title="3. 具体例子"></a>3. 具体例子</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/08/20240808-193450.png" alt="类的卸载"></p>
+<p>loader1变量和obj变量间接引用代表Sample类的Class对象，而objClass变量则直接引用它。</p>
+<p>如果程序运行过程中，将上图左侧三个引用变量都置为null，此时Sample对象结束生命周期，MyClassLoader对象结束生命周期，代表Sample类的Class对象也结束生命周期，Sample类在方法区内的二进制数据被卸载。</p>
+<p>当再次有需要时，会检查Sample类的Class对象是否存在，如果存在会直接使用，不再重新加载；如果不存在Sample类会被重新加载，在Java虚拟机的堆区会生成一个新的代表Sample类的Class实例（可以通过哈希码查看是否是同一个实例）</p>
+<h2 id="4-类的卸载"><a href="#4-类的卸载" class="headerlink" title="4. 类的卸载"></a>4. 类的卸载</h2><ol>
+<li>启动类加载器加载的类型在整个运行期间是不可能被卸载的（jvm和jls规范）</li>
+<li>被系统类加载器和扩展类加载器加载的类型在运行期间不太可能被卸载，因为系统类加载器实例或者扩展类的实例基本上在整个运行期间总能直接或者间接的访问的到，其达到unreachable的可能性极小。</li>
+<li>被开发者自定义的类加载器实例加载的类型只有在很简单的上下文环境中才能被卸载，而且一般还要借助于强制调用虚拟机的垃圾收集功能才可以做到。可以预想，稍微复杂点的应用场景中（比如：很多时候用户在开发自定义类加载器实例的时候采用缓存的策略以提高系统性能），被加载的类型在运行期间也是几乎不太可能被卸载的（至少卸载的时间是不确定的）。</li>
+</ol>
+<p>综合以上三点，一个已经加载的类型被卸载的几率很小至少被卸载的时间是不确定的。同时我们可以看的出来，开发者在开发代码时候，不应该对虚拟机的类型卸载做任何假设的前提下，来实现系统中的特定功能。</p>
+<h2 id="回顾：方法区的垃圾回收"><a href="#回顾：方法区的垃圾回收" class="headerlink" title="回顾：方法区的垃圾回收"></a>回顾：方法区的垃圾回收</h2><p>方法区的垃圾收集主要回收两部分内容：<strong>常量池中废弃的常量和不再使用的类型</strong>。</p>
+<p>HotSpot虚拟机对常量池的回收策略是很明确的，只要常量池中的常量没有被任何地方引用，就可以被回收。</p>
+<p>判定一个常量是否“废弃”还是相对简单，而要判定一个类型是否属于“不再使用的类”的条件就比较苛刻了。需要同时满足下面三个条件：</p>
+<ul>
+<li><p>该类所有的实例都已经被回收。也就是Java堆中不存在该类及其任何派生子类的实例。</p>
+</li>
+<li><p>加载该类的类加载器已经被回收。这个条件除非是经过精心设计的可替换类加载器的场景，如OSGi、JSP的重加载等，否则通常是很难达成的。</p>
+</li>
+<li><p>该类对应的java.lang.Class对象没有在任何地方被引用，无法在任何地方通过反射访问该类的方法.</p>
+</li>
+</ul>
+<p>Java虚拟机被允许对满足上述三个条件的无用类进行回收，这里说的仅仅是“被允许”，而并不是和对象一样，没有引用了就必然会回收。</p>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>

@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>第十七章-使用javap指令解析class文件 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" jvm , java ">
+  <meta name="description" content="第十七章-使用javap指令解析class文件 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#114;&#103;&#x65;&#x5f;&#57;&#x35;&#64;&#49;&#x32;&#54;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#114;&#103;&#x65;&#x5f;&#57;&#x35;&#64;&#49;&#x32;&#54;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(37)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(26)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="37">
+<input type="hidden" id="yelog_site_word_count" value="196.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 JVM "
+           href="/944806143/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/490498600/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1471620196/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/971417975/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2165702380/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2681163762/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/3537043756/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/3387211378/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1107503247/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2772873157/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/143162370/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/309245330/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1750792302/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/484946532/"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/2929260443/"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/1403776474/"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/2561891005/"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/2224151177/"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2105268063/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/364508352/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/2050535563/"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/2388209687/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/3385856233/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/4075763684/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/3720767522/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/105864584/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/543408063/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/554039338/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1123461525/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1626061462/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/222077543/"
+           data-tag="jvm,java,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/1897413233/"
+           data-tag="jvm,java"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/4179015178/"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/877664098/"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/2016918085/"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/3069199997/"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/3070587776/"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-jvm/第十七章-使用javap指令解析class文件" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">第十七章-使用javap指令解析class文件</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="JVM">JVM</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">jvm</a>
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-07-22 10:14:17'>2024-07-22 23:54</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:2.2k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%A7%A3%E6%9E%90%E5%AD%97%E8%8A%82%E7%A0%81%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">一、解析字节码的作用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81javac-g-%E6%93%8D%E4%BD%9C"><span class="toc-text">二、javac -g 操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81javap-%E7%9A%84%E7%94%A8%E6%B3%95"><span class="toc-text">三、javap 的用法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E4%BD%BF%E7%94%A8%E4%B8%BE%E4%BE%8B"><span class="toc-text">四、使用举例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%A3%E7%A0%81"><span class="toc-text">1. 代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AD%97%E8%8A%82%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">2. 字节码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%BD%BF%E7%94%A8-javap-%E5%91%BD%E4%BB%A4%E8%A7%A3%E6%9E%90class%E6%96%87%E4%BB%B6"><span class="toc-text">2.1 使用 javap 命令解析class文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%89%88%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="toc-text">2.2 版本信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%B8%B8%E9%87%8F%E6%B1%A0"><span class="toc-text">2.3 常量池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%AD%97%E6%AE%B5%E8%A1%A8%E9%9B%86%E5%90%88%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">2.4 字段表集合的信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E6%96%B9%E6%B3%95%E8%A1%A8%E9%9B%86%E5%90%88%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="toc-text">2.5 方法表集合的信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-jclasslib%E5%B1%95%E7%A4%BA%E7%9A%84%E5%86%85%E5%AE%B9%EF%BC%9A"><span class="toc-text">2.6 jclasslib展示的内容：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">五、总结</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、解析字节码的作用"><a href="#一、解析字节码的作用" class="headerlink" title="一、解析字节码的作用"></a>一、解析字节码的作用</h1><p>通过反编译生成的字节码文件，我们可以深入的了解java代码的工作机制。但是，自己分析类文件结构太麻烦了! 除了使用第三方的jclasslib工具之外，oracle官方也提供了工具: <code>javap</code> 。<br>javap 是jdk自带的反解析工具。它的作用就是根据class字节码文件，反解析出当前类对应的code区(字节码指令)局部变量表、异常表和代码行偏移量映射表、常量池等信息。<br>通过局部变量表，我们可以查看局部变量的作用域范围、所在槽位等信息，甚至可以看到槽位复用等信息。</p>
+<h1 id="二、javac-g-操作"><a href="#二、javac-g-操作" class="headerlink" title="二、javac -g 操作"></a>二、javac -g 操作</h1><p>解析字节码文件得到的信息中，有些信息(如局部变量表、指令和代码行偏移量映射表、常量池中方法的参数名称等等)需要在使用javac编译成class文件时，指定参数才能输出。<br>比如，你直接javac xx.java，就不会在生成对应的局部变量表等信息，如果你使用javac -g xx.java就可以生成所有相关信息了。如果你使用的eclipse或 IDEA，则默认情况下，eclipse、IDEA在编译时会帮你生成局部变量表、指令和代码行偏移量映射表等信息的。</p>
+<h1 id="三、javap-的用法"><a href="#三、javap-的用法" class="headerlink" title="三、javap 的用法"></a>三、javap 的用法</h1><p>javap的用法格式:</p>
+<ul>
+<li><p>javap <options> <classes></p>
+<ul>
+<li><p>其中，classes就是你要反编译的class文件。</p>
+</li>
+<li><p>在命令行中直接输入javap或javap -help可以看到javap的options有如下选项:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/22/20240722-094028.png" alt="javap"></p>
+</li>
+</ul>
+</li>
+</ul>
+<p>一般常用的是 -v -l -c三个选项。</p>
+<ul>
+<li>javap -l 会输出行号和本地变量表信息。</li>
+<li>javap -c 会对当前class字节码进行反编译生成汇编代码。</li>
+<li>javap -v classxx 除了包含-c内容外，还会输出行号、局部变量表信息、常量池等信息。</li>
+</ul>
+<p><strong>注意：</strong></p>
+<p>① -v 相当于 -c -l </p>
+<p>② -v 也不会输出私有的字段、方法等信息，所以如果想输出私有的信息，那需要在 -v 后面加上 -p 才行</p>
+<h1 id="四、使用举例"><a href="#四、使用举例" class="headerlink" title="四、使用举例"></a>四、使用举例</h1><h2 id="1-代码"><a href="#1-代码" class="headerlink" title="1. 代码"></a>1. 代码</h2><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">JavapTest</span> &#123;
+    <span class="keyword">private</span> <span class="type">int</span> num;
+    <span class="type">boolean</span> flag;
+    <span class="keyword">protected</span> <span class="type">char</span> gender;
+    <span class="keyword">public</span> String info;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">COUNTS</span> <span class="operator">=</span> <span class="number">1</span>;
+    <span class="keyword">static</span>&#123;
+        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;www.atguigu.com&quot;</span>;
+    &#125;
+    &#123;
+        info = <span class="string">&quot;java&quot;</span>;
+    &#125;
+    <span class="keyword">public</span> <span class="title function_">JavapTest</span><span class="params">()</span>&#123;
+
+    &#125;
+    <span class="keyword">private</span> <span class="title function_">JavapTest</span><span class="params">(<span class="type">boolean</span> flag)</span>&#123;
+        <span class="built_in">this</span>.flag = flag;
+    &#125;
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">methodPrivate</span><span class="params">()</span>&#123;
+
+    &#125;
+    <span class="type">int</span> <span class="title function_">getNum</span><span class="params">(<span class="type">int</span> i)</span>&#123;
+        <span class="keyword">return</span> num + i;
+    &#125;
+    <span class="keyword">protected</span> <span class="type">char</span> <span class="title function_">showGender</span><span class="params">()</span>&#123;
+        <span class="keyword">return</span> gender;
+    &#125;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">showInfo</span><span class="params">()</span>&#123;
+        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">10</span>;
+        System.out.println(info + i);
+    &#125;
+&#125;</code></pre>
+
+
+
+<h2 id="2-字节码分析"><a href="#2-字节码分析" class="headerlink" title="2. 字节码分析"></a>2. 字节码分析</h2><h3 id="2-1-使用-javap-命令解析class文件"><a href="#2-1-使用-javap-命令解析class文件" class="headerlink" title="2.1 使用 javap 命令解析class文件"></a>2.1 使用 <code>javap</code> 命令解析class文件</h3><pre><code class="highlight shell">javap -v -p JavapTest</code></pre>
+
+
+
+<h3 id="2-2-版本信息"><a href="#2-2-版本信息" class="headerlink" title="2.2 版本信息"></a>2.2 版本信息</h3><pre><code class="highlight shell">警告: 二进制文件JavapTest包含com.atguigu.java1.JavapTest
+Classfile /E:/testWorkspace/jvm-demo-mid/out/production/chapter01/com/atguigu/java1/JavapTest.class   // 字节码文件所属的路径
+  Last modified 2024-7-22; size 1358 bytes  // 最后修改时间，字节码文件的大小
+  MD5 checksum 526b4a845e4d98180438e4c5781b7e88 // MD5散列值
+  Compiled from &quot;JavapTest.java&quot;   // 源文件的名称
+public class com.atguigu.java1.JavapTest
+  minor version: 0 // 副版本
+  major version: 52 // 主版本
+  flags: ACC_PUBLIC, ACC_SUPER // 访问标识</code></pre>
+
+
+
+<h3 id="2-3-常量池"><a href="#2-3-常量池" class="headerlink" title="2.3 常量池"></a>2.3 常量池</h3><pre><code class="highlight shell">Constant pool:
+<span class="meta prompt_">   #</span><span class="language-bash">1 = Methodref          <span class="comment">#16.#46        // java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">2 = String             <span class="comment">#47            // java</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">3 = Fieldref           <span class="comment">#15.#48        // com/atguigu/java1/JavapTest.info:Ljava/lang/String;</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">4 = Fieldref           <span class="comment">#15.#49        // com/atguigu/java1/JavapTest.flag:Z</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">5 = Fieldref           <span class="comment">#15.#50        // com/atguigu/java1/JavapTest.num:I</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">6 = Fieldref           <span class="comment">#15.#51        // com/atguigu/java1/JavapTest.gender:C</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">7 = Fieldref           <span class="comment">#52.#53        // java/lang/System.out:Ljava/io/PrintStream;</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">8 = Class              <span class="comment">#54            // java/lang/StringBuilder</span></span>
+<span class="meta prompt_">   #</span><span class="language-bash">9 = Methodref          <span class="comment">#8.#46         // java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">10 = Methodref          <span class="comment">#8.#55         // java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">11 = Methodref          <span class="comment">#8.#56         // java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">12 = Methodref          <span class="comment">#8.#57         // java/lang/StringBuilder.toString:()Ljava/lang/String;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">13 = Methodref          <span class="comment">#58.#59        // java/io/PrintStream.println:(Ljava/lang/String;)V</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">14 = String             <span class="comment">#60            // www.atguigu.com</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">15 = Class              <span class="comment">#61            // com/atguigu/java1/JavapTest</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">16 = Class              <span class="comment">#62            // java/lang/Object</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">17 = Utf8               num</span>
+<span class="meta prompt_">  #</span><span class="language-bash">18 = Utf8               I</span>
+<span class="meta prompt_">  #</span><span class="language-bash">19 = Utf8               flag</span>
+<span class="meta prompt_">  #</span><span class="language-bash">20 = Utf8               Z</span>
+<span class="meta prompt_">  #</span><span class="language-bash">21 = Utf8               gender</span>
+<span class="meta prompt_">  #</span><span class="language-bash">22 = Utf8               C</span>
+<span class="meta prompt_">  #</span><span class="language-bash">23 = Utf8               info</span>
+<span class="meta prompt_">  #</span><span class="language-bash">24 = Utf8               Ljava/lang/String;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">25 = Utf8               COUNTS</span>
+<span class="meta prompt_">  #</span><span class="language-bash">26 = Utf8               ConstantValue</span>
+<span class="meta prompt_">  #</span><span class="language-bash">27 = Integer            1</span>
+<span class="meta prompt_">  #</span><span class="language-bash">28 = Utf8               &lt;init&gt;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">29 = Utf8               ()V</span>
+<span class="meta prompt_">  #</span><span class="language-bash">30 = Utf8               Code</span>
+<span class="meta prompt_">  #</span><span class="language-bash">31 = Utf8               LineNumberTable</span>
+<span class="meta prompt_">  #</span><span class="language-bash">32 = Utf8               LocalVariableTable</span>
+<span class="meta prompt_">  #</span><span class="language-bash">33 = Utf8               this</span>
+<span class="meta prompt_">  #</span><span class="language-bash">34 = Utf8               Lcom/atguigu/java1/JavapTest;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">35 = Utf8               (Z)V</span>
+<span class="meta prompt_">  #</span><span class="language-bash">36 = Utf8               methodPrivate</span>
+<span class="meta prompt_">  #</span><span class="language-bash">37 = Utf8               getNum</span>
+<span class="meta prompt_">  #</span><span class="language-bash">38 = Utf8               (I)I</span>
+<span class="meta prompt_">  #</span><span class="language-bash">39 = Utf8               i</span>
+<span class="meta prompt_">  #</span><span class="language-bash">40 = Utf8               showGender</span>
+<span class="meta prompt_">  #</span><span class="language-bash">41 = Utf8               ()C</span>
+<span class="meta prompt_">  #</span><span class="language-bash">42 = Utf8               showInfo</span>
+<span class="meta prompt_">  #</span><span class="language-bash">43 = Utf8               &lt;clinit&gt;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">44 = Utf8               SourceFile</span>
+<span class="meta prompt_">  #</span><span class="language-bash">45 = Utf8               JavapTest.java</span>
+<span class="meta prompt_">  #</span><span class="language-bash">46 = NameAndType        <span class="comment">#28:#29        // &quot;&lt;init&gt;&quot;:()V</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">47 = Utf8               java</span>
+<span class="meta prompt_">  #</span><span class="language-bash">48 = NameAndType        <span class="comment">#23:#24        // info:Ljava/lang/String;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">49 = NameAndType        <span class="comment">#19:#20        // flag:Z</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">50 = NameAndType        <span class="comment">#17:#18        // num:I</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">51 = NameAndType        <span class="comment">#21:#22        // gender:C</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">52 = Class              <span class="comment">#63            // java/lang/System</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">53 = NameAndType        <span class="comment">#64:#65        // out:Ljava/io/PrintStream;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">54 = Utf8               java/lang/StringBuilder</span>
+<span class="meta prompt_">  #</span><span class="language-bash">55 = NameAndType        <span class="comment">#66:#67        // append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">56 = NameAndType        <span class="comment">#66:#68        // append:(I)Ljava/lang/StringBuilder;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">57 = NameAndType        <span class="comment">#69:#70        // toString:()Ljava/lang/String;</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">58 = Class              <span class="comment">#71            // java/io/PrintStream</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">59 = NameAndType        <span class="comment">#72:#73        // println:(Ljava/lang/String;)V</span></span>
+<span class="meta prompt_">  #</span><span class="language-bash">60 = Utf8               www.atguigu.com</span>
+<span class="meta prompt_">  #</span><span class="language-bash">61 = Utf8               com/atguigu/java1/JavapTest</span>
+<span class="meta prompt_">  #</span><span class="language-bash">62 = Utf8               java/lang/Object</span>
+<span class="meta prompt_">  #</span><span class="language-bash">63 = Utf8               java/lang/System</span>
+<span class="meta prompt_">  #</span><span class="language-bash">64 = Utf8               out</span>
+<span class="meta prompt_">  #</span><span class="language-bash">65 = Utf8               Ljava/io/PrintStream;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">66 = Utf8               append</span>
+<span class="meta prompt_">  #</span><span class="language-bash">67 = Utf8               (Ljava/lang/String;)Ljava/lang/StringBuilder;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">68 = Utf8               (I)Ljava/lang/StringBuilder;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">69 = Utf8               toString</span>
+<span class="meta prompt_">  #</span><span class="language-bash">70 = Utf8               ()Ljava/lang/String;</span>
+<span class="meta prompt_">  #</span><span class="language-bash">71 = Utf8               java/io/PrintStream</span>
+<span class="meta prompt_">  #</span><span class="language-bash">72 = Utf8               println</span>
+<span class="meta prompt_">  #</span><span class="language-bash">73 = Utf8               (Ljava/lang/String;)V</span></code></pre>
+
+
+
+<h3 id="2-4-字段表集合的信息"><a href="#2-4-字段表集合的信息" class="headerlink" title="2.4 字段表集合的信息"></a>2.4 字段表集合的信息</h3><pre><code class="highlight shell">&#123;
+  private int num; // 字段名
+    descriptor: I // 字段表集合的信息
+    flags: ACC_PRIVATE // 字段的访问标识
+
+  boolean flag;
+    descriptor: Z
+    flags:
+
+  protected char gender;
+    descriptor: C
+    flags: ACC_PROTECTED
+
+  public java.lang.String info;
+    descriptor: Ljava/lang/String;
+    flags: ACC_PUBLIC
+
+  public static final int COUNTS;
+    descriptor: I
+    flags: ACC_PUBLIC, ACC_STATIC, ACC_FINAL
+    ConstantValue: int 1 // 常量字段的属性：ConstantValue</code></pre>
+
+
+
+<h3 id="2-5-方法表集合的信息"><a href="#2-5-方法表集合的信息" class="headerlink" title="2.5 方法表集合的信息"></a>2.5 方法表集合的信息</h3><pre><code class="highlight shell">  public com.atguigu.java1.JavapTest(); // 无参构造器方法信息
+    descriptor: ()V
+    flags: ACC_PUBLIC
+    Code:
+      stack=2, locals=1, args_size=1
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
+         4: aload_0
+         5: ldc           #2                  // String java
+         7: putfield      #3                  // Field info:Ljava/lang/String;
+        10: return
+      LineNumberTable:
+        line 20: 0
+        line 18: 4
+        line 22: 10
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      11     0  this   Lcom/atguigu/java1/JavapTest;
+
+private com.atguigu.java1.JavapTest(boolean); // 单个参数构造器方法信息
+    descriptor: (Z)V
+    flags: ACC_PRIVATE
+    Code:
+      stack=2, locals=2, args_size=2
+         0: aload_0
+         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V
+         4: aload_0
+         5: ldc           #2                  // String java
+         7: putfield      #3                  // Field info:Ljava/lang/String;
+        10: aload_0
+        11: iload_1
+        12: putfield      #4                  // Field flag:Z
+        15: return
+      LineNumberTable:
+        line 23: 0
+        line 18: 4
+        line 24: 10
+        line 25: 15
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      16     0  this   Lcom/atguigu/java1/JavapTest;
+            0      16     1  flag   Z
+
+  private void methodPrivate();
+    descriptor: ()V
+    flags: ACC_PRIVATE
+    Code:
+      stack=0, locals=1, args_size=1
+         0: return
+      LineNumberTable:
+        line 28: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       1     0  this   Lcom/atguigu/java1/JavapTest;
+
+  int getNum(int);
+    descriptor: (I)I
+    flags:
+    Code:
+      stack=2, locals=2, args_size=2
+         0: aload_0
+         1: getfield      #5                  // Field num:I
+         4: iload_1
+         5: iadd
+         6: ireturn
+      LineNumberTable:
+        line 30: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       7     0  this   Lcom/atguigu/java1/JavapTest;
+            0       7     1     i   I
+
+  protected char showGender();
+    descriptor: ()C
+    flags: ACC_PROTECTED
+    Code:
+      stack=1, locals=1, args_size=1
+         0: aload_0
+         1: getfield      #6                  // Field gender:C
+         4: ireturn
+      LineNumberTable:
+        line 33: 0
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0       5     0  this   Lcom/atguigu/java1/JavapTest;
+
+  public void showInfo();
+    descriptor: ()V  // 方法的描述符：方法的形参列表、返回值类型
+    flags: ACC_PUBLIC // 方法的访问标识
+    Code: // 方法的Code属性
+      stack=3, locals=2, args_size=1  // stack：操作数栈的最大深度   locals：局部变量表的长度   args_size：方法接受参数的个数
+      // 偏移量  操作码   操作数
+         0: bipush        10
+         2: istore_1
+         3: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+         6: new           #8                  // class java/lang/StringBuilder
+         9: dup
+        10: invokespecial #9                  // Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V
+        13: aload_0
+        14: getfield      #3                  // Field info:Ljava/lang/String;
+        17: invokevirtual #10                 // Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;
+        20: iload_1
+        21: invokevirtual #11                 // Method java/lang/StringBuilder.append:(I)Ljava/lang/StringBuilder;
+        24: invokevirtual #12                 // Method java/lang/StringBuilder.toString:()Ljava/lang/String;
+        27: invokevirtual #13                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+        30: return
+        
+      // 行号表：指明字节码指令的偏移量与java源代码中代码的行号的一一对应关系
+      LineNumberTable:
+        line 36: 0
+        line 37: 3
+        line 38: 30
+        
+      // 局部变量表：描述内部局部变量的相关信息
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+            0      31     0  this   Lcom/atguigu/java1/JavapTest;
+            3      28     1     i   I
+
+  static &#123;&#125;;
+    descriptor: ()V
+    flags: ACC_STATIC
+    Code:
+      stack=1, locals=1, args_size=0
+         0: ldc           #14                 // String www.atguigu.com
+         2: astore_0
+         3: return
+      LineNumberTable:
+        line 15: 0
+        line 16: 3
+      LocalVariableTable:
+        Start  Length  Slot  Name   Signature
+&#125;
+
+ // 附加属性：指明当前字节码文件对应的源程序文件名
+SourceFile: &quot;JavapTest.java&quot;</code></pre>
+
+
+
+<h3 id="2-6-jclasslib展示的内容："><a href="#2-6-jclasslib展示的内容：" class="headerlink" title="2.6 jclasslib展示的内容："></a>2.6 jclasslib展示的内容：</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/22/20240722-100533.png" alt="jclasslib"></p>
+<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><ul>
+<li><p>通过 javap 命令可以査看一个java类反汇编得到的class文件版本号、常量池、访问标识、变量表、指令代码行号表等等信息。不显示类索引、父类索引、接口索引集合、<clinit>()、<init>()等结构</p>
+</li>
+<li><p>通过对前面例子代码反汇编文件的简单分析，可以发现，一个方法的执行通常会涉及下面几块内存的操作:</p>
+<ul>
+<li>java栈中:局部变量表、操作数栈。</li>
+<li>java堆。通过对象的地址引用去操作。</li>
+<li>常量池。</li>
+<li>其他如帧数据区、方法区的剩余部分等情况，测试中没有显示出来，这里说明一下。</li>
+</ul>
+</li>
+<li><p>平常，我们比较关注的是java类中每个方法的反汇编中的指令操作过程，这些指令都是顺序执行的，可以参考官方文档查看每个指令的含义，很简单: <a target="_blank" rel="noopener" href="https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html">https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-6.html</a></p>
+</li>
+</ul>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
