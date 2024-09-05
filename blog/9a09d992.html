@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Typora设置图片自动上传Github | George&#39;s Blog</title>
+  <title>04-集合的线程安全 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" hexo , typora , github ">
-  <meta name="description" content="Typora设置图片自动上传Github | George&#39;s Blog">
+  <meta name="keywords" content=" juc , java ">
+  <meta name="description" content="04-集合的线程安全 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#x6f;&#114;&#103;&#101;&#95;&#57;&#53;&#x40;&#49;&#x32;&#54;&#46;&#x63;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -792,9 +792,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hexo/Typora设置图片自动上传Github" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-juc/04-集合的线程安全" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Typora设置图片自动上传Github</h1>
+        <h1 class="article-title">04-集合的线程安全</h1>
     
     <div class="article-meta">
         
@@ -804,9 +804,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="Hexo">Hexo</a> > 
-            
-            <a  data-rel="Hexo&lt;---&gt;Typora">Typora</a>
+            <a  data-rel="JUC">JUC</a>
             
         </span>
         
@@ -814,23 +812,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">hexo</a>
+            <a class="color4">juc</a>
             
-            <a class="color2">typora</a>
-            
-            <a class="color2">github</a>
+            <a class="color5">java</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 12:17:33'>2023-11-20 20:30</time>
+            发布时间 : <time class="date" title='最后更新: 2024-09-05 19:46:04'>2024-09-04 21:09</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1k</span>
+        <span>字数:1.7k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -860,7 +856,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85PicGo-Core"><span class="toc-text">一、安装PicGo-Core</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BF%AE%E6%94%B9Typora%E5%9B%BE%E5%83%8F%E4%B8%8A%E4%BC%A0%E8%AE%BE%E7%BD%AE"><span class="toc-text">1. 修改Typora图像上传设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9PicGo-Core%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">2. 修改PicGo-Core配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Github%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE"><span class="toc-text">2.1 Github图床配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E6%96%B0%E5%BB%BA%E5%9B%BE%E5%BA%8A%E4%BB%93%E5%BA%93"><span class="toc-text">2.1.1 新建图床仓库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E9%85%8D%E7%BD%AEToken"><span class="toc-text">2.1.2 配置Token</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-%E4%BF%AE%E6%94%B9PicGo%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">2.1.3 修改PicGo配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-4-%E9%AA%8C%E8%AF%81PicGo%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0"><span class="toc-text">2.1.4 验证PicGo图片上传</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BAPicgo%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-text">二、为Picgo安装插件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85super-prefix%E6%8F%92%E4%BB%B6"><span class="toc-text">1. 安装super-prefix插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9Picgo%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">2. 修改Picgo配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%85%8D%E7%BD%AE%E8%A7%A3%E6%9E%90"><span class="toc-text">2.1 配置解析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-text">参考链接</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81ArrayList%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">一、ArrayList线程安全的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9B%86%E5%90%88%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%BC%94%E7%A4%BA"><span class="toc-text">1. 集合不安全的演示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Vector"><span class="toc-text">2. Vector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Collections"><span class="toc-text">3. Collections</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-CopyOnWriteArrayList-%E9%87%8D%E7%82%B9"><span class="toc-text">4. CopyOnWriteArrayList (重点)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81HashSet-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">二、HashSet 线程安全的操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81HashMap-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">三、HashMap 线程安全的操作</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -876,126 +872,205 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
-<p>系统 : Windows 10</p>
-<p>NodeJS : 14.21.3</p>
-</blockquote>
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在使用 <code>Typora</code> 编辑Markdown笔记时需要将复制的截图上传到图床，并能够自动将上传后的路径替换掉图片粘贴时自动生成的路径。这样操作方便笔记查看和迁移。</p>
-<p>这里使用Github做图床，优点：免费&amp;没有容量的限制，缺点：国内网络访问很慢。</p>
-<p>图片上传使用 PicGo-Core 插件，需要使用 <code>npm</code> 安装该插件。</p>
-<h1 id="一、安装PicGo-Core"><a href="#一、安装PicGo-Core" class="headerlink" title="一、安装PicGo-Core"></a>一、安装PicGo-Core</h1><h2 id="1-修改Typora图像上传设置"><a href="#1-修改Typora图像上传设置" class="headerlink" title="1. 修改Typora图像上传设置"></a>1. 修改Typora图像上传设置</h2><p>打开Typora，依次点击：文件 –&gt; 偏好设置 –&gt; 图像 </p>
-<p>勾选配置如下：</p>
-<p>选择 <code>上传图片</code> –&gt; <code>勾选上传图片配置(2、3、4)</code>  –&gt; 选择 <code>PicGo-Core(command line)</code> –&gt; 点击 <code>下载或更新</code> </p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-205500.png" alt="image-20231120205458979"></p>
-<p><strong>PicGo-Core 安装成功</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-210102.png" alt="image-20231120210101191"></p>
-<h2 id="2-修改PicGo-Core配置文件"><a href="#2-修改PicGo-Core配置文件" class="headerlink" title="2. 修改PicGo-Core配置文件"></a>2. 修改PicGo-Core配置文件</h2><p>PicGo-Core 插件安装成功后，点击 <code>打开配置文件</code> 修改 PicGo-Core 配置文件。</p>
-<p>默认路径：C:\Users\用户名\.picgo\config.json</p>
-<p>配置文件内容如下：</p>
-<pre><code class="highlight json"><span class="punctuation">&#123;</span>
-  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github仓库名&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github Token配置&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;img/&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;master&quot;</span>
-    <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span>
-  <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-  <span class="comment">// 插件设置</span>
-  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-  <span class="punctuation">&#125;</span>
-<span class="punctuation">&#125;</span></code></pre>
+        <h1 id="一、ArrayList线程安全的操作"><a href="#一、ArrayList线程安全的操作" class="headerlink" title="一、ArrayList线程安全的操作"></a>一、ArrayList线程安全的操作</h1><h2 id="1-集合不安全的演示"><a href="#1-集合不安全的演示" class="headerlink" title="1. 集合不安全的演示"></a>1. 集合不安全的演示</h2><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NotSafeDemo</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 多个线程同时对集合进行修改</span>
+<span class="comment">     * <span class="doctag">@param</span> args</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
+            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
+                list.add(UUID.randomUUID().toString());
+                System.out.println(list);
+            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+<p><strong>运行结果：</strong></p>
+<pre><code class="highlight shell">Exception in thread &quot;线程93&quot; java.util.ConcurrentModificationException
+	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1013)
+	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:967)
+	at java.base/java.util.AbstractCollection.toString(AbstractCollection.java:456)
+	at java.base/java.lang.String.valueOf(String.java:4222)
+	at java.base/java.io.PrintStream.println(PrintStream.java:1047)</code></pre>
+
+<p><strong>ArrayList add() 方法原码</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Appends the specified element to the end of this list.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span> e element to be appended to this list</span>
+<span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; (as specified by &#123;<span class="doctag">@link</span> Collection#add&#125;)</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">add</span><span class="params">(E e)</span> &#123;
+    modCount++;
+    add(e, elementData, size);
+    <span class="keyword">return</span> <span class="literal">true</span>;
+&#125;</code></pre>
+
+<p>add() 方法没有加锁，是不安全的操作。</p>
+<p><strong>如何去解决 List 类型的线程安全问题?</strong></p>
+<h2 id="2-Vector"><a href="#2-Vector" class="headerlink" title="2. Vector"></a>2. Vector</h2><p>Vector 是<strong>矢量队列</strong>，它是 JDK1.0 版本添加的类。继承于 AbstractList，实现了 List, RandomAccess, Cloneable 这些接口。 Vector 继承了 AbstractList，实现了 List；所以，<strong>它是一个队列，支持相关的添加、删除、修改、遍历等功能</strong>。 Vector 实现了 RandmoAccess 接口，即<strong>提供了随机访问功能</strong>。RandmoAccess 是 java 中用来被 List 实现，为 List 提供快速访问功能的。在Vector 中，我们即可以通过元素的序号快速获取元素对象；这就是快速随机访问。 Vector 实现了 Cloneable 接口，即实现 clone()函数。它能被克隆。</p>
+<p><strong>和 ArrayList 不同，Vector 中的操作是线程安全的。</strong></p>
+<p>使用 <strong>Vector</strong> 对 Demo 进行修改</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VectorDemo</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 多个线程同时对集合进行修改</span>
+<span class="comment">     * <span class="doctag">@param</span> args</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Vector</span>();
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
+            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
+                list.add(UUID.randomUUID().toString());
+                System.out.println(list);
+            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+<p><strong>运行结果：无异常</strong></p>
+<p>查看Vector add() 方法</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Appends the specified element to the end of this Vector.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span> e element to be appended to this Vector</span>
+<span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; (as specified by &#123;<span class="doctag">@link</span> Collection#add&#125;)</span>
+<span class="comment"> * <span class="doctag">@since</span> 1.2</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">boolean</span> <span class="title function_">add</span><span class="params">(E e)</span> &#123;
+    modCount++;
+    add(e, elementData, elementCount);
+    <span class="keyword">return</span> <span class="literal">true</span>;
+&#125;</code></pre>
+
+<p><code>add()</code> 方法添加了 <code>synchronized</code> 这是线程安全的操作。</p>
+<h2 id="3-Collections"><a href="#3-Collections" class="headerlink" title="3. Collections"></a>3. Collections</h2><p>Collections 提供了方法 synchronizedList 保证 list 是同步线程安全的。</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CollectionsDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        List&lt;Object&gt; list = Collections.synchronizedList(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;());
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
+            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
+                list.add(UUID.randomUUID().toString());
+                System.out.println(list);
+            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+<p><strong>运行结果：没有异常</strong></p>
+<p><strong>查看原码：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Returns a synchronized (thread-safe) list backed by the specified</span>
+<span class="comment"> * list.  In order to guarantee serial access, it is critical that</span>
+<span class="comment"> * &lt;strong&gt;all&lt;/strong&gt; access to the backing list is accomplished</span>
+<span class="comment"> * through the returned list.&lt;p&gt;</span>
+<span class="comment"> *</span>
+<span class="comment"> * It is imperative that the user manually synchronize on the returned</span>
+<span class="comment"> * list when traversing it via &#123;<span class="doctag">@link</span> Iterator&#125;, &#123;<span class="doctag">@link</span> Spliterator&#125;</span>
+<span class="comment"> * or &#123;<span class="doctag">@link</span> Stream&#125;:</span>
+<span class="comment"> * &lt;pre&gt;</span>
+<span class="comment"> *  List list = Collections.synchronizedList(new ArrayList());</span>
+<span class="comment"> *      ...</span>
+<span class="comment"> *  synchronized (list) &#123;</span>
+<span class="comment"> *      Iterator i = list.iterator(); // Must be in synchronized block</span>
+<span class="comment"> *      while (i.hasNext())</span>
+<span class="comment"> *          foo(i.next());</span>
+<span class="comment"> *  &#125;</span>
+<span class="comment"> * &lt;/pre&gt;</span>
+<span class="comment"> * Failure to follow this advice may result in non-deterministic behavior.</span>
+<span class="comment"> *</span>
+<span class="comment"> * &lt;p&gt;The returned list will be serializable if the specified list is</span>
+<span class="comment"> * serializable.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span>  &lt;T&gt; the class of the objects in the list</span>
+<span class="comment"> * <span class="doctag">@param</span>  list the list to be &quot;wrapped&quot; in a synchronized list.</span>
+<span class="comment"> * <span class="doctag">@return</span> a synchronized view of the specified list.</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; List&lt;T&gt; <span class="title function_">synchronizedList</span><span class="params">(List&lt;T&gt; list)</span> &#123;
+    <span class="keyword">return</span> (list <span class="keyword">instanceof</span> RandomAccess ?
+            <span class="keyword">new</span> <span class="title class_">SynchronizedRandomAccessList</span>&lt;&gt;(list) :
+            <span class="keyword">new</span> <span class="title class_">SynchronizedList</span>&lt;&gt;(list));
+&#125;</code></pre>
 
 
 
-<h3 id="2-1-Github图床配置"><a href="#2-1-Github图床配置" class="headerlink" title="2.1 Github图床配置"></a>2.1 Github图床配置</h3><p>在Github创建一个仓库作为 <code>PicGo</code> 上传图片的图床，并为 <code>PicGo</code> 创建 github <code>token</code>。</p>
-<h4 id="2-1-1-新建图床仓库"><a href="#2-1-1-新建图床仓库" class="headerlink" title="2.1.1 新建图床仓库"></a>2.1.1 新建图床仓库</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-211154.png" alt="image-20231120211152544"></p>
-<p><strong>注意：</strong>图床仓库必须为 <strong>Public</strong> 权限。</p>
-<p>图床仓库创建成功后，PicGo 配置文件(config.json)中 <code>picBed.github.repo</code> 的值就确定了，应该改为：<code>GeorgeChan95/picgo-img</code></p>
-<h4 id="2-1-2-配置Token"><a href="#2-1-2-配置Token" class="headerlink" title="2.1.2 配置Token"></a>2.1.2 配置Token</h4><p>打开Github –&gt; 点击头像 –&gt; <code>Settings</code> –&gt; <code>Developer settings</code> –&gt; 点击 <code>Personal access tokens</code> –&gt; 点击 <code>Tokens(classic)</code>  –&gt; 选择 <code>Generate new token</code>  –&gt;  填写Note(token名称)\选择过期时间\选择token权限 –&gt; 点击 <code>Generate token</code> 保存token</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-212117.png" alt="image-20231120212115905"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-212235.png" alt="image-20231120212234100"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-212414.png" alt="image-20231120212413138"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-212948.png" alt="image-20231120212946870"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-213320.png" alt="image-20231120213319506"></p>
-<p><strong>复制token，填写到 PicGo 配置文件(config.json)的 <code>picBed.github.token</code> 中。</strong></p>
-<h4 id="2-1-3-修改PicGo配置文件"><a href="#2-1-3-修改PicGo配置文件" class="headerlink" title="2.1.3 修改PicGo配置文件"></a>2.1.3 修改PicGo配置文件</h4><p>配置文件(config.json)内容修改如下：</p>
-<pre><code class="highlight json"><span class="punctuation">&#123;</span>
-  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GeorgeChan95/picgo-img&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;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&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;img/&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;master&quot;</span>
-    <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span>
-  <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-  <span class="comment">// 插件设置</span>
-  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-  <span class="punctuation">&#125;</span>
-<span class="punctuation">&#125;</span></code></pre>
-
-<p>保存！！</p>
-<h4 id="2-1-4-验证PicGo图片上传"><a href="#2-1-4-验证PicGo图片上传" class="headerlink" title="2.1.4 验证PicGo图片上传"></a>2.1.4 验证PicGo图片上传</h4><p>在Typora偏好设置里，点击 <code>验证图片选项</code>，</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-213941.png" alt="image-20231120213939604"></p>
-<p>验证成功！</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-214114.png" alt="image-20231120214113620"></p>
-<h1 id="二、为Picgo安装插件"><a href="#二、为Picgo安装插件" class="headerlink" title="二、为Picgo安装插件"></a>二、为Picgo安装插件</h1><p>到上一步已实现了图片的自动上传和替换markdown图片url的功能，但默认的图片上传其实有一些问题。</p>
+<h2 id="4-CopyOnWriteArrayList-重点"><a href="#4-CopyOnWriteArrayList-重点" class="headerlink" title="4. CopyOnWriteArrayList (重点)"></a>4. CopyOnWriteArrayList (重点)</h2><p>CopyOnWriteArrayList 是线程安全的 ArrayList，具有以下特性：</p>
 <ul>
-<li><p>问题1：默认会把所有图片上传到配置文件指定的 <code>picBed.github.path</code> 路径下，不会创建子文件夹，图片不好管理。</p>
-</li>
-<li><p>问题2：默认不会给文件重命名，如果两个文件重名，粘贴上传就会出错。</p>
-</li>
+<li>它最适合于具有以下特征的应用程序：List 大小通常保持很小，只读操作远多于可变操作，需要在遍历期间防止线程间的冲突。</li>
+<li>它是线程安全的。</li>
+<li>因为通常需要复制整个基础数组，所以可变操作（add()、set() 和 remove() 等等）的开销很大</li>
+<li>迭代器支持 hasNext(), next()等不可变操作，但不支持可变 remove()等操作。</li>
+<li>使用迭代器进行遍历的速度很快，并且不会与其他线程发生冲突。在构造迭代器时，迭代器依赖于不变的数组快照。</li>
 </ul>
-<p>所以需要为 Picgo 安装 <code>super-prefix</code> 插件，实现文件自动重命名和按日期创建文件夹存储文件。</p>
-<h2 id="1-安装super-prefix插件"><a href="#1-安装super-prefix插件" class="headerlink" title="1. 安装super-prefix插件"></a>1. 安装super-prefix插件</h2><p>建议使用npm进行安装</p>
-<pre><code class="highlight shell">npm install picgo-plugin-super-prefix</code></pre>
+<p>当我们往一个容器添加元素的时候，不直接往当前容器添加，而是先将当前容器进行 Copy，复制出一个新的容器，然后新的容器里添加元素，添加完元素之后，再将原容器的引用指向新的容器。</p>
+<p><strong>这时候会抛出来一个新的问题，也就是数据不一致的问题。如果写线程还没来得及写完并切换引用，其他的线程就会读到了脏数据</strong></p>
+<p><strong>代码示例</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CopyOnWriteArrayListDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        CopyOnWriteArrayList&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">CopyOnWriteArrayList</span>&lt;&gt;();
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
+            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
+                list.add(UUID.randomUUID().toString());
+                System.out.println(list);
+            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
+        &#125;
+    &#125;
+&#125;</code></pre>
 
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-215637.png" alt="image-20231120215635966"></p>
-<h2 id="2-修改Picgo配置文件"><a href="#2-修改Picgo配置文件" class="headerlink" title="2. 修改Picgo配置文件"></a>2. 修改Picgo配置文件</h2><p>添加 <code>super-prefix</code> 插件相关配置</p>
-<p>默认路径：C:\Users\用户名\.picgo\config.json</p>
-<pre><code class="highlight json"><span class="punctuation">&#123;</span>
-  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GeorgeChan95/picgo-img&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;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&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;img/&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;master&quot;</span>
-    <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span>
-  <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-  <span class="comment">// 插件设置</span>
-  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;picgo-plugin-super-prefix&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span>
-  <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-  <span class="attr">&quot;picgo-plugin-super-prefix&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;prefixFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YYYY/MM/DD/&quot;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;fileFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YYYYMMDD-HHmmss&quot;</span>
-  <span class="punctuation">&#125;</span>
-<span class="punctuation">&#125;</span></code></pre>
+<p>运行结果：没有线程安全问题</p>
+<p>下面从“动态数组”和“线程安全”两个方面进一步对CopyOnWriteArrayList 的原理进行说明。</p>
+<ul>
+<li><strong>“动态数组”机制</strong><ul>
+<li>它内部有个“volatile 数组”(array)来保持数据。在“添加&#x2F;修改&#x2F;删除”数据时，都会新建一个数组，并将更新后的数据拷贝到新建的数组中，最后再将该数组赋值给“volatile 数组”, 这就是它叫做 CopyOnWriteArrayList 的原因</li>
+<li><strong>由于它在“添加&#x2F;修改&#x2F;删除”数据时，都会新建数组，所以涉及到修改数据的操作，CopyOnWriteArrayList 效率很低；但是单单只是进行遍历查找的话，效率比较高。</strong></li>
+</ul>
+</li>
+<li><strong>“线程安全”机制</strong><ul>
+<li>通过 volatile 和互斥锁来实现的。</li>
+<li>通过“volatile 数组”来保存数据的。一个线程读取 volatile 数组时，总能看到其它线程对该 volatile 变量最后的写入；就这样，通过 volatile 提供了“读取到的数据总是最新的”这个机制的保证。</li>
+<li>通过互斥锁来保护数据。在“添加&#x2F;修改&#x2F;删除”数据时，会先“获取互斥锁”，再修改完毕之后，先将数据更新到 “volatile 数组” 中，然后再 “释放互斥锁”，就达到了保护数据的目的。</li>
+</ul>
+</li>
+</ul>
+<h1 id="二、HashSet-线程安全的操作"><a href="#二、HashSet-线程安全的操作" class="headerlink" title="二、HashSet 线程安全的操作"></a>二、HashSet 线程安全的操作</h1><p>解决方案 CopyOnWriteArraySet</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CopyOnWriteArraySetDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 线程不安全的操作</span>
+<span class="comment">//        HashSet&lt;String&gt; set = new HashSet&lt;&gt;();</span>
+        <span class="comment">// 线程安全的操作</span>
+        CopyOnWriteArraySet&lt;String&gt; set = <span class="keyword">new</span> <span class="title class_">CopyOnWriteArraySet</span>&lt;&gt;();
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;
+            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
+                set.add(UUID.randomUUID().toString());
+                System.out.println(set);
+            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
+        &#125;
+    &#125;
+&#125;</code></pre>
 
-<p>保存！！重启Typora！</p>
-<h3 id="2-1-配置解析"><a href="#2-1-配置解析" class="headerlink" title="2.1 配置解析"></a>2.1 配置解析</h3><ul>
-<li>“prefixFormat”: “YYYY&#x2F;MM&#x2F;DD&#x2F;“<ul>
-<li>图片上传到仓库中会自动在 <code>picBed.github.path</code> 路径下，根据当前时间创建  <code>年/月/日</code> 文件夹，并将文件上传到改路径下</li>
-</ul>
-</li>
-<li>“fileFormat”: “YYYYMMDD-HHmmss”<ul>
-<li>文件上传后按照上传时间重命名，格式为：YYYYMMDD-HHmmss</li>
-</ul>
-</li>
-</ul>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yongdaimi/p/16300462.html">https://www.cnblogs.com/yongdaimi/p/16300462.html</a></p>
+
+
+
+
+<h1 id="三、HashMap-线程安全的操作"><a href="#三、HashMap-线程安全的操作" class="headerlink" title="三、HashMap 线程安全的操作"></a>三、HashMap 线程安全的操作</h1><p>解决方案 ConcurrentHashMap</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcurrentHashMapDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 线程不安全的操作</span>
+<span class="comment">//        HashMap&lt;String, String&gt; map = new HashMap&lt;&gt;();</span>
+        <span class="comment">// 线程安全的操作</span>
+        ConcurrentHashMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;
+            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
+                map.put(UUID.randomUUID().toString(), <span class="string">&quot;1&quot;</span>);
+                System.out.println(map.values());
+            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
+        &#125;
+    &#125;
+&#125;</code></pre>
+
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
