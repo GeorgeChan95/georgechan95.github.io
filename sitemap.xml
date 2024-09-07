@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://georgechan95.github.io/blog/838e7581.html</loc>
+    
+    <lastmod>2024-09-07</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://georgechan95.github.io/blog/f60e37c5.html</loc>
     
     <lastmod>2024-09-07</lastmod>
@@ -493,13 +502,6 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/tags/sitemap/</loc>
-    <lastmod>2024-09-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://georgechan95.github.io/tags/typora/</loc>
     <lastmod>2024-09-07</lastmod>
     <changefreq>weekly</changefreq>
@@ -522,6 +524,13 @@
   
   <url>
     <loc>https://georgechan95.github.io/tags/java/</loc>
+    <lastmod>2024-09-07</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/tags/sitemap/</loc>
     <lastmod>2024-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -572,14 +581,14 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/Hexo/Typora/</loc>
+    <loc>https://georgechan95.github.io/categories/JUC/</loc>
     <lastmod>2024-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/JUC/</loc>
+    <loc>https://georgechan95.github.io/categories/Hexo/Typora/</loc>
     <lastmod>2024-09-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
