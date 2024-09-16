@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>链表反转 | George&#39;s Blog</title>
+  <title>11-CompletableFuture | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 算法 , 链表 ">
-  <meta name="description" content="链表反转 | George&#39;s Blog">
+  <meta name="keywords" content=" java , juc ">
+  <meta name="description" content="11-CompletableFuture | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#103;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#x36;&#46;&#x63;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -855,9 +855,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-algorithm/链表反转" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-juc/11-CompletableFuture" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">链表反转</h1>
+        <h1 class="article-title">11-CompletableFuture</h1>
     
     <div class="article-meta">
         
@@ -867,7 +867,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="算法">算法</a>
+            <a  data-rel="JUC">JUC</a>
             
         </span>
         
@@ -875,21 +875,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color3">算法</a>
+            <a class="color5">java</a>
             
-            <a class="color3">链表</a>
+            <a class="color4">juc</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-07 19:37:29'>2024-07-05 19:45</time>
+            发布时间 : <time class="date" title='最后更新: 2024-09-16 20:04:49'>2024-09-16 16:12</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:647</span>
+        <span>字数:3.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -919,7 +919,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%8D%95%E5%90%91%E9%93%BE%E8%A1%A8%E5%8F%8D%E8%BD%AC"><span class="toc-text">1. 单向链表反转</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E9%A2%98%E7%9B%AE%E8%A6%81%E6%B1%82"><span class="toc-text">1.1 题目要求</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90"><span class="toc-text">1.2 思路分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81"><span class="toc-text">1.3 关键代码</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%8F%8C%E5%90%91%E9%93%BE%E8%A1%A8%E5%8F%8D%E8%BD%AC"><span class="toc-text">2. 双向链表反转</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81"><span class="toc-text">2.1 关键代码</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81CompletableFuture-%E7%AE%80%E4%BB%8B"><span class="toc-text">一、CompletableFuture 简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Future-%E4%B8%8E-CompletableFuture"><span class="toc-text">二、Future 与 CompletableFuture</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81CompletableFuture-%E5%85%A5%E9%97%A8"><span class="toc-text">三、CompletableFuture 入门</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8-CompletableFuture"><span class="toc-text">1. 使用 CompletableFuture</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B2%A1%E6%9C%89%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="toc-text">2. 没有返回值的异步任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9C%89%E8%BF%94%E5%9B%9E%E5%80%BC%E7%9A%84%E5%BC%82%E6%AD%A5%E4%BB%BB%E5%8A%A1"><span class="toc-text">3. 有返回值的异步任务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%BA%BF%E7%A8%8B%E4%BE%9D%E8%B5%96"><span class="toc-text">4. 线程依赖</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%B6%88%E8%B4%B9%E5%A4%84%E7%90%86%E7%BB%93%E6%9E%9C"><span class="toc-text">5. 消费处理结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-text">6. 异常处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%BB%93%E6%9E%9C%E5%90%88%E5%B9%B6"><span class="toc-text">7. 结果合并</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -935,106 +935,442 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-单向链表反转"><a href="#1-单向链表反转" class="headerlink" title="1. 单向链表反转"></a>1. 单向链表反转</h1><h2 id="1-1-题目要求"><a href="#1-1-题目要求" class="headerlink" title="1.1 题目要求"></a>1.1 题目要求</h2><p>给你单链表的头节点 <code>head</code> ，请你反转链表，并返回反转后的链表。</p>
-<p><strong>示例1:</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/05/20240705-194718.jpg" alt="img"></p>
-<blockquote>
-<p><strong>输入：</strong>head &#x3D; [1,2,3,4,5]</p>
-<p><strong>输出：</strong>[5,4,3,2,1]</p>
-</blockquote>
-<p><strong>示例2:</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/05/20240705-195131.jpg" alt="img"></p>
-<blockquote>
-<p>输入：head &#x3D; [1,2]<br>输出：[2,1]</p>
-</blockquote>
-<p><strong>示例3:</strong></p>
-<blockquote>
-<p>输入：head &#x3D; []<br>输出：[]</p>
-</blockquote>
-<h2 id="1-2-思路分析"><a href="#1-2-思路分析" class="headerlink" title="1.2 思路分析"></a>1.2 思路分析</h2><p>假设链表为 1→2→3→∅，我们想要把它改成 ∅←1←2←3。</p>
-<p>在遍历链表时，将当前节点的 next 指针改为指向前一个节点。由于节点没有引用其前一个节点，因此必须事先存储其前一个节点。在更改引用之前，还需要存储后一个节点。最后返回新的头引用。</p>
-<h2 id="1-3-关键代码"><a href="#1-3-关键代码" class="headerlink" title="1.3 关键代码"></a>1.3 关键代码</h2><pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 单向节点</span>
+        <h1 id="一、CompletableFuture-简介"><a href="#一、CompletableFuture-简介" class="headerlink" title="一、CompletableFuture 简介"></a>一、CompletableFuture 简介</h1><p>CompletableFuture 在 Java 里面被用于异步编程，异步通常意味着非阻塞，可以使得我们的任务单独运行在与主线程分离的其他线程中，并且通过回调可以在主线程中得到异步任务的执行状态，是否完成，和是否异常等信息。</p>
+<p>CompletableFuture 实现了 Future, CompletionStage 接口，实现了 Future接口就可以兼容现在有线程池框架，而 CompletionStage 接口才是异步编程的接口抽象，里面定义多种异步方法，通过这两者集合，从而打造出了强大的 CompletableFuture 类。</p>
+<h1 id="二、Future-与-CompletableFuture"><a href="#二、Future-与-CompletableFuture" class="headerlink" title="二、Future 与 CompletableFuture"></a>二、Future 与 CompletableFuture</h1><p>Futrue 在 Java 里面，通常用来表示一个异步任务的引用，比如我们将任务提交到线程池里面，然后我们会得到一个 Futrue，在 Future 里面有 isDone 方法来 判断任务是否处理结束，还有 get 方法可以一直阻塞直到任务结束然后获取结果，但整体来说这种方式，还是同步的，因为需要客户端不断阻塞等待或者不断轮询才能知道任务是否完成。</p>
+<p><strong>Future 的主要缺点如下：</strong></p>
+<ul>
+<li><p>不支持手动完成</p>
+<p>我提交了一个任务，但是执行太慢了，我通过其他路径已经获取到了任务结果，现在没法把这个任务结果通知到正在执行的线程，所以必须主动取消或者一直等待它执行完成</p>
+</li>
+<li><p>不支持进一步的非阻塞调用</p>
+<p>通过 Future 的 get 方法会一直阻塞到任务完成，但是想在获取任务之后执行额外的任务，因为 Future 不支持回调函数，所以无法实现这个功能</p>
+</li>
+<li><p>不支持链式调用</p>
+<p>对于 Future 的执行结果，我们想继续传到下一个 Future 处理使用，从而形成一个链式的 pipline 调用，这在 Future 中是没法实现的。</p>
+</li>
+<li><p>不支持多个 Future 合并</p>
+<p>比如我们有 10 个 Future 并行执行，我们想在所有的 Future 运行完毕之后，执行某些函数，是没法通过 Future 实现的。</p>
+</li>
+<li><p>不支持异常处理</p>
+<p>Future 的 API 没有任何的异常处理的 api，所以在异步运行时，如果出了问题是不好定位的。</p>
+</li>
+</ul>
+<h1 id="三、CompletableFuture-入门"><a href="#三、CompletableFuture-入门" class="headerlink" title="三、CompletableFuture 入门"></a>三、CompletableFuture 入门</h1><h2 id="1-使用-CompletableFuture"><a href="#1-使用-CompletableFuture" class="headerlink" title="1. 使用 CompletableFuture"></a>1. 使用 CompletableFuture</h2><p>场景:主线程里面创建一个 CompletableFuture，然后主线程调用 get 方法会阻塞，最后我们在一个子线程中使其终止。</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 主线程里面创建一个 CompletableFuture，然后主线程调用 get 方法会阻塞，最后我们在一个子线程中使其终止</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> * <span class="doctag">@throws</span> ExecutionException</span>
 <span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SinglyNode</span> &#123;
-    <span class="keyword">public</span> <span class="type">int</span> val;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 下一个节点</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> SinglyNode next;
-
-    <span class="keyword">public</span> <span class="title function_">SinglyNode</span><span class="params">(<span class="type">int</span> val)</span> &#123;
-        <span class="built_in">this</span>.val = val;
-    &#125;
-
-    <span class="keyword">public</span> <span class="title function_">SinglyNode</span><span class="params">(<span class="type">int</span> val, SinglyNode next)</span> &#123;
-        <span class="built_in">this</span>.val = val;
-        <span class="built_in">this</span>.next = next;
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 单向链表反转</span>
-<span class="comment"> * <span class="doctag">@param</span> head 头节点</span>
-<span class="comment"> * <span class="doctag">@return</span></span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> SinglyNode <span class="title function_">reverseSinglyList</span><span class="params">(SinglyNode head)</span> &#123;
-    <span class="type">SinglyNode</span> <span class="variable">pre</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 当前节点的前一个节点,默认是null</span>
-    <span class="type">SinglyNode</span> <span class="variable">next</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 当前节点的下一个节点,默认是null</span>
-
-    <span class="keyword">while</span> (head != <span class="literal">null</span>) &#123;
-        next = head.next; <span class="comment">// 获取当前节点的下一个节点</span>
-        head.next = pre; <span class="comment">// 当前节点的前一个节点变成当前的下一个节点(方向反转)</span>
-
-        pre = head; <span class="comment">// 当前节点赋值给pre,指针后移</span>
-        head = next; <span class="comment">// 指针移动到next节点,继续循环</span>
-    &#125;
-    <span class="keyword">return</span> pre; <span class="comment">// 最后头节点的引用</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException &#123;
+    CompletableFuture&lt;String&gt; future = <span class="keyword">new</span> <span class="title class_">CompletableFuture</span>&lt;&gt;();
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">try</span> &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;子线程开始干活&quot;</span>);
+            <span class="comment">//子线程睡 5 秒</span>
+            Thread.sleep(<span class="number">5000</span>);
+            <span class="comment">//在子线程中完成主线程</span>
+            future.complete(<span class="string">&quot;success&quot;</span>);
+        &#125; <span class="keyword">catch</span> (Exception e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;, <span class="string">&quot;A&quot;</span>).start();
+    <span class="comment">//主线程调用 get 方法阻塞</span>
+    System.out.println(<span class="string">&quot;主线程调用 get 方法获取结果为: &quot;</span> + future.get());
+    System.out.println(<span class="string">&quot;主线程完成,阻塞结束!!!!!!&quot;</span>);
 &#125;</code></pre>
 
-<p>完整测试代码见: <a target="_blank" rel="noopener" href="https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/reverseList/ReverseSingleList.java">https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/reverseList/ReverseSingleList.java</a></p>
-<h1 id="2-双向链表反转"><a href="#2-双向链表反转" class="headerlink" title="2. 双向链表反转"></a>2. 双向链表反转</h1><h2 id="2-1-关键代码"><a href="#2-1-关键代码" class="headerlink" title="2.1 关键代码"></a>2.1 关键代码</h2><pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 双向链表节点</span>
+<p>打印结果:</p>
+<pre><code class="highlight shell">A子线程开始干活
+主线程调用 get 方法获取结果为: success
+主线程完成,阻塞结束!!!!!!</code></pre>
+
+
+
+<h2 id="2-没有返回值的异步任务"><a href="#2-没有返回值的异步任务" class="headerlink" title="2. 没有返回值的异步任务"></a>2. 没有返回值的异步任务</h2><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment">    * 没有返回值的异步任务</span>
+<span class="comment">    *</span>
+<span class="comment">    * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment">    * <span class="doctag">@throws</span> ExecutionException</span>
+<span class="comment">    */</span>
+   <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method2</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException &#123;
+       CompletableFuture&lt;Void&gt; future = <span class="keyword">new</span> <span class="title class_">CompletableFuture</span>&lt;&gt;();
+       <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+           <span class="keyword">try</span> &#123;
+               System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始作业&quot;</span>);
+               TimeUnit.SECONDS.sleep(<span class="number">5</span>);
+               System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 完成作业&quot;</span>);
+           &#125; <span class="keyword">catch</span> (Exception e) &#123;
+               e.printStackTrace();
+           &#125;
+       &#125;, <span class="string">&quot;线程1&quot;</span>).start();
+
+       <span class="comment">//主线程调用 get 方法阻塞</span>
+       future.get();
+       System.out.println(<span class="string">&quot;主线程结束&quot;</span>);
+   &#125;</code></pre>
+
+<p>运行结果:</p>
+<pre><code class="highlight shell">线程1开始作业
+线程1 完成作业</code></pre>
+
+
+
+<h2 id="3-有返回值的异步任务"><a href="#3-有返回值的异步任务" class="headerlink" title="3. 有返回值的异步任务"></a>3. 有返回值的异步任务</h2><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 有返回值的异步任务</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> * <span class="doctag">@throws</span> ExecutionException</span>
 <span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DoubleListNode</span> &#123;
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method3</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException &#123;
+    CompletableFuture&lt;String&gt; future = CompletableFuture.supplyAsync(<span class="keyword">new</span> <span class="title class_">Supplier</span>&lt;String&gt;() &#123;
+        <span class="meta">@Override</span>
+        <span class="keyword">public</span> String <span class="title function_">get</span><span class="params">()</span> &#123;
+            <span class="keyword">try</span> &#123;
+                System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始作业&quot;</span>);
+                TimeUnit.SECONDS.sleep(<span class="number">5</span>);
+                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 完成作业&quot;</span>);
+            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+                e.printStackTrace();
+            &#125;
+            <span class="keyword">return</span> <span class="string">&quot;异步结果&quot;</span>;
+        &#125;
+    &#125;);
 
-    <span class="keyword">public</span> <span class="type">int</span> value;
-    <span class="comment">/**</span>
-<span class="comment">     * 前一个节点</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> DoubleListNode last;
-    <span class="comment">/**</span>
-<span class="comment">     * 下一个节点</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> DoubleListNode next;
-
-    <span class="keyword">public</span> <span class="title function_">DoubleListNode</span><span class="params">(<span class="type">int</span> value)</span> &#123;
-        <span class="built_in">this</span>.value = value;
-    &#125;
-&#125;
-
-<span class="comment">/**</span>
-<span class="comment"> * 双向链表反转</span>
-<span class="comment"> * <span class="doctag">@param</span> head 头节点</span>
-<span class="comment"> * <span class="doctag">@return</span></span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> DoubleListNode <span class="title function_">reverseList</span><span class="params">(DoubleListNode head)</span> &#123;
-    <span class="type">DoubleListNode</span> <span class="variable">last</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 前一个节点</span>
-    <span class="type">DoubleListNode</span> <span class="variable">next</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 下一个节点</span>
-
-    <span class="keyword">while</span> (head != <span class="literal">null</span>) &#123;
-        next = head.next; <span class="comment">// 获取当前节点的下一个节点</span>
-
-        head.next = last; <span class="comment">// 前一个节点变成当前节点的下一个节点(链表方向反转)[原来头节点的last节点为空,反转后在链表末尾,next节点为空]</span>
-        head.last = next; <span class="comment">// 下一个节点变成当前节点的前一个节点(方向反转)[原链表末尾节next节点为空,反转后变成头节点,last节点为空]</span>
-
-        last = head; <span class="comment">// 当前节点变成前一个节点,指针后移</span>
-        head = next; <span class="comment">// 指针指向下一个节点,进入下一轮循环.</span>
-    &#125;
-    <span class="keyword">return</span> last; <span class="comment">// 返回反转后的头节点的引用</span>
+    <span class="comment">//主线程调用 get 方法阻塞</span>
+    future.get();
+    System.out.println(<span class="string">&quot;主线程结束&quot;</span>);
 &#125;</code></pre>
+
+<p><strong>运行结果:</strong></p>
+<pre><code class="highlight shell">ForkJoinPool.commonPool-worker-19开始作业
+ForkJoinPool.commonPool-worker-19 完成作业
+主线程结束</code></pre>
+
+
+
+<h2 id="4-线程依赖"><a href="#4-线程依赖" class="headerlink" title="4. 线程依赖"></a>4. 线程依赖</h2><p>当一个线程依赖另一个线程时，可以使用 thenApply 方法来把这两个线程串行化。</p>
+<pre><code class="highlight java"><span class="keyword">private</span> <span class="keyword">static</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>;
+<span class="comment">/**</span>
+<span class="comment"> * 线程依赖</span>
+<span class="comment"> * 先对一个数加 10,然后取平方</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> * <span class="doctag">@throws</span> ExecutionException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method4</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException &#123;
+    CompletableFuture&lt;Integer&gt; future = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始对值进行 +10 操作&quot;</span>);
+        num += <span class="number">10</span>;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 完成作业&quot;</span>);
+        <span class="keyword">return</span> num;
+    &#125;).thenApply(<span class="keyword">new</span> <span class="title class_">Function</span>&lt;Integer, Integer&gt;() &#123;
+        <span class="meta">@Override</span>
+        <span class="keyword">public</span> Integer <span class="title function_">apply</span><span class="params">(Integer data)</span> &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始对值进行 取平方 操作&quot;</span>);
+            System.out.println(<span class="string">&quot;integer: &quot;</span> + data);
+            <span class="keyword">return</span> data*data;
+        &#125;
+    &#125;);
+
+    <span class="comment">//主线程调用 get 方法阻塞</span>
+    System.out.println(<span class="string">&quot;主线程阻塞获取结果,结果为:&quot;</span> + future.get());
+    System.out.println(<span class="string">&quot;主线程结束&quot;</span>);
+&#125;</code></pre>
+
+<p>运行结果:</p>
+<pre><code class="highlight shell">ForkJoinPool.commonPool-worker-19开始对值进行 +10 操作
+ForkJoinPool.commonPool-worker-19 完成作业
+ForkJoinPool.commonPool-worker-19开始对值进行 取平方 操作
+integer: 10
+主线程阻塞获取结果,结果为:100
+主线程结束</code></pre>
+
+
+
+<h2 id="5-消费处理结果"><a href="#5-消费处理结果" class="headerlink" title="5. 消费处理结果"></a>5. 消费处理结果</h2><p>thenAccept 消费处理结果, 接收任务的处理结果，并消费处理，无返回结果。</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * thenAccept 消费处理结果, 接收任务的处理结果，并消费处理，无返回结果。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> * <span class="doctag">@throws</span> ExecutionException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method5</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException &#123;
+    CompletableFuture&lt;Void&gt; completableFuture = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始对值进行 +10 操作&quot;</span>);
+        num += <span class="number">10</span>;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 完成作业&quot;</span>);
+        <span class="keyword">return</span> num;
+    &#125;).thenApply(data -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始对值进行 取平方 操作&quot;</span>);
+        System.out.println(<span class="string">&quot;integer: &quot;</span> + data);
+        <span class="keyword">return</span> data * data;
+    &#125;).thenAccept(integer -&gt; &#123;
+        System.out.println(<span class="string">&quot;子线程全部处理完成,最后调用了 accept,结果为:&quot;</span> + integer);
+    &#125;);
+
+    <span class="comment">//主线程调用 get 方法阻塞</span>
+    System.out.println(<span class="string">&quot;主线程阻塞获取结果,结果为:&quot;</span> + completableFuture.get());
+    System.out.println(<span class="string">&quot;主线程结束&quot;</span>);
+&#125;</code></pre>
+
+<p>运行结果:</p>
+<pre><code class="highlight shell">ForkJoinPool.commonPool-worker-19开始对值进行 +10 操作
+ForkJoinPool.commonPool-worker-19 完成作业
+ForkJoinPool.commonPool-worker-19开始对值进行 取平方 操作
+integer: 10
+子线程全部处理完成,最后调用了 accept,结果为:100
+主线程阻塞获取结果,结果为:null
+主线程结束</code></pre>
+
+
+
+<h2 id="6-异常处理"><a href="#6-异常处理" class="headerlink" title="6. 异常处理"></a>6. 异常处理</h2><p>exceptionally 异常处理,出现异常时触发</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * exceptionally 异常处理,出现异常时触发</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> * <span class="doctag">@throws</span> ExecutionException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method6</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException, ExecutionException &#123;
+    CompletableFuture&lt;Integer&gt; completableFuture = CompletableFuture.supplyAsync(() -&gt; &#123;
+        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span> / <span class="number">0</span>;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始对值进行 +10 操作&quot;</span>);
+        num += <span class="number">10</span>;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 完成作业&quot;</span>);
+        <span class="keyword">return</span> num;
+    &#125;).exceptionally(throwable -&gt; &#123;
+        System.out.println(throwable.getMessage());
+        <span class="keyword">return</span> -<span class="number">1</span>;
+    &#125;);
+
+    <span class="comment">//主线程调用 get 方法阻塞</span>
+    System.out.println(<span class="string">&quot;主线程阻塞获取结果,结果为:&quot;</span> + completableFuture.get());
+    System.out.println(<span class="string">&quot;主线程结束&quot;</span>);
+&#125;</code></pre>
+
+<p>执行结果:</p>
+<pre><code class="highlight shell">java.lang.ArithmeticException: / by zero
+主线程阻塞获取结果,结果为:-1
+主线程结束</code></pre>
+
+<p><strong>handle 类似于 thenAccept&#x2F;thenRun 方法,是最后一步的处理调用,但是同时可以处理异常</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * handle 类似于 thenAccept/thenRun 方法,是最后一步的处理调用,但是同时可以处理异常</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method7</span><span class="params">()</span> &#123;
+    System.out.println(<span class="string">&quot;主线程开始&quot;</span>);
+    CompletableFuture&lt;Integer&gt; future = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;加 10 任务开始&quot;</span>);
+        num += <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;).handle((i, ex) -&gt; &#123;
+        System.out.println(<span class="string">&quot;进入 handle 方法&quot;</span>);
+        <span class="keyword">if</span> (ex != <span class="literal">null</span>) &#123;
+            System.out.print(<span class="string">&quot;发生了异常,内容为:&quot;</span>);
+            System.out.println(ex.getMessage());
+            <span class="keyword">return</span> -<span class="number">1</span>;
+        &#125; <span class="keyword">else</span> &#123;
+            System.out.println(<span class="string">&quot;正常完成,内容为: &quot;</span> + i);
+            <span class="keyword">return</span> i;
+        &#125;
+    &#125;);
+&#125;</code></pre>
+
+<p>运行结果:</p>
+<pre><code class="highlight shell">主线程开始
+加 10 任务开始
+进入 handle 方法
+正常完成,内容为: 10</code></pre>
+
+<p>发生异常时:</p>
+<pre><code class="highlight shell">主线程开始
+加 10 任务开始
+进入 handle 方法
+发生了异常,内容为:java.lang.ArithmeticException: / by zero</code></pre>
+
+
+
+<h2 id="7-结果合并"><a href="#7-结果合并" class="headerlink" title="7. 结果合并"></a>7. 结果合并</h2><p><strong>thenCompose 合并两个有依赖关系的 CompletableFutures 的执行结果.</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * thenCompose 合并两个有依赖关系的 CompletableFutures 的执行结果</span>
+<span class="comment"> * <span class="doctag">@throws</span> ExecutionException</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method8</span><span class="params">()</span> <span class="keyword">throws</span> ExecutionException, InterruptedException &#123;
+    System.out.println(<span class="string">&quot;主线程开始......&quot;</span>);
+    <span class="comment">//第一步加 10</span>
+    CompletableFuture&lt;Integer&gt; future1 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;线程执行num加10&quot;</span>);
+        num += <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+
+    <span class="comment">// 合并</span>
+    CompletableFuture&lt;Integer&gt; future2 = future1.thenCompose(data -&gt; CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;线程执行合并&quot;</span>);
+        <span class="keyword">return</span> data + <span class="number">1</span>;
+    &#125;));
+
+    System.out.println(<span class="string">&quot;主线程阻塞获取结果: &quot;</span> + future1.get());
+    System.out.println(<span class="string">&quot;主线程阻塞获取结果: &quot;</span> + future2.get());
+&#125;</code></pre>
+
+<p>执行结果:</p>
+<pre><code class="highlight shell">主线程开始......
+ForkJoinPool.commonPool-worker-19线程执行num加10
+ForkJoinPool.commonPool-worker-5线程执行合并
+主线程阻塞获取结果: 10
+主线程阻塞获取结果: 11</code></pre>
+
+
+
+<p><strong>thenCombine 合并两个没有依赖关系的 CompletableFutures 任务</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * thenCombine 合并两个没有依赖关系的 CompletableFutures 任务</span>
+<span class="comment"> * <span class="doctag">@throws</span> ExecutionException</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method9</span><span class="params">()</span> <span class="keyword">throws</span> ExecutionException, InterruptedException &#123;
+    System.out.println(<span class="string">&quot;主线程开始......&quot;</span>);
+    <span class="comment">//第一个线程加 10</span>
+    CompletableFuture&lt;Integer&gt; future1 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;线程执行num加10&quot;</span>);
+        num += <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+
+    <span class="comment">// 第二个线程 *10</span>
+    CompletableFuture&lt;Integer&gt; future2 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;线程执行num * 10&quot;</span>);
+        num *= <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+
+    <span class="comment">// 合并两个CompletableFuture</span>
+    CompletableFuture&lt;Object&gt; combine = future1.thenCombine(future2, (a, b) -&gt; &#123;
+        List&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+        list.add(a);
+        list.add(b);
+        <span class="keyword">return</span> list;
+    &#125;);
+
+    System.out.println(<span class="string">&quot;主线程阻塞获取future1结果: &quot;</span> + future1.get());
+    System.out.println(<span class="string">&quot;主线程阻塞获取future2结果: &quot;</span> + future2.get());
+    System.out.println(<span class="string">&quot;主线程阻塞获取combine结果: &quot;</span> + combine.get());
+&#125;</code></pre>
+
+<p>执行结果:</p>
+<pre><code class="highlight shell">主线程开始......
+ForkJoinPool.commonPool-worker-19线程执行num加10
+ForkJoinPool.commonPool-worker-5线程执行num * 10
+主线程阻塞获取future1结果: 10
+主线程阻塞获取future2结果: 100
+主线程阻塞获取combine结果: [10, 100]</code></pre>
+
+
+
+<p><strong>合并多个任务的结果 allOf 与 anyOf</strong></p>
+<p><strong>allOf:</strong>  一系列独立的 future 任务，等其所有的任务执行完后做一些事情</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * allOf: 一系列独立的 future 任务，等其所有的任务执行完后做一些事情</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method10</span><span class="params">()</span> &#123;
+    System.out.println(<span class="string">&quot;主线程开始&quot;</span>);
+    List&lt;CompletableFuture&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+    CompletableFuture&lt;Integer&gt; job1 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;加 10 任务开始&quot;</span>);
+        num += <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+    list.add(job1);
+
+    CompletableFuture&lt;Integer&gt; job2 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;乘以 10 任务开始&quot;</span>);
+        num = num * <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+    list.add(job2);
+
+    CompletableFuture&lt;Integer&gt; job3 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;减以 10 任务开始&quot;</span>);
+        num = num * <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+    list.add(job3);
+
+    CompletableFuture&lt;Integer&gt; job4 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;除以 10 任务开始&quot;</span>);
+        num = num * <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+    list.add(job4);
+
+    <span class="comment">//多任务合并</span>
+    List&lt;Integer&gt; collect =
+            list.stream().map(CompletableFuture&lt;Integer&gt;::join).collect(Collectors.toList());
+    System.out.println(<span class="string">&quot;所有任务执行结束,结果为: &quot;</span> + collect);
+&#125;</code></pre>
+
+<p>运行结果:</p>
+<pre><code class="highlight shell">主线程开始
+乘以 10 任务开始
+加 10 任务开始
+减以 10 任务开始
+除以 10 任务开始
+所有任务执行结束,结果为: [10, 0, 100, 1000]</code></pre>
+
+
+
+<p><strong>anyOf</strong>: 只要在多个 future 里面有一个返回，整个任务就可以结束，而不需要等到每一个future 结束</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * anyOf: 只要在多个 future 里面有一个返回，整个任务就可以结束，而不需要等到每一个future 结束</span>
+<span class="comment"> * <span class="doctag">@throws</span> ExecutionException</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">method11</span><span class="params">()</span> <span class="keyword">throws</span> ExecutionException, InterruptedException &#123;
+    System.out.println(<span class="string">&quot;主线程开始&quot;</span>);
+    CompletableFuture&lt;Integer&gt;[] futures = <span class="keyword">new</span> <span class="title class_">CompletableFuture</span>[<span class="number">4</span>];
+    CompletableFuture&lt;Integer&gt; job1 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;加 10 任务开始&quot;</span>);
+        num += <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+    futures[<span class="number">0</span>] = job1;
+
+    CompletableFuture&lt;Integer&gt; job2 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;乘以 10 任务开始&quot;</span>);
+        num = num * <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+    futures[<span class="number">1</span>] = job2;
+
+    CompletableFuture&lt;Integer&gt; job3 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;减以 10 任务开始&quot;</span>);
+        num = num * <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+    futures[<span class="number">2</span>] = job3;
+
+    CompletableFuture&lt;Integer&gt; job4 = CompletableFuture.supplyAsync(() -&gt; &#123;
+        System.out.println(<span class="string">&quot;除以 10 任务开始&quot;</span>);
+        num = num * <span class="number">10</span>;
+        <span class="keyword">return</span> num;
+    &#125;);
+    futures[<span class="number">3</span>] = job4;
+
+    CompletableFuture&lt;Object&gt; future = CompletableFuture.anyOf(futures);
+    System.out.println(future.get());
+    System.out.println(<span class="string">&quot;其中一个任务执行结束,结果为: &quot;</span> + future.get());
+&#125;</code></pre>
+
+<p>执行结果:</p>
+<pre><code class="highlight shell">主线程开始
+乘以 10 任务开始
+加 10 任务开始
+减以 10 任务开始
+10
+除以 10 任务开始
+其中一个任务执行结束,结果为: 10</code></pre>
 
 
       
