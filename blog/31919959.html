@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>第二十五章-分析GC日志 | George&#39;s Blog</title>
+  <title>10-Fork/Join | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , jvm ">
-  <meta name="description" content="第二十五章-分析GC日志 | George&#39;s Blog">
+  <meta name="keywords" content=" juc , java ">
+  <meta name="description" content="10-Fork/Join | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#x6f;&#114;&#103;&#x65;&#x5f;&#x39;&#x35;&#64;&#x31;&#x32;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -846,9 +846,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-jvm/第二十五章-分析GC日志" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-juc/10-ForkJoin" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">第二十五章-分析GC日志</h1>
+        <h1 class="article-title">10-Fork/Join</h1>
     
     <div class="article-meta">
         
@@ -858,7 +858,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JVM">JVM</a>
+            <a  data-rel="JUC">JUC</a>
             
         </span>
         
@@ -866,21 +866,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
+            <a class="color4">juc</a>
             
-            <a class="color4">jvm</a>
+            <a class="color5">java</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-07 19:37:29'>2024-08-28 21:36</time>
+            发布时间 : <time class="date" title='最后更新: 2024-09-16 16:06:00'>2024-09-16 13:10</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:3.3k</span>
+        <span>字数:1.7k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -910,7 +910,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81GC%E6%97%A5%E5%BF%97%E5%8F%82%E6%95%B0"><span class="toc-text">一、GC日志参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81GC%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F"><span class="toc-text">二、GC日志格式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-GC%E5%88%86%E7%B1%BB"><span class="toc-text">1. GC分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%83%A8%E5%88%86%E6%94%B6%E9%9B%86"><span class="toc-text">1.1 部分收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%95%B4%E5%A0%86%E6%94%B6%E9%9B%86%EF%BC%88Full-GC"><span class="toc-text">1.2 整堆收集（Full GC)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-GC%E6%97%A5%E5%BF%97%E5%88%86%E7%B1%BB"><span class="toc-text">2. GC日志分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-MinorGC"><span class="toc-text">2.1 MinorGC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-FullGC"><span class="toc-text">2.2 FullGC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-GC%E6%97%A5%E5%BF%97%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90"><span class="toc-text">3. GC日志结构剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">3.1  垃圾收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-GC%E5%89%8D%E5%90%8E%E6%83%85%E5%86%B5"><span class="toc-text">3.2 GC前后情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-GC%E6%97%B6%E9%97%B4"><span class="toc-text">3.3 GC时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Minor-GC-%E6%97%A5%E5%BF%97%E8%A7%A3%E6%9E%90"><span class="toc-text">4. Minor GC 日志解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Full-GC-%E6%97%A5%E5%BF%97%E8%A7%A3%E6%9E%90"><span class="toc-text">5. Full GC 日志解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%97%A5%E5%BF%97%E5%88%86%E8%A7%A3%E4%B8%8E%E8%A7%A3%E9%87%8A"><span class="toc-text">5.1 日志分解与解释</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81GC%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="toc-text">三、GC日志分析工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-GCeasy"><span class="toc-text">1. GCeasy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-GCViewer"><span class="toc-text">2. GCViewer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0"><span class="toc-text">2.1 基本概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AE%89%E8%A3%85"><span class="toc-text">2.2 安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%90%AF%E5%8A%A8GCViewer-gui"><span class="toc-text">2.3 启动GCViewer(gui)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="toc-text">3. 其他工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-GChisto"><span class="toc-text">3.1 GChisto</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-HPjmeter"><span class="toc-text">3.2 HPjmeter</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Fork-Join-%E6%A1%86%E6%9E%B6%E7%AE%80%E4%BB%8B"><span class="toc-text">一、Fork&#x2F;Join 框架简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Fork-%E6%96%B9%E6%B3%95"><span class="toc-text">二、Fork 方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81join-%E6%96%B9%E6%B3%95"><span class="toc-text">三、join 方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Fork-Join-%E6%A1%86%E6%9E%B6%E7%9A%84%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86"><span class="toc-text">四、Fork&#x2F;Join 框架的异常处理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">五、入门案例</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -926,272 +926,214 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、GC日志参数"><a href="#一、GC日志参数" class="headerlink" title="一、GC日志参数"></a>一、GC日志参数</h1><ul>
-<li><p><code>-verbose:gc</code></p>
-<p>输出gc日志信息，默认输出到标准输出</p>
-</li>
-<li><p><code>-XX:+PrintGC</code></p>
-<p>输出GC日志。类似：-verbose:gc</p>
-</li>
-<li><p><code>-XX:+PrintGCDetails</code></p>
-<p>在发生垃圾回收时打印内存回收详细的日志，并在进程退出时输出当前内存各区域分配情况</p>
-</li>
-<li><p><code>-XX:+PrintGCTimeStamps</code></p>
-<p>输出GC发生时的时间截</p>
-</li>
-<li><p><code>-XX:+PrintGCDateStamps</code></p>
-<p>输出GC发生时的时间戳（以日期的形式，如 2013-05-04T21:53:59.234+0800)</p>
-</li>
-<li><p><code>-XX:+PrintHeapAtGC</code></p>
-<p>每一次GC前和GC后，都打印堆信息</p>
-</li>
-<li><p><code>-Xloggc:&lt;file&gt;</code></p>
-<p>表示把GC日志写入到一个文件中去，而不是打印到标准输出中</p>
-</li>
-</ul>
-<h1 id="二、GC日志格式"><a href="#二、GC日志格式" class="headerlink" title="二、GC日志格式"></a>二、GC日志格式</h1><h2 id="1-GC分类"><a href="#1-GC分类" class="headerlink" title="1. GC分类"></a>1. GC分类</h2><p>针对 HotSpot VM 的实现，它里面的GC按照回收区域又分为两大种类型：一种是部分收集（Partial GC), 一种是整堆收集（Full GC)</p>
-<h3 id="1-1-部分收集"><a href="#1-1-部分收集" class="headerlink" title="1.1 部分收集"></a>1.1 部分收集</h3><p>不是完整收集整个Java堆的垃圾收集。</p>
-<p>其中又分为：</p>
+        <h1 id="一、Fork-Join-框架简介"><a href="#一、Fork-Join-框架简介" class="headerlink" title="一、Fork&#x2F;Join 框架简介"></a>一、Fork&#x2F;Join 框架简介</h1><p>Fork&#x2F;Join 它可以将一个大的任务拆分成多个子任务进行并行处理，最后将子任务结果合并成最后的计算结果，并进行输出。Fork&#x2F;Join 框架要完成两件事情：</p>
+<p><strong>Fork：把一个复杂任务进行分拆，大事化小</strong></p>
+<p><strong>Join：把分拆任务的结果进行合并</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/16/20240916-150030.png" alt="任务拆分"></p>
 <ul>
-<li>新生代收集（Minor GC&#x2F;Young GC):只是新生代（Eden\S0,S1)的垃圾收集</li>
-<li>老年代收集（Major GC&#x2F;old GC):只是老年代的垃圾收集。<ul>
-<li>目前，只有CMSGC会有单独收集老年代的行为。</li>
-<li>注意，很多时候Major GC会和Full GC混淆使用，需要具体分辨是老年代回收还是整堆回收。</li>
+<li><strong>任务分割：</strong>首先 Fork&#x2F;Join 框架需要把大的任务分割成足够小的子任务，如果子任务比较大的话还要对子任务进行继续分割</li>
+<li><strong>执行任务并合并结果：</strong>分割的子任务分别放到双端队列里，然后几个启动线程分别从双端队列里获取任务执行。子任务执行完的结果都放在另外一个队列里，启动一个线程从队列里取数据，然后合并这些数据。</li>
 </ul>
-</li>
-<li>混合收集（Mixed GC):收集整个新生代以及部分老年代的垃圾收集。<ul>
-<li>目前，只有G1GC会有这种行为</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-2-整堆收集（Full-GC"><a href="#1-2-整堆收集（Full-GC" class="headerlink" title="1.2 整堆收集（Full GC)"></a>1.2 整堆收集（Full GC)</h3><p>收集整个java堆和方法区的垃圾收集。</p>
-<p><strong>哪些情况会触发Full GC?</strong></p>
+<p>在 Java 的 Fork&#x2F;Join 框架中，使用两个类完成上述操作</p>
 <ul>
-<li>老年代空间不足</li>
-<li>方法区空间不足</li>
-<li>显式调用System.gc()</li>
-<li>Minor GC进入老年代的数据的平均大小大于老年代的可用内存</li>
-<li>大对象直接进入老年代，而老年代的可用空间不足</li>
-</ul>
-<h2 id="2-GC日志分类"><a href="#2-GC日志分类" class="headerlink" title="2. GC日志分类"></a>2. GC日志分类</h2><h3 id="2-1-MinorGC"><a href="#2-1-MinorGC" class="headerlink" title="2.1 MinorGC"></a>2.1 MinorGC</h3><p>MinorGC(或young GC或YGC)日志：</p>
-<p>[GC (Allocation Failure) [PSYoungGen: 131584K-&gt;7195K(153088K)] 131584K-&gt;7203K(502784K), 0.0334432 secs] [Times: user&#x3D;0.02 sys&#x3D;0.00, real&#x3D;0.04 secs]</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-140528.png" alt="minorGC日志解析"></p>
-<h3 id="2-2-FullGC"><a href="#2-2-FullGC" class="headerlink" title="2.2 FullGC"></a>2.2 FullGC</h3><p>[Full GC (Metadata GC Threshold) [PSYoungGen: 2848K-&gt;0K(158720K)] [ParOldGen: 32816K-&gt;19441K(349696K)] 35664K-&gt;19441K(508416K), [Metaspace: 34044K-&gt;34044K(1079296K)], 0.1156700 secs] [Times: user&#x3D;0.09 sys&#x3D;0.00, real&#x3D;0.12 secs]</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-140956.png" alt="fullGC日志解析"></p>
-<h2 id="3-GC日志结构剖析"><a href="#3-GC日志结构剖析" class="headerlink" title="3. GC日志结构剖析"></a>3. GC日志结构剖析</h2><h3 id="3-1-垃圾收集器"><a href="#3-1-垃圾收集器" class="headerlink" title="3.1  垃圾收集器"></a>3.1  垃圾收集器</h3><ul>
-<li>使用 <code>Serial</code> 收集器在新生代的名字是 <code>Default New Generation</code> , 因此显示的是”[DefNew”</li>
-<li>使用 <code>ParNew</code> 收集器在新生代的名字会变成”[ParNew” , 意思是”Parallel New Generation”</li>
-<li>使用 <code>Parallel Scavenge</code> 收集器在新生代的名字是”[PSYoungGen”,这里的JDK1.7使用的就是<code>PSYoungGen</code></li>
-<li>使用 <code>Parallel Old Generation</code> 收集器在老年代的名字是”[ParOldGen”</li>
-<li>使用G1收集器的话，会显示为”garbage-first heap”</li>
-</ul>
-<p><strong>Allocation Failure</strong></p>
-<p>表明本次引起GC的原因是因为在年轻代中没有足够的空间能够存储新的数据了。</p>
-<h3 id="3-2-GC前后情况"><a href="#3-2-GC前后情况" class="headerlink" title="3.2 GC前后情况"></a>3.2 GC前后情况</h3><p>通过图示，我们可以发现GC日志格式的规律一般都是：GC前内存占用 一&gt; GC后内存占用（该区域内存总大小）</p>
-<p>[PSYoungGen: 5986K -&gt; 696K(8704K)] 5986K -&gt; 704K(9216K)</p>
-<p>中括号内：GC回收前年轻代堆大小，回收后大小，(<strong>年轻代堆总大小</strong>）</p>
-<p>括号外：GC回收前年轻代和老年代大小，回收后大小，(<strong>年轻代和老年代总大小</strong>）</p>
-<h3 id="3-3-GC时间"><a href="#3-3-GC时间" class="headerlink" title="3.3 GC时间"></a>3.3 GC时间</h3><p>GC日志中有三个时间：user , sys 和 real</p>
-<ul>
-<li><strong>user</strong> - 进程执行用户态代码（核心之外）所使用的时间。这是执行此进程所使用的实际CPU时间，其他进程和此进程阻塞的时间并不包括在内。在垃圾收集的情况下，表示GC线程执行所使用的CPU总时间。</li>
-<li><strong>sys</strong> - 进程在内核态消耗的CPU时间，即在内核执行系统调用或等待系统事件所使用的CPU时间</li>
-<li><strong>real</strong> - 程序从开始到结束所用的时钟时间。这个时间包括其他进程使用的时间片和进程阻塞的时间（比如等待I&#x2F;0完成）。对于并行gc,这个数字应该接近（用户时间+系统时间）除以垃圾收集器使用的线程数。</li>
-</ul>
-<p>由于多核的原因，一般的GC事件中，real time是小于 <code>sys + user time</code> 的，因为一般是多个线程并发的去做 GC,所以real time是要小于 sys+user time 的。<br> 如果 <code>real &gt; sys+user</code> 的话，则你的应用可能存在下列问题：IO负载非常重 或者是CPU不够用。</p>
-<h2 id="4-Minor-GC-日志解析"><a href="#4-Minor-GC-日志解析" class="headerlink" title="4. Minor GC 日志解析"></a>4. Minor GC 日志解析</h2><p>2024-08-28T15:09:58.253+0800: 2.004: [GC (Allocation Failure) [PSYoungGen: 138937K-&gt;7465K(153088K)] 138945K-&gt;7473K(502784K), 0.0261046 secs] [Times: user&#x3D;0.01 sys&#x3D;0.00, real&#x3D;0.03 secs]</p>
-<ul>
-<li><p>2024-08-28T15:09:58.253+0800</p>
-<p><strong>日志打印时间日期格式</strong></p>
-</li>
-<li><p>2.004</p>
-<p><strong>gc发生时，Java虚拟机启动以来经过的秒数</strong></p>
-</li>
-<li><p>[GC (Allocation Failure) </p>
-<p><strong>发生了一次垃圾回收，这是一次MinorGC</strong></p>
-<p>它不区分新生代还是老年代GC，括号里的内容是gc发生的原因，这里的Allocation Failure的原因是新生代中没有足够区域能够存放需要分配的数据而失败</p>
-</li>
-<li><p>[PSYoungGen: 138937K-&gt;7465K(153088K)] </p>
-<ul>
-<li>PSYoungGen：表示GC发生的区域，区域名称与使用的GC收集器是密切相关的<ul>
-<li>Serial收集器：Default New Generation 显示Defnew</li>
-<li>ParNew收集器：ParNew</li>
-<li>Parallel Scanvenge收集器：PSYoung</li>
-<li>老年代和新生代同理，也是和收集器名称相关</li>
+<li><strong>ForkJoinTask:</strong> 我们要使用 Fork&#x2F;Join 框架，首先需要创建一个 ForkJoin 任务。该类提供了在任务中执行 fork 和 join 的机制。通常情况下我们不需要直接集成 ForkJoinTask 类，只需要继承它的子类，Fork&#x2F;Join 框架提供了两个子类：<ul>
+<li>RecursiveAction：用于没有返回结果的任务</li>
+<li>RecursiveTask: 用于有返回结果的任务</li>
 </ul>
 </li>
-<li>138937K-&gt;7465K(153088K)：GC前该内存区域已使用容量-&gt;GC后该区域容量(该区域总容量)<ul>
-<li>如果是新生代，总容量则会显示整个新生代内存的9&#x2F;10，即eden+from&#x2F;to区</li>
-<li>如果是老年代，总容量则是全身内存大小，无变化</li>
+<li><strong>ForkJoinPool</strong>: ForkJoinTask 需要通过 ForkJoinPool 来执行</li>
+<li><strong>RecursiveTask</strong>: 继承后可以实现递归(自己调自己)调用的任务</li>
 </ul>
-</li>
-</ul>
-</li>
-<li><p>138945K-&gt;7473K(502784K)</p>
-<p>虽然本次是Minor GC，只会进行新生代的垃圾收集，但是也肯定会打印堆中总容量相关信息</p>
-<p>在显示完区域容量GC的情况之后，会接着显示整个堆内存区域的GC情况：GC前堆内存已使用容量-&gt;GC后堆内存容量（堆内存总容量），并且堆内存总容量 &#x3D; 9&#x2F;10 新生代 + 老年代，然后堆内存总容量肯定小于初始化的内存大小</p>
-</li>
-<li><p>0.0261046 secs</p>
-<p>整个GC所花费的时间，单位是秒</p>
-</li>
-<li><p>[Times: user&#x3D;0.01 sys&#x3D;0.00, real&#x3D;0.03 secs]</p>
-<ul>
-<li>user：指CPU工作在用户态所花费的时间</li>
-<li>sys：指CPU工作在内核态所花费的时间</li>
-<li>real：指在此次事件中所花费的总时间</li>
-</ul>
-</li>
-</ul>
-<h2 id="5-Full-GC-日志解析"><a href="#5-Full-GC-日志解析" class="headerlink" title="5. Full GC 日志解析"></a>5. Full GC 日志解析</h2><p>2024-08-28T15:10:01.578+0800: 5.329: [Full GC (Metadata GC Threshold) [PSYoungGen: 3264K-&gt;0K(163840K)] [ParOldGen: 6227K-&gt;7621K(349696K)] 9491K-&gt;7621K(513536K), [Metaspace: 20472K-&gt;20472K(1067008K)], 0.0627380 secs] [Times: user&#x3D;0.04 sys&#x3D;0.00, real&#x3D;0.06 secs]</p>
-<h3 id="5-1-日志分解与解释"><a href="#5-1-日志分解与解释" class="headerlink" title="5.1 日志分解与解释"></a>5.1 日志分解与解释</h3><pre><code class="highlight plaintext">2024-08-28T15:10:01.578+0800: 5.329: [Full GC (Metadata GC Threshold) 
-[PSYoungGen: 3264K-&gt;0K(163840K)] 
-[ParOldGen: 6227K-&gt;7621K(349696K)] 
-9491K-&gt;7621K(513536K), 
-[Metaspace: 20472K-&gt;20472K(1067008K)], 
-0.0627380 secs] 
-[Times: user=0.04 sys=0.00, real=0.06 secs]</code></pre>
-
-<ol>
-<li><strong>时间戳</strong>: <code>2024-08-28T15:10:01.578+0800</code><ul>
-<li>这表示日志条目的日期和时间。<code>+0800</code> 表示时区偏移量（例如，北京时间为 UTC+8）。</li>
-</ul>
-</li>
-<li><strong>GC 事件触发时间</strong>: <code>5.329</code><ul>
-<li>表示从 JVM 启动到 GC 事件发生的时间，单位是秒。这表明在 JVM 启动后的 5.329 秒，发生了一个 Full GC。</li>
-</ul>
-</li>
-<li><strong>GC 类型</strong>: <code>[Full GC (Metadata GC Threshold)]</code><ul>
-<li><code>Full GC</code> 表示一次 Full Garbage Collection，即对整个堆（包括年轻代和老年代）进行的垃圾回收。</li>
-<li><code>Metadata GC Threshold</code> 是此次 GC 的触发原因。它表明是因为元数据（如类的元信息）达到了特定的阈值，导致了 Full GC。<ul>
-<li>Full GC (Ergonomics) : JVM , 自适应调整导致的GC</li>
-<li>Full GC(System) : 调用了System.gc()方法</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>年轻代回收</strong>: <code>[PSYoungGen: 3264K-&gt;0K(163840K)]</code><ul>
-<li><strong>PSYoungGen</strong>: 使用 Parallel Scavenge（并行清除）垃圾回收器的年轻代（Young Generation）。</li>
-<li><code>3264K-&gt;0K</code>: 表示在回收前年轻代占用 3264 KB 内存，回收后占用 0 KB。</li>
-<li><code>(163840K)</code>: 年轻代的总容量是 163840 KB（160 MB）。</li>
-</ul>
-</li>
-<li><strong>老年代回收</strong>: <code>[ParOldGen: 6227K-&gt;7621K(349696K)]</code><ul>
-<li><strong>ParOldGen</strong>: 使用并行老年代垃圾回收器（Parallel Old Generation）。</li>
-<li><code>6227K-&gt;7621K</code>: 表示在回收前老年代占用 6227 KB 内存，回收后增加到 7621 KB。这通常表示有一些对象从年轻代晋升到老年代。</li>
-<li><code>(349696K)</code>: 老年代的总容量是 349696 KB（341.5 MB）。</li>
-</ul>
-</li>
-<li><strong>堆总内存使用情况</strong>: <code>9491K-&gt;7621K(513536K)</code><ul>
-<li><code>9491K-&gt;7621K</code>: 表示在 GC 前整个堆（年轻代 + 老年代）使用的总内存为 9491 KB，GC 后减少到 7621 KB。</li>
-<li><code>(513536K)</code>: 堆的总容量是 513536 KB（501.25 MB）。</li>
-</ul>
-</li>
-<li><strong>元空间（Metaspace）</strong>: <code>[Metaspace: 20472K-&gt;20472K(1067008K)]</code><ul>
-<li><code>20472K-&gt;20472K</code>: 表示元空间（用于存储类的元数据）的使用量在 GC 前后保持不变，为 20472 KB。</li>
-<li><code>(1067008K)</code>: 元空间的总容量是 1067008 KB（1042 MB）。</li>
-</ul>
-</li>
-<li><strong>GC 事件耗时</strong>: <code>0.0627380 secs</code><ul>
-<li>表示 GC 事件的总持续时间为 0.0627380 秒（约 62 毫秒）。</li>
-</ul>
-</li>
-<li><strong>GC 时间分解</strong>: <code>[Times: user=0.04 sys=0.00, real=0.06 secs]</code><ul>
-<li><code>user=0.04</code>: 用户态 CPU 时间（多个 CPU 线程的总和）是 0.04 秒。</li>
-<li><code>sys=0.00</code>: 内核态 CPU 时间是 0.00 秒。</li>
-<li><code>real=0.06</code>: 真实时间，即 GC 事件的墙钟时间是 0.06 秒。这个值通常比 <code>user</code> 和 <code>sys</code> 时间之和略大，反映了多线程并行执行的情况。</li>
-</ul>
-</li>
-</ol>
-<h1 id="三、GC日志分析工具"><a href="#三、GC日志分析工具" class="headerlink" title="三、GC日志分析工具"></a>三、GC日志分析工具</h1><p>上节介绍了GC日志的打印及含义，但是GC日志看起来比较麻烦，本节将会介绍一下GC日志可视化分析工具GCeasy和GCviewer等。通过GC日志可视化分析工具，我们可以很方便的看到JVM各个分代的内存使用情况、垃圾回收次数、垃圾回收的原因、垃圾回收占用的时间、吞吐量等，这些指标在我们进行JVM调优的时候是很有用的。</p>
-<p>如果想把GC日志存到文件的话，是下面这个参数：</p>
-<pre><code class="highlight shell">-Xloggc:/path/to/gc.log
-<span class="meta prompt_"># </span><span class="language-bash">示例</span>
-java -Xms512m -Xmx512m -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/opt/module/ioms/ioms-ums/gc-%t.log -jar ioms-ums.jar --spring.profiles.active=dev</code></pre>
-
-<p>然后就可以用一些工具去分析这些gc日志。</p>
-<p><strong>示例代码1</strong></p>
+<p><strong>Fork&#x2F;Join 框架的实现原理</strong></p>
+<p>ForkJoinPool 由 ForkJoinTask 数组和 ForkJoinWorkerThread 数组组成，ForkJoinTask 数组负责将存放以及将程序提交给 ForkJoinPool，而ForkJoinWorkerThread 负责执行这些任务。</p>
+<h1 id="二、Fork-方法"><a href="#二、Fork-方法" class="headerlink" title="二、Fork 方法"></a>二、Fork 方法</h1><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/16/20240916-150946.png" alt="ForkJoinPool继承体系"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/16/20240916-151158.png" alt="ForkJoinTask继承体系"></p>
+<p><strong>Fork 方法的实现原理：</strong> 当我们调用 ForkJoinTask 的 fork 方法时，程序会把任务放在 ForkJoinWorkerThread 的 pushTask 的 workQueue 中，异步地执行这个任务，然后立即返回结果. </p>
 <pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 测试生成详细的日志文件</span>
+<span class="comment"> * Arranges to asynchronously execute this task in the pool the</span>
+<span class="comment"> * current task is running in, if applicable, or using the &#123;<span class="doctag">@link</span></span>
+<span class="comment"> * ForkJoinPool#commonPool()&#125; if not &#123;<span class="doctag">@link</span> #inForkJoinPool&#125;.  While</span>
+<span class="comment"> * it is not necessarily enforced, it is a usage error to fork a</span>
+<span class="comment"> * task more than once unless it has completed and been</span>
+<span class="comment"> * reinitialized.  Subsequent modifications to the state of this</span>
+<span class="comment"> * task or any data it operates on are not necessarily</span>
+<span class="comment"> * consistently observable by any thread other than the one</span>
+<span class="comment"> * executing it unless preceded by a call to &#123;<span class="doctag">@link</span> #join&#125; or</span>
+<span class="comment"> * related methods, or a call to &#123;<span class="doctag">@link</span> #isDone&#125; returning &#123;<span class="doctag">@code</span></span>
+<span class="comment"> * true&#125;.</span>
 <span class="comment"> *</span>
-<span class="comment"> * -Xms60m -Xmx60m -XX:SurvivorRatio=8 -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -Xloggc:d:/gc-log-%t.log</span>
-<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> this&#125;, to simplify usage</span>
 <span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GCLogTest</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        ArrayList&lt;<span class="type">byte</span>[]&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+<span class="keyword">public</span> <span class="keyword">final</span> ForkJoinTask&lt;V&gt; <span class="title function_">fork</span><span class="params">()</span> &#123;
+    Thread t;
+    <span class="keyword">if</span> ((t = Thread.currentThread()) <span class="keyword">instanceof</span> ForkJoinWorkerThread)
+        ((ForkJoinWorkerThread)t).workQueue.push(<span class="built_in">this</span>);
+    <span class="keyword">else</span>
+        ForkJoinPool.common.externalPush(<span class="built_in">this</span>);
+    <span class="keyword">return</span> <span class="built_in">this</span>;
+&#125;</code></pre>
 
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5000</span>; i++) &#123;
-            <span class="type">byte</span>[] arr = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span> * <span class="number">50</span>];<span class="comment">//50KB</span>
-            list.add(arr);
-            <span class="keyword">try</span> &#123;
-                Thread.sleep(<span class="number">30</span>);
-            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
-                e.printStackTrace();
-            &#125;
+<p>pushTask 方法把当前任务存放在 ForkJoinTask 数组队列里。然后再调用ForkJoinPool 的 signalWork()方法唤醒或创建一个工作线程来执行任务。代码如下：</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Pushes a task. Call only by owner in unshared queues.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span> task the task. Caller must ensure non-null.</span>
+<span class="comment"> * <span class="doctag">@throws</span> RejectedExecutionException if array cannot be resized</span>
+<span class="comment"> */</span>
+<span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">push</span><span class="params">(ForkJoinTask&lt;?&gt; task)</span> &#123;
+    ForkJoinTask&lt;?&gt;[] a;
+    <span class="type">int</span> <span class="variable">s</span> <span class="operator">=</span> top, d, cap, m;
+    <span class="type">ForkJoinPool</span> <span class="variable">p</span> <span class="operator">=</span> pool;
+    <span class="keyword">if</span> ((a = array) != <span class="literal">null</span> &amp;&amp; (cap = a.length) &gt; <span class="number">0</span>) &#123;
+        QA.setRelease(a, (m = cap - <span class="number">1</span>) &amp; s, task);
+        top = s + <span class="number">1</span>;
+        <span class="keyword">if</span> (((d = s - (<span class="type">int</span>)BASE.getAcquire(<span class="built_in">this</span>)) &amp; ~<span class="number">1</span>) == <span class="number">0</span> &amp;&amp;
+                p != <span class="literal">null</span>) &#123;                 <span class="comment">// size 0 or 1</span>
+            VarHandle.fullFence();
+            p.signalWork();
         &#125;
-
+        <span class="keyword">else</span> <span class="keyword">if</span> (d == m)
+            growArray(<span class="literal">false</span>);
     &#125;
 &#125;</code></pre>
 
-<p><strong>示例代码2</strong></p>
+
+
+
+
+<h1 id="三、join-方法"><a href="#三、join-方法" class="headerlink" title="三、join 方法"></a>三、join 方法</h1><p>Join 方法的主要作用是阻塞当前线程并等待获取结果。让我们一起看看 ForkJoinTask 的 join 方法的实现，代码如下：</p>
 <pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * java.lang.OutOfMemoryError: Metaspace异常演示：</span>
+<span class="comment"> * Returns the result of the computation when it</span>
+<span class="comment"> * &#123;<span class="doctag">@linkplain</span> #isDone is done&#125;.</span>
+<span class="comment"> * This method differs from &#123;<span class="doctag">@link</span> #get()&#125; in that abnormal</span>
+<span class="comment"> * completion results in &#123;<span class="doctag">@code</span> RuntimeException&#125; or &#123;<span class="doctag">@code</span> Error&#125;,</span>
+<span class="comment"> * not &#123;<span class="doctag">@code</span> ExecutionException&#125;, and that interrupts of the</span>
+<span class="comment"> * calling thread do &lt;em&gt;not&lt;/em&gt; cause the method to abruptly</span>
+<span class="comment"> * return by throwing &#123;<span class="doctag">@code</span> InterruptedException&#125;.</span>
 <span class="comment"> *</span>
-<span class="comment"> * -Xms60m -Xmx60m -XX:MetaspaceSize=10m -XX:MaxMetaspaceSize=10m -XX:SurvivorRatio=8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -Xloggc:d:/meta-log-%t.log</span>
-<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@return</span> the computed result</span>
 <span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MetaspaceOOM</span> <span class="keyword">extends</span> <span class="title class_">ClassLoader</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>;
+<span class="keyword">public</span> <span class="keyword">final</span> V <span class="title function_">join</span><span class="params">()</span> &#123;
+    <span class="type">int</span> s;
+    <span class="keyword">if</span> (((s = doJoin()) &amp; ABNORMAL) != <span class="number">0</span>)
+        reportException(s);
+    <span class="keyword">return</span> getRawResult();
+&#125;</code></pre>
+
+<p>它首先调用 doJoin 方法，通过 doJoin()方法得到当前任务的状态来判断返回什么结果，任务状态有 4 种：</p>
+<p><strong>已完成（NORMAL）</strong>、<strong>被取消（CANCELLED）</strong>、<strong>信号（SIGNAL）</strong>和 <strong>出现异常（EXCEPTIONAL）</strong></p>
+<ul>
+<li>如果任务状态是已完成，则直接返回任务结果。</li>
+<li>如果任务状态是被取消，则直接抛出 CancellationException</li>
+<li>如果任务状态是抛出异常，则直接抛出对应的异常</li>
+</ul>
+<p><strong>分析一下 doJoin 方法的实现</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Implementation for join, get, quietlyJoin. Directly handles</span>
+<span class="comment"> * only cases of already-completed, external wait, and</span>
+<span class="comment"> * unfork+exec.  Others are relayed to ForkJoinPool.awaitJoin.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@return</span> status upon completion</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="type">int</span> <span class="title function_">doJoin</span><span class="params">()</span> &#123;
+    <span class="type">int</span> s; Thread t; ForkJoinWorkerThread wt; ForkJoinPool.WorkQueue w;
+    <span class="keyword">return</span> (s = status) &lt; <span class="number">0</span> ? s :
+            ((t = Thread.currentThread()) <span class="keyword">instanceof</span> ForkJoinWorkerThread) ?
+                    (w = (wt = (ForkJoinWorkerThread)t).workQueue).
+                            tryUnpush(<span class="built_in">this</span>) &amp;&amp; (s = doExec()) &lt; <span class="number">0</span> ? s :
+                            wt.pool.awaitJoin(w, <span class="built_in">this</span>, <span class="number">0L</span>) :
+                    externalAwaitDone();
+&#125;
+
+<span class="comment">/**</span>
+<span class="comment"> * Primary execution method for stolen tasks. Unless done, calls</span>
+<span class="comment"> * exec and records status if completed, but doesn&#x27;t wait for</span>
+<span class="comment"> * completion otherwise.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@return</span> status on exit from this method</span>
+<span class="comment"> */</span>
+<span class="keyword">final</span> <span class="type">int</span> <span class="title function_">doExec</span><span class="params">()</span> &#123;
+    <span class="type">int</span> s; <span class="type">boolean</span> completed;
+    <span class="keyword">if</span> ((s = status) &gt;= <span class="number">0</span>) &#123;
         <span class="keyword">try</span> &#123;
-            <span class="type">MetaspaceOOM</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MetaspaceOOM</span>();
-            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;
-                <span class="comment">//创建ClassWriter对象，用于生成类的二进制字节码</span>
-                <span class="type">ClassWriter</span> <span class="variable">classWriter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassWriter</span>(<span class="number">0</span>);
-                <span class="comment">//指明版本号，修饰符，类名，包名，父类，接口</span>
-                classWriter.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC, <span class="string">&quot;Class&quot;</span> + i, <span class="literal">null</span>, <span class="string">&quot;java/lang/Object&quot;</span>, <span class="literal">null</span>);
-                <span class="comment">//返回byte[]</span>
-                <span class="type">byte</span>[] code = classWriter.toByteArray();
-                <span class="comment">//类的加载</span>
-                test.defineClass(<span class="string">&quot;Class&quot;</span> + i, code, <span class="number">0</span>, code.length);<span class="comment">//Class对象</span>
-                j++;
-            &#125;
-        &#125; <span class="keyword">finally</span> &#123;
-            System.out.println(j);
+            completed = exec();
+        &#125; <span class="keyword">catch</span> (Throwable rex) &#123;
+            completed = <span class="literal">false</span>;
+            s = setExceptionalCompletion(rex);
         &#125;
+        <span class="keyword">if</span> (completed)
+            s = setDone();
+    &#125;
+    <span class="keyword">return</span> s;
+&#125;</code></pre>
+
+<p>在 doJoin()方法流程如下:</p>
+<ul>
+<li>首先通过查看任务的状态，看任务是否已经执行完成，如果执行完成，则直接返回任务状态；</li>
+<li>如果没有执行完，则从任务数组里取出任务并执行。</li>
+<li>如果任务顺利执行完成，则设置任务状态为 NORMAL，如果出现异常，则记录异常，并将任务状态设置为 EXCEPTIONAL。</li>
+</ul>
+<h1 id="四、Fork-Join-框架的异常处理"><a href="#四、Fork-Join-框架的异常处理" class="headerlink" title="四、Fork&#x2F;Join 框架的异常处理"></a>四、Fork&#x2F;Join 框架的异常处理</h1><p>ForkJoinTask 在执行的时候可能会抛出异常，但是我们没办法在主线程里直接捕获异常，所以 ForkJoinTask 提供了 isCompletedAbnormally() 方法来检查任务是否已经抛出异常或已经被取消了，并且可以通过 ForkJoinTask 的 getException 方法获取异常。</p>
+<p>getException 方法返回 Throwable 对象，如果任务被取消了则返回 CancellationException。如果任务没有完成或者没有抛出异常则返回 null。</p>
+<h1 id="五、入门案例"><a href="#五、入门案例" class="headerlink" title="五、入门案例"></a>五、入门案例</h1><p><strong>场景: 生成一个计算任务，计算 1+2+3………+100 每 10 个数切分一个子任务</strong></p>
+<pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">MyTask</span> <span class="keyword">extends</span> <span class="title class_">RecursiveTask</span>&lt;Integer&gt; &#123;
+
+    <span class="comment">//拆分差值不能超过10，计算10以内运算</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">Integer</span> <span class="variable">VALUE</span> <span class="operator">=</span> <span class="number">10</span>;
+    <span class="keyword">private</span> <span class="type">int</span> begin ;<span class="comment">//拆分开始值</span>
+    <span class="keyword">private</span> <span class="type">int</span> end;<span class="comment">//拆分结束值</span>
+    <span class="keyword">private</span> <span class="type">int</span> result ; <span class="comment">//返回结果</span>
+
+    <span class="comment">//创建有参数构造</span>
+    <span class="keyword">public</span> <span class="title function_">MyTask</span><span class="params">(<span class="type">int</span> begin,<span class="type">int</span> end)</span> &#123;
+        <span class="built_in">this</span>.begin = begin;
+        <span class="built_in">this</span>.end = end;
+    &#125;
+
+    <span class="comment">//拆分和合并过程</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> Integer <span class="title function_">compute</span><span class="params">()</span> &#123;
+<span class="comment">//        System.out.println(Thread.currentThread().getName() + &quot;, begin: &quot; + begin + &quot;, end: &quot; + end);</span>
+        <span class="comment">//判断相加两个数值是否大于10</span>
+        <span class="keyword">if</span>((end-begin)&lt;=VALUE) &#123;
+            <span class="comment">//相加操作</span>
+            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> begin; i &lt;=end; i++) &#123;
+                result = result+i;
+            &#125;
+        &#125; <span class="keyword">else</span> &#123;<span class="comment">// 递归调用,切分为 2 个小任务</span>
+            <span class="comment">//获取中间值</span>
+            <span class="type">int</span> <span class="variable">middle</span> <span class="operator">=</span> (begin+end)/<span class="number">2</span>;
+            <span class="comment">//拆分左边</span>
+            <span class="type">MyTask</span> <span class="variable">task01</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyTask</span>(begin,middle);
+            <span class="comment">//拆分右边</span>
+            <span class="type">MyTask</span> <span class="variable">task02</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyTask</span>(middle+<span class="number">1</span>,end);
+            <span class="comment">// 执行:异步</span>
+            task01.fork();
+            task02.fork();
+            <span class="comment">// 同步阻塞获取执行结果</span>
+            result = task01.join()+task02.join();
+        &#125;
+        <span class="keyword">return</span> result;
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ForkJoinDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> ExecutionException, InterruptedException &#123;
+        <span class="comment">//创建MyTask对象</span>
+        <span class="type">MyTask</span> <span class="variable">myTask</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyTask</span>(<span class="number">0</span>,<span class="number">100</span>);
+        <span class="comment">//创建分支合并池对象</span>
+        <span class="type">ForkJoinPool</span> <span class="variable">forkJoinPool</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ForkJoinPool</span>();
+        ForkJoinTask&lt;Integer&gt; forkJoinTask = forkJoinPool.submit(myTask);
+        <span class="comment">//获取最终合并之后结果</span>
+        <span class="type">Integer</span> <span class="variable">result</span> <span class="operator">=</span> forkJoinTask.get();
+        System.out.println(result);
+        <span class="comment">//关闭池对象</span>
+        forkJoinPool.shutdown();
     &#125;
 &#125;</code></pre>
 
 
 
-<h2 id="1-GCeasy"><a href="#1-GCeasy" class="headerlink" title="1. GCeasy"></a>1. GCeasy</h2><p><strong>基本概述</strong></p>
-<p>GCeasy——一款超好用的在线分析GC日志的网站官网地址：<a target="_blank" rel="noopener" href="https://gceasy.io/gc-dashboard.jsp">https://gceasy.io/gc-dashboard.jsp</a></p>
-<p>GCeasy是一款在线的GC日志分析器，可以通过GC日志分析进行内存泄漏检测、GC暂停原因分析、JVM配置建议优化等功能，而且是可以免费使用的（有一些服务是收费的）。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160343.png" alt="GCeasy官网"></p>
-<p><strong>分析结果</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160459.png" alt="内存分析"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160520.png" alt="gc时间分析"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160833.png" alt="堆的使用"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160741.png" alt="GC统计"></p>
-<p>等等……</p>
-<h2 id="2-GCViewer"><a href="#2-GCViewer" class="headerlink" title="2. GCViewer"></a>2. GCViewer</h2><h3 id="2-1-基本概述"><a href="#2-1-基本概述" class="headerlink" title="2.1 基本概述"></a>2.1 基本概述</h3><p><code>GCViewer</code> 是一个免费的、开源的分析小工具，用于可视化查看由SUN&#x2F;Oracle,IBM,HP和BEA Java虚拟机产生的垃圾收集器的日志。</p>
-<p>GCViewer用于可视化Java VM选项 <code>-verbose:gc</code> 和.NET生成的数据 <code>-Xloggc:&lt;file&gt;</code> 。它还计算与垃圾回收相关的性能指标（吞吐量，累积的暂停，最长的暂停等）。当通过更改世代大小或设置初始堆大小来调整特定应用程序的垃圾回收时，此功能非常有用。</p>
-<h3 id="2-2-安装"><a href="#2-2-安装" class="headerlink" title="2.2 安装"></a>2.2 安装</h3><p><strong>下载GCViewer工具</strong></p>
-<ul>
-<li>源码下载: <a target="_blank" rel="noopener" href="https://github.com/chewiebug/GCViewer">https://github.com/chewiebug/GCViewer</a></li>
-<li>运行版本下载: <a target="_blank" rel="noopener" href="https://github.com/chewiebug/GCViewer/wiki/Changelog">https://github.com/chewiebug/GCViewer/wiki/Changelog</a></li>
-</ul>
-<h3 id="2-3-启动GCViewer-gui"><a href="#2-3-启动GCViewer-gui" class="headerlink" title="2.3 启动GCViewer(gui)"></a>2.3 启动GCViewer(gui)</h3><p>需双击 <code>gcviewer-1.3x.jar</code></p>
-<p>或</p>
-<p>需要运行java1.8 vm</p>
-<pre><code class="highlight shell">java -jar gcviewer-1.3x.jar</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-162437.png" alt="GCViewer"></p>
-<p>很难用！！！</p>
-<h2 id="3-其他工具"><a href="#3-其他工具" class="headerlink" title="3. 其他工具"></a>3. 其他工具</h2><h3 id="3-1-GChisto"><a href="#3-1-GChisto" class="headerlink" title="3.1 GChisto"></a>3.1 GChisto</h3><p><code>GChisto</code> 是一款专业分析gc日志的工具，可以通过gc日志来分析 : MinorGC、Full GC的次数、频率、持续时间等，通过列表、报表、图表等不同形式来反应gc的情况。</p>
-<p>虽然界面略显粗糙，但是功能还是不错的。</p>
-<p>官网上没有下载的地方，需要自己从SVN上拉下来编译，不过这个工具似乎没怎么维护了，存在不少bug</p>
-<h3 id="3-2-HPjmeter"><a href="#3-2-HPjmeter" class="headerlink" title="3.2 HPjmeter"></a>3.2 HPjmeter</h3><p>工具很强大，但只能打开由以下参数生成的 <code>GC log</code> , <code>-verbose:gc</code> <code>-Xloggc:gc.log</code> 。添加其他参数生成的 gc.log无法打开</p>
-<p>HPjmeter集成了以前的 <code>HPjtune</code> 功能，可以分析在HP机器上产生的垃圾回收日志文件</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
