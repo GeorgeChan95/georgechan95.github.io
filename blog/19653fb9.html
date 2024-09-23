@@ -9,12 +9,12 @@
   <meta name="keywords" content=" juc , java ">
   <meta name="description" content="04-JUC进阶-LockSupport与线程中断 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#x72;&#x67;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#x72;&#x67;&#101;&#95;&#x39;&#x35;&#x40;&#49;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#x72;&#x67;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#x72;&#x67;&#101;&#95;&#x39;&#x35;&#x40;&#49;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
@@ -920,7 +920,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-23 15:38:53'>2024-09-23 20:51</time>
+            发布时间 : <time class="date" title='最后更新: 2024-09-23 16:07:47'>2024-09-23 20:51</time>
         
     </div>
     <div class="article-meta">
@@ -955,7 +955,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6"><span class="toc-text">一、线程中断机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6-%EF%BC%9F"><span class="toc-text">1. 什么是中断机制 ？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%AD%E6%96%AD%E7%9A%84%E7%9B%B8%E5%85%B3API%E6%96%B9%E6%B3%95"><span class="toc-text">2. 中断的相关API方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%80%9A%E8%BF%87%E4%B8%80%E4%B8%AA-volatile-%E5%8F%98%E9%87%8F%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.1 通过一个 volatile 变量实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E9%80%9A%E8%BF%87-AtomicBoolean%EF%BC%88%E5%8E%9F%E5%AD%90%E5%B8%83%E5%B0%94%E5%9E%8B%EF%BC%89"><span class="toc-text">2.2 通过 AtomicBoolean（原子布尔型）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%80%9A%E8%BF%87Thread%E7%B1%BB%E8%87%AA%E5%B8%A6%E7%9A%84%E4%B8%AD%E6%96%ADapi%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.3 通过Thread类自带的中断api方法实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%AD%E6%96%ADAPI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">3. 中断API源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E6%A0%87%E8%AF%86%E4%B8%BAtrue%EF%BC%8C%E6%98%AF%E4%B8%8D%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%B0%B1%E7%AB%8B%E5%88%BB%E5%81%9C%E6%AD%A2%EF%BC%9F"><span class="toc-text">3.1 当前线程的中断标识为true，是不是线程就立刻停止？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%B8%AD%E6%96%AD%E5%BC%82%E5%B8%B8%E4%BB%A3%E7%A0%81%E6%A1%88%E4%BE%8B%EF%BC%9A"><span class="toc-text">3.2 中断异常代码案例：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%AF%B9%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95-Thread-interrupted-%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">3.3 对静态方法 Thread.interrupted() 的理解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93"><span class="toc-text">4. 总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%94%A4%E9%86%92%E6%9C%BA%E5%88%B6"><span class="toc-text">三、线程等待唤醒机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3%E7%A7%8D%E8%AE%A9%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">1. 3种让线程等待和唤醒的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Object%E7%B1%BB%E4%B8%AD%E7%9A%84-wait-%E5%92%8C-notify-%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92"><span class="toc-text">1.1 Object类中的 wait 和 notify 方法实现线程等待和唤醒</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Condition%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%9A%84-await-%E5%90%8E-signal-%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92"><span class="toc-text">1.2 Condition接口中的 await 后 signal 方法实现线程的等待和唤醒</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Object%E5%92%8CCondition%E4%BD%BF%E7%94%A8%E7%9A%84%E9%99%90%E5%88%B6%E6%9D%A1%E4%BB%B6"><span class="toc-text">1.3 Object和Condition使用的限制条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-LockSupport%E7%B1%BB%E4%B8%AD%E7%9A%84park%E7%AD%89%E5%BE%85%E5%92%8Cunpark%E5%94%A4%E9%86%92"><span class="toc-text">1.4 LockSupport类中的park等待和unpark唤醒</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90"><span class="toc-text">1.4.1 概念解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95"><span class="toc-text">1.4.2 主要方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-4-2-1-API"><span class="toc-text">1.4.2.1 API</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-4-2-2-%E9%98%BB%E5%A1%9E"><span class="toc-text">1.4.2.2 阻塞</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-4-2-3-%E5%94%A4%E9%86%92"><span class="toc-text">1.4.2.3 唤醒</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-3-LockSupport-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">1.4.3 LockSupport 代码示例</span></a></li></ol></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6"><span class="toc-text">一、线程中断机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6-%EF%BC%9F"><span class="toc-text">1. 什么是中断机制 ？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%AD%E6%96%AD%E7%9A%84%E7%9B%B8%E5%85%B3API%E6%96%B9%E6%B3%95"><span class="toc-text">2. 中断的相关API方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%80%9A%E8%BF%87%E4%B8%80%E4%B8%AA-volatile-%E5%8F%98%E9%87%8F%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.1 通过一个 volatile 变量实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E9%80%9A%E8%BF%87-AtomicBoolean%EF%BC%88%E5%8E%9F%E5%AD%90%E5%B8%83%E5%B0%94%E5%9E%8B%EF%BC%89"><span class="toc-text">2.2 通过 AtomicBoolean（原子布尔型）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%80%9A%E8%BF%87Thread%E7%B1%BB%E8%87%AA%E5%B8%A6%E7%9A%84%E4%B8%AD%E6%96%ADapi%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.3 通过Thread类自带的中断api方法实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%AD%E6%96%ADAPI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">3. 中断API源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E6%A0%87%E8%AF%86%E4%B8%BAtrue%EF%BC%8C%E6%98%AF%E4%B8%8D%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%B0%B1%E7%AB%8B%E5%88%BB%E5%81%9C%E6%AD%A2%EF%BC%9F"><span class="toc-text">3.1 当前线程的中断标识为true，是不是线程就立刻停止？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%B8%AD%E6%96%AD%E5%BC%82%E5%B8%B8%E4%BB%A3%E7%A0%81%E6%A1%88%E4%BE%8B%EF%BC%9A"><span class="toc-text">3.2 中断异常代码案例：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%AF%B9%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95-Thread-interrupted-%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">3.3 对静态方法 Thread.interrupted() 的理解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93"><span class="toc-text">4. 总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81LockSupport%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-text">二、LockSupport是什么</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%94%A4%E9%86%92%E6%9C%BA%E5%88%B6"><span class="toc-text">三、线程等待唤醒机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3%E7%A7%8D%E8%AE%A9%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">1. 3种让线程等待和唤醒的方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Object%E7%B1%BB%E4%B8%AD%E7%9A%84-wait-%E5%92%8C-notify-%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92"><span class="toc-text">2. Object类中的 wait 和 notify 方法实现线程等待和唤醒</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Condition%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%9A%84-await-%E5%90%8E-signal-%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92"><span class="toc-text">3. Condition接口中的 await 后 signal 方法实现线程的等待和唤醒</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Object%E5%92%8CCondition%E4%BD%BF%E7%94%A8%E7%9A%84%E9%99%90%E5%88%B6%E6%9D%A1%E4%BB%B6"><span class="toc-text">4. Object和Condition使用的限制条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-LockSupport%E7%B1%BB%E4%B8%AD%E7%9A%84park%E7%AD%89%E5%BE%85%E5%92%8Cunpark%E5%94%A4%E9%86%92"><span class="toc-text">5. LockSupport类中的park等待和unpark唤醒</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90"><span class="toc-text">5.1 概念解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95"><span class="toc-text">5.2 主要方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-1-API"><span class="toc-text">5.2.1 API</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-2-%E9%98%BB%E5%A1%9E"><span class="toc-text">5.2.2 阻塞</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-2-3-%E5%94%A4%E9%86%92"><span class="toc-text">5.2.3 唤醒</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-LockSupport-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">5.3 LockSupport 代码示例</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1319,15 +1319,14 @@ main---false</code></pre>
 <p>返回当前线程的中断状态(boolean类型)且将当前线程的中断状态设为false，此方法调用之后会清除当前线程的中断标志位的状态（将中断标志置为false了），返回当前值并清零置false</p>
 </li>
 </ul>
-<p>二、LockSupport是什么</p>
-<p><code>LockSupport</code> 是用来创建锁和其他同步类的基本线程阻塞原语，其中 <code>park()</code> 和 <code>unpack()</code> 而作用分别是阻塞线程和解除阻塞线程.</p>
+<h1 id="二、LockSupport是什么"><a href="#二、LockSupport是什么" class="headerlink" title="二、LockSupport是什么"></a>二、LockSupport是什么</h1><p><code>LockSupport</code> 是用来创建锁和其他同步类的基本线程阻塞原语，其中 <code>park()</code> 和 <code>unpack()</code> 而作用分别是阻塞线程和解除阻塞线程.</p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-133129.png" alt="LockSupport"></p>
 <h1 id="三、线程等待唤醒机制"><a href="#三、线程等待唤醒机制" class="headerlink" title="三、线程等待唤醒机制"></a>三、线程等待唤醒机制</h1><h2 id="1-3种让线程等待和唤醒的方法"><a href="#1-3种让线程等待和唤醒的方法" class="headerlink" title="1. 3种让线程等待和唤醒的方法"></a>1. 3种让线程等待和唤醒的方法</h2><ul>
 <li>使用Object中的<code>wait()</code>方法让线程等待，使用Object中的<code>notify()</code>方法唤醒线程</li>
 <li>使用JUC包中<code>Condition</code>的<code>await()</code>方法让线程等待，使用<code>signal()</code>方法唤醒线程</li>
 <li><code>LockSupport</code>类可以阻塞当前线程以及唤醒指定被阻塞的线程</li>
 </ul>
-<h3 id="1-1-Object类中的-wait-和-notify-方法实现线程等待和唤醒"><a href="#1-1-Object类中的-wait-和-notify-方法实现线程等待和唤醒" class="headerlink" title="1.1 Object类中的 wait 和 notify 方法实现线程等待和唤醒"></a>1.1 Object类中的 wait 和 notify 方法实现线程等待和唤醒</h3><p><strong>正确使用 wait &#x2F; notify</strong> </p>
+<h2 id="2-Object类中的-wait-和-notify-方法实现线程等待和唤醒"><a href="#2-Object类中的-wait-和-notify-方法实现线程等待和唤醒" class="headerlink" title="2. Object类中的 wait 和 notify 方法实现线程等待和唤醒"></a>2. Object类中的 wait 和 notify 方法实现线程等待和唤醒</h2><p><strong>正确使用 wait &#x2F; notify</strong> </p>
 <ul>
 <li>wait 和 notify 都必须在 synchronized 覆盖的代码块中</li>
 <li>必须先执行 wait， 再执行 notify</li>
@@ -1454,7 +1453,7 @@ t1 ---- t1释放锁</code></pre>
 <li>wait和notify方法必须要在<strong>同步</strong>块或者方法里面，且必须<strong>成对</strong>出现使用</li>
 <li>先wait后notify才可以,<strong>顺序不能错</strong></li>
 </ul>
-<h3 id="1-2-Condition接口中的-await-后-signal-方法实现线程的等待和唤醒"><a href="#1-2-Condition接口中的-await-后-signal-方法实现线程的等待和唤醒" class="headerlink" title="1.2 Condition接口中的 await 后 signal 方法实现线程的等待和唤醒"></a>1.2 Condition接口中的 await 后 signal 方法实现线程的等待和唤醒</h3><p><strong>正确使用 await &#x2F; signal</strong> </p>
+<h2 id="3-Condition接口中的-await-后-signal-方法实现线程的等待和唤醒"><a href="#3-Condition接口中的-await-后-signal-方法实现线程的等待和唤醒" class="headerlink" title="3. Condition接口中的 await 后 signal 方法实现线程的等待和唤醒"></a>3. Condition接口中的 await 后 signal 方法实现线程的等待和唤醒</h2><p><strong>正确使用 await &#x2F; signal</strong> </p>
 <ul>
 <li>await 和 signal 都必须在 lock() &#x2F; unlock() 覆盖的代码块中</li>
 <li>必须先执行 await ， 再执行 signal</li>
@@ -1504,11 +1503,11 @@ t1---- t1 重新获取锁</code></pre>
 <p>报错： java.lang.IllegalMonitorStateException</p>
 <p><strong>错误使用二：必须先执行 signal ， 再执行 await</strong></p>
 <p>线程没有正确的停止</p>
-<h3 id="1-3-Object和Condition使用的限制条件"><a href="#1-3-Object和Condition使用的限制条件" class="headerlink" title="1.3 Object和Condition使用的限制条件"></a>1.3 Object和Condition使用的限制条件</h3><ul>
+<h2 id="4-Object和Condition使用的限制条件"><a href="#4-Object和Condition使用的限制条件" class="headerlink" title="4. Object和Condition使用的限制条件"></a>4. Object和Condition使用的限制条件</h2><ul>
 <li>线程先要获得并持有锁，必须在锁块(synchronized或lock)中</li>
 <li>必须要先等待后唤醒，线程才能够被唤醒</li>
 </ul>
-<h3 id="1-4-LockSupport类中的park等待和unpark唤醒"><a href="#1-4-LockSupport类中的park等待和unpark唤醒" class="headerlink" title="1.4 LockSupport类中的park等待和unpark唤醒"></a>1.4 LockSupport类中的park等待和unpark唤醒</h3><h4 id="1-4-1-概念解析"><a href="#1-4-1-概念解析" class="headerlink" title="1.4.1 概念解析"></a>1.4.1 概念解析</h4><p>LockSupport 通过 <code>park()</code> 和 <code>unpark(thread)</code> 方法来实现阻塞和唤醒线程的操作</p>
+<h2 id="5-LockSupport类中的park等待和unpark唤醒"><a href="#5-LockSupport类中的park等待和unpark唤醒" class="headerlink" title="5. LockSupport类中的park等待和unpark唤醒"></a>5. LockSupport类中的park等待和unpark唤醒</h2><h3 id="5-1-概念解析"><a href="#5-1-概念解析" class="headerlink" title="5.1 概念解析"></a>5.1 概念解析</h3><p>LockSupport 通过 <code>park()</code> 和 <code>unpark(thread)</code> 方法来实现阻塞和唤醒线程的操作</p>
 <p><strong>官网解释</strong></p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-145605.png" alt="LockSupport"></p>
 <p>LockSupport是用来创建锁和其他同步类的基本线程阻塞原语。</p>
@@ -1517,8 +1516,8 @@ t1---- t1 重新获取锁</code></pre>
 <li>permit只有两个值1和零，默认是零。</li>
 <li>可以把许可看成是一种(0,1)信号量（Semaphore），但与 Semaphore 不同的是，许可的累加上限是1。</li>
 </ul>
-<h4 id="1-4-2-主要方法"><a href="#1-4-2-主要方法" class="headerlink" title="1.4.2 主要方法"></a>1.4.2 主要方法</h4><h5 id="1-4-2-1-API"><a href="#1-4-2-1-API" class="headerlink" title="1.4.2.1 API"></a>1.4.2.1 API</h5><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-150101.png" alt="LockSupport API"></p>
-<h5 id="1-4-2-2-阻塞"><a href="#1-4-2-2-阻塞" class="headerlink" title="1.4.2.2 阻塞"></a>1.4.2.2 阻塞</h5><ul>
+<h3 id="5-2-主要方法"><a href="#5-2-主要方法" class="headerlink" title="5.2 主要方法"></a>5.2 主要方法</h3><h4 id="5-2-1-API"><a href="#5-2-1-API" class="headerlink" title="5.2.1 API"></a>5.2.1 API</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-150101.png" alt="LockSupport API"></p>
+<h4 id="5-2-2-阻塞"><a href="#5-2-2-阻塞" class="headerlink" title="5.2.2 阻塞"></a>5.2.2 阻塞</h4><ul>
 <li><code>park() / park(Object blocker)</code></li>
 <li>阻塞当前线程 &#x2F; 阻塞传入的具体线程</li>
 </ul>
@@ -1530,7 +1529,7 @@ t1---- t1 重新获取锁</code></pre>
 <ul>
 <li>permit默认是零，所以一开始调用<code>park()</code>方法，当前线程就会阻塞，直到别的线程将当前线程的permit设置为1时，park方法会被唤醒，然后会将permit再次设置为零并返回。</li>
 </ul>
-<h5 id="1-4-2-3-唤醒"><a href="#1-4-2-3-唤醒" class="headerlink" title="1.4.2.3 唤醒"></a>1.4.2.3 唤醒</h5><p><code>unpark(Thread thread)</code> , 唤醒处于阻塞状态的指定线程</p>
+<h4 id="5-2-3-唤醒"><a href="#5-2-3-唤醒" class="headerlink" title="5.2.3 唤醒"></a>5.2.3 唤醒</h4><p><code>unpark(Thread thread)</code> , 唤醒处于阻塞状态的指定线程</p>
 <pre><code class="highlight java"><span class="comment">/**</span>
 <span class="comment"> * Makes available the permit for the given thread, if it</span>
 <span class="comment"> * was not already available.  If the thread was blocked on</span>
@@ -1551,7 +1550,7 @@ t1---- t1 重新获取锁</code></pre>
 <ul>
 <li>调用unpark(thread)方法后，就会将 thread线程的许可 permit 设置成<strong>1</strong>(注意多次调用 unpark 方法，不会累加，permit 值还是1)会自动唤醒 thread 线程，即之前阻塞中的 LockSupport.park() 方法会立即返回。</li>
 </ul>
-<h4 id="1-4-3-LockSupport-代码示例"><a href="#1-4-3-LockSupport-代码示例" class="headerlink" title="1.4.3 LockSupport 代码示例"></a>1.4.3 LockSupport 代码示例</h4><p><strong>正常+无锁块要求</strong></p>
+<h3 id="5-3-LockSupport-代码示例"><a href="#5-3-LockSupport-代码示例" class="headerlink" title="5.3 LockSupport 代码示例"></a>5.3 LockSupport 代码示例</h3><p><strong>正常+无锁块要求</strong></p>
 <pre><code class="highlight java"><span class="comment">/**</span>
 <span class="comment"> * 正常使用，无锁块要求</span>
 <span class="comment"> * 先阻塞后释放，可以实现线程的阻塞和唤醒</span>
