@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>04-JUC进阶-LockSupport与线程中断 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" juc , java ">
+  <meta name="description" content="04-JUC进阶-LockSupport与线程中断 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#x72;&#x67;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#x72;&#x67;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(53)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(15)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="53">
+<input type="hidden" id="yelog_site_word_count" value="249.3k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-juc2/04-JUC进阶-LockSupport与线程中断" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">04-JUC进阶-LockSupport与线程中断</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="JUC">JUC</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">juc</a>
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-09-23 15:38:53'>2024-09-23 20:51</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:4.8k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BA%BF%E7%A8%8B%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6"><span class="toc-text">一、线程中断机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E4%B8%AD%E6%96%AD%E6%9C%BA%E5%88%B6-%EF%BC%9F"><span class="toc-text">1. 什么是中断机制 ？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%AD%E6%96%AD%E7%9A%84%E7%9B%B8%E5%85%B3API%E6%96%B9%E6%B3%95"><span class="toc-text">2. 中断的相关API方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%80%9A%E8%BF%87%E4%B8%80%E4%B8%AA-volatile-%E5%8F%98%E9%87%8F%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.1 通过一个 volatile 变量实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E9%80%9A%E8%BF%87-AtomicBoolean%EF%BC%88%E5%8E%9F%E5%AD%90%E5%B8%83%E5%B0%94%E5%9E%8B%EF%BC%89"><span class="toc-text">2.2 通过 AtomicBoolean（原子布尔型）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%80%9A%E8%BF%87Thread%E7%B1%BB%E8%87%AA%E5%B8%A6%E7%9A%84%E4%B8%AD%E6%96%ADapi%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.3 通过Thread类自带的中断api方法实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%AD%E6%96%ADAPI%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">3. 中断API源码分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E7%9A%84%E4%B8%AD%E6%96%AD%E6%A0%87%E8%AF%86%E4%B8%BAtrue%EF%BC%8C%E6%98%AF%E4%B8%8D%E6%98%AF%E7%BA%BF%E7%A8%8B%E5%B0%B1%E7%AB%8B%E5%88%BB%E5%81%9C%E6%AD%A2%EF%BC%9F"><span class="toc-text">3.1 当前线程的中断标识为true，是不是线程就立刻停止？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E4%B8%AD%E6%96%AD%E5%BC%82%E5%B8%B8%E4%BB%A3%E7%A0%81%E6%A1%88%E4%BE%8B%EF%BC%9A"><span class="toc-text">3.2 中断异常代码案例：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%AF%B9%E9%9D%99%E6%80%81%E6%96%B9%E6%B3%95-Thread-interrupted-%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">3.3 对静态方法 Thread.interrupted() 的理解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%80%BB%E7%BB%93"><span class="toc-text">4. 总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%94%A4%E9%86%92%E6%9C%BA%E5%88%B6"><span class="toc-text">三、线程等待唤醒机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3%E7%A7%8D%E8%AE%A9%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">1. 3种让线程等待和唤醒的方法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Object%E7%B1%BB%E4%B8%AD%E7%9A%84-wait-%E5%92%8C-notify-%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92"><span class="toc-text">1.1 Object类中的 wait 和 notify 方法实现线程等待和唤醒</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Condition%E6%8E%A5%E5%8F%A3%E4%B8%AD%E7%9A%84-await-%E5%90%8E-signal-%E6%96%B9%E6%B3%95%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%AD%89%E5%BE%85%E5%92%8C%E5%94%A4%E9%86%92"><span class="toc-text">1.2 Condition接口中的 await 后 signal 方法实现线程的等待和唤醒</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Object%E5%92%8CCondition%E4%BD%BF%E7%94%A8%E7%9A%84%E9%99%90%E5%88%B6%E6%9D%A1%E4%BB%B6"><span class="toc-text">1.3 Object和Condition使用的限制条件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-LockSupport%E7%B1%BB%E4%B8%AD%E7%9A%84park%E7%AD%89%E5%BE%85%E5%92%8Cunpark%E5%94%A4%E9%86%92"><span class="toc-text">1.4 LockSupport类中的park等待和unpark唤醒</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90"><span class="toc-text">1.4.1 概念解析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-%E4%B8%BB%E8%A6%81%E6%96%B9%E6%B3%95"><span class="toc-text">1.4.2 主要方法</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#1-4-2-1-API"><span class="toc-text">1.4.2.1 API</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-4-2-2-%E9%98%BB%E5%A1%9E"><span class="toc-text">1.4.2.2 阻塞</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#1-4-2-3-%E5%94%A4%E9%86%92"><span class="toc-text">1.4.2.3 唤醒</span></a></li></ol></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-3-LockSupport-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">1.4.3 LockSupport 代码示例</span></a></li></ol></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1</p>
+<h1 id="一、线程中断机制"><a href="#一、线程中断机制" class="headerlink" title="一、线程中断机制"></a>一、线程中断机制</h1><h2 id="1-什么是中断机制-？"><a href="#1-什么是中断机制-？" class="headerlink" title="1. 什么是中断机制 ？"></a>1. 什么是中断机制 ？</h2><p>首先一个线程不应该由其他线程来强制中断或停止，而是应该由线程自己自行停止。所以，<code>Thread.stop</code> , <code>Thread.suspend</code> , <code>Thread.resume</code> 都已经被废弃了。</p>
+<p>其次在Java中没有办法立即停止一条线程，然而停止线程却显得尤为重要，如取消一个耗时操作。因此，Java提供了一种用于停止线程的机制——中断。</p>
+<p><strong>中断只是一种协作机制，Java没有给中断增加任何语法，中断的过程完全需要程序员自己实现。</strong></p>
+<ul>
+<li>若要中断一个线程，你需要手动调用该线程的interrupt方法，<strong>该方法也仅仅是将线程对象的中断标识设成true</strong>；</li>
+<li>接着你需要自己写代码不断地检测当前线程的标识位，如果为true，表示别的线程要求这条线程中断，</li>
+<li>此时究竟该做什么需要你自己写代码实现。</li>
+<li>每个线程对象中都有一个标识，用于表示线程是否被中断；该标识位为true表示中断，为false表示未中断；</li>
+<li>通过调用线程对象的 <code>interrupt</code> 方法将该线程的标识位设为 true ；可以在别的线程中调用，也可以在自己的线程中调用。</li>
+</ul>
+<h2 id="2-中断的相关API方法"><a href="#2-中断的相关API方法" class="headerlink" title="2. 中断的相关API方法"></a>2. 中断的相关API方法</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-094444.png" alt="线程中断API"></p>
+<table>
+<thead>
+<tr>
+<th>API</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>public void interrupt()</td>
+<td>实例方法，<br/>实例方法 <code>interrupt()</code> 仅仅是设置线程的中断状态为true，不会停止线程</td>
+</tr>
+<tr>
+<td><strong>public static boolean interrupted()</strong></td>
+<td><strong>静态方法</strong>，<code>Thread.interrupted();</code>  <br/>判断线程是否被中断，并清除当前中断状态<br/>这个方法做了两件事：<br/>1 返回当前线程的中断状态<br/>2 将当前线程的中断状态设为false<br/> <br/>这个方法有点不好理解，因为连续调用两次的结果可能不一样。</td>
+</tr>
+<tr>
+<td>public boolean isInterrupted()</td>
+<td>实例方法，<br/>判断当前线程是否被中断（通过检查中断标志位）</td>
+</tr>
+</tbody></table>
+<h3 id="2-1-通过一个-volatile-变量实现"><a href="#2-1-通过一个-volatile-变量实现" class="headerlink" title="2.1 通过一个 volatile 变量实现"></a>2.1 通过一个 volatile 变量实现</h3><ul>
+<li>volatile保证了可见性，t2修改了标志位后能马上被t1看到</li>
+</ul>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * volatile变量实现线程中断</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">volatileStopThread</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">while</span> (!isStop) &#123;
+            System.out.println(<span class="string">&quot;------- t1 run&quot;</span>);
+        &#125;
+        System.out.println(<span class="string">&quot;===== t1 is stop =====&quot;</span>);
+    &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+    <span class="comment">// 让线程t1运行50毫秒后，中断线程运行</span>
+    Thread.sleep(<span class="number">10</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        isStop = <span class="literal">true</span>;
+        System.out.println(<span class="string">&quot;------- t2 stop: &quot;</span> + isStop);
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+
+
+<h3 id="2-2-通过-AtomicBoolean（原子布尔型）"><a href="#2-2-通过-AtomicBoolean（原子布尔型）" class="headerlink" title="2.2 通过 AtomicBoolean（原子布尔型）"></a>2.2 通过 AtomicBoolean（原子布尔型）</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 通过AtomicBoolean变量实现线程中断</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">atomicBooleanStopThread</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">while</span> (!flag.get()) &#123;
+            System.out.println(<span class="string">&quot;------- t1 run&quot;</span>);
+        &#125;
+        System.out.println(<span class="string">&quot;===== t1 is stop =====&quot;</span>);
+    &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+    <span class="comment">// 让线程t1运行50毫秒后，中断线程运行</span>
+    Thread.sleep(<span class="number">50</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        flag.set(<span class="literal">true</span>);
+        System.out.println(<span class="string">&quot;------- t2 stop: &quot;</span> + flag.get());
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+
+
+<h3 id="2-3-通过Thread类自带的中断api方法实现"><a href="#2-3-通过Thread类自带的中断api方法实现" class="headerlink" title="2.3 通过Thread类自带的中断api方法实现"></a>2.3 通过Thread类自带的中断api方法实现</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 通过Thread类自带的中断api方法实现</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">threadApiInterruptThread</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">while</span> (!Thread.currentThread().isInterrupted()) &#123;
+            System.out.println(<span class="string">&quot;------- t1 run&quot;</span>);
+        &#125;
+        System.out.println(<span class="string">&quot;===== t1 is stop =====&quot;</span>);
+    &#125;, <span class="string">&quot;t1&quot;</span>);
+
+    t1.start();
+
+    <span class="comment">// 让线程t1运行50毫秒后，中断线程运行</span>
+    Thread.sleep(<span class="number">50</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="comment">// t1线程中断标识设置为true，等待县城自我中断</span>
+        t1.interrupt();
+        System.out.println(<span class="string">&quot;------- t2 stop: &quot;</span> + <span class="literal">true</span>);
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+
+
+<h2 id="3-中断API源码分析"><a href="#3-中断API源码分析" class="headerlink" title="3. 中断API源码分析"></a>3. 中断API源码分析</h2><ul>
+<li><strong>实例方法interrupt()，没有返回值</strong></li>
+</ul>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">interrupt</span><span class="params">()</span> &#123;
+    <span class="keyword">if</span> (<span class="built_in">this</span> != Thread.currentThread())
+        checkAccess();
+
+    <span class="keyword">synchronized</span> (blockerLock) &#123;
+        <span class="type">Interruptible</span> <span class="variable">b</span> <span class="operator">=</span> blocker;
+        <span class="keyword">if</span> (b != <span class="literal">null</span>) &#123;
+            interrupt0();           <span class="comment">// Just to set the interrupt flag</span>
+            b.interrupt(<span class="built_in">this</span>);
+            <span class="keyword">return</span>;
+        &#125;
+    &#125;
+    interrupt0();
+&#125;
+
+
+<span class="comment">//Thread.java</span>
+<span class="comment">/* Some private helper methods */</span>
+<span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">setPriority0</span><span class="params">(<span class="type">int</span> newPriority)</span>;
+<span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">stop0</span><span class="params">(Object o)</span>;
+<span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">suspend0</span><span class="params">()</span>;
+<span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">resume0</span><span class="params">()</span>;
+<span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">interrupt0</span><span class="params">()</span>;  <span class="comment">//---------------------------调用了c底层原生方法</span>
+<span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">setNativeName</span><span class="params">(String name)</span>;</code></pre>
+
+
+
+<ul>
+<li><strong>实例方法 isInterrupted，返回布尔值</strong></li>
+</ul>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Tests whether this thread has been interrupted.  The &lt;i&gt;interrupted</span>
+<span class="comment"> * status&lt;/i&gt; of the thread is unaffected by this method.</span>
+<span class="comment"> *</span>
+<span class="comment"> * &lt;p&gt;A thread interruption ignored because a thread was not alive</span>
+<span class="comment"> * at the time of the interrupt will be reflected by this method</span>
+<span class="comment"> * returning false.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@return</span>  &lt;code&gt;true&lt;/code&gt; if this thread has been interrupted;</span>
+<span class="comment"> *          &lt;code&gt;false&lt;/code&gt; otherwise.</span>
+<span class="comment"> * <span class="doctag">@see</span>     #interrupted()</span>
+<span class="comment"> * <span class="doctag">@revised</span> 6.0</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isInterrupted</span><span class="params">()</span> &#123;
+    <span class="keyword">return</span> isInterrupted(<span class="literal">false</span>);
+&#125;
+
+<span class="comment">//Thread.java</span>
+<span class="keyword">private</span> <span class="keyword">native</span> <span class="type">boolean</span> <span class="title function_">isInterrupted</span><span class="params">(<span class="type">boolean</span> ClearInterrupted)</span>;<span class="comment">//也调用了c底层</span></code></pre>
+
+
+
+<p><strong>中断API相关说明：</strong></p>
+<p>具体来说，当对一个线程，调用 interrupt() 时：</p>
+<ul>
+<li>如果线程处于<strong>正常活动状态</strong>，那么会将该线程的中断标志设置为 true，仅此而已。被设置中断标志的线程将继续正常运行，不受影响。所以， interrupt() 并不能真正的中断线程，需要被调用的线程自己进行配合才行（即：代码自行实现中断逻辑）。</li>
+<li>如果线程处于被阻塞状态（例如处于sleep, wait, join 等状态），在别的线程中调用当前线程对象的interrupt方法，那么线程将立即退出被阻塞状态（中断状态将被清除），并抛出一个InterruptedException异常。（ 关于这一点，<code>interrupt()</code> 方法的注释有明确的说明，）</li>
+<li>中断<strong>不活动的线程</strong>不会产生任何影响，具体看下面案例</li>
+</ul>
+<h3 id="3-1-当前线程的中断标识为true，是不是线程就立刻停止？"><a href="#3-1-当前线程的中断标识为true，是不是线程就立刻停止？" class="headerlink" title="3.1 当前线程的中断标识为true，是不是线程就立刻停止？"></a>3.1 <strong>当前线程的中断标识为true，是不是线程就立刻停止？</strong></h3><p>答案：否， 仅仅设置了一个中断状态为true。</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 中断为true后，并不是立刻stop程序</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m4</span><span class="params">()</span> &#123;
+    <span class="comment">//中断为true后，并不是立刻stop程序</span>
+    <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">800</span>; i++) &#123;
+            System.out.println(<span class="string">&quot;------i: &quot;</span> + i);
+        &#125;
+        System.out.println(<span class="string">&quot;t1.interrupt()调用之后02： &quot;</span> + Thread.currentThread().isInterrupted());
+    &#125;, <span class="string">&quot;t1&quot;</span>);
+    t1.start();
+
+    System.out.println(<span class="string">&quot;t1.interrupt()调用之前,t1线程的中断标识默认值： &quot;</span> + t1.isInterrupted());
+    <span class="keyword">try</span> &#123;
+        TimeUnit.MILLISECONDS.sleep(<span class="number">3</span>);
+    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+        e.printStackTrace();
+    &#125;
+    <span class="comment">//实例方法interrupt()仅仅是设置线程的中断状态位设置为true，不会停止线程</span>
+    t1.interrupt();
+    <span class="comment">//活动状态,t1线程还在执行中</span>
+    System.out.println(<span class="string">&quot;t1.interrupt()调用之后01： &quot;</span> + t1.isInterrupted());
+
+    <span class="keyword">try</span> &#123;
+        TimeUnit.MILLISECONDS.sleep(<span class="number">3000</span>);
+    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+        e.printStackTrace();
+    &#125;
+    <span class="comment">//非活动状态,t1线程不在执行中，已经结束执行了, 此时调用 isInterrupted() 方法不起作用，中断状态标识位返回：false</span>
+    System.out.println(<span class="string">&quot;t1.interrupt()调用之后03： &quot;</span> + t1.isInterrupted());
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t1.interrupt()调用之前,t1线程的中断标识默认值： false
+------i: 1
+------i: 2
+------i: 3
+......
+------i: 645
+t1.interrupt()调用之后01： true // ------此处中断标志位设置为了true,但是t1仍然在运行
+------i: 646
+......
+------i: 798
+------i: 799
+------i: 800
+t1.interrupt()调用之后02： true
+t1.interrupt()调用之后03： false //中断不活动的线程不会产生任何影响，线程结束后应该是自动变为了false</code></pre>
+
+
+
+<h3 id="3-2-中断异常代码案例："><a href="#3-2-中断异常代码案例：" class="headerlink" title="3.2 中断异常代码案例："></a>3.2 <strong>中断异常代码案例：</strong></h3><p>当线程处于 <code>wait</code> 、<code>join</code> 、<code>sleep</code> 时，此时调用 <code>interrupt()</code> 方法，会触发 <strong>中断异常</strong>， 且会导致程序无限循环. 因为 InterruptedException，将会把中断状态清除。</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m5</span><span class="params">()</span> &#123;
+    <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">while</span> (<span class="literal">true</span>) &#123;
+            <span class="keyword">if</span> (Thread.currentThread().isInterrupted()) &#123;
+                System.out.println(<span class="string">&quot;-----isInterrupted() = true，程序结束。&quot;</span>);
+                <span class="keyword">break</span>;
+            &#125;
+            <span class="keyword">try</span> &#123;
+                Thread.sleep(<span class="number">500</span>);
+            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+<span class="comment">//                    Thread.currentThread().interrupt(); //线程的中断标志位为false,无法停下，需要再次掉interrupt()设置true</span>
+                e.printStackTrace();
+            &#125;
+            System.out.println(<span class="string">&quot;------hello Interrupt&quot;</span>);
+        &#125;
+    &#125;, <span class="string">&quot;t1&quot;</span>);
+    t1.start();
+
+    <span class="keyword">try</span> &#123;
+        TimeUnit.SECONDS.sleep(<span class="number">3</span>);
+    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+        e.printStackTrace();
+    &#125;
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        t1.interrupt();<span class="comment">//修改t1线程的中断标志位为true</span>
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p><strong>运行结果：</strong></p>
+<p>当调用 t1.interrupt(); 时，代码发生了异常，但 t1 依然在运行，没有结束掉</p>
+<pre><code class="highlight shell">------hello Interrupt
+------hello Interrupt
+java.lang.InterruptedException: sleep interrupted
+	at java.lang.Thread.sleep(Native Method)
+	at com.atguigu.juc.interrupt.InterruptDemo.lambda$m5$0(InterruptDemo.java:34)
+	at java.lang.Thread.run(Thread.java:748)
+------hello Interrupt
+------hello Interrupt
+------hello Interrupt
+......</code></pre>
+
+
+
+<p><strong>解决方法：</strong></p>
+<p>在 catch (InterruptedException e)  处添加 <code>Thread.currentThread().interrupt();</code> 发生异常后，再次调用代码执行中断，程序发生异常后依然可以正常结束；</p>
+<pre><code class="highlight shell">------hello Interrupt
+------hello Interrupt
+------hello Interrupt
+------hello Interrupt
+------hello Interrupt
+java.lang.InterruptedException: sleep interrupted
+	at java.lang.Thread.sleep(Native Method)
+	at com.atguigu.juc.interrupt.InterruptDemo.lambda$m5$0(InterruptDemo.java:34)
+	at java.lang.Thread.run(Thread.java:748)
+------hello Interrupt
+-----isInterrupted() = true，程序结束。</code></pre>
+
+
+
+<h3 id="3-3-对静态方法-Thread-interrupted-的理解"><a href="#3-3-对静态方法-Thread-interrupted-的理解" class="headerlink" title="3.3 对静态方法 Thread.interrupted() 的理解"></a>3.3 对静态方法 Thread.interrupted() 的理解</h3><p><code>public static boolean interrupted()</code> </p>
+<ul>
+<li><p>静态方法，Thread.interrupted(); 判断线程是否被中断，并清除当前中断状态这个方法做了两件事：</p>
+<ul>
+<li>1 返回当前线程的中断状态</li>
+<li>2 将当前线程的中断状态设为false</li>
+</ul>
+<p>注意：此方法连续调用两次的结果可能不一样</p>
+</li>
+</ul>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+    System.out.println(Thread.currentThread().getName()+<span class="string">&quot;---&quot;</span>+Thread.interrupted()); <span class="comment">// main---false</span>
+    System.out.println(Thread.currentThread().getName()+<span class="string">&quot;---&quot;</span>+Thread.interrupted()); <span class="comment">// main---false</span>
+    System.out.println(<span class="string">&quot;111111&quot;</span>);
+    Thread.currentThread().interrupt();<span class="comment">///----false---&gt; true</span>
+    System.out.println(<span class="string">&quot;222222&quot;</span>);
+    System.out.println(Thread.currentThread().getName()+<span class="string">&quot;---&quot;</span>+Thread.interrupted()); <span class="comment">// main---true</span>
+    System.out.println(Thread.currentThread().getName()+<span class="string">&quot;---&quot;</span>+Thread.interrupted()); <span class="comment">// main---false</span>
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">main---false
+main---false
+111111
+222222
+main---true
+main---false</code></pre>
+
+
+
+<p><strong>对比 <code>interrupted()</code> 与 <code>isInterrupted()</code> 源码</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">interrupted</span><span class="params">()</span> &#123;
+    <span class="keyword">return</span> currentThread().isInterrupted(<span class="literal">true</span>);
+&#125;
+
+<span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isInterrupted</span><span class="params">()</span> &#123;
+    <span class="keyword">return</span> isInterrupted(<span class="literal">false</span>);
+&#125;
+
+<span class="comment">/**</span>
+<span class="comment"> * Tests if some Thread has been interrupted.  The interrupted state</span>
+<span class="comment"> * is reset or not based on the value of ClearInterrupted that is</span>
+<span class="comment"> * passed.</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">native</span> <span class="type">boolean</span> <span class="title function_">isInterrupted</span><span class="params">(<span class="type">boolean</span> ClearInterrupted)</span>;</code></pre>
+
+<p>他们在底层都调用了native方法 isInterrupted() , 只不过传入参数ClearInterrupted一个传参传了<code>true</code>，一个传了<code>false</code>。</p>
+<ul>
+<li>静态方法<code>interrupted() </code>中<code>true</code>表示清空当前中断状态。</li>
+<li>实例方法<code>isInterrupted</code> 则不会。</li>
+</ul>
+<h2 id="4-总结"><a href="#4-总结" class="headerlink" title="4. 总结"></a>4. 总结</h2><p>线程中断相关的方法：</p>
+<ul>
+<li><p><code>interrupt()</code> 方法是一个实例方法</p>
+<p>它通知目标线程中断，也就是设置目标线程的中断标志位为true，中断标志位表示当前线程已经被中断了。</p>
+</li>
+<li><p><code>isInterrupted()</code> 方法也是一个实例方法</p>
+<p>它判断当前线程是否被中断（通过检查中断标志位）并获取中断标志</p>
+</li>
+<li><p>Thread类的静态方法 <code>interrupted()</code></p>
+<p>返回当前线程的中断状态(boolean类型)且将当前线程的中断状态设为false，此方法调用之后会清除当前线程的中断标志位的状态（将中断标志置为false了），返回当前值并清零置false</p>
+</li>
+</ul>
+<p>二、LockSupport是什么</p>
+<p><code>LockSupport</code> 是用来创建锁和其他同步类的基本线程阻塞原语，其中 <code>park()</code> 和 <code>unpack()</code> 而作用分别是阻塞线程和解除阻塞线程.</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-133129.png" alt="LockSupport"></p>
+<h1 id="三、线程等待唤醒机制"><a href="#三、线程等待唤醒机制" class="headerlink" title="三、线程等待唤醒机制"></a>三、线程等待唤醒机制</h1><h2 id="1-3种让线程等待和唤醒的方法"><a href="#1-3种让线程等待和唤醒的方法" class="headerlink" title="1. 3种让线程等待和唤醒的方法"></a>1. 3种让线程等待和唤醒的方法</h2><ul>
+<li>使用Object中的<code>wait()</code>方法让线程等待，使用Object中的<code>notify()</code>方法唤醒线程</li>
+<li>使用JUC包中<code>Condition</code>的<code>await()</code>方法让线程等待，使用<code>signal()</code>方法唤醒线程</li>
+<li><code>LockSupport</code>类可以阻塞当前线程以及唤醒指定被阻塞的线程</li>
+</ul>
+<h3 id="1-1-Object类中的-wait-和-notify-方法实现线程等待和唤醒"><a href="#1-1-Object类中的-wait-和-notify-方法实现线程等待和唤醒" class="headerlink" title="1.1 Object类中的 wait 和 notify 方法实现线程等待和唤醒"></a>1.1 Object类中的 wait 和 notify 方法实现线程等待和唤醒</h3><p><strong>正确使用 wait &#x2F; notify</strong> </p>
+<ul>
+<li>wait 和 notify 都必须在 synchronized 覆盖的代码块中</li>
+<li>必须先执行 wait， 再执行 notify</li>
+</ul>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 正确使用 wait / notify 实现线程的等待和唤醒</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">normal</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">synchronized</span> (object) &#123;
+            <span class="keyword">try</span> &#123;
+                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; ---- t1释放锁&quot;</span>);
+                <span class="comment">// wait方法会释放锁，给其他线程获取锁的机会</span>
+                object.wait();
+                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; ---- t1重新获取锁&quot;</span>);
+            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+            &#125;
+        &#125;
+    &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+    TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">synchronized</span> (object) &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- notify&quot;</span>);
+            object.notify(); <span class="comment">// notify执行，让 t1 线程重新获取锁</span>
+        &#125;
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t1 ---- t1释放锁
+t2---- notify
+t1 ---- t1重新获取锁</code></pre>
+
+
+
+<p><strong>错误使用—： 去掉 synchronized</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 错误方式—： 去掉 synchronized</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">error1</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">try</span> &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; ---- t1释放锁&quot;</span>);
+            <span class="comment">// wait方法会释放锁，给其他线程获取锁的机会</span>
+            object.wait();
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; ---- t1重新获取锁&quot;</span>);
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+        &#125;
+    &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+    TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- notify&quot;</span>);
+        object.notify(); <span class="comment">// notify执行，让 t1 线程重新获取锁</span>
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t1 ---- t1释放锁
+Exception in thread &quot;t1&quot; java.lang.IllegalMonitorStateException
+	at java.lang.Object.wait(Native Method)
+	at java.lang.Object.wait(Object.java:502)
+	at com.atguigu.juc.interrupt.SynchronizedDemo.lambda$error1$2(SynchronizedDemo.java:59)
+	at java.lang.Thread.run(Thread.java:748)
+t2---- notify
+Exception in thread &quot;t2&quot; java.lang.IllegalMonitorStateException
+	at java.lang.Object.notify(Native Method)
+	at com.atguigu.juc.interrupt.SynchronizedDemo.lambda$error1$3(SynchronizedDemo.java:70)
+	at java.lang.Thread.run(Thread.java:748)</code></pre>
+
+
+
+<p><strong>错误使用二：把notify和wait的执行顺序对换</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 错误使用二：把notify和wait的执行顺序对换</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">error2</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">try</span> &#123;
+            TimeUnit.SECONDS.sleep(<span class="number">2</span>); <span class="comment">// t1 线程先停2秒，等待t2线程执行结束</span>
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+        &#125;
+        <span class="keyword">synchronized</span> (object) &#123;
+            <span class="keyword">try</span> &#123;
+                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; ---- t1释放锁&quot;</span>);
+                <span class="comment">// wait方法会释放锁，给其他线程获取锁的机会</span>
+                object.wait();
+                System.out.println(Thread.currentThread().getName() + <span class="string">&quot; ---- t1重新获取锁&quot;</span>);
+            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+            &#125;
+        &#125;
+    &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+    TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">synchronized</span> (object) &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- notify&quot;</span>);
+            object.notify(); <span class="comment">// notify执行，让 t1 线程重新获取锁</span>
+        &#125;
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t2---- notify
+t1 ---- t1释放锁</code></pre>
+
+<p>现象：t1 线程没有结束掉。</p>
+<p><strong>总结：</strong></p>
+<ul>
+<li>wait和notify方法必须要在<strong>同步</strong>块或者方法里面，且必须<strong>成对</strong>出现使用</li>
+<li>先wait后notify才可以,<strong>顺序不能错</strong></li>
+</ul>
+<h3 id="1-2-Condition接口中的-await-后-signal-方法实现线程的等待和唤醒"><a href="#1-2-Condition接口中的-await-后-signal-方法实现线程的等待和唤醒" class="headerlink" title="1.2 Condition接口中的 await 后 signal 方法实现线程的等待和唤醒"></a>1.2 Condition接口中的 await 后 signal 方法实现线程的等待和唤醒</h3><p><strong>正确使用 await &#x2F; signal</strong> </p>
+<ul>
+<li>await 和 signal 都必须在 lock() &#x2F; unlock() 覆盖的代码块中</li>
+<li>必须先执行 await ， 再执行 signal</li>
+</ul>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 正确使用 Lock 的 await / signal 实现对线程的等待和唤醒</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">normal</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="type">Lock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ReentrantLock</span>();
+    <span class="type">Condition</span> <span class="variable">condition</span> <span class="operator">=</span> lock.newCondition();
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">try</span> &#123;
+            lock.lock();
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- t1 释放锁&quot;</span>);
+            condition.await();
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- t1 重新获取锁&quot;</span>);
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+        &#125; <span class="keyword">finally</span> &#123;
+            lock.unlock();
+        &#125;
+    &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+    TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">try</span> &#123;
+            lock.lock();
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- t2唤醒t1线程&quot;</span>);
+            condition.signal();
+        &#125; <span class="keyword">finally</span> &#123;
+            lock.unlock();
+        &#125;
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t1---- t1 释放锁
+t2---- t2唤醒t1线程
+t1---- t1 重新获取锁</code></pre>
+
+
+
+<p><strong>错误使用一：await 和 signal 不在 lock() &#x2F; unlock() 覆盖的代码块中</strong></p>
+<p>报错： java.lang.IllegalMonitorStateException</p>
+<p><strong>错误使用二：必须先执行 signal ， 再执行 await</strong></p>
+<p>线程没有正确的停止</p>
+<h3 id="1-3-Object和Condition使用的限制条件"><a href="#1-3-Object和Condition使用的限制条件" class="headerlink" title="1.3 Object和Condition使用的限制条件"></a>1.3 Object和Condition使用的限制条件</h3><ul>
+<li>线程先要获得并持有锁，必须在锁块(synchronized或lock)中</li>
+<li>必须要先等待后唤醒，线程才能够被唤醒</li>
+</ul>
+<h3 id="1-4-LockSupport类中的park等待和unpark唤醒"><a href="#1-4-LockSupport类中的park等待和unpark唤醒" class="headerlink" title="1.4 LockSupport类中的park等待和unpark唤醒"></a>1.4 LockSupport类中的park等待和unpark唤醒</h3><h4 id="1-4-1-概念解析"><a href="#1-4-1-概念解析" class="headerlink" title="1.4.1 概念解析"></a>1.4.1 概念解析</h4><p>LockSupport 通过 <code>park()</code> 和 <code>unpark(thread)</code> 方法来实现阻塞和唤醒线程的操作</p>
+<p><strong>官网解释</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-145605.png" alt="LockSupport"></p>
+<p>LockSupport是用来创建锁和其他同步类的基本线程阻塞原语。</p>
+<ul>
+<li>LockSupport类使用了一种名为Permit（许可）的概念来做到阻塞和唤醒线程的功能， 每个线程都有一个许可(permit)，</li>
+<li>permit只有两个值1和零，默认是零。</li>
+<li>可以把许可看成是一种(0,1)信号量（Semaphore），但与 Semaphore 不同的是，许可的累加上限是1。</li>
+</ul>
+<h4 id="1-4-2-主要方法"><a href="#1-4-2-主要方法" class="headerlink" title="1.4.2 主要方法"></a>1.4.2 主要方法</h4><h5 id="1-4-2-1-API"><a href="#1-4-2-1-API" class="headerlink" title="1.4.2.1 API"></a>1.4.2.1 API</h5><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-150101.png" alt="LockSupport API"></p>
+<h5 id="1-4-2-2-阻塞"><a href="#1-4-2-2-阻塞" class="headerlink" title="1.4.2.2 阻塞"></a>1.4.2.2 阻塞</h5><ul>
+<li><code>park() / park(Object blocker)</code></li>
+<li>阻塞当前线程 &#x2F; 阻塞传入的具体线程</li>
+</ul>
+<p>调用<code>LockSupport.park()</code>时，发现它调用了<code>unsafe类</code>，并且默认传了一个0</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">park</span><span class="params">()</span> &#123;
+    UNSAFE.park(<span class="literal">false</span>, <span class="number">0L</span>);
+&#125;</code></pre>
+
+<ul>
+<li>permit默认是零，所以一开始调用<code>park()</code>方法，当前线程就会阻塞，直到别的线程将当前线程的permit设置为1时，park方法会被唤醒，然后会将permit再次设置为零并返回。</li>
+</ul>
+<h5 id="1-4-2-3-唤醒"><a href="#1-4-2-3-唤醒" class="headerlink" title="1.4.2.3 唤醒"></a>1.4.2.3 唤醒</h5><p><code>unpark(Thread thread)</code> , 唤醒处于阻塞状态的指定线程</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Makes available the permit for the given thread, if it</span>
+<span class="comment"> * was not already available.  If the thread was blocked on</span>
+<span class="comment"> * &#123;<span class="doctag">@code</span> park&#125; then it will unblock.  Otherwise, its next call</span>
+<span class="comment"> * to &#123;<span class="doctag">@code</span> park&#125; is guaranteed not to block. This operation</span>
+<span class="comment"> * is not guaranteed to have any effect at all if the given</span>
+<span class="comment"> * thread has not been started.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span> thread the thread to unpark, or &#123;<span class="doctag">@code</span> null&#125;, in which case</span>
+<span class="comment"> *        this operation has no effect</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">unpark</span><span class="params">(Thread thread)</span> &#123;
+    <span class="keyword">if</span> (thread != <span class="literal">null</span>)
+        UNSAFE.unpark(thread);
+&#125;</code></pre>
+
+<p>调用<code>LockSupport.unpark();</code>时，也调用了<code>unsafe类</code></p>
+<ul>
+<li>调用unpark(thread)方法后，就会将 thread线程的许可 permit 设置成<strong>1</strong>(注意多次调用 unpark 方法，不会累加，permit 值还是1)会自动唤醒 thread 线程，即之前阻塞中的 LockSupport.park() 方法会立即返回。</li>
+</ul>
+<h4 id="1-4-3-LockSupport-代码示例"><a href="#1-4-3-LockSupport-代码示例" class="headerlink" title="1.4.3 LockSupport 代码示例"></a>1.4.3 LockSupport 代码示例</h4><p><strong>正常+无锁块要求</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 正常使用，无锁块要求</span>
+<span class="comment"> * 先阻塞后释放，可以实现线程的阻塞和唤醒</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m1</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- come in&quot;</span>);
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- park阻塞&quot;</span>);
+        LockSupport.park();
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- 继续执行&quot;</span>);
+    &#125;, <span class="string">&quot;t1&quot;</span>);
+    t1.start();
+
+    TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- come in&quot;</span>);
+        LockSupport.unpark(t1);
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t1---- come in
+t1---- park阻塞
+t2---- come in
+t1---- 继续执行</code></pre>
+
+
+
+<p><strong>先唤醒后等待，LockSupport 同样支持</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 先释放后阻塞，也可以实现线程的阻塞和唤醒</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@throws</span> InterruptedException</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m2</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException &#123;
+    <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="keyword">try</span> &#123;
+            TimeUnit.SECONDS.sleep(<span class="number">2</span>);
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+        &#125;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- come in&quot;</span>);
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- park阻塞&quot;</span>);
+        LockSupport.park();
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- 继续执行&quot;</span>);
+    &#125;, <span class="string">&quot;t1&quot;</span>);
+    t1.start();
+
+    TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- come in&quot;</span>);
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;---- 给t1线程发通行证&quot;</span>);
+        LockSupport.unpark(t1);
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t2---- come in
+t2---- 给t1线程发通行证
+t1---- come in
+t1---- park阻塞
+t1---- 继续执行</code></pre>
+
+<p>t1 sleep方法2秒后醒来，执行park无效，没有阻塞效果，这是因为 t2 先执行了<code>unpark(t1)</code>导致上面的park方法无效.</p>
+<p>注意：park() &#x2F; unpark() 必须成对出现</p>
+<p><strong>错误使用：连续执行 unpark(), 相当于只执行了一次 unpark()</strong> </p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 连续执行 unpark(), 相当于只执行了一次 unpark()</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">error1</span><span class="params">()</span> &#123;
+    <span class="type">Thread</span> <span class="variable">t1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;---come in&quot;</span>);
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;--- park1&quot;</span>);
+        LockSupport.park();
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;--- park2&quot;</span>);
+        LockSupport.park();
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;---被唤醒&quot;</span>);
+    &#125;, <span class="string">&quot;t1&quot;</span>);
+    t1.start();
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        LockSupport.unpark(t1);
+        LockSupport.unpark(t1);
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;--- unpark1&quot;</span>);
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;--- unpark2&quot;</span>);
+        <span class="keyword">try</span> &#123;
+            TimeUnit.SECONDS.sleep(<span class="number">3</span>);
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125;
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t1	---come in
+t1	--- park1
+t2	--- unpark1
+t2	--- unpark2
+t1	--- park2</code></pre>
+
+<p>t1 没有停止，继续阻塞，这是因为 t2 连续执行了两次 <code>unpark(t1)</code> ，但其实只发布了一个通行证，导致 t1 的第一次 park() 被唤醒了，但是第二次 park() 就没有通行证用来唤醒它，因此 t1 阻塞。</p>
+<p><strong>总结：</strong></p>
+<ul>
+<li>Lock Support是用来创建锁和其他同步类的基本线程阻塞原语。</li>
+<li>Lock Support是一个线程阻塞工具类， 所有的方法都是静态方法， 可以让线程在任意位置阻塞， 阻塞之后也有对应的唤醒方法。归根结底，Lock Support调用的Unsafe中的native代码。</li>
+<li>Lock Support提供<code>park()</code> 和<code>unpark() </code>方法实现<strong>阻塞线程</strong>和<strong>解除线程阻塞</strong>的过程</li>
+<li>Lock Support和每个使用它的线程都有一个许可(permit) 关联。</li>
+<li>每个线程都有一个相关的 permit， permit 最多只有一个， 重复调用 <code>unpark()</code> 也不会积累凭证。</li>
+</ul>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
