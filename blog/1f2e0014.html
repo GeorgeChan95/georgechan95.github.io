@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>第八章-直接内存 | George&#39;s Blog</title>
+  <title>05-JUC进阶-Java内存模型-JMM | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , jvm ">
-  <meta name="description" content="第八章-直接内存 | George&#39;s Blog">
+  <meta name="keywords" content=" juc , java ">
+  <meta name="description" content="05-JUC进阶-Java内存模型-JMM | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#x6f;&#x72;&#103;&#x65;&#x5f;&#x39;&#53;&#64;&#x31;&#x32;&#x36;&#x2e;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -900,9 +900,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-jvm/第八章-直接内存" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-juc2/05-JUC进阶-Java内存模型-JMM" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">第八章-直接内存</h1>
+        <h1 class="article-title">05-JUC进阶-Java内存模型-JMM</h1>
     
     <div class="article-meta">
         
@@ -912,7 +912,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JVM">JVM</a>
+            <a  data-rel="JUC">JUC</a>
             
         </span>
         
@@ -920,21 +920,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
+            <a class="color4">juc</a>
             
-            <a class="color4">jvm</a>
+            <a class="color5">java</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 12:17:33'>2023-12-20 17:03</time>
+            发布时间 : <time class="date" title='最后更新: 2024-09-25 13:09:02'>2024-09-23 23:01</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:625</span>
+        <span>字数:3.7k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -964,7 +964,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0"><span class="toc-text">一、直接内存概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81BIO-%E4%B8%8E-NIO"><span class="toc-text">二、BIO 与 NIO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9D%9E%E7%9B%B4%E6%8E%A5%E7%BC%93%E5%AD%98%E5%8C%BA%EF%BC%88BIO%EF%BC%89"><span class="toc-text">1. 非直接缓存区（BIO）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%9B%B4%E6%8E%A5%E7%BC%93%E5%86%B2%E5%8C%BA%EF%BC%88NIO%EF%BC%89"><span class="toc-text">2. 直接缓冲区（NIO）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E4%B8%8E-OOM"><span class="toc-text">3. 直接内存与 OOM</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E5%AD%98%E5%82%A8%E4%BD%93%E7%B3%BB"><span class="toc-text">一、计算机硬件存储体系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B-JMM"><span class="toc-text">二、Java内存模型-JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-JMM%E6%A6%82%E8%BF%B0"><span class="toc-text">1. JMM概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-JMM%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">2. JMM的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-text">3. JMM规范下，三大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-text">3.1 可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text">3.2 原子性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="toc-text">3.3. 有序性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E8%AF%BB%E5%86%99%E8%BF%87%E7%A8%8B"><span class="toc-text">三、JMM规范下，多线程对变量的读写过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%88%E8%A1%8C%E5%8F%91%E7%94%9F%E5%8E%9F%E5%88%99%E4%B9%8Bhappens-before"><span class="toc-text">四、JMM规范下，多线程先行发生原则之happens-before</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-x-%E3%80%81y%E6%A1%88%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-text">1. x 、y案例说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%85%88%E8%A1%8C%E5%B9%B6%E5%8F%91%E5%8E%9F%E5%88%99%E8%AF%B4%E6%98%8E"><span class="toc-text">2. 先行并发原则说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-happens-before%E6%80%BB%E5%8E%9F%E5%88%99"><span class="toc-text">3. happens-before总原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-happens-before%E4%B9%8B8%E6%9D%A1%E8%A7%84%E5%88%99"><span class="toc-text">4. happens-before之8条规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-happens-before-%E6%80%BB%E7%BB%93"><span class="toc-text">5. happens-before 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%A1%88%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-text">6. 案例说明</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -980,104 +980,169 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
-<p>系统 : Windows 10<br>JDK : 1.8</p>
-</blockquote>
-<h1 id="一、直接内存概述"><a href="#一、直接内存概述" class="headerlink" title="一、直接内存概述"></a>一、直接内存概述</h1><ul>
-<li>不是虚拟机运行时数据区的一部分，也不是《Java虚拟机规范》中定义的内存区域。</li>
-<li>直接内存是在Java堆外的、直接向系统申请的内存区间。</li>
-<li>来源于NIO，通过存在堆中的DirectByteBuffer操作Native内存</li>
-<li>通常，访问直接内存的速度会优于Java堆。即读写性能高。<ul>
-<li>因此出于性能考虑，读写频繁的场合可能会考虑使用直接内存。</li>
-<li>Java的NIO库允许Java程序使用直接内存，用于数据缓冲区</li>
+        <h1 id="一、计算机硬件存储体系"><a href="#一、计算机硬件存储体系" class="headerlink" title="一、计算机硬件存储体系"></a>一、计算机硬件存储体系</h1><p> 计算机存储结构，从本地磁盘 到 主内存 到 CPU缓存，也就是从硬盘 -&gt; 内存 -&gt; CPU。</p>
+<p>一般对应的程序的操作就是从数据库查数据到内存然后到CPU进行计算</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-162409.png" alt="计算机硬件存储体系"></p>
+<p>由于CPU和物理主内存的速度不一致（CPU速度远快于主内存），因此CPU和主内存之间需要多级缓存。</p>
+<p>CPU的运行并不是直接操作内存而是先把内存里边的数据读到缓存，而内存的读和写操作的时候就会造成不一致的问题。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-162728.png" alt="CPU-缓存-内存"></p>
+<p>Java虚拟机规范中试图定义一种Java内存模型（java Memory Model，简称JMM) 来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。</p>
+<h1 id="二、Java内存模型-JMM"><a href="#二、Java内存模型-JMM" class="headerlink" title="二、Java内存模型-JMM"></a>二、Java内存模型-JMM</h1><h2 id="1-JMM概述"><a href="#1-JMM概述" class="headerlink" title="1. JMM概述"></a>1. JMM概述</h2><p>JMM(Java内存模型Java Memory Model，简称JMM)本身是一种抽象的概念并不真实存在<strong>它仅仅描述的是一组约定或规范</strong>，通过这组规范定义了程序中(尤其是多线程)各个变量的读写访问方式并决定一个线程对共享变量的写入何时以及如何变成对另一个线程可见，<strong>关键技术点都是围绕多线程的原子性、可见性和有序性展开的</strong>。</p>
+<h2 id="2-JMM的作用"><a href="#2-JMM的作用" class="headerlink" title="2. JMM的作用"></a>2. JMM的作用</h2><ul>
+<li>通过JMM来实现线程和主内存之间的抽象关系</li>
+<li>屏蔽各个硬件平台和操作系统的内存访问差异以实现让Java程序在各种平台下都能达到一致的内存访问效果。</li>
+</ul>
+<h2 id="3-JMM规范下，三大特性"><a href="#3-JMM规范下，三大特性" class="headerlink" title="3. JMM规范下，三大特性"></a>3. JMM规范下，三大特性</h2><ul>
+<li><p>可见性</p>
+</li>
+<li><p>原子性</p>
+</li>
+<li><p>有序性</p>
+</li>
+</ul>
+<h3 id="3-1-可见性"><a href="#3-1-可见性" class="headerlink" title="3.1 可见性"></a>3.1 可见性</h3><p>是指当一个线程修改了某一个共享变量的值，其他线程是否能够立即知道该变更 ，JMM规定了所有的变量都存储在主内存中。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-165016.png" alt="CPU-缓存-主存"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-165023.png" alt="多线程修改同一个变量"></p>
+<p><strong>Java中普通的共享变量不保证可见性</strong>，因为数据修改被写入内存的时机是不确定的，多线程并发下很可能出现**”脏读”<strong>，所以每个线程都有自己的</strong>工作内存<strong>，线程自己的工作内存中保存了该线程使用到的变量的</strong>主内存副本拷贝**，线程对变量的所有操作（读取，赋值等 ）都必需在线程自己的工作内存中进行，而不能够直接读写主内存中的变量。不同线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-164824.png" alt="线程-主存-工作内存的关系"></p>
+<p> <strong>线程脏读：如果没有可见性保证</strong></p>
+<ul>
+<li>主内存中有变量 x，初始值为 0</li>
+<li>线程 A 要将 x 加 1，先将 x&#x3D;0 拷贝到自己的私有内存中，然后更新 x 的值</li>
+<li>线程 A 将更新后的 x 值回刷到主内存的时间是不固定的</li>
+<li>刚好在线程 A 没有回刷 x 到主内存时，线程 B 同样从主内存中读取 x，此时为 0，和线程 A 一样的操作，最后期盼的 x&#x3D;2 就会变成 x&#x3D;1</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-170757.png" alt="线程脏读"></p>
+<h3 id="3-2-原子性"><a href="#3-2-原子性" class="headerlink" title="3.2 原子性"></a>3.2 原子性</h3><p>指一个操作是不可被打断的，即多线程环境下，操作不能被其他线程干扰</p>
+<h3 id="3-3-有序性"><a href="#3-3-有序性" class="headerlink" title="3.3. 有序性"></a>3.3. 有序性</h3><p>对于一个线程的执行代码而言，我们总是习惯性地认为代码的执行总是从上到下，有序执行。但为了提升性能，编译器和处理器通常会对指令序列进行重新排序。Java规范规定JVM线程内部维持顺序化语义，即只要程序的最终结果与它顺序化执行的结果相等，那么指令的执行顺序可以与代码顺序不一致，此过程叫指令的重排序。</p>
+<p>  <strong>优缺点：</strong></p>
+<ul>
+<li>JVM能根据处理器特性（CPU多级缓存系统、多核处理器等）适当的对机器指令进行重排序，使机器指令更符合CPU的执行特性，最大限度的发挥机器性能</li>
+<li>​    但是指令重排可以保证串行语义一致，<strong>但没有义务保证多线程的语义也一致（即可能产生“脏读”）</strong>，简单而言就是两行以上不相干的代码在执行的时候有可能先执行的不是第一条，不见得是从上到下顺序执行，执行顺序会被优化。</li>
+</ul>
+<p>从源码到最终执行示例图</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-171944.png" alt="原码编译到执行"></p>
+<ul>
+<li><p>单线程环境里面确保程序最终执行结果和代码顺序执行的结果一致。处理器在进行重排序时必须要考虑指令之间的数据依赖性。</p>
+</li>
+<li><p>多线程环境中线程交替执行,由于编译器优化重排的存在，两个线程中使用的变量能否保证一致性是无法确定的,结果无法预测</p>
+</li>
+</ul>
+<h1 id="三、JMM规范下，多线程对变量的读写过程"><a href="#三、JMM规范下，多线程对变量的读写过程" class="headerlink" title="三、JMM规范下，多线程对变量的读写过程"></a>三、JMM规范下，多线程对变量的读写过程</h1><p><strong>读取过程</strong></p>
+<p>由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存(有些地方称为栈空间)，工作内存是每个线程的私有数据区域，而Java内存模型中规定所有变量都存储在<strong>主内存</strong>，主内存是共享内存区域，所有线程都可以访问，但<strong>线程对变量的操作(读取赋值等)必须在工作内存中进行，首先要将变量从主内存拷贝到的线程自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存</strong>，不能直接操作主内存中的变量，各个线程中的工作内存中存储着主内存中的变量副本拷贝，因此不同的线程间无法访问对方的工作内存，线程间的通信(传值)必须通过主内存来完成，其简要访问过程如下图:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-172630.png" alt="多线程操作主内存变量"></p>
+<p><strong>JMM定义了线程和主内存之间的抽象关系：</strong></p>
+<ul>
+<li>线程之间的共享变量存储在主内存中（从硬件角度讲就是内存条）</li>
+<li>每个线程都有一个自己的本地工作内存，本地工作内存中存储了该线程用来读写共享变量的副本（从硬件角度来说就是CPU的缓存）</li>
+</ul>
+<p><strong>总结</strong></p>
+<ul>
+<li>我们定义的所有共享变量都储存在<strong>物理主内存中</strong></li>
+<li>每个线程都有自己独立的工作内存，里面保证该线程使用到的共享变量的副本（主内存中该变量的一份拷贝）</li>
+<li>线程对共享变量所有的操作都必须先在线程自己的工作内存中进行后写回主内存，不能直接从主内存在读写（不能越级）</li>
+<li>不同线程之间也无法直接访问其他线程的工作内存中的变量，线程间变量值的传递需要通过主内存来进行（同级不能互相访问）。</li>
+</ul>
+<h1 id="四、JMM规范下，多线程先行发生原则之happens-before"><a href="#四、JMM规范下，多线程先行发生原则之happens-before" class="headerlink" title="四、JMM规范下，多线程先行发生原则之happens-before"></a>四、JMM规范下，多线程先行发生原则之happens-before</h1><p>在JVM中，如果一个操作执行的结果需要对另一个操作可见或者代码重排序，那么这两个操作之间必须存在 happens-before（先行发生）原则，逻辑上的先后关系。</p>
+<h2 id="1-x-、y案例说明"><a href="#1-x-、y案例说明" class="headerlink" title="1. x 、y案例说明"></a>1. x 、y案例说明</h2><ul>
+<li>x&#x3D;5;线程A执行</li>
+<li>y&#x3D;x;线程B执行</li>
+<li>问：y一定等于5吗？</li>
+</ul>
+<p><strong>答案：不一定</strong></p>
+<p>如果线程A的操作（x&#x3D; 5）happens-before(先行发生)线程B的操作（y &#x3D; x）,那么可以确定线程B执行后y &#x3D; 5 一定成立;</p>
+<p>如果他们不存在happens-before原则，那么y &#x3D; 5 不一定成立。</p>
+<p><strong>这就是happens-before原则的为例———–&gt;包含可见性和有序性的约束</strong></p>
+<h2 id="2-先行并发原则说明"><a href="#2-先行并发原则说明" class="headerlink" title="2. 先行并发原则说明"></a>2. 先行并发原则说明</h2><p>如果Java内存模型中所有的有序性都仅靠 <code>volatile</code> 和 <code>synchronized</code> 来完成，那么有很多操作都将变得非常罗嗦，但是我们在编写Java并发代码的时候并没有察觉到这一点。</p>
+<p>我们没有时时、处处、次次，添加volatile和synchronized来完成程序，这是因为Java语言中JMM原则下，有一个“先行发生”（happens-before）的原则限制和规矩，给你理好了规矩！</p>
+<p>这个原则非常重要：它是判断数据是否存在竞争，线程是否安全的非常有用的手段。依赖这个原则，我们可以通过几条简单规则解决并发环境下两个操作之间是否可能存在冲突的所有问题，而不需要陷入Java内存模型晦涩难懂的底层编译原理之中。</p>
+<h2 id="3-happens-before总原则"><a href="#3-happens-before总原则" class="headerlink" title="3. happens-before总原则"></a>3. happens-before总原则</h2><ul>
+<li>如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前</li>
+<li>如果两个操作之间存在happens-before关系，并不意味着一定要按照happens-before原则制定的顺序来执行。如果重排之后的执行结果与按照happens-before关系来执行的结果一致，那么这种重排序并不非法。</li>
+</ul>
+<h2 id="4-happens-before之8条规则"><a href="#4-happens-before之8条规则" class="headerlink" title="4. happens-before之8条规则"></a>4. happens-before之8条规则</h2><p>从JDK 5开始，Java使用新的JSR-133内存模型，提供了 happens-before 原则来辅助保证程序执行的原子性、可见性以及有序性的问题，它是判断数据是否存在竞争、线程是否安全的依据，happens-before 原则内容如下：</p>
+<ol>
+<li><p>次序规则：一个线程内，按照代码的顺序，写在前面的操作先行发生于写在后面的操作，也就是说前一个操作的结果可以被后续的操作获取（保证语义串行性，按照代码顺序执行）。比如前一个操作把变量x赋值为1，那后面一个操作肯定能知道x已经变成了1</p>
+</li>
+<li><p>锁定规则：一个 <code>unLock</code> 操作先行发生于后面对同一个锁的<code>lock</code>操作（后面指时间上的先后）</p>
+<p>​	解释：A线程的 unlock 操作，先行发生于 B线程的 lock 操作。</p>
+</li>
+<li><p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作，前面的写对后面的读是可见的，这里的后面同样指时间上的先后</p>
+</li>
+<li><p>传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C。</p>
+</li>
+<li><p>线程启动规则（Thread start Rule）：Thread对象的start()方法先行发生于此线程的每一个动作</p>
+</li>
+<li><p>线程中断规则（Thread Interruption Rule）：</p>
+<ol>
+<li>对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生</li>
+<li>可以通过Thread.interrupted()检测到是否发生中断</li>
+<li>也就是说你要先调用interrupt()方法设置过中断标志位，我才能检测到中断发生</li>
+</ol>
+<p>解释：这里其实都是重排序问题，如果没有的此规则就变成了你写的前面设置终止状态，判断结果理应是true，但指令重排序有可能给你改成先判断结果就是false了</p>
+</li>
+<li><p>线程终止规则（Thread Termination Rule）：线程中的所有操作都优先发生于对此线程的终止检测，我们可以通过isAlive()等手段检测线程是否已经终止执行。</p>
+</li>
+<li><p>对象终结规则（Finalizer Rule）：一个对象的初始化完成（构造函数执行结束）先行发生于它的finalize(）方法的开始——-&gt;对象没有完成初始化之前，是不能调用finalized()方法的</p>
+</li>
+</ol>
+<h2 id="5-happens-before-总结"><a href="#5-happens-before-总结" class="headerlink" title="5. happens-before 总结"></a>5. happens-before 总结</h2><ul>
+<li>在Java语言里面，Happens-before 的语义本质上是一种可见性</li>
+<li>A happens-before B ,意味着A发生过的事情对B而言是可见的，无论A事件和B事件是否发生在同一线程里</li>
+<li>JVM的设计分为两部分：<ul>
+<li>一部分是面向我们程序员提供的，也就是happens-before规则，它通俗易懂的向我们程序员阐述了一个强内存模型，我们只要理解happens-before规则，就可以编写并发安全的程序了</li>
+<li>另一部分是针对JVM实现的，为了尽可能少的对编译器和处理器做约束从而提升性能，JMM在不影响程序执行结果的前提下对其不做要求，即允许优化重排序，我们只要关注前者就好了，也就是理解happens-before规则即可，其他繁杂的内容由JMM规范结合操作系统给我们搞定，我们只写好代码即可。</li>
 </ul>
 </li>
 </ul>
-<blockquote>
-<p>代码示例</p>
-</blockquote>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> *  IO                  NIO (New IO / Non-Blocking IO)</span>
-<span class="comment"> *  byte[] / char[]     Buffer</span>
-<span class="comment"> *  Stream              Channel</span>
-<span class="comment"> *</span>
-<span class="comment"> * 查看直接内存的占用与释放</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BufferTest</span> &#123;
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">BUFFER</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">1024</span>;<span class="comment">//1GB</span>
-
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;
-        <span class="comment">//直接分配本地内存空间</span>
-        <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(BUFFER);
-        System.out.println(<span class="string">&quot;直接内存分配完毕，请求指示！&quot;</span>);
-
-        <span class="type">Scanner</span> <span class="variable">scanner</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Scanner</span>(System.in);
-        scanner.next();
-
-        System.out.println(<span class="string">&quot;直接内存开始释放！&quot;</span>);
-        byteBuffer = <span class="literal">null</span>;
-        System.gc();
-        scanner.next();
-    &#125;
+<h2 id="6-案例说明"><a href="#6-案例说明" class="headerlink" title="6. 案例说明"></a>6. 案例说明</h2><pre><code class="highlight java"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
+<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
+    <span class="keyword">return</span> value;
+&#125;
+<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
+    <span class="keyword">return</span> ++value;
 &#125;</code></pre>
 
-
-
-<p>直接占用了 1G 的本地内存</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/12/20/20231220-193801.png" alt="image-20231220193601231"></p>
-<h1 id="二、BIO-与-NIO"><a href="#二、BIO-与-NIO" class="headerlink" title="二、BIO 与 NIO"></a>二、BIO 与 NIO</h1><h2 id="1-非直接缓存区（BIO）"><a href="#1-非直接缓存区（BIO）" class="headerlink" title="1. 非直接缓存区（BIO）"></a>1. 非直接缓存区（BIO）</h2><p>原来采用BIO的架构，在读写本地文件时，我们需要从用户态切换成内核态</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/12/20/20231220-194244.png" alt="image-20231220194157794"></p>
-<h2 id="2-直接缓冲区（NIO）"><a href="#2-直接缓冲区（NIO）" class="headerlink" title="2. 直接缓冲区（NIO）"></a>2. 直接缓冲区（NIO）</h2><p>NIO 直接操作物理磁盘，省去了中间过程</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/12/20/20231220-200818.png" alt="image-20231220200446807"></p>
-<h2 id="3-直接内存与-OOM"><a href="#3-直接内存与-OOM" class="headerlink" title="3. 直接内存与 OOM"></a>3. 直接内存与 OOM</h2><ul>
-<li>直接内存也可能导致OutofMemoryError异常</li>
-<li>由于直接内存在Java堆外，因此它的大小不会直接受限于-Xmx指定的最大堆大小，但是系统内存是有限的，Java堆和直接内存的总和依然受限于操作系统能给出的最大内存。</li>
-<li>直接内存的缺点为：<ul>
-<li>分配回收成本较高</li>
-<li>不受JVM内存回收管理</li>
+<p>问题描述：假设存在线程A和B，线程A先（时间上的先后）调用了setValue()方法，然后线程B调用了同一个对象的getValue()方法，那么线程B收到的返回值是什么？</p>
+<p><strong>答案：不一定</strong></p>
+<p><strong>分析如下：</strong></p>
+<p>分析happens-before规则（规则5，6，7，8可以忽略，和代码无关）</p>
+<ul>
+<li>由于两个方法由不同线程调用，不满足一个线程的条件，不满足程序次序规则</li>
+<li>两个方法都没有用锁，不满足锁定规则</li>
+<li>变量没有使用volatile修饰，所以不满足volatile变量规则</li>
+<li>传递规则肯定不满足</li>
+</ul>
+<p>综上：无法通过happens-before原则推导出线程A happens-before 线程B，虽然可以确定时间上线程A优于线程B，但就是无法确定线程B获得的结果是什么，所以这段代码不是线程安全的</p>
+<p>注意：如果两个操作的执行次序无法从happens-before原则推导出来，那么就不能保证他们的有序性，虚拟机可以随意对他们进行重排序</p>
+<p><strong>解决方案：</strong></p>
+<ul>
+<li><p>方案一：</p>
+<ul>
+<li><p>把getter&#x2F;setter方法都定义为synchronized方法——-&gt;<strong>不好，重量锁，并发性下降</strong></p>
+<pre><code class="highlight java"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
+<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
+    <span class="keyword">return</span> value;
+&#125;
+<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
+    <span class="keyword">return</span> ++value;
+&#125;</code></pre>
+</li>
+<li><p>把 value 定义为 volatile 变量，由于setter方法对value的修改不依赖value的原值，满足volatile关键字使用场景</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment">* 利用volatile保证读取操作的可见性，</span>
+<span class="comment">* 利用synchronized保证符合操作的原子性结合使用锁和volatile变量来减少同步的开销</span>
+<span class="comment">*/</span>
+<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
+<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
+    <span class="keyword">return</span> value;
+&#125;
+<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
+    <span class="keyword">return</span> ++value;
+&#125;</code></pre></li>
 </ul>
 </li>
-<li>直接内存大小可以通过 <code>-XX:MaxDirectMemorySize</code> 设置</li>
-<li>如果不指定，默认与堆的最大值-Xmx参数值一致</li>
 </ul>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 本地内存的OOM:  OutOfMemoryError: Direct buffer memory</span>
-<span class="comment"> *</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BufferTest2</span> &#123;
-    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">BUFFER</span> <span class="operator">=</span> <span class="number">1024</span> * <span class="number">1024</span> * <span class="number">20</span>;<span class="comment">//20MB</span>
-
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        ArrayList&lt;ByteBuffer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
-
-        <span class="type">int</span> <span class="variable">count</span> <span class="operator">=</span> <span class="number">0</span>;
-        <span class="keyword">try</span> &#123;
-            <span class="keyword">while</span>(<span class="literal">true</span>)&#123;
-                <span class="type">ByteBuffer</span> <span class="variable">byteBuffer</span> <span class="operator">=</span> ByteBuffer.allocateDirect(BUFFER);
-                list.add(byteBuffer);
-                count++;
-                <span class="keyword">try</span> &#123;
-                    Thread.sleep(<span class="number">100</span>);
-                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
-                    e.printStackTrace();
-                &#125;
-            &#125;
-        &#125; <span class="keyword">finally</span> &#123;
-            System.out.println(count);
-        &#125;
-    &#125;
-&#125;</code></pre>
-
-<blockquote>
-<p>控制台错误信息如下：</p>
-<p>直接内存溢出</p>
-</blockquote>
-<pre><code class="highlight plaintext">Exception in thread &quot;main&quot; java.lang.OutOfMemoryError: Direct buffer memory
-	at java.nio.Bits.reserveMemory(Bits.java:694)
-	at java.nio.DirectByteBuffer.&lt;init&gt;(DirectByteBuffer.java:123)
-	at java.nio.ByteBuffer.allocateDirect(ByteBuffer.java:311)
-	at com.atguigu.java.BufferTest2.main(BufferTest2.java:19)</code></pre>
-
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
