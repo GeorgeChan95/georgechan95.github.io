@@ -1,0 +1,1628 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>06-JUC进阶-Volatile与Java内存模型 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" juc , java ">
+  <meta name="description" content="06-JUC进阶-Volatile与Java内存模型 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#x72;&#x67;&#x65;&#95;&#57;&#x35;&#64;&#49;&#x32;&#x36;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#x72;&#x67;&#x65;&#95;&#57;&#x35;&#64;&#49;&#x32;&#x36;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(55)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(17)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="55">
+<input type="hidden" id="yelog_site_word_count" value="258k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-juc2/06-JUC进阶-Volatile与Java内存模型" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">06-JUC进阶-Volatile与Java内存模型</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="JUC">JUC</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">juc</a>
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-09-26 19:10:59'>2024-09-25 19:01</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:5k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%A2%ABVolatile%E4%BF%AE%E6%94%B9%E7%9A%84%E5%8F%98%E9%87%8F%E6%9C%892%E5%A4%A7%E7%89%B9%E7%82%B9"><span class="toc-text">一、被Volatile修改的变量有2大特点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%89%B9%E7%82%B9"><span class="toc-text">1. 特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-volatile%E7%9A%84%E5%86%85%E5%AD%98%E8%AF%AD%E4%B9%89"><span class="toc-text">2. volatile的内存语义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C"><span class="toc-text">二、内存屏障</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C"><span class="toc-text">1. 什么是内存屏障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C%E5%88%86%E7%B1%BB"><span class="toc-text">2. 内存屏障分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%88%86%E7%B1%BB%E8%A7%A3%E6%9E%90"><span class="toc-text">2.1 分类解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">2.2 源码分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-volatile-%E5%8F%98%E9%87%8F%E8%A7%84%E5%88%99%E4%B8%8E%E6%8F%92%E5%85%A5%E7%AD%96%E7%95%A5"><span class="toc-text">3. volatile 变量规则与插入策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E6%9C%89%E5%BA%8F%E6%80%A7%EF%BC%9F"><span class="toc-text">3.1 如何保证有序性？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-happens-before-%E4%B9%8B-volatile-%E5%8F%98%E9%87%8F%E8%A7%84%E5%88%99"><span class="toc-text">3.2 happens-before 之 volatile 变量规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C%E6%8F%92%E2%BC%8A%E7%AD%96%E7%95%A5"><span class="toc-text">3.3 内存屏障插⼊策略</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81volatile%E7%89%B9%E6%80%A7"><span class="toc-text">三、volatile特性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BF%9D%E8%AF%81%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-text">1. 保证可见性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B%EF%BC%9A"><span class="toc-text">1.1 代码示例：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%8E%9F%E7%90%86%E8%A7%A3%E6%9E%90"><span class="toc-text">1.2 原理解析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-volatile%E5%8F%98%E9%87%8F%E7%9A%84%E8%AF%BB%E5%86%99%E8%BF%87%E7%A8%8B"><span class="toc-text">1.3 volatile变量的读写过程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B2%A1%E6%9C%89%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text">2. 没有原子性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%8C%87%E4%BB%A4%E7%A6%81%E9%87%8D%E6%8E%92"><span class="toc-text">3. 指令禁重排</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%87%8D%E6%8E%92%E5%BA%8F"><span class="toc-text">3.1 重排序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E9%87%8D%E6%8E%92%E5%BA%8F%E7%9A%84%E5%88%86%E7%B1%BB%E5%92%8C%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="toc-text">3.2 重排序的分类和执行流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%95%B0%E6%8D%AE%E4%BE%9D%E8%B5%96%E6%80%A7"><span class="toc-text">3.3 数据依赖性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%A6%82%E4%BD%95%E6%AD%A3%E7%A1%AE%E4%BD%BF%E7%94%A8volatile"><span class="toc-text">四、如何正确使用volatile</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8D%95%E4%B8%80%E8%B5%8B%E5%80%BC"><span class="toc-text">1. 单一赋值</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%8A%B6%E6%80%81%E6%A0%87%E5%BF%97"><span class="toc-text">2. 状态标志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BC%80%E9%94%80%E8%BE%83%E4%BD%8E%E7%9A%84%E8%AF%BB%EF%BC%8C%E5%86%99%E9%94%81%E7%AD%96%E7%95%A5"><span class="toc-text">3. 开销较低的读，写锁策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-DCL%E5%8F%8C%E7%AB%AF%E9%94%81%E7%9A%84%E5%8F%91%E5%B8%83"><span class="toc-text">4. DCL双端锁的发布</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E9%97%AE%E9%A2%98%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">4.1 问题代码示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E9%97%AE%E9%A2%98%E5%A6%82%E4%B8%8B"><span class="toc-text">4.2 问题如下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="toc-text">4.3 问题解决</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-1-%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E5%8A%A0volatile%E4%BF%AE%E9%A5%B0"><span class="toc-text">4.3.1 方式一：加volatile修饰</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3-2-%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E9%87%87%E7%94%A8%E9%9D%99%E6%80%81%E5%86%85%E9%83%A8%E7%B1%BB%E7%9A%84%E6%96%B9%E5%BC%8F%E5%AE%9E%E7%8E%B0"><span class="toc-text">4.3.2 方式二：采用静态内部类的方式实现</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-text">五、总结</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、被Volatile修改的变量有2大特点"><a href="#一、被Volatile修改的变量有2大特点" class="headerlink" title="一、被Volatile修改的变量有2大特点"></a>一、被Volatile修改的变量有2大特点</h1><h2 id="1-特点"><a href="#1-特点" class="headerlink" title="1. 特点"></a>1. 特点</h2><ul>
+<li><p>可见性</p>
+<p>写完后立即刷新回主内存并及时发出通知，其它线程可以去主内存拿到最新的数据，前面的修改对后面所有线程可见</p>
+</li>
+<li><p>有序性</p>
+<p>重排序是指编译器和处理器为了优化程序性能而对指令序列进行重新排序的一种手段，有时候会改变程序语句的先后顺序，若不存在数据依赖关系，可以重排序；存在数据依赖关系，禁止重排序；但重排后的指令绝对不能改变原有的串行语义！这点在并发设计中必须要重点考虑！</p>
+</li>
+</ul>
+<p><strong>注意：volatile 修饰的字段，没有原子性</strong></p>
+<h2 id="2-volatile的内存语义"><a href="#2-volatile的内存语义" class="headerlink" title="2. volatile的内存语义"></a>2. volatile的内存语义</h2><ul>
+<li>当写一个volatile变量时，JMM会把该线程对应的本地内存中的共享变量值立即刷新回主内存中</li>
+<li>当读一个volatile变量时，JMM会把该线程对应的本地内存设置为无效，重新回到主内存中读取最新共享变量的值</li>
+<li>所以volatile的写内存语义是直接刷新到主内存中，读的内存语义是直接从主内存中读取</li>
+</ul>
+<p><strong>volatile凭什么可以保证可见性和有序性？</strong></p>
+<p>  内存屏障Memory Barrier</p>
+<h1 id="二、内存屏障"><a href="#二、内存屏障" class="headerlink" title="二、内存屏障"></a>二、内存屏障</h1><h2 id="1-什么是内存屏障"><a href="#1-什么是内存屏障" class="headerlink" title="1. 什么是内存屏障"></a>1. 什么是内存屏障</h2><p>内存屏障（也称内存栅栏，内存栅障，屏障指令等，是一类同步屏障指令，是CPU或编译器在对内存随机访问的操作中的一个同步点，使得此点之前的所有读写操作都执行后才可以开始执行此点之后的操作），避免代码重排序。内存屏障其实就是一种JVM指令，Java内存模型的重排规则会要求Java编译器在生成JVM指令时插入特定的内存屏障指令，通过这些内存屏障指令，volatile实现了Java内存模型中的可见性和有序性，但volatile无法保证原子性。</p>
+<p>内存屏障之前的所有写操作都要回写到主内存，<br>内存屏障之后的所有读操作都能获得内存屏障之前的所有写操作的最新结果(实现了可见性)。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-191447.png" alt="内存屏障"></p>
+<p>因此重排序时，不允许把内存屏障之后的指令重排序到内存屏障之前。</p>
+<p>一句话：<strong>对一个 volatile 域的写, happens-before 于任意后续对这个 volatile 域的读，也叫写后读。</strong></p>
+<h2 id="2-内存屏障分类"><a href="#2-内存屏障分类" class="headerlink" title="2. 内存屏障分类"></a>2. 内存屏障分类</h2><h3 id="2-1-分类解析"><a href="#2-1-分类解析" class="headerlink" title="2.1 分类解析"></a>2.1 分类解析</h3><p><strong>内存屏障粗分为两种</strong></p>
+<ul>
+<li>读屏障（Load Barrier）：在读指令之前插入读屏障，让工作内存或CPU高速缓存 当中的缓存数据失效，重新回到主内存中获取最新数据。</li>
+<li>写屏障（Store Barrier）：在写指令之后插入写屏障，强制把缓冲区的数据刷回到主内存中。</li>
+</ul>
+<p><strong>内存屏障细分四种：</strong></p>
+<table>
+<thead>
+<tr>
+<th><strong>屏障类型</strong></th>
+<th><strong>指令示例</strong></th>
+<th><strong>说明</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LoadLoad</td>
+<td>Load1;LoadLoad;Load2</td>
+<td>保证Load1的读取操作在Load2及后续读取操作之前执行</td>
+</tr>
+<tr>
+<td>StoreStore</td>
+<td>Store1;StoreStore;Store2</td>
+<td>在store2及其后的写操作执行前，保证Store1的写操作已经刷新到主内存</td>
+</tr>
+<tr>
+<td>LoadStore</td>
+<td>Load1;LoadStore;Store2</td>
+<td>在Store2及其后的写操作执行前，保证Load1的读操作已经结束</td>
+</tr>
+<tr>
+<td>StoreLoad</td>
+<td>Store1;StoreLoad;Load2</td>
+<td>保证Store1的写操作已经刷新到主内存后，Load2及其后的读操作才能执行</td>
+</tr>
+</tbody></table>
+<h3 id="2-2-源码分析"><a href="#2-2-源码分析" class="headerlink" title="2.2 源码分析"></a>2.2 源码分析</h3><p>IDEA工具里面找 <code>Unsafe.class</code> –&gt; <code>Unsafe.java</code> –&gt; <code>Unsafe.cpp</code> –&gt; <code>OrderAccess.hpp</code> –&gt; <code>orderAccess_linux_x86.inline.hpp</code></p>
+<ul>
+<li>Unsafe.class</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-193844.png" alt="Unsafe.class"></p>
+<ul>
+<li>Unsafe.java</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-193745.png" alt="Unsafe.java"></p>
+<ul>
+<li>Unsafe.cpp</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-194019.png" alt="Unsafe.cpp"></p>
+<ul>
+<li>OrderAccess.hpp</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-194034.png" alt="OrderAccess.hpp"></p>
+<ul>
+<li>orderAccess_linux_x86.inline.hpp</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-194058.png" alt="orderAccess_linux_x86.inline.hpp"></p>
+<h2 id="3-volatile-变量规则与插入策略"><a href="#3-volatile-变量规则与插入策略" class="headerlink" title="3. volatile 变量规则与插入策略"></a>3. volatile 变量规则与插入策略</h2><h3 id="3-1-如何保证有序性？"><a href="#3-1-如何保证有序性？" class="headerlink" title="3.1 如何保证有序性？"></a>3.1 如何保证有序性？</h3><p><strong>通过内存屏障禁重排</strong></p>
+<ul>
+<li>重排序有可能影响程序的执行和实现，因此，我们有时候希望JVM不要自动重排序。</li>
+<li>对于编译器的重排序，JMM会根据重排序的规则，禁止特定类型的编译器重排序</li>
+<li>对于处理器的重排序，Java编译器在生成指令序列的适当位置，插入内存屏障指令，来禁止特定类型的处理器排序。</li>
+</ul>
+<h3 id="3-2-happens-before-之-volatile-变量规则"><a href="#3-2-happens-before-之-volatile-变量规则" class="headerlink" title="3.2 happens-before 之 volatile 变量规则"></a>3.2 happens-before 之 volatile 变量规则</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-192602.png" alt="volatile变量规则"></p>
+<ul>
+<li>当第一个操作为volatile读时，不论第二个操作是什么，都不能重排序。这个操作保证了volatile读之后的操作不会被重排到volatile读之前。</li>
+<li>当第二个操作为volatile写时，不论第一个操作是什么，都不能重排序。这个操作保证了volatile写之前的操作不会被重排到volatile写之后。</li>
+<li>当第一个操作为volatile写时，第二个操作为volatile读时，不能重排。</li>
+</ul>
+<h3 id="3-3-内存屏障插⼊策略"><a href="#3-3-内存屏障插⼊策略" class="headerlink" title="3.3 内存屏障插⼊策略"></a>3.3 内存屏障插⼊策略</h3><p>JMM 就将内存屏障插⼊策略分为 4 种</p>
+<p><strong>读屏障</strong></p>
+<ul>
+<li><p>在每个 volatile 读操作的后⾯插⼊⼀个 LoadLoad 屏障</p>
+<p>LoadLoad屏障用来禁止处理器把上面的volatile读与下面的普通读重排序。</p>
+</li>
+<li><p>在每个 volatile 读操作的后⾯插⼊⼀个 LoadStore 屏障</p>
+<p>LoadStore屏障用来禁止处理器把上面的volatile读与下面的普通写重排序。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-195529.png" alt="读屏障"></p>
+</li>
+</ul>
+<p><strong>写屏障</strong></p>
+<ul>
+<li><p>在每个 volatile 写操作的前⾯插⼊⼀个 StoreStore 屏障</p>
+<p>StoreStore屏障可以保证在volatile写之前，其前面的所有普通写操作都已经刷新到主内存中。</p>
+</li>
+<li><p>在每个 volatile 写操作的后⾯插⼊⼀个 StoreLoad 屏障</p>
+<p>StoreLoad屏障的作用是避免volatile写与后面可能有的volatile读&#x2F;写操作重排序</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-195658.png" alt="写屏障"></p>
+</li>
+</ul>
+<h1 id="三、volatile特性"><a href="#三、volatile特性" class="headerlink" title="三、volatile特性"></a>三、volatile特性</h1><h2 id="1-保证可见性"><a href="#1-保证可见性" class="headerlink" title="1. 保证可见性"></a>1. 保证可见性</h2><p>保证不同线程对某个变量完成操作后结果及时可见，即该共享变量一旦改变所有线程立即可见</p>
+<h3 id="1-1-代码示例："><a href="#1-1-代码示例：" class="headerlink" title="1.1 代码示例："></a>1.1 代码示例：</h3><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileSeeDemo</span> &#123;
+<span class="comment">//    static boolean flag = true;       //不加volatile，没有可见性</span>
+    <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">true</span>;       <span class="comment">//加了volatile，保证可见性</span>
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;---come in&quot;</span>);
+            <span class="keyword">while</span> (flag) &#123;
+                <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">308</span>);
+            &#125;
+            System.out.println(<span class="string">&quot;t1 over&quot;</span>);
+        &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+        <span class="keyword">try</span> &#123;
+            TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125;
+
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            flag = <span class="literal">false</span>;
+        &#125;, <span class="string">&quot;t2&quot;</span>).start();
+    &#125;
+&#125;</code></pre>
+
+<ul>
+<li>不加volatile，没有可见性，程序无法停止</li>
+<li>加了volatile，保证可见性，程序可以停止</li>
+</ul>
+<h3 id="1-2-原理解析"><a href="#1-2-原理解析" class="headerlink" title="1.2 原理解析"></a>1.2 原理解析</h3><p><strong>线程t1中为何看不到被主线程main修改为false的flag的值？</strong></p>
+<p>猜测：</p>
+<ol>
+<li>主线程修改了flag之后没有将其刷新到主内存，所以t1线程看不到。</li>
+<li>主线程将flag刷新到了主内存，但是t1一直读取的是自己工作内存中flag的值，没有去主内存中更新获取flag最新的值。</li>
+</ol>
+<p>诉求：</p>
+<ol>
+<li>线程中修改了工作内存中的副本之后，立即将其刷新到主内存</li>
+<li>工作内存中每次读取共享变量时，都去主内存中重新读取，然后拷贝到工作内存</li>
+</ol>
+<p>使用 <code>volatile</code> 修饰共享变量，就可以达到上面的效果，被 <code>volatile</code> 修改的变量有以下特点：</p>
+<ul>
+<li>线程中读取的时候，每次读取都会去主内存中读取共享变量最新的值，然后将其复制到工作内存</li>
+<li>线程中修改了工作内存中变量的副本，修改之后会立即刷新到主内存</li>
+</ul>
+<h3 id="1-3-volatile变量的读写过程"><a href="#1-3-volatile变量的读写过程" class="headerlink" title="1.3 volatile变量的读写过程"></a>1.3 volatile变量的读写过程</h3><p>Java内存模型中定义的8种工作内存与主内存之间的原子操作</p>
+<p>read(读取)→load(加载)→use(使用)→assign(赋值)→store(存储)→write(写入)→lock(锁定)→unlock(解锁)</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/25/20240925-202607.png" alt="image-20240925202607271"></p>
+<ul>
+<li><p>read: 作用于主内存，将变量的值从主内存传输到工作内存，主内存到工作内存</p>
+</li>
+<li><p>load: 作用于工作内存，将read从主内存传输的变量值放入工作内存变量副本中，即数据加载</p>
+</li>
+<li><p>use: 作用于工作内存，将工作内存变量副本的值传递给执行引擎，每当JVM遇到需要该变量的字节码指令时会执行该操作</p>
+</li>
+<li><p>assign: 作用于工作内存，将从执行引擎接收到的值赋值给工作内存变量，每当JVM遇到一个给变量赋值字节码指令时会执行该操作</p>
+</li>
+<li><p>store: 作用于工作内存，将赋值完毕的工作变量的值写回给主内存</p>
+</li>
+<li><p>write: 作用于主内存，将store传输过来的变量值赋值给主内存中的变量</p>
+<p>由于上述只能保证单条指令的原子性，针对多条指令的组合性原子保证，没有大面积加锁，所以，JVM提供了另外两个原子指令：</p>
+</li>
+<li><p>lock: 作用于主内存，将一个变量标记为一个线程独占的状态，只是写时候加锁，就只是锁了写变量的过程。</p>
+</li>
+<li><p>unlock: 作用于主内存，把一个处于锁定状态的变量释放，然后才能被其他线程占用</p>
+</li>
+</ul>
+<h2 id="2-没有原子性"><a href="#2-没有原子性" class="headerlink" title="2. 没有原子性"></a>2. 没有原子性</h2><p>volatile变量的符合操作不具有原子性</p>
+<ul>
+<li><p>对于voaltile变量具备可见性，<strong>JVM只是保证从主内存加载到线程工作内存的值是最新的</strong>，也仅仅是数据加载时是最新的。但是多线程环境下，“数据计算”和“数据赋值”操作可能多次出现，若数据在加载之后，若主内存volatile修饰变量发生修改之后，线程工作内存的操作将会<strong>作废</strong>去读主内存最新值，<strong>操作出现写丢失问题</strong>。<strong>即各线程私有内存和主内存公共内存中变量不同步</strong>，进而导致数据不一致。由此可见volatile解决的是变量读时的可见性问题，但<strong>无法保证原子性，对于多线程修改主内存共享变量的场景必须加锁同步</strong>。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-103838.png" alt="image-20240926103741047"></p>
+</li>
+<li><p>至于怎么去理解这个写丢失的问题，就是再将数据读取到本地内存到写回主内存中有三个步骤：数据加载—-&gt;数据计算—-&gt;数据赋值，如果第二个线程在第一个线程读取旧值与写回新值期间读取共享变量的值，那么第二个线程将会与第一个线程一起看到同一个值，并执行自己的操作，<strong>一旦其中一个线程对volatile修饰的变量先行完成操作刷回主内存后，另一个线程会作废自己的操作，然后重新去读取最新的值再进行操作，这样的话，它自身的那一次操作就丢失了</strong>，这就造成了 线程安全失败，因此，这个问题<strong>需要使用synchronized修饰以保证线程安全性</strong>。</p>
+</li>
+</ul>
+<p><strong>读取赋值一个volatile变量的情况</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-104126.png" alt="读取赋值一个volatile变量"></p>
+<p>read-load-use 和 assign-store-write 成为了两个不可分割的原子操作，但是在use和assign之间依然有极小的一段真空期，有可能变量会被其他线程读取，导致写丢失一次。无论在哪一个时间点主内存的变量和任一工作内存的变量的值都是相等的。这个特性就导致了volatile变量不适合参与到依赖当前值的运算，如i &#x3D; i + 1; i++;之类的那么依靠可见性的特点volatile可以用在哪些地方呢？ 通常volatile用做保存某个状态的boolean值or int值。</p>
+<p><strong>结论：volatile变量不适合参与到依赖当前值的运算</strong>，如i++，i&#x3D;i+1之类的，<strong>通常用来保存某个状态的boolean值或者int值</strong>，也正是由于volatile变量只能保证可见性，在不符合以下规则的运算场景中，我们仍然要通过加锁来保证原子性：</p>
+<ul>
+<li><p>运算结果并不依赖变量的当前值，或者能够确保只有单一的线程修改变量的值</p>
+</li>
+<li><p>变量不需要与其他的状态变量共同参与不变约束</p>
+</li>
+</ul>
+<p><strong>volatile不具备原子性的代码示例</strong></p>
+<pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">MyNumber1</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addNum</span><span class="params">()</span> &#123;
+        num++;
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;
+        <span class="type">MyNumber1</span> <span class="variable">myNumber1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyNumber1</span>();
+
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;
+            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; <span class="number">1000</span>; j++) &#123;
+                    myNumber1.addNum();
+                &#125;
+            &#125;, <span class="string">&quot;t&quot;</span> + i).start();
+        &#125;
+
+        TimeUnit.SECONDS.sleep(<span class="number">3</span>);
+
+        System.out.println(<span class="string">&quot;执行结束，num值为：&quot;</span> + myNumber1.num);
+    &#125;
+&#125;</code></pre>
+
+<p>执行结果：</p>
+<pre><code class="highlight shell">执行结束，num值为：9913</code></pre>
+
+<p>多次执行，结果都接近10000，但是到不了10000，原因在于上面说的，volatile修饰的变量，在多线程并发修改情况下会出现写丢失。</p>
+<p><strong>解决方式：</strong> 给 addNum() 添加 synchronized</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">addNum</span><span class="params">()</span> &#123;
+    num++;
+&#125;</code></pre>
+
+
+
+<h2 id="3-指令禁重排"><a href="#3-指令禁重排" class="headerlink" title="3. 指令禁重排"></a>3. 指令禁重排</h2><h3 id="3-1-重排序"><a href="#3-1-重排序" class="headerlink" title="3.1 重排序"></a>3.1 重排序</h3><p>重排序是指编译器和处理器为了优化程序性能而对指令序列进行重新排序的一种手段，有时候会改变程序语句的先后顺序</p>
+<ul>
+<li>不存在数据依赖关系，可以重排序；</li>
+<li><strong>存在数据依赖关系，禁止重排序</strong></li>
+</ul>
+<p>但重排后的指令绝对不能改变原有的串行语义！这点在并发设计中必须要重点考虑！</p>
+<h3 id="3-2-重排序的分类和执行流程"><a href="#3-2-重排序的分类和执行流程" class="headerlink" title="3.2 重排序的分类和执行流程"></a>3.2 重排序的分类和执行流程</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-161621.png" alt="重排序的分类和执行流程"></p>
+<ul>
+<li>编译器优化的重排序：编译器在不改变单线程串行语义的前提下，可以重新调整指令的执行顺序</li>
+<li>指令级并行的重排序：处理器使用指令级并行技术来讲多条指令重叠执行，若不存在数据依赖性，处理器可以改变语句对应机器指令的执行顺序</li>
+<li>内存系统的重排序：由于处理器使用缓存和读&#x2F;写缓冲区，这使得加载和存储操作看上去可能是乱序执行</li>
+</ul>
+<h3 id="3-3-数据依赖性"><a href="#3-3-数据依赖性" class="headerlink" title="3.3 数据依赖性"></a>3.3 数据依赖性</h3><p>若两个操作访问同一变量，且这两个操作中有一个为写操作，此时两操作间就存在数据依赖性。</p>
+<p><strong>案例说明</strong></p>
+<ul>
+<li><p>不存在数据依赖关系，可以重排序</p>
+<table>
+<thead>
+<tr>
+<th>重排前</th>
+<th>重排后</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>int a &#x3D; 1;  &#x2F;&#x2F;1<br/>int b &#x3D; 20; &#x2F;&#x2F;2<br/>int c &#x3D; a + b; &#x2F;&#x2F;3</td>
+<td>int b &#x3D; 20;  &#x2F;&#x2F;1<br/>int a &#x3D; 1; &#x2F;&#x2F;2<br/>int c &#x3D; a + b; &#x2F;&#x2F;3</td>
+</tr>
+<tr>
+<td>结论：编译器调整了语句的顺序，但是不影响程序的最终结果。</td>
+<td><strong>可以重排序</strong></td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>存在数据依赖关系，禁止重排序</strong></p>
+<p>重排序发生，会导致程序运行结果不同。编译器和处理器在重排序时，会遵守数据依赖性，不会改变存在依赖关系的两个操作的执行,但不同处理器和不同线程之间的数据性不会被编译器和处理器考虑，其只会作用于单处理器和单线程环境，下面三种情况，只要重排序两个操作的执行顺序，程序的执行结果就会被改变。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-162829.png" alt="数据依赖"></p>
+</li>
+</ul>
+<h1 id="四、如何正确使用volatile"><a href="#四、如何正确使用volatile" class="headerlink" title="四、如何正确使用volatile"></a>四、如何正确使用volatile</h1><h2 id="1-单一赋值"><a href="#1-单一赋值" class="headerlink" title="1. 单一赋值"></a>1. 单一赋值</h2><p>单一赋值可以，但是含复合运算赋值不可以(i++之类)</p>
+<pre><code class="highlight java"><span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">10</span>
+<span class="keyword">volatile</span> <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">false</span></code></pre>
+
+
+
+<h2 id="2-状态标志"><a href="#2-状态标志" class="headerlink" title="2. 状态标志"></a>2. 状态标志</h2><p>判断业务是否结束</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileSeeDemo</span> &#123;
+<span class="comment">//    static boolean flag = true;       //不加volatile，没有可见性</span>
+    <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> <span class="literal">true</span>;       <span class="comment">//加了volatile，保证可见性</span>
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;---come in&quot;</span>);
+            <span class="keyword">while</span> (flag) &#123;
+                <span class="keyword">new</span> <span class="title class_">Integer</span>(<span class="number">308</span>);
+            &#125;
+            System.out.println(<span class="string">&quot;t1 over&quot;</span>);
+        &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+        <span class="keyword">try</span> &#123;
+            TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            e.printStackTrace();
+        &#125;
+
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            flag = <span class="literal">false</span>;
+        &#125;, <span class="string">&quot;t2&quot;</span>).start();
+    &#125;
+&#125;</code></pre>
+
+
+
+<h2 id="3-开销较低的读，写锁策略"><a href="#3-开销较低的读，写锁策略" class="headerlink" title="3. 开销较低的读，写锁策略"></a>3. 开销较低的读，写锁策略</h2><pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">MyNumber1</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">0</span>;
+
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">addNum</span><span class="params">()</span> &#123;
+        num++;
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VolatileDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;
+        <span class="type">MyNumber1</span> <span class="variable">myNumber1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MyNumber1</span>();
+
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;
+            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+                <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>; j &lt; <span class="number">1000</span>; j++) &#123;
+                    myNumber1.addNum();
+                &#125;
+            &#125;, <span class="string">&quot;t&quot;</span> + i).start();
+        &#125;
+
+        TimeUnit.SECONDS.sleep(<span class="number">3</span>);
+
+        System.out.println(<span class="string">&quot;执行结束，num值为：&quot;</span> + myNumber1.num);
+    &#125;
+&#125;</code></pre>
+
+
+
+<h2 id="4-DCL双端锁的发布"><a href="#4-DCL双端锁的发布" class="headerlink" title="4. DCL双端锁的发布"></a>4. DCL双端锁的发布</h2><h3 id="4-1-问题代码示例"><a href="#4-1-问题代码示例" class="headerlink" title="4.1 问题代码示例"></a>4.1 问题代码示例</h3><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SafeDoubleCheckSingleton</span> &#123;
+    <span class="comment">// 加 volatile 保证了对象的可见性</span>
+    <span class="comment">//    private volatile static SafeDoubleCheckSingleton singleton = null;</span>
+    <span class="comment">// 不加 volatile 在多线程环境下可能导致获取到的对象是null</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">SafeDoubleCheckSingleton</span> <span class="variable">singleton</span> <span class="operator">=</span> <span class="literal">null</span>;
+
+    <span class="comment">//私有化构造方法</span>
+    <span class="keyword">private</span> <span class="title function_">SafeDoubleCheckSingleton</span><span class="params">()</span> &#123;
+    &#125;
+
+    <span class="comment">//双重锁设计</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> SafeDoubleCheckSingleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;
+        <span class="keyword">if</span> (singleton == <span class="literal">null</span>) &#123;
+            <span class="comment">//1.多线程并发创建对象时，会通过加锁保证只有一个线程能创建对象</span>
+            <span class="keyword">synchronized</span> (SafeDoubleCheckSingleton.class) &#123;
+                <span class="keyword">if</span> (singleton == <span class="literal">null</span>) &#123;
+                    <span class="comment">//隐患：多线程环境下，由于重排序，该对象可能还未完成初始化就被其他线程读取</span>
+                    singleton = <span class="keyword">new</span> <span class="title class_">SafeDoubleCheckSingleton</span>();
+                &#125;
+            &#125;
+        &#125;
+        <span class="comment">//2.对象创建完毕，执行getInstance()将不需要获取锁，直接返回创建对象</span>
+        <span class="keyword">return</span> singleton;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">SafeDoubleCheckSingleton</span> <span class="variable">instance</span> <span class="operator">=</span> SafeDoubleCheckSingleton.getInstance();
+    &#125;
+&#125;</code></pre>
+
+
+
+<h3 id="4-2-问题如下"><a href="#4-2-问题如下" class="headerlink" title="4.2 问题如下"></a>4.2 问题如下</h3><ul>
+<li><p>单线程环境下：(或者说正常情况下)，在”问题代码处”，会执行如下操作，保证能获取到已完成初始化的实例</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-172219.png" alt="单线程环境下指令执行逻辑"></p>
+<p>由于代码从编译到执行的过程中，可能会出现指令重排，2、3 两处的指令执行顺序可能会颠倒，这就有可能导致返回的对象，还未执行初始化。</p>
+</li>
+<li><p>多线程环境下：在”问题代码处”，会执行如下操作，由于重排序导致2,3乱序，后果就是其他线程得到的是null而不是完成初始化的对象</p>
+<p>正确的执行顺序</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-172545.png" alt="指令顺序-正确"></p>
+<p>异常的执行顺序</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-172531.png" alt="指令顺序-异常"></p>
+</li>
+</ul>
+<h3 id="4-3-问题解决"><a href="#4-3-问题解决" class="headerlink" title="4.3 问题解决"></a>4.3 问题解决</h3><h4 id="4-3-1-方式一：加volatile修饰"><a href="#4-3-1-方式一：加volatile修饰" class="headerlink" title="4.3.1 方式一：加volatile修饰"></a>4.3.1 方式一：加volatile修饰</h4><p><strong>原理:利用volatile，禁止 “初始化对象”(2) 和 “设置singleton指向内存空间”(3) 的重排序</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SafeDoubleCheckSingleton</span> &#123;
+    <span class="comment">// 加 volatile 保证了对象的可见性，实现线程安全的延迟初始化。</span>
+    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="type">SafeDoubleCheckSingleton</span> <span class="variable">singleton</span> <span class="operator">=</span> <span class="literal">null</span>;
+
+    <span class="comment">//私有化构造方法</span>
+    <span class="keyword">private</span> <span class="title function_">SafeDoubleCheckSingleton</span><span class="params">()</span> &#123;
+    &#125;
+
+    <span class="comment">//双重锁设计</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> SafeDoubleCheckSingleton <span class="title function_">getInstance</span><span class="params">()</span> &#123;
+        <span class="keyword">if</span> (singleton == <span class="literal">null</span>) &#123;
+            <span class="comment">//1.多线程并发创建对象时，会通过加锁保证只有一个线程能创建对象</span>
+            <span class="keyword">synchronized</span> (SafeDoubleCheckSingleton.class) &#123;
+                <span class="keyword">if</span> (singleton == <span class="literal">null</span>) &#123;
+                    <span class="comment">//隐患：多线程环境下，由于重排序，该对象可能还未完成初始化就被其他线程读取</span>
+                    singleton = <span class="keyword">new</span> <span class="title class_">SafeDoubleCheckSingleton</span>();
+                &#125;
+            &#125;
+        &#125;
+        <span class="comment">//2.对象创建完毕，执行getInstance()将不需要获取锁，直接返回创建对象</span>
+        <span class="keyword">return</span> singleton;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">SafeDoubleCheckSingleton</span> <span class="variable">instance</span> <span class="operator">=</span> SafeDoubleCheckSingleton.getInstance();
+    &#125;
+&#125;</code></pre>
+
+
+
+<h4 id="4-3-2-方式二：采用静态内部类的方式实现"><a href="#4-3-2-方式二：采用静态内部类的方式实现" class="headerlink" title="4.3.2 方式二：采用静态内部类的方式实现"></a>4.3.2 方式二：采用静态内部类的方式实现</h4><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SingletonDemo</span> &#123;
+    <span class="keyword">private</span> <span class="title function_">SingletonDemo</span><span class="params">()</span> &#123;
+    &#125;
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">SingletonDemoHandler</span> &#123;
+        <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">SingletonDemo</span> <span class="variable">instance</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SingletonDemo</span>();
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> SingletonDemo <span class="title function_">getInstance</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> SingletonDemoHandler.instance;
+    &#125;
+&#125;</code></pre>
+
+
+
+
+
+<h1 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h1><p>凭什么我们java写了一个volatile关键字系统底层加入内存屏障？两者关系怎么勾搭上的?</p>
+<ul>
+<li><p>字节码层面</p>
+<p>它其实给 volatile 修饰的字段添加了一个 <code>ACC_VOLATILE</code> 标识</p>
+<p>查看命令：<code>javap -v -p SafeDoubleCheckSingleton.class</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-180150.png" alt="image-20240926180150159"></p>
+</li>
+</ul>
+<p>JVM 在把字节码 生成 为 机器码 的时候，发现操作是 volatile 的变量的话，就会根据 JMM 要求，在相应的位置去插入 内存屏障指令</p>
+<p><strong>对比 java.util.concurrent.locks.Lock 来理解</strong></p>
+<p>cpu执行机器码指令的时候，是使用lock前缀指令 来实现 volatile 的功能的。</p>
+<p>Lock 指令，相当于内存屏障，功能也类似内存屏障的功能:</p>
+<ul>
+<li>首先对总线&#x2F;缓存加锁，然后去执行后面的指令，最后，释放锁，同时把高速缓存的数据刷新回到主内存</li>
+<li>在 lock 锁住总线&#x2F;缓存的时候，其它 cpu 的读写请求就会被阻塞，直到锁释放。Lock过后的写操作,会让其它cpu的高速缓存中相应的数据失效这样后续这些 cpu 在读取数据的时候，就会从主内存去加载最新的数据</li>
+</ul>
+<p>加了 Lock 指令过后的具体表现，就跟 JMM 添加内存屏障后一样。</p>
+<p><strong>一句话总结</strong></p>
+<ul>
+<li>volatile写之前的的操作，都禁止重排到volatile之后</li>
+<li>volatile读之后的操作，都禁止重排到volatile之前</li>
+<li>volatile写之后volatile读，禁止重排序</li>
+</ul>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
