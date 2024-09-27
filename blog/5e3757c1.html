@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>合并两个有序链表 | George&#39;s Blog</title>
+  <title>07-JUC进阶-CAS | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 算法 , 合并有序链表 ">
-  <meta name="description" content="合并两个有序链表 | George&#39;s Blog">
+  <meta name="keywords" content=" juc , java ">
+  <meta name="description" content="07-JUC进阶-CAS | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#x65;&#x5f;&#57;&#x35;&#x40;&#49;&#50;&#54;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -918,9 +918,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-algorithm/合并两个有序链表" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-juc2/07-JUC进阶-CAS" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">合并两个有序链表</h1>
+        <h1 class="article-title">07-JUC进阶-CAS</h1>
     
     <div class="article-meta">
         
@@ -930,7 +930,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="算法">算法</a>
+            <a  data-rel="JUC">JUC</a>
             
         </span>
         
@@ -938,21 +938,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color3">算法</a>
+            <a class="color4">juc</a>
             
-            <a class="color2">合并有序链表</a>
+            <a class="color5">java</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 12:17:33'>2024-07-06 09:11</time>
+            发布时间 : <time class="date" title='最后更新: 2024-09-27 19:59:39'>2024-09-26 19:37</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:833</span>
+        <span>字数:3.3k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -982,7 +982,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-text">1. 题目描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="toc-text">2. 解决思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81"><span class="toc-text">3. 关键代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="toc-text">4. 复杂度分析</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%B2%A1%E6%9C%89CAS%E4%B9%8B%E5%89%8D"><span class="toc-text">一、没有CAS之前</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFCAS"><span class="toc-text">二、什么是CAS</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5"><span class="toc-text">1. 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8E%9F%E7%90%86"><span class="toc-text">2. 原理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%A6%82%E8%BF%B0"><span class="toc-text">2.1 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%A1%AC%E4%BB%B6%E7%BA%A7%E5%88%AB%E4%BF%9D%E8%AF%81"><span class="toc-text">2.2 硬件级别保证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-CAS%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">3. CAS代码示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90"><span class="toc-text">4. 源码解析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%85%B3%E4%BA%8E-UnSafe-%E7%9A%84%E7%90%86%E8%A7%A3"><span class="toc-text">三、关于 UnSafe 的理解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-UnSafe"><span class="toc-text">1. UnSafe</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-CPU%E5%B9%B6%E5%8F%91%E5%8E%9F%E8%AF%AD"><span class="toc-text">2. CPU并发原语</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%BA%95%E5%B1%82%E6%B1%87%E7%BC%96"><span class="toc-text">3. 底层汇编</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8E%9F%E5%AD%90%E5%BC%95%E7%94%A8"><span class="toc-text">四、原子引用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E8%87%AA%E6%97%8B%E9%94%81"><span class="toc-text">五、自旋锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%87%AA%E6%97%8B%E9%94%81%E6%A6%82%E5%BF%B5"><span class="toc-text">1. 自旋锁概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E8%87%AA%E6%97%8B%E9%94%81"><span class="toc-text">2. 实现一个自旋锁</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81CAS%E7%BC%BA%E7%82%B9"><span class="toc-text">六、CAS缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%97%B6%E9%97%B4%E5%BC%80%E9%94%80%E5%A4%A7"><span class="toc-text">1. 时间开销大</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-ABA%E9%97%AE%E9%A2%98"><span class="toc-text">2. ABA问题</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -998,79 +998,346 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1. 题目描述"></a>1. 题目描述</h1><p>将两个升序链表合并为一个新的 <strong>升序</strong> 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 </p>
-<p><strong>示例 1：</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/06/20240706-125245.jpg" alt="img"></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [1,2,4], l2 &#x3D; [1,3,4]<br><strong>输出：</strong>[1,1,2,3,4,4]</p>
-</blockquote>
-<p><strong>示例 2：</strong></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [], l2 &#x3D; []<br><strong>输出：</strong>[]</p>
-</blockquote>
-<p><strong>示例 3：</strong></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [], l2 &#x3D; [0]<br><strong>输出：</strong>[0]</p>
-</blockquote>
-<h1 id="2-解决思路"><a href="#2-解决思路" class="headerlink" title="2. 解决思路"></a>2. 解决思路</h1><p>可以使用迭代方法来实现有序链表的合并.</p>
-<p>假设有两个有序链表 list1和list2, 当这两个链表都不是空链表时,选择头节点中较小的一个作为合并链表的头节点,.</p>
-<p>移动有序链表的指针,比较list1和list2最新的头节点, 添加到合并链表中.</p>
-<h1 id="3-关键代码"><a href="#3-关键代码" class="headerlink" title="3. 关键代码"></a>3. 关键代码</h1><pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 合并两个有序列表</span>
-<span class="comment"> *</span>
-<span class="comment"> * <span class="doctag">@param</span> list1 有序链表1, 顺序: 由小到大</span>
-<span class="comment"> * <span class="doctag">@param</span> list2 有序链表2, 顺序: 由小到大</span>
-<span class="comment"> * <span class="doctag">@return</span> ListNode 合并后的有序链表</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> ListNode <span class="title function_">merge</span><span class="params">(ListNode list1, ListNode list2)</span> &#123;
-    <span class="comment">// 极值判断</span>
-    <span class="keyword">if</span> (list1 == <span class="literal">null</span> || list2 == <span class="literal">null</span>) &#123;
-        <span class="keyword">return</span> list1 == <span class="literal">null</span> ? list2 : list1;
+        <h1 id="一、没有CAS之前"><a href="#一、没有CAS之前" class="headerlink" title="一、没有CAS之前"></a>一、没有CAS之前</h1><ul>
+<li><p>多线程环境不使用原子类保证线程安全（基本数据类型）</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">T1</span> &#123;
+    <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">number</span> <span class="operator">=</span> <span class="number">0</span>;
+
+    <span class="comment">//读取</span>
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getNumber</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> number;
     &#125;
 
-    <span class="type">ListNode</span> <span class="variable">cur1</span> <span class="operator">=</span> list1; <span class="comment">// list1中当前正在比较的头节点</span>
-    <span class="type">ListNode</span> <span class="variable">cur2</span> <span class="operator">=</span> list2; <span class="comment">// list2中当前正在比较的头节点</span>
-    <span class="type">ListNode</span> <span class="variable">head</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 已完成合并操作的链表(默认头节点是两个有序链表头节点中较小的一个)</span>
-    <span class="keyword">if</span> (cur1.val &lt;= cur2.val) &#123;
-        head = cur1;
-        cur1 = cur1.next; <span class="comment">// 更新cur1的头节点</span>
-    &#125; <span class="keyword">else</span> &#123;
-        head = cur2;
-        cur2 = cur2.next; <span class="comment">// 更新cur2的头节点</span>
+    <span class="comment">//写入加锁保证原子性</span>
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">setNumber</span><span class="params">()</span> &#123;
+        number++;
     &#125;
-
-    <span class="type">ListNode</span> <span class="variable">pre</span> <span class="operator">=</span> head; <span class="comment">// 临时节点,开始指向head, 后面通过pre不断调整head节点的next属性的引用</span>
-
-    <span class="keyword">while</span> (cur1 != <span class="literal">null</span> &amp;&amp; cur2 != <span class="literal">null</span>) &#123; <span class="comment">// 仅当两个队列当前操作的节点都不为空时,才需要进行比较与合并操作</span>
-        <span class="keyword">if</span> (cur1.val &lt;= cur2.val) &#123;
-            pre.next = cur1; <span class="comment">// 当cur1的值小于cur2时,next指向cur1</span>
-            cur1 = cur1.next; <span class="comment">// cur1节点后移,继续后面节点的比较</span>
-        &#125; <span class="keyword">else</span> &#123;
-            pre.next = cur2; <span class="comment">// 当cur2的值小于cur1时,将cur2作为待合并的节点</span>
-            cur2 = cur2.next; <span class="comment">// cur2节点后移,继续后面节点的比较</span>
-        &#125;
-
-        <span class="comment">// 这一行同时也不断调整了head节点的next属性,扩充了head链表</span>
-        pre = pre.next; <span class="comment">// 链表指针后移</span>
-    &#125;
-
-    <span class="comment">// 当其中一个链表(假设是cur1)的最后一个节点完成了合并操作,而另一个链表(假设是cur2)还有剩余节点未合并,</span>
-    <span class="comment">// 此时就需要将最后完成合并的节点(pre节点)的next指向还有节点未合并的链表(不为空的链表).</span>
-    <span class="comment">// 这一步是必须存在的,因为两个有序链表合并,必然会存在其中一个节点先完成合并.</span>
-    pre.next = cur1 != <span class="literal">null</span> ? cur1 : cur2;
-
-    <span class="comment">// 返回合并后,完整的有序链表</span>
-    <span class="keyword">return</span> head;
 &#125;</code></pre>
 
-<p>完整测试代码:</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/mergeTwoList/MergeTwoList.java">https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/mergeTwoList/MergeTwoList.java</a></p>
-<h1 id="4-复杂度分析"><a href="#4-复杂度分析" class="headerlink" title="4. 复杂度分析"></a>4. 复杂度分析</h1><ul>
-<li><p>时间复杂度：O(n+m)，其中 n 和 m 分别为两个链表的长度。因为每次循环迭代中，l1 和 l2 只有一个元素会被放进合并链表中， 因此 while 循环的次数不会超过两个链表的长度之和。所有其他操作的时间复杂度都是常数级别的，因此总的时间复杂度为 O(n+m)。</p>
+
 </li>
-<li><p>空间复杂度：O(1)。我们只需要常数的空间存放若干变量。</p>
+<li><p>多线程环境使用原子类保证线程安全（基本数据类型）</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">T2</span> &#123;
+    <span class="type">AtomicInteger</span> <span class="variable">atomicInteger</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>();
+
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getAtomicInteger</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> atomicInteger.get();
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setAtomicInteger</span><span class="params">()</span> &#123;
+        atomicInteger.getAndIncrement();
+    &#125;
+&#125;</code></pre></li>
+</ul>
+<h1 id="二、什么是CAS"><a href="#二、什么是CAS" class="headerlink" title="二、什么是CAS"></a>二、什么是CAS</h1><h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h2><p>CAS 即： compare and swap的缩写，中文翻译成比较并交换,实现并发算法时常用到的一种技术。它包含三个操作数——内存位置、预期原值及更新值。</p>
+<p>执行CAS操作的时候，将内存位置的值与预期原值比较：</p>
+<ul>
+<li>如果相匹配，那么处理器会自动将该位置值更新为新值，</li>
+<li>如果不匹配，处理器不做任何操作，多个线程同时执行CAS操作只有一个会成功。</li>
+</ul>
+<h2 id="2-原理"><a href="#2-原理" class="headerlink" title="2. 原理"></a>2. 原理</h2><h3 id="2-1-概述"><a href="#2-1-概述" class="headerlink" title="2.1 概述"></a>2.1 概述</h3><p>CAS有3个操作数，位置内存值V，旧的预期值A，要修改的更新值B。</p>
+<p>当且仅当旧的预期值A和内存值V相同时，将内存值V修改为B，否则什么都不做或重来</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-200317.png" alt="CAS原理"></p>
+<h3 id="2-2-硬件级别保证"><a href="#2-2-硬件级别保证" class="headerlink" title="2.2 硬件级别保证"></a>2.2 硬件级别保证</h3><p>CAS是JDK提供的非阻塞原子性操作，它通过硬件保证了比较-更新的原子性。</p>
+<p>它是非阻塞的且自身原子性，也就是说它效率更高且通过硬件保证，更可靠。</p>
+<p>CAS是一条CPU的原子指令（cmpxchg指令），不会造成所谓的数据不一致问题，Unsafe提供的CAS方法（如 compareAndSwapXXX ）底层实现即为CPU指令<code>cmpxchg</code>。</p>
+<p>执行 <code>cmpxchg</code> 指令的时候，会判断当前系统是否为多核系统，如果是就给总线加锁，只有一个线程会对总线加锁成功，加锁成功之后会执行cas操作，也就是说CAS的原子性实际上是CPU实现的， 其实在这一点上还是有排他锁的，只是比起用 <code>synchronized</code>， 这里的排他时间要短的多， 所以在多线程情况下性能会比较好</p>
+<h2 id="3-CAS代码示例"><a href="#3-CAS代码示例" class="headerlink" title="3. CAS代码示例"></a>3. CAS代码示例</h2><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CASDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">AtomicInteger</span> <span class="variable">atomicInteger</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>(<span class="number">5</span>);
+        System.out.println(atomicInteger.get());
+        
+        System.out.println(atomicInteger.compareAndSet(<span class="number">5</span>, <span class="number">308</span>) + <span class="string">&quot;\t&quot;</span> + atomicInteger.get());
+
+        System.out.println(atomicInteger.compareAndSet(<span class="number">5</span>, <span class="number">3333</span>) + <span class="string">&quot;\t&quot;</span> + atomicInteger.get());
+    &#125;
+&#125;</code></pre>
+
+<p>执行结果：</p>
+<pre><code class="highlight shell">5
+true	308
+false	308</code></pre>
+
+
+
+<h2 id="4-源码解析"><a href="#4-源码解析" class="headerlink" title="4. 源码解析"></a>4. 源码解析</h2><ul>
+<li><p>compareAndSet(int expect, int update)</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Atomically sets the value to the given updated value</span>
+<span class="comment"> * if the current value &#123;<span class="doctag">@code</span> ==&#125; the expected value.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@param</span> expect the expected value</span>
+<span class="comment"> * <span class="doctag">@param</span> update the new value</span>
+<span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; if successful. False return indicates that</span>
+<span class="comment"> * the actual value was not equal to the expected value.</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">final</span> <span class="type">boolean</span> <span class="title function_">compareAndSet</span><span class="params">(<span class="type">int</span> expect, <span class="type">int</span> update)</span> &#123;
+    <span class="keyword">return</span> unsafe.compareAndSwapInt(<span class="built_in">this</span>, valueOffset, expect, update);
+&#125;</code></pre>
+
+<ul>
+<li><p>unsafe.compareAndSwapInt(this, valueOffset, expect, update)</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="type">boolean</span> <span class="title function_">compareAndSwapObject</span><span class="params">(Object var1, <span class="type">long</span> var2, Object var4, Object var5)</span>;
+
+<span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="type">boolean</span> <span class="title function_">compareAndSwapInt</span><span class="params">(Object var1, <span class="type">long</span> var2, <span class="type">int</span> var4, <span class="type">int</span> var5)</span>;
+
+<span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">native</span> <span class="type">boolean</span> <span class="title function_">compareAndSwapLong</span><span class="params">(Object var1, <span class="type">long</span> var2, <span class="type">long</span> var4, <span class="type">long</span> var6)</span>;</code></pre></li>
+</ul>
+<p>上面三个方法都是类似的，主要对4个参数做一下说明。</p>
+<ul>
+<li>var1：表示要操作的对象</li>
+<li>var2：表示要操作对象中属性地址的偏移量</li>
+<li>var4：表示需要修改数据的期望的值</li>
+<li>var5&#x2F;var6：表示需要修改为的新值</li>
+</ul>
 </li>
 </ul>
+<p>那么什么是 <code>unsafe</code> 呢？</p>
+<h1 id="三、关于-UnSafe-的理解"><a href="#三、关于-UnSafe-的理解" class="headerlink" title="三、关于 UnSafe 的理解"></a>三、关于 UnSafe 的理解</h1><h2 id="1-UnSafe"><a href="#1-UnSafe" class="headerlink" title="1. UnSafe"></a>1. UnSafe</h2><p><strong>UnSafe</strong></p>
+<p><code>Unsafe</code> 是CAS的核心类，由于Java方法无法直接访问底层系统，需要通过本地（native）方法来访问，<code>Unsafe</code> 相当于一个后门，基于该类可以直接操作特定内存的数据。<code>Unsafe</code> 类存在于 <code>sun.misc</code> 包中，其内部方法操作可以像C的指针一样直接操作内存，因为Java中CAS操作的执行依赖于<code>Unsafe</code>类的方法。</p>
+<p><strong>注意Unsafe类中的所有方法都是native修饰的，也就是说Unsafe类中的方法都直接调用操作系统底层资源执行相应任务</strong> </p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-202221.png" alt="AtomicInteger"></p>
+<p><strong>变量valueOffset</strong></p>
+<p>变量 valueOffset，表示该变量值在内存中的偏移地址，因为 <code>Unsafe</code> 就是根据内存偏移地址获取数据的。</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Atomically increments by one the current value.</span>
+<span class="comment"> *</span>
+<span class="comment"> * <span class="doctag">@return</span> the previous value</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">final</span> <span class="type">int</span> <span class="title function_">getAndIncrement</span><span class="params">()</span> &#123;
+    <span class="keyword">return</span> unsafe.getAndAddInt(<span class="built_in">this</span>, valueOffset, <span class="number">1</span>);
+&#125;</code></pre>
+
+
+
+<p><strong>用volatile修饰</strong>，保证了多线程之间的内存可见性。</p>
+<p><img src="C:/Users/kd/AppData/Roaming/Typora/typora-user-images/image-20240926202653288.png" alt="变量value"></p>
+<h2 id="2-CPU并发原语"><a href="#2-CPU并发原语" class="headerlink" title="2. CPU并发原语"></a>2. CPU并发原语</h2><p>我们知道i++线程不安全的，那 <code>atomicInteger.getAndIncrement()</code> 是如何保证线程安全的呢？</p>
+<p>CAS的全称为Compare-And-Swap，它是一条CPU并发原语。它的功能是判断内存某个位置的值是否为预期值，如果是则更改为新的值，这个过程是原子的。<br>AtomicInteger 类主要利用 CAS (compare and swap) + volatile 和 native 方法来保证原子操作，从而避免 synchronized 的高开销，执行效率大为提升。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/26/20240926-203001.png" alt="Compare-And-Swap"></p>
+<p>CAS并发原语体现在JAVA语言中就是 <code>sun.misc.Unsafe</code> 类中的各个方法。调用 UnSafe 类中的CAS方法，JVM会帮我们实现出CAS汇编指令。这是一种完全依赖于硬件的功能，通过它实现了原子操作。再次强调，由于CAS是一种系统原语，原语属于操作系统用语范畴，是由若干条指令组成的，用于完成某个功能的一个过程，并且原语的执行必须是连续的，在执行过程中不允许被中断，也就是说CAS是一条CPU的原子指令，不会造成所谓的数据不一致问题。</p>
+<h2 id="3-底层汇编"><a href="#3-底层汇编" class="headerlink" title="3. 底层汇编"></a>3. 底层汇编</h2><ul>
+<li><p>native修饰的方法代表是底层方法</p>
+<p>Unsafe类中的compareAndSwapInt，是一个本地方法，该方法的实现位于unsafe.cpp中</p>
+<pre><code class="highlight cpp"><span class="built_in">UNSAFE_ENTRY</span>(jboolean, <span class="built_in">Unsafe_CompareAndSwapInt</span>(JNIEnv *env, jobject unsafe, jobject obj, jlong offset, jint e, jint x))
+  <span class="built_in">UnsafeWrapper</span>(<span class="string">&quot;Unsafe_CompareAndSwapInt&quot;</span>);
+  oop p = JNIHandles::<span class="built_in">resolve</span>(obj);
+<span class="comment">// 先想办法拿到变量value在内存中的地址，根据偏移量valueOffset，计算 value 的地址</span>
+  jint* addr = (jint *) <span class="built_in">index_oop_from_field_offset_long</span>(p, offset);
+<span class="comment">// 调用 Atomic 中的函数 cmpxchg来进行比较交换，其中参数x是即将更新的值，参数e是原内存的值</span>
+  <span class="keyword">return</span> (jint)(Atomic::<span class="built_in">cmpxchg</span>(x, addr, e)) == e;
+UNSAFE_END</code></pre>
+
+<p>(Atomic::cmpxchg(x, addr, e)) &#x3D;&#x3D; e;</p>
+</li>
+<li><p>cmpxchg</p>
+<p>&#x2F;&#x2F; 调用 Atomic 中的函数 cmpxchg来进行比较交换，其中参数x是即将更新的值，参数e是原内存的值<br>  return (jint)(Atomic::cmpxchg(x, addr, e)) &#x3D;&#x3D; e;</p>
+<pre><code class="highlight cpp"><span class="function"><span class="type">unsigned</span> <span class="title">Atomic::cmpxchg</span><span class="params">(<span class="type">unsigned</span> <span class="type">int</span> exchange_value,<span class="keyword">volatile</span> <span class="type">unsigned</span> <span class="type">int</span>* dest, <span class="type">unsigned</span> <span class="type">int</span> compare_value)</span> </span>&#123;
+    <span class="built_in">assert</span>(<span class="built_in">sizeof</span>(<span class="type">unsigned</span> <span class="type">int</span>) == <span class="built_in">sizeof</span>(jint), <span class="string">&quot;more work to do&quot;</span>);
+  <span class="comment">/*</span>
+<span class="comment">   * 根据操作系统类型调用不同平台下的重载函数，这个在预编译期间编译器会决定调用哪个平台下的重载函数*/</span>
+    <span class="keyword">return</span> (<span class="type">unsigned</span> <span class="type">int</span>)Atomic::<span class="built_in">cmpxchg</span>((jint)exchange_value, (<span class="keyword">volatile</span> jint*)dest, (jint)compare_value);
+&#125;</code></pre>
+</li>
+<li><p>在不同的操作系统下会调用不同的cmpxchg重载函数，本次用的是win10系统</p>
+<pre><code class="highlight cpp"><span class="function"><span class="keyword">inline</span> jint <span class="title">Atomic::cmpxchg</span> <span class="params">(jint exchange_value, <span class="keyword">volatile</span> jint* dest, jint compare_value)</span> </span>&#123;
+  <span class="comment">//判断是否是多核CPU</span>
+  <span class="type">int</span> mp = os::<span class="built_in">is_MP</span>();
+  __asm &#123;
+    <span class="comment">//三个move指令表示的是将后面的值移动到前面的寄存器上</span>
+    mov edx, dest
+    mov ecx, exchange_value
+    mov eax, compare_value
+    <span class="comment">//CPU原语级别，CPU触发</span>
+    <span class="built_in">LOCK_IF_MP</span>(mp)
+    <span class="comment">//比较并交换指令</span>
+    <span class="comment">//cmpxchg: 即“比较并交换”指令</span>
+    <span class="comment">//dword: 全称是 double word 表示两个字，一共四个字节</span>
+    <span class="comment">//ptr: 全称是 pointer，与前面的 dword 连起来使用，表明访问的内存单元是一个双字单元 </span>
+    <span class="comment">//将 eax 寄存器中的值（compare_value）与 [edx] 双字内存单元中的值进行对比，</span>
+    <span class="comment">//如果相同，则将 ecx 寄存器中的值（exchange_value）存入 [edx] 内存单元中</span>
+    cmpxchg dword ptr [edx], ecx
+  &#125;
+&#125;</code></pre>
+
+<p>到这里我们应该理解了CAS真正实现的机制了，它最终是由操作系统的汇编指令完成的。</p>
+</li>
+</ul>
+<p><strong>总结：</strong></p>
+<p>你只需要记住：CAS是靠硬件实现的从而在硬件层面提升效率，最底层还是交给硬件来保证原子性和可见性。实现方式是基于硬件平台的汇编指令，在intel的CPU中(X86机器上)，使用的是汇编指令<code>cmpxchg</code>指令。 </p>
+<p>核心思想就是：比较要更新变量的值V和预期值E（compare），相等才会将V的值设为新值N（swap）如果不相等自旋再来。</p>
+<h1 id="四、原子引用"><a href="#四、原子引用" class="headerlink" title="四、原子引用"></a>四、原子引用</h1><p>除了 AtomicInteger 原子整型，可否有其它原子类型？比如 AtomicBook 、AtomicOrder。</p>
+<p>JDK 除了提供了原子整型之外，还提供了原子引用类：<code>AtomicReference</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/27/20240927-192203.png" alt="原子引用"></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AtomicReferenceTest</span> &#123;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">User1</span> <span class="variable">user1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User1</span>(<span class="string">&quot;张三&quot;</span>, <span class="number">20</span>);
+        <span class="type">User1</span> <span class="variable">user2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">User1</span>(<span class="string">&quot;george&quot;</span>, <span class="number">22</span>);
+
+        AtomicReference&lt;User1&gt; atomicUser1 = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;();
+        atomicUser1.set(user1);
+        System.out.println(<span class="string">&quot;当前人员：&quot;</span> + atomicUser1.get());
+        <span class="comment">// 第一次比较替换，张三 换成 george， 结果成功</span>
+        System.out.println(atomicUser1.compareAndSet(user1, user2) + <span class="string">&quot;\t&quot;</span> + atomicUser1.get());
+        <span class="comment">// 第二次比较替换，张三 换成 george， 结果失败</span>
+        System.out.println(atomicUser1.compareAndSet(user1, user2) + <span class="string">&quot;\t&quot;</span> + atomicUser1.get());
+    &#125;
+&#125;
+
+
+<span class="meta">@Data</span>
+<span class="meta">@ToString</span>
+<span class="meta">@NoArgsConstructor</span>
+<span class="meta">@AllArgsConstructor</span>
+<span class="keyword">class</span> <span class="title class_">User1</span> &#123;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> Integer age;
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">当前人员：User1(name=张三, age=20)
+true	User1(name=george, age=22)
+false	User1(name=george, age=22)</code></pre>
+
+
+
+
+
+<h1 id="五、自旋锁"><a href="#五、自旋锁" class="headerlink" title="五、自旋锁"></a>五、自旋锁</h1><h2 id="1-自旋锁概念"><a href="#1-自旋锁概念" class="headerlink" title="1. 自旋锁概念"></a>1. 自旋锁概念</h2><p><strong>自旋锁（spinlock）</strong>是指尝试获取锁的线程不会立即阻塞，而是采用循环的方式去尝试获取锁，当线程发现锁被占用时，会不断循环判断锁的状态，直到获取。这样的好处是减少线程上下文切换的消耗，缺点是循环会消耗CPU</p>
+<p>OpenJDK源码里面查看下 </p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/27/20240927-192926.png" alt="Unsafe.java"></p>
+<h2 id="2-实现一个自旋锁"><a href="#2-实现一个自旋锁" class="headerlink" title="2. 实现一个自旋锁"></a>2. 实现一个自旋锁</h2><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MySpinLock</span> &#123;
+    AtomicReference&lt;Thread&gt; atomicReference = <span class="keyword">new</span> <span class="title class_">AtomicReference</span>&lt;&gt;();
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lock</span><span class="params">()</span> &#123;
+        <span class="comment">// 当没有替换成当前线程，则表示获取锁失败，线程自旋</span>
+        <span class="keyword">while</span> (!atomicReference.compareAndSet(<span class="literal">null</span>, Thread.currentThread())) &#123;
+
+        &#125;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;获取锁成功&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlock</span><span class="params">()</span> &#123;
+        <span class="keyword">while</span> (atomicReference.compareAndSet(Thread.currentThread(), <span class="literal">null</span>)) &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;解锁成功&quot;</span>);
+        &#125;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;
+        <span class="type">MySpinLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MySpinLock</span>();
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="comment">// 获取锁</span>
+            lock.lock();
+            <span class="keyword">try</span> &#123;
+                <span class="comment">// 阻塞3秒</span>
+                TimeUnit.SECONDS.sleep(<span class="number">3</span>);
+            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+            &#125;
+            <span class="comment">// 解锁</span>
+            lock.unlock();
+        &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+        <span class="comment">// 程序暂停1秒， 保证t1先拿到锁</span>
+        TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            lock.lock();
+            lock.unlock();
+        &#125;, <span class="string">&quot;t2&quot;</span>).start();
+    &#125;
+&#125;</code></pre>
+
+<p>运行结果：</p>
+<pre><code class="highlight shell">t1获取锁成功
+t1解锁成功
+t2获取锁成功
+t2解锁成功</code></pre>
+
+<p>结果：t1先拿到了锁，将 atomicReference 设置成自己，t2 再去获取锁的时候就会获取失败，然后在 while 中自旋， 等待 t1 释放锁后，t2才能获取到锁继续执行。</p>
+<h1 id="六、CAS缺点"><a href="#六、CAS缺点" class="headerlink" title="六、CAS缺点"></a>六、CAS缺点</h1><h2 id="1-时间开销大"><a href="#1-时间开销大" class="headerlink" title="1. 时间开销大"></a>1. 时间开销大</h2><p>循环时间长开销很大。</p>
+<p>我们可以看到 <code>getAndAddInt</code> 方法执行时，有个 <code>do while</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/27/20240927-194243.png" alt="do while"></p>
+<p>如果CAS失败，会一直进行尝试。如果CAS长时间一直不成功，可能会给CPU带来很大的开销。</p>
+<h2 id="2-ABA问题"><a href="#2-ABA问题" class="headerlink" title="2. ABA问题"></a>2. ABA问题</h2><p>CAS会导致“ABA问题”。</p>
+<p>CAS算法实现一个重要前提需要取出内存中某时刻的数据并在当下时刻比较并替换，那么在这个时间差类会导致数据的变化。</p>
+<p>比如说一个<strong>线程t1</strong>从内存位置V中取出A，这时候另一个<strong>线程t2</strong>也从内存中取出A，并且<strong>线程t2</strong>进行了一些操作将值变成了B，<br>然后<strong>线程t2</strong>又将V位置的数据变成A，这时候<strong>线程t1</strong>进行CAS操作发现内存中仍然是A，然后<strong>线程t1</strong>操作成功。</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">abaProblem</span><span class="params">()</span> &#123;
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        atomicInteger.compareAndSet(<span class="number">100</span>, <span class="number">101</span>);
+        atomicInteger.compareAndSet(<span class="number">101</span>, <span class="number">100</span>);
+    &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+    <span class="comment">//暂停毫秒</span>
+    <span class="keyword">try</span> &#123;
+        TimeUnit.MILLISECONDS.sleep(<span class="number">10</span>);
+    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+        e.printStackTrace();
+    &#125;
+
+    <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+        <span class="type">boolean</span> <span class="variable">b</span> <span class="operator">=</span> atomicInteger.compareAndSet(<span class="number">100</span>, <span class="number">20210308</span>);
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;修改成功否：&quot;</span> + b + <span class="string">&quot;\t&quot;</span> + atomicInteger.get());
+    &#125;, <span class="string">&quot;t2&quot;</span>).start();
+&#125;</code></pre>
+
+<p>尽管<strong>线程t1</strong>的CAS操作成功，但是不代表这个过程就是没有问题的。</p>
+<p><strong>解决方式：</strong>使用 <code>AtomicStampedReference</code>， 带有版本号的原子操作类。</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ABATest</span> &#123;
+
+    <span class="comment">// 初始值：100   初始版本号：1</span>
+    <span class="keyword">static</span> AtomicStampedReference&lt;Integer&gt; stampedReference = <span class="keyword">new</span> <span class="title class_">AtomicStampedReference</span>&lt;&gt;(<span class="number">100</span>, <span class="number">1</span>);
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="type">int</span> <span class="variable">stamp</span> <span class="operator">=</span> stampedReference.getStamp();
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 默认获取到的值：&quot;</span> + stampedReference.getReference() + <span class="string">&quot;\t默认版本号：&quot;</span> + stamp);
+
+            <span class="keyword">try</span> &#123;
+                TimeUnit.SECONDS.sleep(<span class="number">1</span>);
+            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+            &#125;
+
+            <span class="comment">// 修改值，将版本号加1</span>
+            <span class="type">boolean</span> <span class="variable">flag1</span> <span class="operator">=</span> stampedReference.compareAndSet(<span class="number">100</span>, <span class="number">101</span>, stampedReference.getStamp(), stampedReference.getStamp() + <span class="number">1</span>);
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;第一次修改：&quot;</span> + flag1);
+            <span class="comment">// 修改值，将版本号加1</span>
+            <span class="type">boolean</span> <span class="variable">flag2</span> <span class="operator">=</span> stampedReference.compareAndSet(<span class="number">101</span>, <span class="number">100</span>, stampedReference.getStamp(), stampedReference.getStamp() + <span class="number">1</span>);
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;第二次修改：&quot;</span> + flag2);
+
+            System.out.println(<span class="string">&quot;修改后的值：&quot;</span> + stampedReference.getReference() + <span class="string">&quot;\t版本号：&quot;</span> + stampedReference.getStamp());
+        &#125;, <span class="string">&quot;t1&quot;</span>).start();
+
+
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="type">int</span> <span class="variable">stamp</span> <span class="operator">=</span> stampedReference.getStamp();
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 默认获取到的值：&quot;</span> + stampedReference.getReference() + <span class="string">&quot;\t默认版本号：&quot;</span> + stamp);
+
+            <span class="keyword">try</span> &#123;
+                TimeUnit.SECONDS.sleep(<span class="number">3</span>);
+            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(e);
+            &#125;
+
+            <span class="comment">// 修改值，将版本号加1</span>
+            <span class="type">boolean</span> <span class="variable">flag</span> <span class="operator">=</span> stampedReference.compareAndSet(<span class="number">100</span>, <span class="number">2024</span>, stamp, stampedReference.getStamp() + <span class="number">1</span>);
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;修改：&quot;</span> + flag);
+
+            System.out.println(<span class="string">&quot;修改后的值：&quot;</span> + stampedReference.getReference() + <span class="string">&quot;\t版本号：&quot;</span> + stampedReference.getStamp());
+        &#125;, <span class="string">&quot;t2&quot;</span>).start();
+    &#125;
+&#125;</code></pre>
+
+<p>运行结果</p>
+<pre><code class="highlight shell">t1 默认获取到的值：100	默认版本号：1
+t2 默认获取到的值：100	默认版本号：1
+t1第一次修改：true
+t1第二次修改：true
+修改后的值：100	版本号：3
+t2修改：false
+修改后的值：100	版本号：3</code></pre>
+
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
