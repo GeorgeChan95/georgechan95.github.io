@@ -1,0 +1,1606 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>11-JUC进阶-Synchronized与锁升级 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" juc , java ">
+  <meta name="description" content="11-JUC进阶-Synchronized与锁升级 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#x72;&#103;&#101;&#95;&#x39;&#x35;&#x40;&#x31;&#x32;&#54;&#x2e;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#x72;&#103;&#101;&#95;&#x39;&#x35;&#x40;&#x31;&#x32;&#54;&#x2e;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(61)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(23)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="61">
+<input type="hidden" id="yelog_site_word_count" value="291.1k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3fdbf0f6.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
+            <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3e0d7592.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
+            <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4502cffa.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
+            <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4de6a39b.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
+            <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/72329cf5.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
+            <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/5e3757c1.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
+            <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-juc2/11-JUC进阶-Synchronized与锁升级" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">11-JUC进阶-Synchronized与锁升级</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="JUC">JUC</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">juc</a>
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-10-08 12:46:24'>2024-10-06 09:28</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:5.3k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Synchronized%E7%9A%84%E6%80%A7%E8%83%BD%E5%8F%98%E5%8C%96"><span class="toc-text">一、Synchronized的性能变化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%94%A8%E6%88%B7%E6%80%81%E4%B8%8E%E5%86%85%E6%A0%B8%E6%80%81%E5%88%87%E6%8D%A2"><span class="toc-text">1. 用户态与内核态切换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%8F%E4%B8%80%E4%B8%AA%E5%AF%B9%E8%B1%A1%E9%83%BD%E5%8F%AF%E4%BB%A5%E6%88%90%E4%B8%BA%E9%94%81"><span class="toc-text">2. 为什么每一个对象都可以成为锁?</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Monitor"><span class="toc-text">Monitor</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Java6%E7%9A%84%E4%BC%98%E5%8C%96%E6%8F%90%E5%8D%87"><span class="toc-text">3. Java6的优化提升</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81synchronized%E9%94%81%E7%A7%8D%E7%B1%BB%E5%8F%8A%E5%8D%87%E7%BA%A7%E6%AD%A5%E9%AA%A4"><span class="toc-text">二、synchronized锁种类及升级步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E8%AE%BF%E9%97%AE%E7%9A%843%E7%A7%8D%E6%83%85%E5%86%B5"><span class="toc-text">1. 多线程访问的3种情况</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8D%87%E7%BA%A7%E6%B5%81%E7%A8%8B"><span class="toc-text">2. 升级流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%97%A0%E9%94%81"><span class="toc-text">3. 无锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%81%8F%E9%94%81"><span class="toc-text">4. 偏锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E4%B8%BB%E8%A6%81%E4%BD%9C%E7%94%A8"><span class="toc-text">4.1 主要作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E6%8C%81%E6%9C%89"><span class="toc-text">4.2 偏向锁的持有</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-1-%E7%90%86%E8%AE%BA"><span class="toc-text">4.2.1 理论</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2-2-%E6%A1%88%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-text">4.2.2 案例说明</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%81%8F%E5%90%91%E9%94%81JVM%E5%91%BD%E4%BB%A4"><span class="toc-text">4.3 偏向锁JVM命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81"><span class="toc-text">4.4 代码验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E6%92%A4%E9%94%80"><span class="toc-text">4.5 偏向锁的撤销</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E6%80%BB%E4%BD%93%E6%AD%A5%E9%AA%A4%E6%B5%81%E7%A8%8B%E5%9B%BE%E7%A4%BA"><span class="toc-text">4.6 总体步骤流程图示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E8%BD%BB%E9%94%81"><span class="toc-text">5. 轻锁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E4%B8%BB%E8%A6%81%E4%BD%9C%E7%94%A8"><span class="toc-text">5.1 主要作用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81%E7%9A%84%E8%8E%B7%E5%8F%96"><span class="toc-text">5.2 轻量级锁的获取</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81"><span class="toc-text">5.3 代码验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E5%9B%BE%E7%A4%BA"><span class="toc-text">5.4 图示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-%E8%87%AA%E6%97%8B%E8%BE%BE%E5%88%B0%E4%B8%80%E5%AE%9A%E6%AC%A1%E6%95%B0%E5%92%8C%E7%A8%8B%E5%BA%A6"><span class="toc-text">5.5 自旋达到一定次数和程度</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-1-java6%E4%B9%8B%E5%89%8D"><span class="toc-text">5.5.1 java6之前</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-5-2-Java6%E4%B9%8B%E5%90%8E"><span class="toc-text">5.5.2 Java6之后</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-%E8%BD%BB%E9%87%8F%E9%94%81%E4%B8%8E%E5%81%8F%E5%90%91%E9%94%81%E7%9A%84%E5%8C%BA%E5%88%AB%E5%92%8C%E4%B8%8D%E5%90%8C"><span class="toc-text">5.6 轻量锁与偏向锁的区别和不同</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E9%87%8D%E9%94%81"><span class="toc-text">6. 重锁</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-%E9%94%81%E6%A0%87%E5%BF%97%E4%BD%8D"><span class="toc-text">6.1 锁标志位</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E4%BB%A3%E7%A0%81%E9%AA%8C%E8%AF%81"><span class="toc-text">6.2 代码验证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%90%84%E7%A7%8D%E9%94%81%E7%9A%84%E6%80%BB%E7%BB%93"><span class="toc-text">三、各种锁的总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81JIT%E7%BC%96%E8%AF%91%E5%99%A8%E5%AF%B9%E9%94%81%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-text">四、JIT编译器对锁的优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%94%81%E6%B6%88%E9%99%A4"><span class="toc-text">1. 锁消除</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%94%81%E7%B2%97%E5%8C%96"><span class="toc-text">2. 锁粗化</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、Synchronized的性能变化"><a href="#一、Synchronized的性能变化" class="headerlink" title="一、Synchronized的性能变化"></a>一、Synchronized的性能变化</h1><h2 id="1-用户态与内核态切换"><a href="#1-用户态与内核态切换" class="headerlink" title="1. 用户态与内核态切换"></a>1. 用户态与内核态切换</h2><p>java5以前，只有 <code>Synchronized</code>，这个是操作系统级别的重量级操作.</p>
+<p>重量级锁，假如锁的竞争比较激烈的话，性能会下降. 因为重量级锁需要在用户态和内核态之间反复切换,消耗大量的资源.</p>
+<p><strong>Java5之前，用户态和内核态之间的切换</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-105654.png" alt="用户态和内核态之间的切换"></p>
+<p> java的线程是映射到操作系统原生线程之上的，如果要阻塞或唤醒一个线程就需要操作系统介入，需要在用户态与核心态之间切换，这种切换会消耗大量的系统资源，因为用户态与内核态都有各自专用的内存空间，专用的寄存器等，用户态切换至内核态需要传递给许多变量、参数给内核，内核也需要保护好用户态在切换时的一些寄存器值、变量等，以便内核态调用结束后切换回用户态继续工作。</p>
+<p>在Java早期版本中，synchronized属于重量级锁，效率低下，因为监视器锁（monitor）是依赖于底层的操作系统的Mutex Lock来实现的，挂起线程和恢复线程都需要转入内核态去完成，阻塞或唤醒一个Java线程需要操作系统切换CPU状态来完成，这种状态切换需要耗费处理器时间，如果同步代码块中内容过于简单，这种切换的时间可能比用户代码执行的时间还长”，时间成本相对较高，这也是为什么早期的synchronized效率低的原因.</p>
+<p>Java 6之后，为了减少获得锁和释放锁所带来的性能消耗，引入了轻量级锁和偏向锁</p>
+<h2 id="2-为什么每一个对象都可以成为锁"><a href="#2-为什么每一个对象都可以成为锁" class="headerlink" title="2. 为什么每一个对象都可以成为锁?"></a>2. 为什么每一个对象都可以成为锁?</h2><p><strong>Java对象头</strong></p>
+<p>在Hotspot虚拟机中，对象在内存中的布局分为三块区域：对象头、实例数据和对齐填充；Java对象头是实现synchronized的锁对象的基础，一般而言，synchronized使用的锁对象是存储在Java对象头里。它是轻量级锁和偏向锁的关键</p>
+<p><strong>Mawrk Word</strong></p>
+<p>Mark Word用于存储对象自身的运行时数据，如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程 ID、偏向时间戳等等。</p>
+<p>在64位系统中，Mark Word占了8个字节，类型指针占了8个字节，一共是16个字节</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-110133.png" alt="Mark Word 的存储结构"></p>
+<p><strong>在源码中的体现：</strong></p>
+<p>如果想更深入了解对象头在JVM源码中的定义，需要关心几个文件，<code>oop.hpp/markOop.hpp</code> 。</p>
+<p><code>oop.hpp</code>，每个 Java Object 在 JVM 内部都有一个 native 的 C++ 对象 oop&#x2F;oopDesc 与之对应。先在<code>oop.hpp</code>中看<code>oopDesc</code>的定义：</p>
+<pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">oopDesc</span> &#123;
+  <span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">VMStructs</span>;
+ <span class="keyword">private</span>:
+  <span class="keyword">volatile</span> markOop  _mark;<span class="comment">//理解为对象头</span>
+  <span class="keyword">union</span> <span class="title class_">_metadata</span> &#123;
+    Klass*      _klass;<span class="comment">//理解为类型指针</span>
+    narrowKlass _compressed_klass; <span class="comment">//默认开启压缩</span>
+  &#125; _metadata;
+......</code></pre>
+
+<p><code>_mark</code> 被声明在 oopDesc 类的顶部，所以这个 <code>_mark</code> 可以认为是一个 头部, 也就是上面那个图种提到的头部保存了一些重要的状态和标识信息，在<code>markOop.hpp</code>文件中有一些注释说明markOop的内存布局：</p>
+<p>官网: <a target="_blank" rel="noopener" href="https://hg.openjdk.org/jdk8u/jdk8u/hotspot/file/89fb452b3688/src/share/vm/oops/markOop.hpp">https://hg.openjdk.org/jdk8u/jdk8u/hotspot/file/89fb452b3688/src/share/vm/oops/markOop.hpp</a></p>
+<pre><code class="highlight cpp"><span class="comment">//  64 bits:</span>
+<span class="comment">//  --------</span>
+<span class="comment">//  unused:25 hash:31 --&gt;| unused:1   age:4    biased_lock:1 lock:2 (normal object) // 普通无锁对象</span>
+<span class="comment">//  JavaThread*:54 epoch:2 unused:1   age:4    biased_lock:1 lock:2 (biased object) // 偏向锁对象</span>
+<span class="comment">//  PromotedObject*:61 ---------------------&gt;| promo_bits:3 -----&gt;| (CMS promoted object) // CMS垃圾回收器中的提升对象</span>
+<span class="comment">//  size:64 -----------------------------------------------------&gt;| (CMS free block) // CMS垃圾回收器中的空闲块</span>
+<span class="comment">//</span></code></pre>
+
+
+
+<h4 id="Monitor"><a href="#Monitor" class="headerlink" title="Monitor"></a><strong>Monitor</strong></h4><p>什么是Monitor？我们可以把它理解为一个同步工具，也可以描述为一种同步机制。所有的Java对象是天生的Monitor，每个object的对象里 markOop-&gt;monitor() 里可以保存ObjectMonitor的对象。从源码层面看一下monitor对象.</p>
+<ul>
+<li>oop.hpp下的oopDesc类是JVM对象的顶级基类，所以每个object对象都包含markOop</li>
+</ul>
+<pre><code class="highlight cpp"><span class="keyword">class</span> <span class="title class_">oopDesc</span> &#123;<span class="comment">//顶层基类</span>
+  <span class="keyword">friend</span> <span class="keyword">class</span> <span class="title class_">VMStructs</span>;
+ <span class="keyword">private</span>:
+  <span class="keyword">volatile</span> markOop  _mark;<span class="comment">//这也就是每个对象的mark头</span>
+  <span class="keyword">union</span> <span class="title class_">_metadata</span> &#123;
+    Klass*      _klass;
+    narrowKlass _compressed_klass;
+  &#125; _metadata;</code></pre>
+
+<ul>
+<li><p>markOop.hpp 中 <code>markOopDesc</code> 继承自oopDesc</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-120755.png" alt="markOopDesc"></p>
+<p>并扩展了自己的monitor方法，这个方法返回一个ObjectMonitor指针对象：这个ObjectMonitor 其实就是对象监视器</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-120858.png" alt="img"></p>
+</li>
+<li><p><code>objectMonitor.hpp</code> , 在hotspot虚拟机中，采用 <code>ObjectMonitor</code> 类来实现 monitor：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-121021.png" alt="objectMonitor.hpp"></p>
+</li>
+</ul>
+<p>到目前位置，对于锁存在哪个位置，我们已经清楚了，<strong>锁存在于每个对象的 markOop 对象头中</strong>.对于为什么每个对象都可以成为锁呢？ 因为每个 Java Object 在 JVM 内部都有一个 native 的 C++ 对象 oop&#x2F;oopDesc 与之对应，而对应的 oop&#x2F;oopDesc 都会存在一个markOop 对象头，而这个对象头是存储锁的位置，<strong>里面还有对象监视器，即ObjectMonitor</strong>，所以这也是为什么每个对象都能成为锁的原因之一。</p>
+<h2 id="3-Java6的优化提升"><a href="#3-Java6的优化提升" class="headerlink" title="3. Java6的优化提升"></a>3. Java6的优化提升</h2><p>java6开始，优化Synchronized, Java6之后，为了减少获得锁和释放锁所带来的性能消耗，引入了<strong>轻量级锁</strong>和<strong>偏向锁</strong></p>
+<p>​	</p>
+<h1 id="二、synchronized锁种类及升级步骤"><a href="#二、synchronized锁种类及升级步骤" class="headerlink" title="二、synchronized锁种类及升级步骤"></a>二、synchronized锁种类及升级步骤</h1><h2 id="1-多线程访问的3种情况"><a href="#1-多线程访问的3种情况" class="headerlink" title="1. 多线程访问的3种情况"></a>1. 多线程访问的3种情况</h2><ul>
+<li>只有一个线程来访问</li>
+<li>有2个线程交替访问</li>
+<li>竞争激烈，多个线程同时来访问</li>
+</ul>
+<h2 id="2-升级流程"><a href="#2-升级流程" class="headerlink" title="2. 升级流程"></a>2. 升级流程</h2><p>synchronized 用的锁是存在Java对象头里的Mark Word中, 锁升级功能主要依赖 MarkWord 中锁标志位和释放偏向锁标志位.</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-122447.png" alt="64位系统,对象内存布局"></p>
+<p><strong>锁指向</strong></p>
+<ul>
+<li>偏向锁：MarkWord存储的是<strong>偏向的线程ID</strong>；</li>
+<li>轻量锁：MarkWord存储的是<strong>指向线程栈中Lock Record的指针</strong>；</li>
+<li>重量锁：MarkWord存储的是<strong>指向堆中的monitor对象的指针</strong>；</li>
+</ul>
+<h2 id="3-无锁"><a href="#3-无锁" class="headerlink" title="3. 无锁"></a>3. 无锁</h2><p><strong>引入依赖</strong></p>
+<pre><code class="highlight xml"><span class="comment">&lt;!--</span>
+<span class="comment">   官网：http://openjdk.java.net/projects/code-tools/jol/</span>
+<span class="comment">   定位：分析对象在JVM的大小和分布</span>
+<span class="comment">--&gt;</span>
+<span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.openjdk.jol<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jol-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9<span class="tag">&lt;/<span class="name">version</span>&gt;</span>
+<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></code></pre>
+
+
+
+<p><strong>实例代码</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyObject</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();
+
+        System.out.println(<span class="string">&quot;10进制hash码：&quot;</span> + o.hashCode());
+        System.out.println(<span class="string">&quot;16进制hash码：&quot;</span> + Integer.toHexString(o.hashCode()));
+        System.out.println(<span class="string">&quot;2进制hash码：&quot;</span> + Integer.toBinaryString(o.hashCode()));
+
+        System.out.println(ClassLayout.parseInstance(o).toPrintable());
+    &#125;
+&#125;</code></pre>
+
+<p>打印如下:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-123233.png" alt="image-20241006123232465"></p>
+<p><strong>001</strong> 表示无锁.</p>
+<p><strong>注意, 对象头打印内容为 大端序.</strong></p>
+<p><strong>大端序（Big-Endian）</strong>将数据的低位字节存放在内存的高位地址，高位字节存放在低位地址。这种排列方式与数据用字节表示时的书写顺序一致，符合人类的阅读习惯。</p>
+<p><strong>小端序（Little-Endian）</strong>，将一个多位数的低位放在较小的地址处，高位放在较大的地址处，则称小端序。小端序与人类的阅读习惯相反，但更符合计算机读取内存的方式，因为CPU读取内存中的数据时，是从低地址向高地址方向进行读取的。</p>
+<p>对象头大端序打印如下(前8子节):</p>
+<pre><code class="highlight plaintext">00000001 01000001 00111010 00101011 01000101 00000000 00000000 00000000</code></pre>
+
+<p>转为小端序如下:</p>
+<pre><code class="highlight plaintext">00000000 00000000 00000000 01000101 00101011 00111010 01000001 00000001</code></pre>
+
+<p>前25位没有用到, 中间31位即为hashCode: 1000101 00101011 00111010 01000001, 与print语句打印的 2进制hash码一致.</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-124320.png" alt="无锁态"></p>
+<h2 id="4-偏锁"><a href="#4-偏锁" class="headerlink" title="4. 偏锁"></a>4. 偏锁</h2><h3 id="4-1-主要作用"><a href="#4-1-主要作用" class="headerlink" title="4.1 主要作用"></a>4.1 主要作用</h3><ul>
+<li>当一段同步代码一直被同一个线程多次访问，由于只有一个线程那么该线程在后续访问时便会自动获得锁</li>
+</ul>
+<p>Hotspot 的作者经过研究发现，大多数情况下：</p>
+<p>多线程的情况下，锁不仅不存在多线程竞争，还存在锁由同一线程多次获得的情况，偏向锁就是在这种情况下出现的，它的出现是为了解决只有在一个线程执行同步时提高性能。</p>
+<h3 id="4-2-偏向锁的持有"><a href="#4-2-偏向锁的持有" class="headerlink" title="4.2 偏向锁的持有"></a>4.2 偏向锁的持有</h3><h4 id="4-2-1-理论"><a href="#4-2-1-理论" class="headerlink" title="4.2.1 理论"></a>4.2.1 理论</h4><p><strong>理论解析</strong></p>
+<p>在实际应用运行过程中发现，“锁总是同一个线程持有，很少发生竞争”，也就是说锁总是被第一个占用他的线程拥有，这个线程就是锁的偏向线程。</p>
+<p>那么只需要**在锁第一次被拥有的时候，记录下偏向线程ID。这样偏向线程就一直持有着锁(后续这个线程进入和退出这段加了同步锁的代码块时，不需要再次加锁和释放锁。而是直接比较对象头里面是否存储了指向当前线程的偏向锁)**。<br>如果相等表示偏向锁是偏向于当前线程的，就不需要再尝试获得锁了，直到竞争发生才释放锁。以后每次同步，检查锁的偏向线程ID与当前线程ID是否一致，如果一致直接进入同步。无需每次加锁解锁都去CAS更新对象头。如果自始至终使用锁的线程只有一个，很明显偏向锁几乎没有额外开销，性能极高。</p>
+<p> 假如不一致意味着发生了竞争，锁已经不是总是偏向于同一个线程了，这时候可能需要升级变为轻量级锁，才能保证线程间公平竞争锁。偏向锁只有遇到其他线程尝试竞争偏向锁时，持有偏向锁的线程才会释放锁，线程是不会主动释放偏向锁的。</p>
+<p><strong>技术实现</strong></p>
+<p>一个synchronized方法被一个线程抢到了锁时，那这个方法所在的对象就会修改Mark Word 的偏向锁状态位，同时还会占用前54位来存储线程指针作为标识。若该线程再次访问同一个synchronized方法时，该线程只需去对象头的Mark Word 中去判断一下是否有偏向锁指向当前线程的ID，无需再进入 Monitor 去竞争对象了。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-144737.png" alt="64位锁标识"></p>
+<h4 id="4-2-2-案例说明"><a href="#4-2-2-案例说明" class="headerlink" title="4.2.2 案例说明"></a>4.2.2 案例说明</h4><p>偏向锁的操作不用涉及操作系统，不涉及用户到内核转换，我们以一个account对象的“对象头”为例.</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-144929.png" alt="Account对象"></p>
+<p>假如有一个线程执行到synchronized代码块的时候，JVM使用CAS操作把线程指针ID记录到Mark Word当中，并修改标偏向标识，表示当前线程就获得该锁。锁对象变成偏向锁（通过CAS修改对象头里的锁标志位），字面意思是“偏向于第一个获得它的线程”的锁。<strong>执行完同步代码块后，线程并不会主动释放偏向锁。</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-145047.png" alt="对象头"></p>
+<p>这时线程获得了锁，可以执行同步代码块。当该线程第二次到达同步代码块时会判断此时持有锁的线程是否还是自己（持有锁的线程ID也在对象头里），JVM通过account对象的Mark Word判断：当前线程ID还在，说明还持有着这个对象的锁，就可以继续进入临界区工作。由于之前没有释放锁，这里也就不需要重新加锁。 如果自始至终使用锁的线程只有一个，很明显偏向锁几乎没有额外开销，性能极高。</p>
+<p>结论：JVM不用和操作系统协商设置Mutex(争取内核)，它只需要记录下线程ID就表示自己获得了当前锁，不用操作系统介入。<br>上述就是偏向锁：<strong>在没有其他线程竞争的时候，一直偏向偏心当前线程，当前线程可以一直执行。</strong></p>
+<h3 id="4-3-偏向锁JVM命令"><a href="#4-3-偏向锁JVM命令" class="headerlink" title="4.3 偏向锁JVM命令"></a>4.3 偏向锁JVM命令</h3><p><code>java -XX:+PrintFlagsInitial |grep BiasedLock*</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-145555.png" alt="偏向锁命令"></p>
+<p><strong>参数说明</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-145638.png" alt="image-20241006145637339"></p>
+<p>实际上偏向锁在JDK1.6之后是默认开启的，但是启动时间有延迟，所以需要添加参数 <code>-XX:BiasedLockingStartupDelay=0</code>，让其在程序启动时立刻启动。</p>
+<ul>
+<li><p>开启偏向锁</p>
+<p><code>-XX:+UseBiasedLocking -XX:BiasedLockingStartupDelay=0</code></p>
+</li>
+<li><p>关闭偏向锁：关闭之后程序默认会直接进入 &#x3D;&gt; 轻量级锁状态。</p>
+<p><code>-XX:-UseBiasedLocking</code></p>
+</li>
+</ul>
+<h3 id="4-4-代码验证"><a href="#4-4-代码验证" class="headerlink" title="4.4 代码验证"></a>4.4 代码验证</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * <span class="doctag">@author</span> George Chan</span>
+<span class="comment"> * <span class="doctag">@date</span> 2024/10/6 14:58</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> *     验证Jdk1.8 默认开启偏向锁</span>
+<span class="comment"> *     设置 VM option : -XX:BiasedLockingStartupDelay=0</span>
+<span class="comment"> * &lt;/p&gt;</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BiasedLockDemo</span> &#123;
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">objectLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(ClassLayout.parseInstance(objectLock).toPrintable());
+            &#125;
+        &#125;).start();
+    &#125;
+&#125;</code></pre>
+
+<p>打印如下:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-150251.png" alt="默认开启偏向锁"></p>
+<p>注意: 偏向锁默认程序启动4秒后开启,如果不设置启动参数: <code>-XX:BiasedLockingStartupDelay=0</code>, 则程序启动打印显示为 轻量级锁.</p>
+<h3 id="4-5-偏向锁的撤销"><a href="#4-5-偏向锁的撤销" class="headerlink" title="4.5 偏向锁的撤销"></a>4.5 偏向锁的撤销</h3><p>当有另外线程逐步来竞争锁的时候，就不能再使用偏向锁了，要升级为轻量级锁.</p>
+<p><strong>竞争线程尝试CAS更新对象头失败，会等待到全局安全点（此时不会执行任何代码）撤销偏向锁。</strong></p>
+<p><strong>偏向锁的撤销</strong></p>
+<p>偏向锁使用一种等到竞争出现才释放锁的机制，只有当其他线程竞争锁时，持有偏向锁的原来线程才会被撤销。<br>撤销需要等待全局安全点(该时间点上没有字节码正在执行)，同时检查持有偏向锁的线程是否还在执行： </p>
+<ul>
+<li>第一个线程正在执行synchronized方法(处于同步块)，它还没有执行完，其它线程来抢夺，该偏向锁会被取消掉并出现锁升级。<br>此时轻量级锁由原持有偏向锁的线程持有，继续执行其同步代码，而正在竞争的线程会进入自旋等待获得该轻量级锁。</li>
+<li>第一个线程执行完成synchronized方法(退出同步块)，则将对象头设置成无锁状态并撤销偏向锁，重新偏向 。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-151632.png" alt="撤销偏向锁的过程"></p>
+<h3 id="4-6-总体步骤流程图示"><a href="#4-6-总体步骤流程图示" class="headerlink" title="4.6 总体步骤流程图示"></a>4.6 总体步骤流程图示</h3><p><strong>图示1</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.processon.com/view/61cb1799f346fb2161a3ecfc">https://www.processon.com/view/61cb1799f346fb2161a3ecfc</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-152712.png" alt="锁的升级流程图"></p>
+<p><strong>图示2</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-153339.png" alt="image-20241006153337711"></p>
+<h2 id="5-轻锁"><a href="#5-轻锁" class="headerlink" title="5. 轻锁"></a>5. 轻锁</h2><h3 id="5-1-主要作用"><a href="#5-1-主要作用" class="headerlink" title="5.1 主要作用"></a>5.1 主要作用</h3><p>有线程来参与锁的竞争，但是获取锁的冲突时间极短.</p>
+<p>本质就是自旋锁.</p>
+<p><strong>锁标识位: 00</strong></p>
+<h3 id="5-2-轻量级锁的获取"><a href="#5-2-轻量级锁的获取" class="headerlink" title="5.2 轻量级锁的获取"></a>5.2 轻量级锁的获取</h3><p>轻量级锁是为了在线程近乎交替执行同步块时提高性能。</p>
+<p><strong>主要目的</strong>： 在没有多线程竞争的前提下，通过CAS减少重量级锁使用操作系统互斥量产生的性能消耗，即:先自旋再阻塞。</p>
+<p><strong>升级时机：</strong> 当关闭偏向锁功能或多线程竞争偏向锁会导致偏向锁升级为轻量级锁</p>
+<p>假如线程A已经拿到锁，这时线程B又来抢该对象的锁，由于该对象的锁已经被线程A拿到，当前该锁已是偏向锁了。而线程B在争抢时发现对象头Mark Word中的线程ID不是线程B自己的线程ID(而是线程A)，那线程B就会进行CAS操作希望能获得锁。</p>
+<p>此时线程B操作中有两种情况：</p>
+<ul>
+<li><p>如果锁获取成功，直接替换Mark Word中的线程ID为B自己的ID(A → B)，重新偏向于其他线程(即将偏向锁交给其他线程，相当于当前线程”被”释放了锁)，该锁会保持偏向锁状态，A线程Over，B线程上位；</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-162752.png" alt="偏向锁"></p>
+</li>
+<li><p>如果锁获取失败，则偏向锁升级为轻量级锁，此时轻量级锁由原持有偏向锁的线程持有，继续执行其同步代码，而正在竞争的线程B会进入自旋等待获得该轻量级锁。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-162745.png" alt="轻量级锁"></p>
+</li>
+</ul>
+<h3 id="5-3-代码验证"><a href="#5-3-代码验证" class="headerlink" title="5.3 代码验证"></a>5.3 代码验证</h3><p>程序启动参数设置: <code>-XX:-UseBiasedLocking</code> , 关闭偏向锁, 则默认为轻量级锁.</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * <span class="doctag">@author</span> George Chan</span>
+<span class="comment"> * <span class="doctag">@date</span> 2024/10/6 14:58</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> *     验证轻量级锁:</span>
+<span class="comment"> *     设置VM option : -XX:-UseBiasedLocking</span>
+<span class="comment"> * &lt;/p&gt;</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BiasedLockDemo</span> &#123;
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">objectLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(ClassLayout.parseInstance(objectLock).toPrintable());
+            &#125;
+        &#125;).start();
+    &#125;
+&#125;</code></pre>
+
+<p>打印如下:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-163122.png" alt="轻量级锁的标识位"></p>
+<p><strong>000 表示 轻量级锁</strong></p>
+<h3 id="5-4-图示"><a href="#5-4-图示" class="headerlink" title="5.4 图示"></a>5.4 图示</h3><p>见 4.6 </p>
+<h3 id="5-5-自旋达到一定次数和程度"><a href="#5-5-自旋达到一定次数和程度" class="headerlink" title="5.5 自旋达到一定次数和程度"></a>5.5 自旋达到一定次数和程度</h3><h4 id="5-5-1-java6之前"><a href="#5-5-1-java6之前" class="headerlink" title="5.5.1 java6之前"></a>5.5.1 java6之前</h4><ul>
+<li><p>默认启用，默认情况下自旋的次数是 10 次</p>
+<p><code>-XX:PreBlockSpin=10</code> 来修改</p>
+</li>
+<li><p>或者自旋线程数超过cpu核数一半</p>
+</li>
+</ul>
+<h4 id="5-5-2-Java6之后"><a href="#5-5-2-Java6之后" class="headerlink" title="5.5.2 Java6之后"></a>5.5.2 Java6之后</h4><p>采用自适应调整自旋次数. 自适应意味着自旋的次数不是固定不变的,而是根据： </p>
+<ul>
+<li>同一个锁上一次自旋的时间。</li>
+<li>拥有锁线程的状态来决定。</li>
+</ul>
+<h3 id="5-6-轻量锁与偏向锁的区别和不同"><a href="#5-6-轻量锁与偏向锁的区别和不同" class="headerlink" title="5.6 轻量锁与偏向锁的区别和不同"></a>5.6 轻量锁与偏向锁的区别和不同</h3><ul>
+<li>争夺轻量级锁失败时，自旋尝试抢占锁</li>
+<li>轻量级锁每次退出同步块都需要释放锁，而偏向锁是在竞争发生时才释放锁</li>
+</ul>
+<h2 id="6-重锁"><a href="#6-重锁" class="headerlink" title="6. 重锁"></a>6. 重锁</h2><p>重锁发生在有大量的线程参与锁的竞争，冲突性很高的场景中.</p>
+<h4 id="6-1-锁标志位"><a href="#6-1-锁标志位" class="headerlink" title="6.1 锁标志位"></a>6.1 锁标志位</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-165212.png" alt="重锁"></p>
+<h3 id="6-2-代码验证"><a href="#6-2-代码验证" class="headerlink" title="6.2 代码验证"></a>6.2 代码验证</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * <span class="doctag">@author</span> George Chan</span>
+<span class="comment"> * <span class="doctag">@date</span> 2024/10/6 14:58</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> *     关闭偏向锁:</span>
+<span class="comment"> *     设置VM option : -XX:-UseBiasedLocking</span>
+<span class="comment"> * &lt;/p&gt;</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BiasedLockDemo</span> &#123;
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">objectLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(ClassLayout.parseInstance(objectLock).toPrintable());
+            &#125;
+        &#125;).start();
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(ClassLayout.parseInstance(objectLock).toPrintable());
+            &#125;
+        &#125;).start();
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(ClassLayout.parseInstance(objectLock).toPrintable());
+            &#125;
+        &#125;).start();
+    &#125;
+&#125;</code></pre>
+
+<p>打印如下:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-165452.png" alt="重锁的锁标志位"></p>
+<h1 id="三、各种锁的总结"><a href="#三、各种锁的总结" class="headerlink" title="三、各种锁的总结"></a>三、各种锁的总结</h1><p>各种锁优缺点、synchronized锁升级和实现原理</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/06/20241006-165615.png" alt="锁的优缺点对比"></p>
+<p>synchronized锁升级过程总结：就是先自旋，不行再阻塞。</p>
+<p>实际上是把之前的悲观锁(重量级锁)变成在一定条件下使用偏向锁以及使用轻量级(自旋锁CAS)的形式</p>
+<p>synchronized在修饰方法和代码块在字节码上实现方式有很大差异，但是内部实现还是基于对象头的MarkWord来实现的。</p>
+<p>JDK1.6之前synchronized使用的是重量级锁，JDK1.6之后进行了优化，拥有了<strong>无锁-&gt;偏向锁-&gt;轻量级锁-&gt;重量级锁</strong>的升级过程，而不是无论什么情况都使用重量级锁。</p>
+<ul>
+<li>偏向锁:适用于单线程适用的情况，在不存在锁竞争的时候进入同步方法&#x2F;代码块则使用偏向锁。</li>
+<li>轻量级锁：适用于竞争较不激烈的情况(这和乐观锁的使用范围类似)， 存在竞争时升级为轻量级锁，轻量级锁采用的是自旋锁，如果同步方法&#x2F;代码块执行时间很短的话，采用轻量级锁虽然会占用cpu资源但是相对比使用重量级锁还是更高效。</li>
+<li>重量级锁：适用于竞争激烈的情况，如果同步方法&#x2F;代码块执行时间很长，那么使用轻量级锁自旋带来的性能消耗就比使用重量级锁更严重，这时候就需要升级为重量级锁。</li>
+</ul>
+<h1 id="四、JIT编译器对锁的优化"><a href="#四、JIT编译器对锁的优化" class="headerlink" title="四、JIT编译器对锁的优化"></a>四、JIT编译器对锁的优化</h1><p>JIT (Just In Time Compiler)，一般翻译为即时编译器. 在代码编译阶段会根据代码的实际运行情况 , 使用 锁消除, 锁粗话 的方式,对同步方法或或同步代码块进行优化处理.</p>
+<h2 id="1-锁消除"><a href="#1-锁消除" class="headerlink" title="1. 锁消除"></a>1. 锁消除</h2><p>从JIT角度看相当于无视它，synchronized (o)不存在了,这个锁对象并没有被共用扩散到其它线程使用，极端的说就是根本没有加这个锁对象的底层机器码，消除了锁的使用</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 锁消除</span>
+<span class="comment"> * 从JIT角度看相当于无视它，synchronized (o)不存在了,这个锁对象并没有被共用扩散到其它线程使用，</span>
+<span class="comment"> * 极端的说就是根本没有加这个锁对象的底层机器码，消除了锁的使用</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LockClearUPDemo</span> &#123;
+    <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">objectLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();<span class="comment">//正常的,有且仅有同一把锁</span>
+    
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">m1</span><span class="params">()</span> &#123;
+        <span class="type">Object</span> <span class="variable">objectLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();<span class="comment">//锁消除</span>
+
+        <span class="keyword">synchronized</span> (objectLock) &#123;
+            System.out.println(<span class="string">&quot;----hello lock&quot;</span>);
+        &#125;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">LockClearUPDemo</span> <span class="variable">demo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LockClearUPDemo</span>();
+        demo.m1();
+    &#125;
+&#125;</code></pre>
+
+<p>由于锁对象 objectLock  定义在 方法 m1 内部,对于每一次方法调用,都会重新创建一把新的锁,各线程拿到的锁都不是同一把锁,这是没有意义的锁, JIT 编译器在编译过程中对锁进行了消除.</p>
+<h2 id="2-锁粗化"><a href="#2-锁粗化" class="headerlink" title="2. 锁粗化"></a>2. 锁粗化</h2><p>假如方法中首尾相接，前后相邻的都是同一个锁对象，那JIT编译器就会把这几个synchronized块合并成一个大块，加粗加大范围，一次申请锁使用即可，避免次次的申请和释放锁，提升了性能.</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LockBigDemo</span> &#123;
+    <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">objectLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(<span class="string">&quot;11111&quot;</span>);
+            &#125;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(<span class="string">&quot;22222&quot;</span>);
+            &#125;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(<span class="string">&quot;33333&quot;</span>);
+            &#125;
+        &#125;, <span class="string">&quot;a&quot;</span>).start();
+
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(<span class="string">&quot;44444&quot;</span>);
+            &#125;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(<span class="string">&quot;55555&quot;</span>);
+            &#125;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(<span class="string">&quot;66666&quot;</span>);
+            &#125;
+        &#125;, <span class="string">&quot;b&quot;</span>).start();
+
+    &#125;
+&#125;
+
+<span class="comment">// 上述代码经过JIT锁粗话后变为:</span>
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LockBigDemo</span> &#123;
+    <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">objectLock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(<span class="string">&quot;11111&quot;</span>);
+                System.out.println(<span class="string">&quot;22222&quot;</span>);
+                System.out.println(<span class="string">&quot;33333&quot;</span>);
+            &#125;
+        &#125;, <span class="string">&quot;a&quot;</span>).start();
+
+        <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
+            <span class="keyword">synchronized</span> (objectLock) &#123;
+                System.out.println(<span class="string">&quot;44444&quot;</span>);
+                System.out.println(<span class="string">&quot;55555&quot;</span>);
+                System.out.println(<span class="string">&quot;66666&quot;</span>);
+            &#125;
+        &#125;, <span class="string">&quot;b&quot;</span>).start();
+    &#125;
+&#125;</code></pre>
+
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
