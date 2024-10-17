@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>第五章-本地方法接口 | George&#39;s Blog</title>
+  <title>Ubuntu18.04离线源环境搭建 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , jvm ">
-  <meta name="description" content="第五章-本地方法接口 | George&#39;s Blog">
+  <meta name="keywords" content=" linux , ubuntu18 ">
+  <meta name="description" content="Ubuntu18.04离线源环境搭建 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#114;&#x67;&#x65;&#x5f;&#x39;&#53;&#x40;&#x31;&#x32;&#x36;&#x2e;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -976,9 +976,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-jvm/第五章-本地方法接口" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-linux/Ubuntu18.04离线源环境搭建" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">第五章-本地方法接口</h1>
+        <h1 class="article-title">Ubuntu18.04离线源环境搭建</h1>
     
     <div class="article-meta">
         
@@ -988,7 +988,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JVM">JVM</a>
+            <a  data-rel="linux">linux</a>
             
         </span>
         
@@ -996,21 +996,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
+            <a class="color1">linux</a>
             
-            <a class="color4">jvm</a>
+            <a class="color4">ubuntu18</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 12:17:33'>2023-11-30 17:55</time>
+            发布时间 : <time class="date" title='最后更新: 2024-10-17 13:45:59'>2024-10-17 09:47</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.6k</span>
+        <span>字数:2.9k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1040,7 +1040,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95"><span class="toc-text">一、什么是本地方法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8-Native-Method"><span class="toc-text">二、为什么要使用 Native Method</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8EJava%E7%8E%AF%E5%A2%83%E5%A4%96%E4%BA%A4%E4%BA%92"><span class="toc-text">1. 与Java环境外交互</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%8E%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%9A%84%E4%BA%A4%E4%BA%92"><span class="toc-text">2. 与操作系统的交互</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Sun%E2%80%99s-Java"><span class="toc-text">3. Sun’s Java</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E7%9A%84%E7%8E%B0%E7%8A%B6"><span class="toc-text">4. 本地方法的现状</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%9C%AC%E5%9C%B0%E6%96%B9%E6%B3%95%E6%A0%88"><span class="toc-text">三、本地方法栈</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81JVM%E6%80%8E%E6%A0%B7%E4%BD%BFNative-Method%E8%B7%91%E8%B5%B7%E6%9D%A5"><span class="toc-text">四、JVM怎样使Native Method跑起来</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">五、注意事项</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%B6%E4%BD%9C%E7%A6%BB%E7%BA%BF%E6%BA%90%EF%BC%88%E5%8F%AF%E8%BF%9E%E5%A4%96%E7%BD%91%EF%BC%89"><span class="toc-text">一、制作离线源（可连外网）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ssh"><span class="toc-text">1. ssh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-vim"><span class="toc-text">2. vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-curl"><span class="toc-text">3. curl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-wget"><span class="toc-text">4. wget</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-unzip"><span class="toc-text">5. unzip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-net-tools"><span class="toc-text">6. net-tools</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-ffmpeg"><span class="toc-text">7. ffmpeg</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-ntp"><span class="toc-text">8. ntp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-apt-transport-https"><span class="toc-text">9. apt-transport-https</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-ca-certificates"><span class="toc-text">10. ca-certificates</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-software-properties-common"><span class="toc-text">11. software-properties-common</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-docker"><span class="toc-text">12. docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-nfs"><span class="toc-text">13. nfs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-sftp"><span class="toc-text">14. sftp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-dos2unix"><span class="toc-text">15. dos2unix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-%E7%A6%BB%E7%BA%BF%E6%BA%90%E6%89%93%E5%8C%85"><span class="toc-text">16. 离线源打包</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8%E7%A6%BB%E7%BA%BF%E6%BA%90%E5%AE%89%E8%A3%85%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">二、使用离线源安装服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8A%E4%BC%A0%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-text">1. 上传离线安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E7%A6%BB%E7%BA%BF%E6%BA%90"><span class="toc-text">2. 配置离线源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E5%AE%89%E8%A3%85"><span class="toc-text">3. 测试安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BD%BF%E7%94%A8%E7%A6%BB%E7%BA%BF%E6%BA%90%E5%AE%89%E8%A3%85docker"><span class="toc-text">4. 使用离线源安装docker</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1056,66 +1056,374 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
-<p>系统 : Windows 10<br>JDK : 1.8</p>
-</blockquote>
-<h1 id="一、什么是本地方法"><a href="#一、什么是本地方法" class="headerlink" title="一、什么是本地方法"></a>一、什么是本地方法</h1><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/30/20231130-195918.png" alt="image-20231130195914842" style="zoom:67%;" />
-
-<ul>
-<li>简单地讲，<strong>一个Native Method是一个Java调用非Java代码的接囗</strong>一个Native Method是这样一个Java方法：该方法的实现由非Java语言实现，比如C。这个特征并非Java所特有，很多其它的编程语言都有这一机制，比如在C++中，你可以用extern 告知C++编译器去调用一个C的函数。</li>
-<li>“A native method is a Java method whose implementation is provided by non-java code.”（本地方法是一个非Java的方法，它的具体实现是非Java代码的实现）</li>
-<li>在定义一个native method时，并不提供实现体（有些像定义一个Java interface），因为其实现体是由非java语言在外面实现的。</li>
-<li>本地接口的作用是融合不同的编程语言为Java所用，它的初衷是融合C&#x2F;C++程序。</li>
-</ul>
-<img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/30/20231130-172423.png" alt="本地方法接口" style="zoom: 67%;" />
-
+        <p><strong>系统环境</strong></p>
 <blockquote>
-<p>示例</p>
+<p>系统发行版：Ubuntu 18.04.6 LTS</p>
+<p>内核版本：5.4.0-150-generic</p>
 </blockquote>
-<p>需要注意的是：标识符native可以与其它java标识符连用，但是abstract除外</p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IHaveNatives</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">Native1</span><span class="params">(<span class="type">int</span> x)</span>;
+<p><strong>注意事项</strong></p>
+<p>使用此方式制作的离线源只能在相同的系统版本下用于离线的环境安装，即：Ubuntu18.04系统环境下制作的离线源，不能用于Ubuntu20.04系统的离线环境安装，如果环境不同可能导致在离线电脑上安装时会缺少部分依赖导致安装失败。</p>
+<h1 id="一、制作离线源（可连外网）"><a href="#一、制作离线源（可连外网）" class="headerlink" title="一、制作离线源（可连外网）"></a>一、制作离线源（可连外网）</h1><p>先在一台可以连接外网的Ubuntu18.04服务器制作离线源环境。</p>
+<ul>
+<li><p>创建离线源目录</p>
+<pre><code class="highlight shell">mkdir -p /opt/offline
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">修改权限</span>
+chmod 777 -R /opt/offline/</code></pre>
 
-    <span class="keyword">public</span> <span class="keyword">native</span> <span class="keyword">static</span> <span class="type">long</span> <span class="title function_">Native2</span><span class="params">()</span>;
-
-    <span class="keyword">private</span> <span class="keyword">native</span> <span class="keyword">synchronized</span> <span class="type">float</span> <span class="title function_">Native3</span><span class="params">(Object o)</span>;
-
-    <span class="keyword">native</span> <span class="keyword">void</span> <span class="title function_">Native4</span><span class="params">(<span class="type">int</span>[] ary)</span> <span class="keyword">throws</span> Exception;
-
-&#125;</code></pre>
-
-
-
-<h1 id="二、为什么要使用-Native-Method"><a href="#二、为什么要使用-Native-Method" class="headerlink" title="二、为什么要使用 Native Method"></a>二、为什么要使用 Native Method</h1><p>Java使用起来非常方便，当某些任务使用Java实现比较困难，或者对性能有更高的要求是，使用Native Method 会更合适。</p>
-<h2 id="1-与Java环境外交互"><a href="#1-与Java环境外交互" class="headerlink" title="1. 与Java环境外交互"></a>1. 与Java环境外交互</h2><p><strong>有时Java应用需要与Java外面的硬件环境交互，这是本地方法存在的主要原因</strong>。你可以想想Java需要与一些<strong>底层系统</strong>，如操作系统或某些硬件交换信息时的情况。本地方法正是这样一种交流机制：它为我们提供了一个非常简洁的接口，而且我们无需去了解Java应用之外的繁琐的细节。</p>
-<h2 id="2-与操作系统的交互"><a href="#2-与操作系统的交互" class="headerlink" title="2. 与操作系统的交互"></a>2. 与操作系统的交互</h2><p>JVM 支持着 Java 语言本身和运行时库，它是 Java 程序赖以生存的平台，它由一个解释器（解释字节码）和一些连接到本地代码的库组成。然而不管怎样，它毕竟不是一个完整的系统，它经常依赖于一些底层系统的支持。这些底层系统常常是强大的操作系统。<strong>通过使用本地方法，我们得以用 Java 实现了 jre 与底层系统的交互，甚至 JVM 的一些部分就是用 C 写的。</strong>还有，如果我们要使用一些 Java 语言本身没有提供封装的操作系统的特性时，我们也需要使用本地方法。</p>
-<h2 id="3-Sun’s-Java"><a href="#3-Sun’s-Java" class="headerlink" title="3. Sun’s Java"></a>3. Sun’s Java</h2><p>Sun的解释器是用C实现的，这使得它能像一些普通的C一样与外部交互。jre大部分是用Java实现的，它也通过一些本地方法与外界交互。</p>
-<p>例如：类java.lang.Thread的setPriority()方法是用Java实现的，但是它实现调用的是该类里的本地方法setPriority0()。这个本地方法是用C实现的，并被植入JVM内部在Windows 95的平台上，这个本地方法最终将调用Win32 setpriority() API。这是一个本地方法的具体实现由JVM直接提供，更多的情况是本地方法由外部的动态链接库（external dynamic link library）提供，然后被JVM调用。</p>
-<h2 id="4-本地方法的现状"><a href="#4-本地方法的现状" class="headerlink" title="4. 本地方法的现状"></a>4. 本地方法的现状</h2><p>目前该方法使用的越来越少了，除非是与硬件有关的应用，比如通过Java程序驱动打印机或者Java系统管理生产设备，在企业级应用中已经比较少见。因为现在的异构领域间的通信很发达，比如可以使用Socket通信，也可以使用Web Service等等。</p>
-<h1 id="三、本地方法栈"><a href="#三、本地方法栈" class="headerlink" title="三、本地方法栈"></a>三、本地方法栈</h1><ul>
-<li><strong>Java虚拟机栈于管理Java方法的调用，而本地方法栈用于管理本地方法的调用</strong>。</li>
-<li>本地方法栈，也是线程私有的。</li>
-<li>允许被实现成固定或者是可动态扩展的内存大小（在内存溢出方面和虚拟机栈相同）<ul>
-<li>如果线程请求分配的栈容量超过本地方法栈允许的最大容量，Java虚拟机将会抛出一个stackoverflowError 异常。</li>
-<li>如果本地方法栈可以动态扩展，并且在尝试扩展的时候无法申请到足够的内存，或者在创建新的线程时没有足够的内存去创建对应的本地方法栈，那么Java虚拟机将会抛出一个outofMemoryError异常。</li>
-</ul>
+<p>后面所有的安装包都会放到此目录，及子目录下。</p>
 </li>
-<li>本地方法一般是使用C语言或C++语言实现的。</li>
-<li>具体做法是Native Method Stack中登记native方法，在Execution Engine 执行时加载本地方法库。</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/30/20231130-201221.png" alt="image-20231130201219877"></p>
-<h1 id="四、JVM怎样使Native-Method跑起来"><a href="#四、JVM怎样使Native-Method跑起来" class="headerlink" title="四、JVM怎样使Native Method跑起来"></a>四、JVM怎样使Native Method跑起来</h1><p> 我们知道，当一个类第一次被使用到时，这个类的字节码会被加载到内存，并且只会回载一次。在这个被加载的字节码的入口维持着一个该类所有方法描述符的 list，这些方法描述符包含这样一些信息：方法代码存于何处，它有哪些参数，方法的描述符（public之类）等等。</p>
-<p> 如果一个方法描述符内有 native，这个描述符块将有一个指向该方法的实现的指针。这些实现在一些DLL文件内，但是它们会被操作系统加载到java程序的地址空间。当一个带有本地方法的类被加载时，其相关的DLL并未被加载，因此指向方法实现的指针并不会被设置。当本地方法被调用之前，这些DLL才会被加载，这是通过调用<code>java.system.loadLibrary()</code> 实现的。</p>
-<h1 id="五、注意事项"><a href="#五、注意事项" class="headerlink" title="五、注意事项"></a>五、注意事项</h1><ul>
-<li>当某个线程调用一个本地方法时，它就进入了一个全新的并且不再受虚拟机限制的世界。它和虚拟机拥有同样的权限。<ul>
-<li>本地方法可以通过本地方法接口来访问虚拟机内部的运行时数据区</li>
-<li>它甚至可以直接使用本地处理器中的寄存器</li>
-<li>直接从本地内存的堆中分配任意数量的内存</li>
-</ul>
+<li><p>安装 dpkg-dev 工具</p>
+<pre><code class="highlight shell">apt-get install -y dpkg-dev</code></pre>
 </li>
-<li>并不是所有的JVM都支持本地方法。因为Java虚拟机规范并没有明确要求本地方法栈的使用语言、具体实现方式、数据结构等。如果JVM产品不打算支持native方法，也可以无需实现本地方法栈。</li>
-<li>在Hotspot JVM中，直接将本地方法栈和虚拟机栈合二为一。</li>
+<li><p>备份系统目录的安装包</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建安装包备份目录</span>
+mkdir -p /opt/offline/default/archives
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">文件迁移</span>
+mv /var/cache/apt/archives/* /opt/offline/default/archives/
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">删除源安装包</span>
+rm -rf /var/cache/apt/archives/*</code></pre></li>
 </ul>
+<p>下面演示常用软件离线源制作</p>
+<h2 id="1-ssh"><a href="#1-ssh" class="headerlink" title="1. ssh"></a>1. ssh</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ssh/archives/
+
+cd /opt/offline/ssh/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances openssh-client openssh-server openssh-sftp-server | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中</span>
+cp Packages.gz ./archives
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">删除外部的依赖关系文件</span>
+rm -rf /opt/offline/ssh/Packages.gz</code></pre>
+
+
+
+<h2 id="2-vim"><a href="#2-vim" class="headerlink" title="2. vim"></a>2. vim</h2><pre><code class="highlight shell">mkdir -p /opt/offline/vim/archives/
+
+cd /opt/offline/vim/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances vim | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/vim/Packages.gz
+</code></pre>
+
+
+
+<h2 id="3-curl"><a href="#3-curl" class="headerlink" title="3. curl"></a>3. curl</h2><pre><code class="highlight shell">mkdir -p /opt/offline/curl/archives/
+
+cd /opt/offline/curl/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances curl | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/curl/Packages.gz</code></pre>
+
+
+
+<h2 id="4-wget"><a href="#4-wget" class="headerlink" title="4. wget"></a>4. wget</h2><pre><code class="highlight shell">mkdir -p /opt/offline/wget/archives/
+
+cd /opt/offline/wget/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances wget | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/wget/Packages.gz</code></pre>
+
+
+
+<h2 id="5-unzip"><a href="#5-unzip" class="headerlink" title="5. unzip"></a>5. unzip</h2><pre><code class="highlight shell">mkdir -p /opt/offline/unzip/archives/
+
+cd /opt/offline/unzip/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances unzip | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/unzip/Packages.gz</code></pre>
+
+
+
+<h2 id="6-net-tools"><a href="#6-net-tools" class="headerlink" title="6. net-tools"></a>6. net-tools</h2><pre><code class="highlight shell">mkdir -p /opt/offline/net-tools/archives/
+
+cd /opt/offline/net-tools/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances net-tools | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/net-tools/Packages.gz</code></pre>
+
+
+
+<h2 id="7-ffmpeg"><a href="#7-ffmpeg" class="headerlink" title="7. ffmpeg"></a>7. ffmpeg</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ffmpeg/archives/
+
+cd /opt/offline/ffmpeg/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ffmpeg | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ffmpeg/Packages.gz</code></pre>
+
+
+
+<h2 id="8-ntp"><a href="#8-ntp" class="headerlink" title="8. ntp"></a>8. ntp</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ntp/archives/
+
+cd /opt/offline/ntp/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ntp ntpdate | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ntp/Packages.gz</code></pre>
+
+
+
+<h2 id="9-apt-transport-https"><a href="#9-apt-transport-https" class="headerlink" title="9. apt-transport-https"></a>9. apt-transport-https</h2><pre><code class="highlight shell">mkdir -p /opt/offline/apt-transport-https/archives/
+
+cd /opt/offline/apt-transport-https/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances apt-transport-https | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/apt-transport-https/Packages.gz</code></pre>
+
+
+
+<h2 id="10-ca-certificates"><a href="#10-ca-certificates" class="headerlink" title="10. ca-certificates"></a>10. ca-certificates</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ca-certificates/archives/
+
+cd /opt/offline/ca-certificates/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ca-certificates | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ca-certificates/Packages.gz</code></pre>
+
+
+
+<h2 id="11-software-properties-common"><a href="#11-software-properties-common" class="headerlink" title="11. software-properties-common"></a>11. software-properties-common</h2><pre><code class="highlight shell">mkdir -p /opt/offline/software-properties-common/archives/
+
+cd /opt/offline/software-properties-common/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances software-properties-common | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/software-properties-common/Packages.gz</code></pre>
+
+
+
+<h2 id="12-docker"><a href="#12-docker" class="headerlink" title="12. docker"></a>12. docker</h2><p>docker的离线源制作稍稍复杂，需要GPG密钥，这里从阿里云下载Docker的GPG密钥，配置APT以从阿里云的Docker镜像仓库安装Docker.</p>
+<ul>
+<li><p>参考资料</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/ecs/use-cases/install-and-use-docker-on-a-linux-ecs-instance#33f11a5f1800n">安装Docker并使用</a></p>
+</blockquote>
+</li>
+</ul>
+<pre><code class="highlight shell">sudo apt-get update -y
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">安装必要的包，包括证书、curl（用于数据传输）和gnupg（用于GPG密钥管理）。</span>
+sudo apt-get install -y ca-certificates curl gnupg
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">创建一个目录/etc/apt/keyrings，并设置其权限为755。</span>
+sudo install -m 0755 -d /etc/apt/keyrings
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">下载Docker的GPG密钥，并将其转换为适合APT使用的格式，保存到指定目录。</span>
+sudo curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">为docker.gpg文件添加可读权限，以便所有用户都可以读取它。</span>
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">将Docker的APT源添加到新的列表文件中，使用当前系统架构和版本代号。</span>
+echo \
+  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] http://mirrors.aliyun.com/docker-ce/linux/ubuntu \
+<span class="meta prompt_">  $</span><span class="language-bash">(. /etc/os-release &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$VERSION_CODENAME</span>&quot;</span>) stable<span class="string">&quot; | \</span></span>
+<span class="string"><span class="language-bash">  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null</span></span>
+<span class="meta prompt_">  </span>
+<span class="meta prompt_"># </span><span class="language-bash"><span class="string">再次更新包索引，以包括刚添加的Docker源。</span></span>
+sudo apt-get update -y
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash"><span class="string">安装docker</span></span> 
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash"><span class="string">查看docker版本信息</span></span>
+docker --version
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash"><span class="string">创建docker离线源安装包目录</span></span>
+mkdir -p /opt/offline/docker/archives/
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash"><span class="string">将docker安装时下载的缓存包，移动到离线源安装包路径中</span></span>
+mv /var/cache/apt/archives/* /opt/offline/docker/archives/
+
+cd /opt/offline/docker/
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash"><span class="string">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span></span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash"><span class="string">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span></span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/docker/Packages.gz</code></pre>
+
+
+
+<h2 id="13-nfs"><a href="#13-nfs" class="headerlink" title="13. nfs"></a>13. nfs</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mrld/articles/14149708.html">https://www.cnblogs.com/mrld/articles/14149708.html</a></p>
+<pre><code class="highlight shell">mkdir -p /opt/offline/nfs/archives/
+
+cd /opt/offline/nfs/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances nfs-kernel-server nfs-common | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/nfs/Packages.gz</code></pre>
+
+
+
+<h2 id="14-sftp"><a href="#14-sftp" class="headerlink" title="14. sftp"></a>14. sftp</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhumengke/articles/11225040.html">https://www.cnblogs.com/zhumengke/articles/11225040.html</a></p>
+<pre><code class="highlight shell">mkdir -p /opt/offline/sftp/archives/
+
+cd /opt/offline/sftp/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances vsftpd | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/sftp/Packages.gz</code></pre>
+
+
+
+<h2 id="15-dos2unix"><a href="#15-dos2unix" class="headerlink" title="15. dos2unix"></a>15. dos2unix</h2><pre><code class="highlight shell">mkdir -p /opt/offline/dos2unix/archives/
+
+cd /opt/offline/dos2unix/archives/
+
+sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances dos2unix | grep &quot;^\w&quot; | sort -u)
+
+cd ..
+<span class="meta prompt_"></span>
+<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
+sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
+<span class="meta prompt_"> </span>
+<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
+cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/dos2unix/Packages.gz</code></pre>
+
+
+
+<h2 id="16-离线源打包"><a href="#16-离线源打包" class="headerlink" title="16. 离线源打包"></a>16. 离线源打包</h2><p>将上面制作好的连线源安装包，打包</p>
+<pre><code class="highlight shell">cd /opt/offline
+
+tar -zcf offline-source.tar.gz ./*</code></pre>
+
+<p><code>offline-source.tar.gz</code> 就是制作好的离线包</p>
+<h1 id="二、使用离线源安装服务器"><a href="#二、使用离线源安装服务器" class="headerlink" title="二、使用离线源安装服务器"></a>二、使用离线源安装服务器</h1><p>上面基于可连外网的服务器制作了离线源，并将离线源打成了一个tar包 ：<code>offline-source.tar.gz</code> ，现在就使用这个打包好的离线源，在断网的服务器上安装环境。</p>
+<h2 id="1-上传离线安装包"><a href="#1-上传离线安装包" class="headerlink" title="1. 上传离线安装包"></a>1. 上传离线安装包</h2><p>将 <code>offline-source.tar.gz</code> 上传到服务器上，可以通过U盘拷贝的方式，或者内网文件服务器下载。</p>
+<h2 id="2-配置离线源"><a href="#2-配置离线源" class="headerlink" title="2. 配置离线源"></a>2. 配置离线源</h2><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建离线文件存放目录</span>
+mkdir -p /opt/offline
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">解压离线文件</span>
+tar -zxvf offline-source.tar.gz -C /opt/offline/
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">备份源文件</span>
+mv /etc/apt/sources.list /etc/apt/sources.list.bak
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">映射本地源，这里可以使用vi</span>
+cat &gt;&gt;/etc/apt/sources.list &lt;&lt;EOF
+deb [trusted=yes] file:///opt/offline/apt-transport-https/ archives/
+deb [trusted=yes] file:///opt/offline/ca-certificates/ archives/
+deb [trusted=yes] file:///opt/offline/curl/ archives/
+deb [trusted=yes] file:///opt/offline/docker/ archives/
+deb [trusted=yes] file:///opt/offline/ffmpeg/ archives/
+deb [trusted=yes] file:///opt/offline/net-tools/ archives/
+deb [trusted=yes] file:///opt/offline/nfs/ archives/
+deb [trusted=yes] file:///opt/offline/ntp/ archives/
+deb [trusted=yes] file:///opt/offline/sftp/ archives/
+deb [trusted=yes] file:///opt/offline/software-properties-common/ archives/
+deb [trusted=yes] file:///opt/offline/ssh/ archives/
+deb [trusted=yes] file:///opt/offline/unzip/ archives/
+deb [trusted=yes] file:///opt/offline/vim/ archives/
+deb [trusted=yes] file:///opt/offline/wget/ archives/
+deb [trusted=yes] file:///opt/offline/dos2unix/ archives/
+EOF
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">更新</span>
+apt-get update -y</code></pre>
+
+
+
+<h2 id="3-测试安装"><a href="#3-测试安装" class="headerlink" title="3. 测试安装"></a>3. 测试安装</h2><pre><code class="highlight shell">//根据自己需求进行安装，例如：
+apt-get install -y wget</code></pre>
+
+
+
+<h2 id="4-使用离线源安装docker"><a href="#4-使用离线源安装docker" class="headerlink" title="4. 使用离线源安装docker"></a>4. 使用离线源安装docker</h2><pre><code class="highlight shell">sudo apt-get install -y docker-ce docker-ce-cli containerd.io</code></pre>
+
+
+
+<p><strong>参考文档</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://always200.com/ubuntu-offline-sources/">ubuntu制作离线源</a></p>
+</blockquote>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
