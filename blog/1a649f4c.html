@@ -1,0 +1,2343 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>13-JUC进阶-ReentrantReadWriteLock与StampedLock | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" juc , java ">
+  <meta name="description" content="13-JUC进阶-ReentrantReadWriteLock与StampedLock | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#x6f;&#x72;&#x67;&#101;&#x5f;&#x39;&#x35;&#x40;&#x31;&#50;&#54;&#x2e;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#x6f;&#x72;&#x67;&#101;&#x5f;&#x39;&#x35;&#x40;&#x31;&#50;&#54;&#x2e;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(64)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="neo4j">
+            
+            neo4j
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="64">
+<input type="hidden" id="yelog_site_word_count" value="307.7k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>neo4j</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu18</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1a649f4c.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="13-JUC进阶-ReentrantReadWriteLock与StampedLock">13-JUC进阶-ReentrantReadWriteLock与StampedLock</span>
+            <span class="post-date" title="2024-10-19 09:26:00">2024/10/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/5c93903a.html"
+           data-tag="linux,neo4j"
+           data-author="" >
+            <span class="post-title" title="Docker部署Neo4j并导入CSV数据">Docker部署Neo4j并导入CSV数据</span>
+            <span class="post-date" title="2024-10-17 15:00:30">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/ad38e6b1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Ubuntu18.04离线源环境搭建">Ubuntu18.04离线源环境搭建</span>
+            <span class="post-date" title="2024-10-17 09:47:33">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3fdbf0f6.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
+            <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3e0d7592.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
+            <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4502cffa.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
+            <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4de6a39b.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
+            <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/72329cf5.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
+            <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/5e3757c1.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
+            <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="juc,java"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-juc2/13-JUC进阶-ReentrantReadWriteLock&amp;StampedLock" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">13-JUC进阶-ReentrantReadWriteLock与StampedLock</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="JUC">JUC</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color4">juc</a>
+            
+            <a class="color5">java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-10-19 16:51:04'>2024-10-19 09:26</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:9.4k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%94%81%E7%9A%84%E6%BC%94%E5%8F%98"><span class="toc-text">一、锁的演变</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81ReentrantReadWriteLock"><span class="toc-text">二、ReentrantReadWriteLock</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E9%82%AE%E6%88%B3%E9%94%81"><span class="toc-text">三、邮戳锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-StampedLock%E7%AE%80%E4%BB%8B"><span class="toc-text">1. StampedLock简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-StampedLock-%E4%B8%89%E4%B8%AA%E4%B8%BB%E8%A6%81%E7%9A%84%E9%94%81%E6%A8%A1%E5%BC%8F"><span class="toc-text">1.1 StampedLock 三个主要的锁模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%88%B3%E8%AE%B0"><span class="toc-text">1.2 戳记</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E8%8E%B7%E5%8F%96%E9%94%81%E5%92%8C%E9%87%8A%E6%94%BE%E9%94%81%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-text">1.3 获取锁和释放锁的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E5%B9%B6%E5%8F%91%E5%BA%A6%E6%AF%94%E8%BE%83"><span class="toc-text">1.4 并发度比较</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-StampedLock%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">2. StampedLock简单使用示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-text">2.1 示例代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BD%BF%E7%94%A8%E4%B9%90%E8%A7%82%E8%AF%BB%E9%94%81%E9%9C%80%E8%A6%81%E9%81%B5%E5%BE%AA%E4%B8%80%E5%AE%9A%E7%9A%84%E8%A7%84%E5%88%99%EF%BC%9A"><span class="toc-text">2.2 使用乐观读锁需要遵循一定的规则：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-validate%E6%96%B9%E6%B3%95%E7%9A%84%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-text">2.3 validate方法的注意点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-StampedLock%E8%8E%B7%E5%8F%96%E9%87%8A%E6%94%BE%E9%94%81%E8%AF%A6%E8%A7%A3"><span class="toc-text">3. StampedLock获取释放锁详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%B1%BB%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84"><span class="toc-text">3.1 类继承结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%B1%BB%E5%B1%9E%E6%80%A7"><span class="toc-text">3.2 类属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-StampedLock%E5%AF%B9%E4%BA%8Estate%E5%8F%98%E9%87%8F%E7%9A%84%E8%AE%BE%E8%AE%A1"><span class="toc-text">3.3 StampedLock对于state变量的设计</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-StampedLock%E4%B9%90%E8%A7%82%E9%94%81%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">3.4 StampedLock乐观锁实现原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-StampedLock%E7%9A%84%E6%9E%84%E9%80%A0%E6%96%B9%E6%B3%95"><span class="toc-text">3.5 StampedLock的构造方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-tryOptimisticRead%E6%96%B9%E6%B3%95"><span class="toc-text">3.6 tryOptimisticRead方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-readLock-%E6%96%B9%E6%B3%95"><span class="toc-text">3.7 readLock 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8-acquireRead%E6%96%B9%E6%B3%95"><span class="toc-text">3.8 acquireRead方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-9-unlockRead%E6%96%B9%E6%B3%95"><span class="toc-text">3.9 unlockRead方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-10-tryDecReaderOverflow%E6%96%B9%E6%B3%95"><span class="toc-text">3.10 tryDecReaderOverflow方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-11-writeLock-%E6%96%B9%E6%B3%95"><span class="toc-text">3.11 writeLock 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-12-acquireWrite%E6%96%B9%E6%B3%95"><span class="toc-text">3.12 acquireWrite方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-13-unlockWrite%E6%96%B9%E6%B3%95"><span class="toc-text">3.13 unlockWrite方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-14-release%E6%96%B9%E6%B3%95"><span class="toc-text">3.14 release方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-StampedLock%E7%AE%A1%E7%90%86%E7%BA%BF%E7%A8%8B%E7%9A%84%E9%98%9F%E5%88%97"><span class="toc-text">4. StampedLock管理线程的队列</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81StampedLock%E5%92%8CReentrantReadWriteLock%E5%AF%B9%E6%AF%94"><span class="toc-text">四、StampedLock和ReentrantReadWriteLock对比</span></a></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、锁的演变"><a href="#一、锁的演变" class="headerlink" title="一、锁的演变"></a>一、锁的演变</h1><p>无锁  –&gt; 独占锁  –&gt; 读写锁  –&gt; 邮戳锁</p>
+<ul>
+<li><p>无锁：存在线程安全问题</p>
+</li>
+<li><p>独占锁（synchronized，ReentrantLock）</p>
+<p>同一时刻只能有一个线程访问，在读多写少的场景下，效率并不高。</p>
+</li>
+<li><p>读写锁（ReentrantReadWriteLock）</p>
+<p> 适应在多读写少的场景下，读锁可以被线程共享(<strong>共享锁</strong>)，写锁只能有一个线程获取(<strong>排它锁</strong>)。读的时候不允许写，写的时候不允许读。</p>
+<ul>
+<li>读写锁的缺点<ul>
+<li>写锁饥饿问题</li>
+<li>锁降级问题</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>邮戳锁（StampedLock）</p>
+<p>是对ReentrantReadWriteLock读写锁的一种改进，主要的改进为：在没有写只有读的场景下，StampedLock支持不用加读锁而是直接进行读操作，最大程度提升读的效率，只有在发生过写操作之后，再加读锁才能进行读操作</p>
+</li>
+</ul>
+<h1 id="二、ReentrantReadWriteLock"><a href="#二、ReentrantReadWriteLock" class="headerlink" title="二、ReentrantReadWriteLock"></a>二、ReentrantReadWriteLock</h1><p>关于读写锁的原理和锁降级，参考博客：<a href="https://georgechan95.github.io/blog/850dac3c.html">https://georgechan95.github.io/blog/850dac3c.html</a></p>
+<h1 id="三、邮戳锁"><a href="#三、邮戳锁" class="headerlink" title="三、邮戳锁"></a>三、邮戳锁</h1><h2 id="1-StampedLock简介"><a href="#1-StampedLock简介" class="headerlink" title="1. StampedLock简介"></a>1. StampedLock简介</h2><p><code>StampedLock</code> 是JUC并发包里面 JDK8 版本新增的一个锁，是读写锁的一种具体实现，和 <code>ReentrantReadWriteLock</code> 不同的是其不提供可重入性，不基于某个类似<code>Lock</code> 或者 <code>ReadWriteLock</code> 接口实现,而是基于CLH锁思想实现这点这AQS有些类似，并且 <code>StampedLock</code> 不支持条件变量 <code>Condition</code> 。</p>
+<h3 id="1-1-StampedLock-三个主要的锁模式"><a href="#1-1-StampedLock-三个主要的锁模式" class="headerlink" title="1.1 StampedLock 三个主要的锁模式"></a>1.1 StampedLock 三个主要的锁模式</h3><ul>
+<li><p><strong>写锁模式（writeLock()）</strong></p>
+<p>用于排他性地写操作。在写锁模式下，其他线程既无法获取读锁，也无法获取写锁。</p>
+</li>
+<li><p><strong>乐观读锁模式（tryOptimisticRead()）</strong></p>
+<p>允许线程进行读操作而不获取读锁，这种模式假设在读操作过程中数据不会被其他线程修改。如果发现数据被修改，可以重新获取悲观读锁以保证数据一致性。</p>
+</li>
+<li><p><strong>悲观读锁模式（readLock()）</strong></p>
+<p>类似于 ReadWriteLock 的读锁，允许多个线程同时获取读锁，但无法与写锁共存。</p>
+</li>
+</ul>
+<h3 id="1-2-戳记"><a href="#1-2-戳记" class="headerlink" title="1.2 戳记"></a>1.2 戳记</h3><p>戳记（stamp） 是 StampedLock 的关键，表示当前锁的状态。获取锁时返回的戳记值在后续的锁操作中用于验证锁的有效性，确保在锁的释放或转换操作中锁的状态是正确的。使用戳记有助于减少锁的争用和开销， StampedLock 通过提供乐观读锁在多线程多读的情况下提供了更好的性能，这是因为获取乐观读锁时不需要进行 CAS 操作设置锁的状态，而只是简单地测试状态。</p>
+<h3 id="1-3-获取锁和释放锁的方法"><a href="#1-3-获取锁和释放锁的方法" class="headerlink" title="1.3 获取锁和释放锁的方法"></a>1.3 获取锁和释放锁的方法</h3><ul>
+<li>获取锁：<ul>
+<li><code>tryOptimisticRead()</code>: 获取乐观读锁，返回戳记。</li>
+<li><code>readLock()</code>: 获取悲观读锁，返回戳记</li>
+<li><code>writeLock()</code>: 获取写锁，返回戳记。</li>
+</ul>
+</li>
+<li>释放锁：<ul>
+<li><code>unlockRead(stamp)</code>: 释放读锁（悲观读锁或乐观读锁）。</li>
+<li><code>unlockWrite(stamp)</code>: 释放写锁。</li>
+</ul>
+</li>
+<li>转换锁：<ul>
+<li><code>tryConvertToWriteLock(long stamp)</code>：尝试将当前持有的锁转换为写锁</li>
+<li><code>tryConvertToReadLock(long stamp)</code>：尝试将当前持有的写锁转换为读锁</li>
+<li><code>tryConvertToOptimisticRead(long stamp)</code>：尝试将当前持有的悲观读锁转换为乐观读锁</li>
+</ul>
+</li>
+</ul>
+<p>可以看出<code>tryConvertToWriteLock</code> 方法表明 <code>StampedLock</code> 支持锁升级，这也是和<code>ReentrantReadWriteLock</code> 不同的点</p>
+<h3 id="1-4-并发度比较"><a href="#1-4-并发度比较" class="headerlink" title="1.4 并发度比较"></a>1.4 并发度比较</h3><table>
+<thead>
+<tr>
+<th align="left">锁</th>
+<th align="left">并发度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">ReentrantLock</td>
+<td align="left">读读互斥，读写互斥，写写互斥</td>
+</tr>
+<tr>
+<td align="left">ReentrantReadWriteLock</td>
+<td align="left">读读不互斥、读写互斥、写写互斥</td>
+</tr>
+<tr>
+<td align="left">StampedLock</td>
+<td align="left">读读不互斥、读写不互斥、写写互斥</td>
+</tr>
+</tbody></table>
+<p>上面对于StampedLock 的读写不互斥是指 乐观读和写，而不是悲观读和写。</p>
+<p>乐观读的思想和数据库中MVCC（Multi-Version Concurrency Control，多版本并发控制）有点类似。</p>
+<h2 id="2-StampedLock简单使用示例"><a href="#2-StampedLock简单使用示例" class="headerlink" title="2. StampedLock简单使用示例"></a>2. StampedLock简单使用示例</h2><h3 id="2-1-示例代码"><a href="#2-1-示例代码" class="headerlink" title="2.1 示例代码"></a>2.1 示例代码</h3><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestStampedLock</span> &#123;
+    <span class="comment">// 声明邮戳锁</span>
+    <span class="keyword">private</span> <span class="type">StampedLock</span> <span class="variable">lock</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StampedLock</span>();
+    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> <span class="number">10</span>;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException &#123;
+        <span class="type">TestStampedLock</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TestStampedLock</span>();
+
+        <span class="type">Runnable</span> <span class="variable">readRun</span> <span class="operator">=</span> () -&gt; test.read();
+        <span class="type">Runnable</span> <span class="variable">writeRun</span> <span class="operator">=</span> () -&gt; test.write(<span class="number">5</span>);
+
+        <span class="comment">// 读数据线程</span>
+        <span class="type">Thread</span> <span class="variable">thread1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(readRun, <span class="string">&quot;thread1&quot;</span>);
+        <span class="comment">// 写数据线程</span>
+        <span class="type">Thread</span> <span class="variable">thread2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(writeRun, <span class="string">&quot;thread2&quot;</span>);
+        <span class="comment">// 读数据线程</span>
+        <span class="type">Thread</span> <span class="variable">thread3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(readRun, <span class="string">&quot;thread3&quot;</span>);
+
+        thread1.start();
+        thread2.start();
+        thread3.start();
+
+        <span class="keyword">try</span> &#123;
+            thread1.join();
+            thread1.join();
+            thread1.join();
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            Thread.currentThread().interrupt();
+        &#125;
+    &#125;
+
+
+    <span class="comment">/**</span>
+<span class="comment">     * 读数据</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">read</span><span class="params">()</span> &#123;
+        <span class="type">long</span> <span class="variable">stamp</span> <span class="operator">=</span> lock.tryOptimisticRead();
+        <span class="keyword">try</span> &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始读数据&quot;</span>);
+            <span class="comment">// 初次尝试乐观读</span>
+            <span class="type">int</span> <span class="variable">currentNum</span> <span class="operator">=</span> num;
+            <span class="comment">// 模拟读取时间延迟</span>
+            TimeUnit.MILLISECONDS.sleep(<span class="number">300</span>);
+            <span class="keyword">if</span> (!lock.validate(stamp)) &#123;
+                <span class="comment">// 乐观读失败，开始悲观读</span>
+                stamp = lock.readLock();
+                <span class="keyword">try</span> &#123;
+                    <span class="comment">// 再次读取内容</span>
+                    currentNum = num;
+                &#125; <span class="keyword">finally</span> &#123;
+                    <span class="comment">// 释放悲观读</span>
+                    lock.unlockRead(stamp);
+                &#125;
+            &#125;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;读取到的数值：&quot;</span> + currentNum);
+        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 发生异常，异常消息：&quot;</span> + e.getMessage());
+            <span class="comment">// 终端线程执行</span>
+            Thread.currentThread().interrupt();
+        &#125;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 写数据</span>
+<span class="comment">     * <span class="doctag">@param</span> number</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">write</span><span class="params">(<span class="type">int</span> number)</span> &#123;
+        <span class="type">long</span> <span class="variable">stamp</span> <span class="operator">=</span> lock.writeLock();
+        <span class="keyword">try</span> &#123;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始写数据&quot;</span>);
+            num += number;
+            System.out.println(Thread.currentThread().getName() + <span class="string">&quot;将数据写为：&quot;</span> + num);
+        &#125; <span class="keyword">finally</span> &#123;
+            lock.unlockWrite(stamp);
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果</p>
+</blockquote>
+<pre><code class="highlight shell">thread1开始读数据
+thread3开始读数据
+thread2开始写数据
+thread2将数据写为：15
+thread3读取到的数值：15
+thread1读取到的数值：15</code></pre>
+
+<p>需要注意的点就是，<code>lock.tryOptimisticRead();</code> 获取悲观锁方法并不真正获取锁，而是假设在读操作期间数据不会被修改。使用戳记来验证数据是否在读操作期间被修改，必要时需要升级为悲观读锁来保证数据一致性。</p>
+<h3 id="2-2-使用乐观读锁需要遵循一定的规则："><a href="#2-2-使用乐观读锁需要遵循一定的规则：" class="headerlink" title="2.2 使用乐观读锁需要遵循一定的规则："></a>2.2 使用乐观读锁需要遵循一定的规则：</h3><p>比如 <code>read()</code> 方法中获取 <code>num</code> 的时候需要遵循下面几个步骤：<br>并且一定要按照下面几个步骤顺序处理。</p>
+<ul>
+<li><p><strong>乐观读操作：</strong></p>
+<p>先尝试使用 <code>tryOptimisticRead()</code> 获取乐观读锁。此时不持有实际的读锁，仅仅假设数据在读取期间不会被修改。进行乐观读操作，相当于把共享变量读取到线程的栈内存，这一步很重要需要在验证之前执行。</p>
+</li>
+<li><p><strong>验证和转换：</strong></p>
+<p>使用 <code>validate(stamp)</code> 检查在乐观读期间数据是否被修改。如果数据未被修改，读取的结果就是可靠的。如果数据被修改，需要使用 <code>readLock()</code> 获取悲观读锁，再进行一遍悲观读取操作来确保数据的一致性。</p>
+</li>
+<li><p><strong>释放锁：</strong></p>
+<p>如果获取了悲观读锁，必须在读操作完成后使用 <code>unlockRead(stamp)</code> 释放锁。</p>
+</li>
+</ul>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 读数据</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">read</span><span class="params">()</span> &#123;
+    <span class="type">long</span> <span class="variable">stamp</span> <span class="operator">=</span> lock.tryOptimisticRead();
+    <span class="keyword">try</span> &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始读数据&quot;</span>);
+        <span class="comment">// 初次尝试乐观读</span>
+        <span class="type">int</span> <span class="variable">currentNum</span> <span class="operator">=</span> num;
+        <span class="comment">// 模拟读取时间延迟</span>
+        TimeUnit.MILLISECONDS.sleep(<span class="number">300</span>);
+        <span class="keyword">if</span> (!lock.validate(stamp)) &#123;
+            <span class="comment">// 乐观读失败，开始悲观读</span>
+            stamp = lock.readLock();
+            <span class="keyword">try</span> &#123;
+                <span class="comment">// 再次读取内容</span>
+                currentNum = num;
+            &#125; <span class="keyword">finally</span> &#123;
+                <span class="comment">// 释放悲观读</span>
+                lock.unlockRead(stamp);
+            &#125;
+        &#125;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;读取到的数值：&quot;</span> + currentNum);
+    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
+        System.out.println(Thread.currentThread().getName() + <span class="string">&quot; 发生异常，异常消息：&quot;</span> + e.getMessage());
+        <span class="comment">// 终端线程执行</span>
+        Thread.currentThread().interrupt();
+    &#125;
+&#125;</code></pre>
+
+<p>使用乐观锁、悲观锁思想也是 <code>StampedLock</code> 提升读取性能的一个方式。因为<code>tryOptimisticRead</code> 和 <code>validate</code> 这两个方法都比悲观读锁的CAS操作要快。</p>
+<h3 id="2-3-validate方法的注意点"><a href="#2-3-validate方法的注意点" class="headerlink" title="2.3 validate方法的注意点"></a>2.3 <code>validate</code>方法的注意点</h3><p>由于乐观读操作对顺序要求很严格，并且乐观读返回的是普通long类型变量，所以为了防止重排序，在validate方法中使用了读屏障（ <code>U.loadFence();</code>） 确保在屏障之前的所有读操作在屏障之后的读操作之前完成。这意味着，<code>U.loadFence(</code>) 保证了在它之前的内存读取操作不会被重新排序到它之后。</p>
+<p><code>StampedLock</code> 中的 <code>state</code> 变量是<code>volatile</code>修饰的，但是<code>validate</code>方法的入参<code>stamp</code>并不能保证是 <code>volatile</code> 变量，所以需要加个读屏障，确保 <code>stamp</code> 和 <code>state</code> 的读取操作不会被重排序，从而保证 <code>stamp</code> 的有效性检查是准确的。如果不使用读屏障，可能会出现 <code>stamp</code> 和 <code>state</code> 的读取操作被重排序的情况，这可能导致 <code>validate</code> 方法返回不正确的结果。</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">validate</span><span class="params">(<span class="type">long</span> stamp)</span> &#123;
+    U.loadFence();
+    <span class="keyword">return</span> (stamp &amp; SBITS) == (state &amp; SBITS);
+&#125;</code></pre>
+
+
+
+<h2 id="3-StampedLock获取释放锁详解"><a href="#3-StampedLock获取释放锁详解" class="headerlink" title="3. StampedLock获取释放锁详解"></a>3. StampedLock获取释放锁详解</h2><h3 id="3-1-类继承结构"><a href="#3-1-类继承结构" class="headerlink" title="3.1 类继承结构"></a>3.1 类继承结构</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/19/20241019-154603.png" alt="类继承结构"></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StampedLock</span> <span class="keyword">implements</span> <span class="title class_">java</span>.io.Serializable</code></pre>
+
+
+
+<h3 id="3-2-类属性"><a href="#3-2-类属性" class="headerlink" title="3.2 类属性"></a>3.2 类属性</h3><pre><code class="highlight java"><span class="comment">/** CPU 核心数，用于自旋控制 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">NCPU</span> <span class="operator">=</span> Runtime.getRuntime().availableProcessors();
+
+<span class="comment">/** 尝试获取锁时的最大自旋次数。自旋是指在短时间内反复检查锁状态，而不是立即阻塞线程。 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">SPINS</span> <span class="operator">=</span> (NCPU &gt; <span class="number">1</span>) ? <span class="number">1</span> &lt;&lt; <span class="number">6</span> : <span class="number">0</span>;
+
+<span class="comment">/** 尝试获取锁时，最大自旋次数，超出此值后会尝试阻塞在队列的头部。 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">HEAD_SPINS</span> <span class="operator">=</span> (NCPU &gt; <span class="number">1</span>) ? <span class="number">1</span> &lt;&lt; <span class="number">10</span> : <span class="number">0</span>;
+
+<span class="comment">/** 自旋时的最大重试次数，超出此值后会重新尝试阻塞。 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">MAX_HEAD_SPINS</span> <span class="operator">=</span> (NCPU &gt; <span class="number">1</span>) ? <span class="number">1</span> &lt;&lt; <span class="number">16</span> : <span class="number">0</span>;
+
+<span class="comment">/** 等待溢出自旋锁时的放弃 CPU 使用的周期。这是一个幂次 2 - 1 的值。 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">OVERFLOW_YIELD_RATE</span> <span class="operator">=</span> <span class="number">7</span>; <span class="comment">// 必须是 2 的幂次 - 1</span>
+
+<span class="comment">/** 用于表示读锁计数的位数，超出此范围会发生溢出。  范围是1~126  */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">LG_READERS</span> <span class="operator">=</span> <span class="number">7</span>;
+
+<span class="comment">/** 锁状态和印章操作的相关常量值 */</span>
+
+<span class="comment">// 单位读操作的位掩码</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">RUNIT</span> <span class="operator">=</span> <span class="number">1L</span>;
+
+<span class="comment">// 写操作的位掩码（位移了 LG_READERS 位）</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">WBIT</span>  <span class="operator">=</span> <span class="number">1L</span> &lt;&lt; LG_READERS;
+
+<span class="comment">// 读操作的位掩码范围</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">RBITS</span> <span class="operator">=</span> WBIT - <span class="number">1L</span>;
+
+<span class="comment">// 读操作的满位掩码</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">RFULL</span> <span class="operator">=</span> RBITS - <span class="number">1L</span>;
+
+<span class="comment">// 所有锁的位掩码（包括读和写）</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">ABITS</span> <span class="operator">=</span> RBITS | WBIT;
+
+<span class="comment">// 只有写锁的位掩码 ( ~ 是按位取反操作符)</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">SBITS</span> <span class="operator">=</span> ~RBITS; <span class="comment">// 注意与 ABITS 的重叠</span>
+
+<span class="comment">// 锁状态的初始值; 避免零值作为失败值</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">ORIGIN</span> <span class="operator">=</span> WBIT &lt;&lt; <span class="number">1</span>;
+
+<span class="comment">/** 从被取消的获取方法返回的特殊值，用于抛出中断异常。 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">INTERRUPTED</span> <span class="operator">=</span> <span class="number">1L</span>;
+
+<span class="comment">/** 节点状态的相关常量值，顺序很重要 */</span>
+
+<span class="comment">// 等待状态</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">WAITING</span>   <span class="operator">=</span> -<span class="number">1</span>;
+<span class="comment">// 取消状态</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">CANCELLED</span> <span class="operator">=</span>  <span class="number">1</span>;
+
+<span class="comment">/** 节点模式; 用整数而不是布尔值，以允许进行算术操作 */</span>
+
+<span class="comment">// 读模式</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">RMODE</span> <span class="operator">=</span> <span class="number">0</span>;
+<span class="comment">// 写模式</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">WMODE</span> <span class="operator">=</span> <span class="number">1</span>;
+
+<span class="comment">/** 等待节点的内部类，用于管理队列中的节点 */</span>
+<span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">class</span> <span class="title class_">WNode</span> &#123;
+    <span class="keyword">volatile</span> WNode prev;    <span class="comment">// 上一个节点</span>
+    <span class="keyword">volatile</span> WNode next;    <span class="comment">// 下一个节点</span>
+    <span class="keyword">volatile</span> WNode cowait;  <span class="comment">// 链接的读线程列表</span>
+    <span class="keyword">volatile</span> Thread thread; <span class="comment">// 线程对象; 如果非空，则线程可能被挂起</span>
+    <span class="keyword">volatile</span> <span class="type">int</span> status;    <span class="comment">// 节点状态; 0, WAITING 或 CANCELLED</span>
+    <span class="keyword">final</span> <span class="type">int</span> mode;         <span class="comment">// 节点模式; RMODE 或 WMODE</span>
+    WNode(<span class="type">int</span> m, WNode p) &#123; mode = m; prev = p; &#125;
+&#125;
+
+<span class="comment">/** CLH 队列的头部节点 */</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> WNode whead;
+
+<span class="comment">/** CLH 队列的尾部节点 */</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> WNode wtail;
+
+<span class="comment">/** 锁视图，用于提供不同类型的锁视图 */</span>
+<span class="keyword">transient</span> ReadLockView readLockView;
+<span class="keyword">transient</span> WriteLockView writeLockView;
+<span class="keyword">transient</span> ReadWriteLockView readWriteLockView;
+
+<span class="comment">/** 锁的状态*/</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> <span class="type">long</span> state;
+
+<span class="comment">/** 当状态的读计数饱和时，所使用的额外读锁计数 */</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="type">int</span> readerOverflow;
+</code></pre>
+
+<p>可以看出<code>StampedLock</code>是通过内部类 <code>WNode</code> 来管理队列中的节点(队列属于双向链表结构，利用了CLH锁思想)。并且用了大量的标志位和位运算来处理锁的逻辑。</p>
+<h3 id="3-3-StampedLock对于state变量的设计"><a href="#3-3-StampedLock对于state变量的设计" class="headerlink" title="3.3 StampedLock对于state变量的设计"></a>3.3 StampedLock对于state变量的设计</h3><pre><code class="highlight java"><span class="comment">/** 用于表示读锁计数的位数，超出此范围会发生溢出。  范围是1~126  */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">LG_READERS</span> <span class="operator">=</span> <span class="number">7</span>;
+<span class="comment">// 写操作的位掩码（位移了 LG_READERS 位）</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">WBIT</span>  <span class="operator">=</span> <span class="number">1L</span> &lt;&lt; LG_READERS;
+<span class="comment">// 锁状态的初始值; 避免零值作为失败值</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">ORIGIN</span> <span class="operator">=</span> WBIT &lt;&lt; <span class="number">1</span>;
+<span class="comment">/** 锁的状态*/</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> <span class="type">long</span> state;</code></pre>
+
+<p>由于只有一个<code>state</code>变量，又需要表示读写锁，所以<code>StampedLock</code>也把state变量拆成了读和写的部分，但是不同于 <code>ReentrantReadWriteLock</code>的int类型的state变量把高16位表示读锁计数，低16位表示写锁计数。</p>
+<p><code>StampedLock</code>中 锁状态的初始值是 <code>ORIGIN</code> 也就是 1&lt;&lt;7,也就是 <code>1000 0000</code>（前面的0省略）用最低的8位表示读和写的状态，其中最低的7位表示读锁的状态(版本)，第8位表示写锁的状态。因为写锁是互斥的且不可重入，用一位就够了。</p>
+<h3 id="3-4-StampedLock乐观锁实现原理"><a href="#3-4-StampedLock乐观锁实现原理" class="headerlink" title="3.4 StampedLock乐观锁实现原理"></a>3.4 StampedLock乐观锁实现原理</h3><p>结合<code>tryOptimisticRead</code>和<code>validate</code>方法分析：</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="type">long</span> <span class="title function_">tryOptimisticRead</span><span class="params">()</span> &#123;
+    <span class="type">long</span> s;
+    <span class="keyword">return</span> (((s = state) &amp; WBIT) == <span class="number">0L</span>) ? (s &amp; SBITS) : <span class="number">0L</span>;
+&#125;</code></pre>
+
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">validate</span><span class="params">(<span class="type">long</span> stamp)</span> &#123;
+    U.loadFence();
+    <span class="keyword">return</span> (stamp &amp; SBITS) == (state &amp; SBITS);
+&#125;</code></pre>
+
+<p><code>tryOptimisticRead</code> 方法中 <code>state&amp;WBIT！=0</code>，说明 <code>state</code> 变量表示写锁的第八位为1，也就是有线程持有写锁，那么 <code>tryOptimisticRead</code> 方法就会返回0。表示获取乐观读锁失败。然后我们再调用 <code>validate(0)</code> 一定会得到false，也就是校验失败。这个符合当有线程持有写锁时与其他锁互斥的逻辑。</p>
+<p>为什么<code>validate</code>方法，比较的是<code>(stamp &amp; SBITS) == (state &amp; SBITS);</code>？<br>因为需要支持读读不互斥，即使修改了state的低7位也就是读锁的部分，<code>(stamp &amp; SBITS) == (state &amp; SBITS);</code>依然会返回true。</p>
+<h3 id="3-5-StampedLock的构造方法"><a href="#3-5-StampedLock的构造方法" class="headerlink" title="3.5 StampedLock的构造方法"></a>3.5 StampedLock的构造方法</h3><pre><code class="highlight java"><span class="comment">/** 用于表示读锁状态的位数，超出此范围会发生溢出。  范围是1~126  */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">LG_READERS</span> <span class="operator">=</span> <span class="number">7</span>;
+
+<span class="comment">/** 写操作的位掩码（位移了 LG_READERS 位） */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">WBIT</span>  <span class="operator">=</span> <span class="number">1L</span> &lt;&lt; LG_READERS;
+
+<span class="comment">/** 锁状态的初始值; 避免零值作为失败值 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">ORIGIN</span> <span class="operator">=</span> WBIT &lt;&lt; <span class="number">1</span>;
+
+<span class="comment">/** 锁的状态*/</span>
+<span class="keyword">private</span> <span class="keyword">transient</span> <span class="keyword">volatile</span> <span class="type">long</span> state;
+
+<span class="comment">/**</span>
+<span class="comment"> * 默认构造方法。</span>
+<span class="comment"> * 初始化 `StampedLock` 对象，将锁状态设置为初始值。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="title function_">StampedLock</span><span class="params">()</span> &#123;
+    <span class="comment">// 初始化锁状态为初始值 ORIGIN，避免状态为零作为失败值。</span>
+    state = ORIGIN;
+&#125;</code></pre>
+
+
+
+<h3 id="3-6-tryOptimisticRead方法"><a href="#3-6-tryOptimisticRead方法" class="headerlink" title="3.6 tryOptimisticRead方法"></a>3.6 tryOptimisticRead方法</h3><pre><code class="highlight java"><span class="comment">/** 用于表示读锁状态的位数 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">LG_READERS</span> <span class="operator">=</span> <span class="number">7</span>;
+
+<span class="comment">/** 写操作的位掩码（位移了 LG_READERS 位） */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">WBIT</span>  <span class="operator">=</span> <span class="number">1L</span> &lt;&lt; LG_READERS;
+
+<span class="comment">/** 只有写锁的位掩码 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">SBITS</span> <span class="operator">=</span> ~RBITS;
+
+<span class="comment">/** 读操作的位掩码范围 */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">long</span> <span class="variable">RBITS</span> <span class="operator">=</span> WBIT - <span class="number">1L</span>;
+
+<span class="comment">/**</span>
+<span class="comment"> * 尝试以乐观读模式获取锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 这个方法检查当前锁状态以确定是否可以进行乐观读操作。</span>
+<span class="comment"> * 如果没有写锁持有者（即锁的写位没有被设置），方法返回当前的读者计数（即锁的状态）。</span>
+<span class="comment"> * 否则，返回 0 表示无法进行乐观读操作。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@return</span> 如果可以进行乐观读，则返回当前的读者计数；否则返回 0。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="type">long</span> <span class="title function_">tryOptimisticRead</span><span class="params">()</span> &#123;
+    <span class="type">long</span> s;
+    <span class="comment">// 读取当前锁状态</span>
+    s = state;
+    <span class="comment">// 检查写锁位是否被设置。如果没有写锁持有者（写位为 0），则返回当前读者计数（即去除写锁位后的状态值）。</span>
+    <span class="keyword">return</span> (((s &amp; WBIT) == <span class="number">0L</span>) ? (s &amp; SBITS) : <span class="number">0L</span>);
+&#125;</code></pre>
+
+<p>这个方法允许线程在没有写锁持有者的情况下进行乐观读操作，这可以提高并发性能，因为乐观读操作不需要获取实际的读锁。</p>
+<h3 id="3-7-readLock-方法"><a href="#3-7-readLock-方法" class="headerlink" title="3.7 readLock 方法"></a>3.7 readLock 方法</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 尝试获取读锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 在常见的无竞争情况下，这个方法会直接返回一个读锁的印章。</span>
+<span class="comment"> * 如果当前队列为空（即 `whead` 等于 `wtail`），并且没有写锁持有者（即当前状态的读位小于 RFULL），</span>
+<span class="comment"> * 则通过 CAS 操作将状态值加上 `RUNIT` 以尝试获取读锁。</span>
+<span class="comment"> * 否则，调用 `acquireRead` 方法来实际获取读锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@return</span> 成功获取读锁时的印章值。如果无法获取，则调用 `acquireRead` 方法来处理。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="type">long</span> <span class="title function_">readLock</span><span class="params">()</span> &#123;
+    <span class="type">long</span> <span class="variable">s</span> <span class="operator">=</span> state, next;  <span class="comment">// 读取当前锁状态，并为下一个状态准备变量</span>
+    <span class="comment">// 如果当前队列为空且状态值允许新的读操作，则尝试通过 CAS 操作增加读锁计数</span>
+    <span class="keyword">return</span> ((whead == wtail &amp;&amp; (s &amp; ABITS) &lt; RFULL &amp;&amp;
+             U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s, next = s + RUNIT)) ?
+            next : acquireRead(<span class="literal">false</span>, <span class="number">0L</span>));  <span class="comment">// 否则调用 acquireRead 方法来获取读锁</span>
+&#125;</code></pre>
+
+<p><strong><code>readLock</code> 方法总结：</strong></p>
+<ul>
+<li><p><strong>目标：</strong> 尝试在无竞争情况下快速获取读锁。如果直接获取失败，则调用 <code>acquireRead</code> 处理复杂情况。</p>
+</li>
+<li><p><strong>具体步骤：</strong></p>
+<ul>
+<li><p><strong>检查队列状态：</strong></p>
+<p>如果队列为空（whead &#x3D;&#x3D; wtail）且状态允许增加读锁计数（(s &amp; ABITS) &lt; RFULL），即没有达到读锁计数上限：尝试通过 CAS 操作将 state 增加 RUNIT，即增加读锁计数。如果 CAS 操作成功，返回新的状态 next。</p>
+</li>
+<li><p><strong>调用 acquireRead：</strong></p>
+<p>如果队列不为空，或者 CAS 操作失败，则调用 acquireRead 方法来处理更复杂的情况，实际获取读锁。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-8-acquireRead方法"><a href="#3-8-acquireRead方法" class="headerlink" title="3.8 acquireRead方法"></a>3.8 acquireRead方法</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 实际获取读锁的方法。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 这个方法会尝试获取读锁。如果直接获取失败，它会通过自旋、队列管理和线程等待来确保获取读锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@param</span> interruptible 是否可中断。</span>
+<span class="comment"> * <span class="doctag">@param</span> deadline 线程等待的截止时间（纳秒）。</span>
+<span class="comment"> * <span class="doctag">@return</span> 成功获取读锁时的印章值。如果超时或中断，则可能会取消等待。</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="type">long</span> <span class="title function_">acquireRead</span><span class="params">(<span class="type">boolean</span> interruptible, <span class="type">long</span> deadline)</span> &#123;
+    <span class="type">WNode</span> <span class="variable">node</span> <span class="operator">=</span> <span class="literal">null</span>, p;
+    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">spins</span> <span class="operator">=</span> -<span class="number">1</span>;;) &#123;
+        WNode h;
+        <span class="keyword">if</span> ((h = whead) == (p = wtail)) &#123;  <span class="comment">// 检查队列是否为空</span>
+            <span class="keyword">for</span> (<span class="type">long</span> m, s, ns;;) &#123;
+                <span class="comment">// 检查当前状态是否允许增加读锁计数</span>
+                <span class="keyword">if</span> ((m = (s = state) &amp; ABITS) &lt; RFULL ?
+                    U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s, ns = s + RUNIT) :
+                    (m &lt; WBIT &amp;&amp; (ns = tryIncReaderOverflow(s)) != <span class="number">0L</span>))
+                    <span class="keyword">return</span> ns;  <span class="comment">// 成功获取读锁</span>
+                <span class="keyword">else</span> <span class="keyword">if</span> (m &gt;= WBIT) &#123;
+                    <span class="keyword">if</span> (spins &gt; <span class="number">0</span>) &#123;
+                        <span class="keyword">if</span> (LockSupport.nextSecondarySeed() &gt;= <span class="number">0</span>)
+                            --spins;
+                    &#125;
+                    <span class="keyword">else</span> &#123;
+                        <span class="keyword">if</span> (spins == <span class="number">0</span>) &#123;
+                            <span class="type">WNode</span> <span class="variable">nh</span> <span class="operator">=</span> whead, np = wtail;
+                            <span class="keyword">if</span> ((nh == h &amp;&amp; np == p) || (h = nh) != (p = np))
+                                <span class="keyword">break</span>;
+                        &#125;
+                        spins = SPINS;  <span class="comment">// 重置自旋次数</span>
+                    &#125;
+                &#125;
+            &#125;
+        &#125;
+        <span class="keyword">if</span> (p == <span class="literal">null</span>) &#123; <span class="comment">// 如果队列为空，初始化队列</span>
+            <span class="type">WNode</span> <span class="variable">hd</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">WNode</span>(WMODE, <span class="literal">null</span>);
+            <span class="keyword">if</span> (U.compareAndSwapObject(<span class="built_in">this</span>, WHEAD, <span class="literal">null</span>, hd))
+                wtail = hd;
+        &#125;
+        <span class="keyword">else</span> <span class="keyword">if</span> (node == <span class="literal">null</span>)
+            node = <span class="keyword">new</span> <span class="title class_">WNode</span>(RMODE, p);  <span class="comment">// 创建新的读节点</span>
+        <span class="keyword">else</span> <span class="keyword">if</span> (h == p || p.mode != RMODE) &#123;  <span class="comment">// 如果队列中的前驱节点不是读节点，尝试加入队列</span>
+            <span class="keyword">if</span> (node.prev != p)
+                node.prev = p;
+            <span class="keyword">else</span> <span class="keyword">if</span> (U.compareAndSwapObject(<span class="built_in">this</span>, WTAIL, p, node)) &#123;
+                p.next = node;
+                <span class="keyword">break</span>;
+            &#125;
+        &#125;
+        <span class="keyword">else</span> <span class="keyword">if</span> (!U.compareAndSwapObject(p, WCOWAIT,
+                                         node.cowait = p.cowait, node))
+            node.cowait = <span class="literal">null</span>;  <span class="comment">// 更新前驱节点的等待列表</span>
+        <span class="keyword">else</span> &#123;
+            <span class="keyword">for</span> (;;) &#123;
+                WNode pp, c; Thread w;
+                <span class="keyword">if</span> ((h = whead) != <span class="literal">null</span> &amp;&amp; (c = h.cowait) != <span class="literal">null</span> &amp;&amp;
+                    U.compareAndSwapObject(h, WCOWAIT, c, c.cowait) &amp;&amp;
+                    (w = c.thread) != <span class="literal">null</span>) <span class="comment">// 唤醒等待线程</span>
+                    U.unpark(w);
+                <span class="keyword">if</span> (h == (pp = p.prev) || h == p || pp == <span class="literal">null</span>) &#123;
+                    <span class="type">long</span> m, s, ns;
+                    <span class="keyword">do</span> &#123;
+                        <span class="comment">// 检查状态是否允许增加读锁计数</span>
+                        <span class="keyword">if</span> ((m = (s = state) &amp; ABITS) &lt; RFULL ?
+                            U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s,
+                                                 ns = s + RUNIT) :
+                            (m &lt; WBIT &amp;&amp;
+                             (ns = tryIncReaderOverflow(s)) != <span class="number">0L</span>))
+                            <span class="keyword">return</span> ns;  <span class="comment">// 成功获取读锁</span>
+                    &#125; <span class="keyword">while</span> (m &lt; WBIT);
+                &#125;
+                <span class="keyword">if</span> (whead == h &amp;&amp; p.prev == pp) &#123;
+                    <span class="type">long</span> time;
+                    <span class="keyword">if</span> (pp == <span class="literal">null</span> || h == p || p.status &gt; <span class="number">0</span>) &#123;
+                        node = <span class="literal">null</span>; <span class="comment">// 丢弃节点</span>
+                        <span class="keyword">break</span>;
+                    &#125;
+                    <span class="keyword">if</span> (deadline == <span class="number">0L</span>)
+                        time = <span class="number">0L</span>;
+                    <span class="keyword">else</span> <span class="keyword">if</span> ((time = deadline - System.nanoTime()) &lt;= <span class="number">0L</span>)
+                        <span class="keyword">return</span> cancelWaiter(node, p, <span class="literal">false</span>);  <span class="comment">// 超时取消等待</span>
+                    <span class="type">Thread</span> <span class="variable">wt</span> <span class="operator">=</span> Thread.currentThread();
+                    U.putObject(wt, PARKBLOCKER, <span class="built_in">this</span>);
+                    node.thread = wt;
+                    <span class="keyword">if</span> ((h != pp || (state &amp; ABITS) == WBIT) &amp;&amp;
+                        whead == h &amp;&amp; p.prev == pp)
+                        U.park(<span class="literal">false</span>, time);  <span class="comment">// 线程等待</span>
+                    node.thread = <span class="literal">null</span>;
+                    U.putObject(wt, PARKBLOCKER, <span class="literal">null</span>);
+                    <span class="keyword">if</span> (interruptible &amp;&amp; Thread.interrupted())
+                        <span class="keyword">return</span> cancelWaiter(node, p, <span class="literal">true</span>);  <span class="comment">// 处理中断</span>
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+
+    <span class="comment">// 在队列头部自旋等待</span>
+    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">spins</span> <span class="operator">=</span> -<span class="number">1</span>;;) &#123;
+        WNode h, np, pp; <span class="type">int</span> ps;
+        <span class="keyword">if</span> ((h = whead) == p) &#123;
+            <span class="keyword">if</span> (spins &lt; <span class="number">0</span>)
+                spins = HEAD_SPINS;  <span class="comment">// 初始化自旋次数</span>
+            <span class="keyword">else</span> <span class="keyword">if</span> (spins &lt; MAX_HEAD_SPINS)
+                spins &lt;&lt;= <span class="number">1</span>;  <span class="comment">// 增加自旋次数</span>
+            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> spins;;) &#123; <span class="comment">// 在队列头部自旋</span>
+                <span class="type">long</span> m, s, ns;
+                <span class="keyword">if</span> ((m = (s = state) &amp; ABITS) &lt; RFULL ?
+                    U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s, ns = s + RUNIT) :
+                    (m &lt; WBIT &amp;&amp; (ns = tryIncReaderOverflow(s)) != <span class="number">0L</span>)) &#123;
+                    WNode c; Thread w;
+                    whead = node;  <span class="comment">// 更新队列头部</span>
+                    node.prev = <span class="literal">null</span>;
+                    <span class="keyword">while</span> ((c = node.cowait) != <span class="literal">null</span>) &#123;
+                        <span class="keyword">if</span> (U.compareAndSwapObject(node, WCOWAIT,
+                                                   c, c.cowait) &amp;&amp;
+                            (w = c.thread) != <span class="literal">null</span>)
+                            U.unpark(w);  <span class="comment">// 唤醒等待线程</span>
+                    &#125;
+                    <span class="keyword">return</span> ns;  <span class="comment">// 成功获取读锁</span>
+                &#125;
+                <span class="keyword">else</span> <span class="keyword">if</span> (m &gt;= WBIT &amp;&amp;
+                         LockSupport.nextSecondarySeed() &gt;= <span class="number">0</span> &amp;&amp; --k &lt;= <span class="number">0</span>)
+                    <span class="keyword">break</span>;  <span class="comment">// 超过自旋次数，退出自旋</span>
+            &#125;
+        &#125;
+        <span class="keyword">else</span> <span class="keyword">if</span> (h != <span class="literal">null</span>) &#123;
+            WNode c; Thread w;
+            <span class="keyword">while</span> ((c = h.cowait) != <span class="literal">null</span>) &#123;
+                <span class="keyword">if</span> (U.compareAndSwapObject(h, WCOWAIT, c, c.cowait) &amp;&amp;
+                    (w = c.thread) != <span class="literal">null</span>)
+                    U.unpark(w);  <span class="comment">// 唤醒等待线程</span>
+            &#125;
+        &#125;
+        <span class="keyword">if</span> (whead == h) &#123;
+            <span class="keyword">if</span> ((np = node.prev) != p) &#123;
+                <span class="keyword">if</span> (np != <span class="literal">null</span>)
+                    (p = np).next = node;   <span class="comment">// 更新前驱节点的 next 指针</span>
+            &#125;
+            <span class="keyword">else</span> <span class="keyword">if</span> ((ps = p.status) == <span class="number">0</span>)
+                U.compareAndSwapInt(p, WSTATUS, <span class="number">0</span>, WAITING);  <span class="comment">// 设置节点状态为等待</span>
+            <span class="keyword">else</span> <span class="keyword">if</span> (ps == CANCELLED) &#123;
+                <span class="keyword">if</span> ((pp = p.prev) != <span class="literal">null</span>) &#123;
+                    node.prev = pp;
+                    pp.next = node;  <span class="comment">// 更新前驱节点的 next 指针</span>
+                &#125;
+            &#125;
+            <span class="keyword">else</span> &#123;
+                <span class="type">long</span> time;
+                <span class="keyword">if</span> (deadline == <span class="number">0L</span>)
+                    time = <span class="number">0L</span>;
+                <span class="keyword">else</span> <span class="keyword">if</span> ((time = deadline - System.nanoTime()) &lt;= <span class="number">0L</span>)
+                    <span class="keyword">return</span> cancelWaiter(node, node, <span class="literal">false</span>);  <span class="comment">// 超时取消等待</span>
+                <span class="type">Thread</span> <span class="variable">wt</span> <span class="operator">=</span> Thread.currentThread();
+                U.putObject(wt, PARKBLOCKER, <span class="built_in">this</span>);
+                node.thread = wt;
+                <span class="keyword">if</span> (p.status &lt; <span class="number">0</span> &amp;&amp;
+                    (p != h || (state &amp; ABITS) == WBIT) &amp;&amp;
+                    whead == h &amp;&amp; node.prev == p)
+                    U.park(<span class="literal">false</span>, time);  <span class="comment">// 线程等待</span>
+                node.thread = <span class="literal">null</span>;
+                U.putObject(wt, PARKBLOCKER, <span class="literal">null</span>);
+                <span class="keyword">if</span> (interruptible &amp;&amp;</code></pre>
+
+<p><strong>acquireRead 方法总结：</strong></p>
+<ul>
+<li><p><strong>目标：</strong> 在有竞争的情况下获取读锁，包括处理线程等待、队列管理、自旋等。</p>
+</li>
+<li><p><strong>acquireRead 的详细步骤：</strong></p>
+<ul>
+<li><p><strong>检查队列状态</strong></p>
+<p>如果队列为空（whead &#x3D;&#x3D; wtail），尝试直接增加读锁计数（state）。如果成功，返回新的状态 ns。否则，进行自旋尝试。</p>
+</li>
+<li><p><strong>创建或管理节点</strong></p>
+<p>如果队列为空，初始化一个新的头节点。如果节点 node 为空，则创建一个新的读节点。尝试将新的读节点添加到队列中，处理节点前驱和队列管理。</p>
+</li>
+<li><p><strong>处理自旋等待</strong></p>
+<p>如果直接获取读锁失败，通过自旋等待的方式尝试获取读锁。</p>
+</li>
+<li><p><strong>处理线程等待</strong></p>
+<p>如果自旋仍然失败，将线程放入等待队列中，处理中断和超时。</p>
+</li>
+<li><p><strong>唤醒等待线程</strong></p>
+<p>当读锁被成功获取后，唤醒等待的线程。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-9-unlockRead方法"><a href="#3-9-unlockRead方法" class="headerlink" title="3.9 unlockRead方法"></a>3.9 unlockRead方法</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 解锁读锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 这个方法会验证提供的印章（`stamp`）是否与当前锁状态一致。如果印章无效或锁状态不匹配，会抛出 `IllegalMonitorStateException`。</span>
+<span class="comment"> * 如果锁的读计数低于 `RFULL`，尝试通过 CAS 操作减少读计数。如果读计数减少到 0，则释放队列中可能被阻塞的线程。</span>
+<span class="comment"> * 如果读计数达到了 `RFULL`，则调用 `tryDecReaderOverflow` 方法来处理溢出读线程计数。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@param</span> stamp 读锁的印章值。</span>
+<span class="comment"> * <span class="doctag">@throws</span> IllegalMonitorStateException 如果印章无效或状态不匹配。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlockRead</span><span class="params">(<span class="type">long</span> stamp)</span> &#123;
+    <span class="type">long</span> s, m; WNode h;
+    <span class="keyword">for</span> (;;) &#123;  <span class="comment">// 自旋</span>
+        <span class="comment">// 获取当前锁状态</span>
+        s = state;
+        <span class="comment">// 检查印章是否与当前状态匹配，或者印章是否有效</span>
+        <span class="keyword">if</span> (((s &amp; SBITS) != (stamp &amp; SBITS)) ||
+            (stamp &amp; ABITS) == <span class="number">0L</span> || (m = s &amp; ABITS) == <span class="number">0L</span> || m == WBIT)
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalMonitorStateException</span>();  <span class="comment">// 印章无效，抛出异常</span>
+
+        <span class="keyword">if</span> (m &lt; RFULL) &#123;
+            <span class="comment">// 如果读计数小于 RFULL，尝试减少读计数</span>
+            <span class="keyword">if</span> (U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s, s - RUNIT)) &#123;
+                <span class="comment">// 如果减少后读计数为 RUNIT 且队列头部节点状态不为 0，释放队列中的线程</span>
+                <span class="keyword">if</span> (m == RUNIT &amp;&amp; (h = whead) != <span class="literal">null</span> &amp;&amp; h.status != <span class="number">0</span>)
+                    release(h);
+                <span class="keyword">break</span>;
+            &#125;
+        &#125;
+        <span class="keyword">else</span> <span class="keyword">if</span> (tryDecReaderOverflow(s) != <span class="number">0L</span>)
+            <span class="keyword">break</span>;  <span class="comment">// 处理溢出的读者计数</span>
+    &#125;
+&#125;</code></pre>
+
+<p><strong><code>unlockRead</code> 方法总结：</strong></p>
+<ul>
+<li><p><code>目标：</code>释放读锁，验证印章的有效性，并根据读锁计数的状态更新锁状态。</p>
+</li>
+<li><p><strong>步骤：</strong></p>
+<ul>
+<li><p>自旋检查印章有效性</p>
+<p>进入自旋循环，获取当前锁状态 s。<br>检查传入的印章 stamp 是否与当前状态一致（通过比较 SBITS），以及印章是否有效（(stamp &amp; ABITS) &#x3D;&#x3D; 0L），或者当前状态是否无效（m &#x3D;&#x3D; WBIT）。<br>如果印章无效，抛出 IllegalMonitorStateException。</p>
+</li>
+<li><p>处理读计数</p>
+<p>如果读计数小于 RFULL：<br>尝试通过 CAS 操作将状态 s 减少 RUNIT，即减少读锁计数。<br>如果读计数减少后为 RUNIT，并且队列头部节点状态不为 0，调用 release(h) 释放队列中的线程。<br>跳出循环，完成解锁。</p>
+<p>如果读计数达到 RFULL：<br>调用 tryDecReaderOverflow 方法处理读计数溢出情况。</p>
+</li>
+<li><p>处理读计数溢出</p>
+<p><code>tryDecReaderOverflow</code> 方法用于减少在 RFULL 状态下的溢出读线程计数。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-10-tryDecReaderOverflow方法"><a href="#3-10-tryDecReaderOverflow方法" class="headerlink" title="3.10 tryDecReaderOverflow方法"></a>3.10 tryDecReaderOverflow方法</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 尝试减少溢出的读计数。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 这个方法会处理在读锁计数达到 `RFULL` 后的溢出情况。如果当前状态的读计数已经达到 `RFULL`，</span>
+<span class="comment"> * 通过 CAS 操作将状态更新为包含读位的值，并减少 `readerOverflow` 计数器。</span>
+<span class="comment"> * 如果 `readerOverflow` 计数器为 0，则直接减少读计数。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@param</span> s 当前锁状态。</span>
+<span class="comment"> * <span class="doctag">@return</span> 更新后的状态值。如果无法减少读者计数，则返回 0L。</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="type">long</span> <span class="title function_">tryDecReaderOverflow</span><span class="params">(<span class="type">long</span> s)</span> &#123;
+    <span class="comment">// 确保当前状态的读位计数达到了 RFULL</span>
+    <span class="keyword">if</span> ((s &amp; ABITS) == RFULL) &#123;
+        <span class="comment">// 通过 CAS 操作将状态值更新为包含读位的状态</span>
+        <span class="keyword">if</span> (U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s, s | RBITS)) &#123;
+            <span class="type">int</span> r; <span class="type">long</span> next;
+            <span class="keyword">if</span> ((r = readerOverflow) &gt; <span class="number">0</span>) &#123;
+                <span class="comment">// 如果溢出计数器大于 0，减少计数器并保持状态</span>
+                readerOverflow = r - <span class="number">1</span>;
+                next = s;
+            &#125;
+            <span class="keyword">else</span>
+                <span class="comment">// 否则，减少读锁计数</span>
+                next = s - RUNIT;
+            state = next;  <span class="comment">// 更新锁状态</span>
+            <span class="keyword">return</span> next;  <span class="comment">// 返回更新后的状态值</span>
+        &#125;
+    &#125;
+    <span class="keyword">else</span> <span class="keyword">if</span> ((LockSupport.nextSecondarySeed() &amp; OVERFLOW_YIELD_RATE) == <span class="number">0</span>)
+        Thread.<span class="keyword">yield</span>();  <span class="comment">// 在不能处理溢出时，让线程让步</span>
+    <span class="keyword">return</span> <span class="number">0L</span>;  <span class="comment">// 无法减少读者计数时返回 0L</span>
+&#125;</code></pre>
+
+<p><strong>tryDecReaderOverflow方法总结：</strong></p>
+<ul>
+<li><p>目标： 处理在读锁计数达到上限时的溢出情况，确保锁状态的正确性。</p>
+</li>
+<li><p>步骤：</p>
+<ul>
+<li><p>检查读计数是否达到 RFULL：如果当前状态的读位计数等于 RFULL，则尝试更新状态以处理溢出情况。</p>
+</li>
+<li><p>更新状态：</p>
+<p>通过 CAS 操作将状态更新为包含读位的状态<code>（s | RBITS）</code>。<br>如果 readerOverflow 计数器大于 0，减少计数器并保持状态。<br>如果 readerOverflow 为 0，减少读锁计数。<br>更新 state 变量，并返回更新后的状态值。</p>
+</li>
+<li><p>处理无法减少计数的情况：</p>
+<p>如果无法处理溢出情况，让线程让步（Thread.yield()），并返回 0L。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-11-writeLock-方法"><a href="#3-11-writeLock-方法" class="headerlink" title="3.11 writeLock 方法"></a>3.11 writeLock 方法</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 尝试获取写锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 这个方法首先检查当前锁状态，如果当前没有读锁或写锁（`ABITS` 中没有任何标志位），</span>
+<span class="comment"> * 直接通过 CAS 操作将状态更新为加上写锁位 `WBIT` 的新状态。如果更新成功，返回新的状态值。</span>
+<span class="comment"> * 如果锁已被其他线程持有，或者队列中存在等待写锁的线程，则调用 `acquireWrite` 方法，</span>
+<span class="comment"> * 通过排队的方式来获取写锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@return</span> 成功获取的写锁印章。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="type">long</span> <span class="title function_">writeLock</span><span class="params">()</span> &#123;
+    <span class="type">long</span> s, next;  <span class="comment">// 当前锁状态和新的状态</span>
+    <span class="comment">// 检查当前锁状态是否为完全解锁状态</span>
+    <span class="keyword">return</span> ((((s = state) &amp; ABITS) == <span class="number">0L</span> &amp;&amp;
+             U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s, next = s + WBIT)) ?
+            next : acquireWrite(<span class="literal">false</span>, <span class="number">0L</span>));
+&#125;</code></pre>
+
+<p><strong>writeLock 方法总结：</strong></p>
+<ul>
+<li><p>目标： writeLock 方法尝试直接获取写锁，如果失败则调用 acquireWrite 方法通过排队的方式获取写锁。</p>
+</li>
+<li><p>步骤：</p>
+<ul>
+<li><p>检查当前锁状态：</p>
+<p>获取当前锁状态 s。<br>如果当前状态没有任何读锁或写锁（即 ABITS 中没有任何标志位），尝试通过 CAS 操作将状态更新为加上写锁位 WBIT 的新状态 next。</p>
+</li>
+<li><p>更新锁状态：</p>
+<p>如果 CAS 操作成功，则返回新的状态值 next。</p>
+</li>
+<li><p>调用 acquireWrite：</p>
+<p>如果状态更新失败（锁已被其他线程持有或队列中存在等待写锁的线程），调用 acquireWrite 方法来通过排队的方式获取写锁。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-12-acquireWrite方法"><a href="#3-12-acquireWrite方法" class="headerlink" title="3.12 acquireWrite方法"></a>3.12 acquireWrite方法</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 尝试获取写锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 这个方法通过自旋和排队的方式获取写锁。如果直接获取写锁失败，则将当前线程排入等待队列，</span>
+<span class="comment"> * 并在队列中等待直到能够获取写锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@param</span> interruptible 是否可中断。</span>
+<span class="comment"> * <span class="doctag">@param</span> deadline 等待的最大时间（以纳秒为单位），0 表示不超时。</span>
+<span class="comment"> * <span class="doctag">@return</span> 成功获取的写锁印章。</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="type">long</span> <span class="title function_">acquireWrite</span><span class="params">(<span class="type">boolean</span> interruptible, <span class="type">long</span> deadline)</span> &#123;
+    <span class="type">WNode</span> <span class="variable">node</span> <span class="operator">=</span> <span class="literal">null</span>, p;
+
+    <span class="comment">// 自旋尝试将当前线程排入等待队列</span>
+    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">spins</span> <span class="operator">=</span> -<span class="number">1</span>;;) &#123; <span class="comment">// 自旋，直到将节点加入队列</span>
+        <span class="type">long</span> m, s, ns;
+
+        <span class="comment">// 获取当前锁状态</span>
+        <span class="keyword">if</span> ((m = (s = state) &amp; ABITS) == <span class="number">0L</span>) &#123;
+            <span class="comment">// 如果当前没有读锁或写锁，通过 CAS 操作将状态更新为加上写锁位 WBIT</span>
+            <span class="keyword">if</span> (U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s, ns = s + WBIT))
+                <span class="keyword">return</span> ns;  <span class="comment">// 返回更新后的状态值</span>
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (spins &lt; <span class="number">0</span>)
+            <span class="comment">// 如果当前状态为写锁且队列为空，设置自旋次数</span>
+            spins = (m == WBIT &amp;&amp; wtail == whead) ? SPINS : <span class="number">0</span>;
+        <span class="keyword">else</span> <span class="keyword">if</span> (spins &gt; <span class="number">0</span>) &#123;
+            <span class="comment">// 自旋，减少自旋次数</span>
+            <span class="keyword">if</span> (LockSupport.nextSecondarySeed() &gt;= <span class="number">0</span>)
+                --spins;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((p = wtail) == <span class="literal">null</span>) &#123; <span class="comment">// 初始化队列</span>
+            <span class="type">WNode</span> <span class="variable">hd</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">WNode</span>(WMODE, <span class="literal">null</span>);
+            <span class="keyword">if</span> (U.compareAndSwapObject(<span class="built_in">this</span>, WHEAD, <span class="literal">null</span>, hd))
+                wtail = hd;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (node == <span class="literal">null</span>)
+            <span class="comment">// 创建新的等待节点</span>
+            node = <span class="keyword">new</span> <span class="title class_">WNode</span>(WMODE, p);
+        <span class="keyword">else</span> <span class="keyword">if</span> (node.prev != p)
+            <span class="comment">// 确保节点的前驱节点正确</span>
+            node.prev = p;
+        <span class="keyword">else</span> <span class="keyword">if</span> (U.compareAndSwapObject(<span class="built_in">this</span>, WTAIL, p, node)) &#123;
+            <span class="comment">// 将当前节点加入队列</span>
+            p.next = node;
+            <span class="keyword">break</span>;  <span class="comment">// 成功将节点加入队列，退出自旋循环</span>
+        &#125;
+    &#125;
+
+    <span class="comment">// 自旋等待，直到获取写锁</span>
+    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">spins</span> <span class="operator">=</span> -<span class="number">1</span>;;) &#123;
+        WNode h, np, pp;
+        <span class="type">int</span> ps;
+
+        <span class="comment">// 检查当前队列头节点</span>
+        <span class="keyword">if</span> ((h = whead) == p) &#123;
+            <span class="comment">// 如果当前节点是队列头节点，自旋等待写锁</span>
+            <span class="keyword">if</span> (spins &lt; <span class="number">0</span>)
+                spins = HEAD_SPINS;
+            <span class="keyword">else</span> <span class="keyword">if</span> (spins &lt; MAX_HEAD_SPINS)
+                spins &lt;&lt;= <span class="number">1</span>;
+            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">k</span> <span class="operator">=</span> spins;;) &#123;
+                <span class="type">long</span> s, ns;
+                <span class="comment">// 获取当前锁状态</span>
+                <span class="keyword">if</span> (((s = state) &amp; ABITS) == <span class="number">0L</span>) &#123;
+                    <span class="comment">// 如果当前没有读锁或写锁，通过 CAS 操作更新状态</span>
+                    <span class="keyword">if</span> (U.compareAndSwapLong(<span class="built_in">this</span>, STATE, s, ns = s + WBIT)) &#123;
+                        <span class="comment">// 更新队列头部为当前节点</span>
+                        whead = node;
+                        node.prev = <span class="literal">null</span>;
+                        <span class="keyword">return</span> ns;  <span class="comment">// 返回新的状态值</span>
+                    &#125;
+                &#125; <span class="keyword">else</span> <span class="keyword">if</span> (LockSupport.nextSecondarySeed() &gt;= <span class="number">0</span> &amp;&amp;
+                         --k &lt;= <span class="number">0</span>)
+                    <span class="keyword">break</span>;  <span class="comment">// 超过自旋次数，退出循环</span>
+            &#125;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (h != <span class="literal">null</span>) &#123; <span class="comment">// 帮助释放过时的等待节点</span>
+            WNode c;
+            Thread w;
+            <span class="keyword">while</span> ((c = h.cowait) != <span class="literal">null</span>) &#123;
+                <span class="keyword">if</span> (U.compareAndSwapObject(h, WCOWAIT, c, c.cowait) &amp;&amp;
+                    (w = c.thread) != <span class="literal">null</span>)
+                    U.unpark(w);
+            &#125;
+        &#125;
+        <span class="keyword">if</span> (whead == h) &#123;
+            <span class="keyword">if</span> ((np = node.prev) != p) &#123;
+                <span class="comment">// 更新链表，将当前节点插入到正确的位置</span>
+                <span class="keyword">if</span> (np != <span class="literal">null</span>)
+                    (p = np).next = node;   <span class="comment">// 处理过时的节点</span>
+            &#125; <span class="keyword">else</span> <span class="keyword">if</span> ((ps = p.status) == <span class="number">0</span>)
+                <span class="comment">// 如果节点状态为 0，设置为 WAITING</span>
+                U.compareAndSwapInt(p, WSTATUS, <span class="number">0</span>, WAITING);
+            <span class="keyword">else</span> <span class="keyword">if</span> (ps == CANCELLED) &#123;
+                <span class="comment">// 如果节点状态为 CANCELLED，处理取消的节点</span>
+                <span class="keyword">if</span> ((pp = p.prev) != <span class="literal">null</span>) &#123;
+                    node.prev = pp;
+                    pp.next = node;
+                &#125;
+            &#125; <span class="keyword">else</span> &#123;
+                <span class="comment">// 等待获取写锁</span>
+                <span class="type">long</span> time; <span class="comment">// 0 参数表示无超时</span>
+                <span class="keyword">if</span> (deadline == <span class="number">0L</span>)
+                    time = <span class="number">0L</span>;
+                <span class="keyword">else</span> <span class="keyword">if</span> ((time = deadline - System.nanoTime()) &lt;= <span class="number">0L</span>)
+                    <span class="comment">// 超过等待时间，取消等待</span>
+                    <span class="keyword">return</span> cancelWaiter(node, node, <span class="literal">false</span>);
+                <span class="type">Thread</span> <span class="variable">wt</span> <span class="operator">=</span> Thread.currentThread();
+                U.putObject(wt, PARKBLOCKER, <span class="built_in">this</span>);
+                node.thread = wt;
+                <span class="keyword">if</span> (p.status &lt; <span class="number">0</span> &amp;&amp; (p != h || (state &amp; ABITS) != <span class="number">0L</span>) &amp;&amp;
+                    whead == h &amp;&amp; node.prev == p)
+                    <span class="comment">// 如果条件满足，则使当前线程进入等待状态</span>
+                    U.park(<span class="literal">false</span>, time);  <span class="comment">// 模拟 LockSupport.park</span>
+                node.thread = <span class="literal">null</span>;
+                U.putObject(wt, PARKBLOCKER, <span class="literal">null</span>);
+                <span class="keyword">if</span> (interruptible &amp;&amp; Thread.interrupted())
+                    <span class="comment">// 如果线程被中断，取消等待</span>
+                    <span class="keyword">return</span> cancelWaiter(node, node, <span class="literal">true</span>);
+            &#125;
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+<p><strong>acquireWrite 方法总结：</strong></p>
+<ul>
+<li><p>目标： 负责处理排队、等待和自旋等复杂逻辑，确保在竞争条件下正确地获取写锁。</p>
+</li>
+<li><p>步骤：</p>
+<ul>
+<li><p>自旋排队:</p>
+<p>方法开始时，尝试通过自旋的方式将当前线程排入等待队列。如果当前没有读锁或写锁，尝试直接获取写锁。如果无法直接获取写锁，初始化队列或创建新的等待节点，将其添加到队列中。</p>
+</li>
+<li><p>等待队列初始化:</p>
+<p>如果队列为空，创建队列头节点，并将尾节点指向该头节点。若节点已经存在，则创建新的节点并将其加入队列。</p>
+</li>
+<li><p>自旋等待写锁:</p>
+<p>在自旋阶段，尝试检查队列头节点并自旋等待写锁。更新队列头节点为当前节点，确保其他线程能够正确地获取写锁。</p>
+</li>
+<li><p>处理过时的等待节点:</p>
+<p>在等待期间，帮助释放已经过时的等待节点，并唤醒那些被阻塞的线程。</p>
+</li>
+<li><p>等待获取写锁:</p>
+<p>如果条件允许，将当前线程进入等待状态，直到写锁可用。支持中断处理，如果线程被中断则取消等待。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-13-unlockWrite方法"><a href="#3-13-unlockWrite方法" class="headerlink" title="3.13 unlockWrite方法"></a>3.13 unlockWrite方法</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 解锁写锁。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 这个方法会验证提供的印章（`stamp`）是否为当前锁的写锁印章。如果印章无效或不是写锁印章，会抛出 `IllegalMonitorStateException`。</span>
+<span class="comment"> * 成功解锁后，将状态重置为原始值 `ORIGIN`（如果 `stamp` 变为 0L），或者恢复为提供的印章加上写锁位 `WBIT`。</span>
+<span class="comment"> * 如果队列头部节点（`whead`）不为空且状态不为 0，则调用 `release` 方法释放队列中可能被阻塞的线程。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@param</span> stamp 写锁的印章值。</span>
+<span class="comment"> * <span class="doctag">@throws</span> IllegalMonitorStateException 如果印章无效或不是写锁印章。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">unlockWrite</span><span class="params">(<span class="type">long</span> stamp)</span> &#123;
+    WNode h;
+    <span class="comment">// 验证提供的印章是否与当前锁状态匹配，并且是写锁印章</span>
+    <span class="keyword">if</span> (state != stamp || (stamp &amp; WBIT) == <span class="number">0L</span>)
+        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalMonitorStateException</span>();  <span class="comment">// 印章无效，抛出异常</span>
+
+    <span class="comment">// 更新锁状态。如果解锁后状态为 0L，重置为原始值 ORIGIN</span>
+    state = (stamp += WBIT) == <span class="number">0L</span> ? ORIGIN : stamp;
+    
+    <span class="comment">// 如果队列头部节点不为空且状态不为 0，释放队列中的线程</span>
+    <span class="keyword">if</span> ((h = whead) != <span class="literal">null</span> &amp;&amp; h.status != <span class="number">0</span>)
+        release(h);
+&#125;</code></pre>
+
+<p><strong>unlockWrite方法总结：</strong></p>
+<ul>
+<li><p>目标： 安全地释放持有的写锁，并确保相关线程被正确唤醒。</p>
+</li>
+<li><p>步骤：</p>
+<ul>
+<li><p>验证印章:</p>
+<p>首先，方法会检查提供的印章是否与当前锁状态匹配，且印章是否包含写锁位 (WBIT)。如果不匹配或不包含写锁位，抛出 IllegalMonitorStateException。</p>
+</li>
+<li><p>更新锁状态:</p>
+<p>如果印章有效，解锁后将状态重置为原始值 ORIGIN（如果 stamp 加上 WBIT 结果为 0L），否则将状态更新为印章加上 WBIT。这个操作确保锁的状态正确反映当前的锁持有情况。</p>
+</li>
+<li><p>释放阻塞线程:</p>
+<p>检查队列头部节点 (whead) 是否存在且状态不为 0。如果存在，则调用 release 方法尝试释放队列中的线程。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-14-release方法"><a href="#3-14-release方法" class="headerlink" title="3.14 release方法"></a>3.14 release方法</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 释放队列中阻塞的线程。</span>
+<span class="comment"> * </span>
+<span class="comment"> * 这个方法会尝试从队列中找到下一个需要被唤醒的节点（`WNode`）。</span>
+<span class="comment"> * 将队列头部节点的状态从 `WAITING` 更新为 0（表示节点不再等待）。</span>
+<span class="comment"> * 如果队列中的下一个节点（`q`）存在且状态不为 `CANCELLED`，唤醒线程。</span>
+<span class="comment"> * </span>
+<span class="comment"> * <span class="doctag">@param</span> h 队列中的头部节点。</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">release</span><span class="params">(WNode h)</span> &#123;
+    <span class="keyword">if</span> (h != <span class="literal">null</span>) &#123;
+        WNode q; Thread w;
+        <span class="comment">// 更新队列头部节点的状态为 0</span>
+        U.compareAndSwapInt(h, WSTATUS, WAITING, <span class="number">0</span>);
+        
+        <span class="comment">// 查找下一个需要被唤醒的节点（如果下一个节点为空或者状态为 CANCELLED）</span>
+        <span class="keyword">if</span> ((q = h.next) == <span class="literal">null</span> || q.status == CANCELLED) &#123;
+            <span class="keyword">for</span> (<span class="type">WNode</span> <span class="variable">t</span> <span class="operator">=</span> wtail; t != <span class="literal">null</span> &amp;&amp; t != h; t = t.prev)
+                <span class="keyword">if</span> (t.status &lt;= <span class="number">0</span>)
+                    q = t;
+        &#125;
+        
+        <span class="comment">// 如果找到的节点存在且线程不为空，唤醒线程</span>
+        <span class="keyword">if</span> (q != <span class="literal">null</span> &amp;&amp; (w = q.thread) != <span class="literal">null</span>)
+            U.unpark(w);
+    &#125;
+&#125;</code></pre>
+
+<p><strong>release方法总结：</strong></p>
+<ul>
+<li><p>目标： 从队列中释放阻塞的线程，并确保下一个等待的线程被正确唤醒。</p>
+</li>
+<li><p>步骤：</p>
+<ul>
+<li><p>更新节点状态:</p>
+<p>将队列头部节点的状态从 WAITING 更新为 0，表示该节点不再需要等待。此操作标志着头部节点已处理完毕，准备释放或处理下一个节点。</p>
+</li>
+<li><p>查找并设置下一个待唤醒的节点:</p>
+<p>如果头部节点的下一个节点为空或状态为 CANCELLED，从队列尾部向前查找有效的待唤醒节点。这样可以确保唤醒操作的正确性，并避免唤醒已取消或不再需要的线程。</p>
+</li>
+<li><p>唤醒线程:</p>
+<p>如果找到有效的待唤醒节点，并且该节点关联的线程不为空，则唤醒该线程。通过调用 U.unpark(w)，可以确保线程能够继续执行，减少系统中的线程阻塞时间。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-StampedLock管理线程的队列"><a href="#4-StampedLock管理线程的队列" class="headerlink" title="4. StampedLock管理线程的队列"></a>4. StampedLock管理线程的队列</h2><p>StampedLock内部基于<code>WNode</code>实现的阻塞队列和AQS实现的阻塞队列类似。<br>初始化时，新建个空节点，<code>whead=wtail=NULL</code> 。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/19/20241019-164228.png" alt="队列初始化"></p>
+<p>之后再往里面加入一个个读线程或写线程节点。</p>
+<p>但是上面<code>acquireRead</code>和<code>acquireWrite</code>方法对于自旋的操作就和AQS有很大不同了。</p>
+<p>在AQS里面，当一个线程CAS state失败之后，会立即加入阻塞队列，并且进入阻塞状态。但在StampedLock中，CAS state失败之后，会不断自旋，自旋足够多的次数之后，如果还拿不到锁，才进入阻塞状态。为此，根据CPU的核数，定义了自旋次数的常量值。如果是单核的CPU，肯定不能自旋，在多核情况下，才采用自旋策略。</p>
+<p>还有个比较特殊的地方在于，每个WNode里面有一个cowait指针，用于串联起所有的读线程。<br>例如，队列尾部阻塞的是一个读线程 1，现在又来了读线程 2、3，那么会通过cowait指针，把1、2、3串联起来。1被唤醒之后，2、3也随之一起被唤醒，因为读和读之间不互斥。</p>
+<p>也就是当入队一个线程时，如果队尾是写结点，则直接链接到队尾。<br>当入队一个读线程时，如果队尾是读节点，则直接链接到该读结点的cowait链中。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/19/20241019-164402.png" alt="节点进入队列"></p>
+<h1 id="四、StampedLock和ReentrantReadWriteLock对比"><a href="#四、StampedLock和ReentrantReadWriteLock对比" class="headerlink" title="四、StampedLock和ReentrantReadWriteLock对比"></a>四、StampedLock和ReentrantReadWriteLock对比</h1><table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>StampedLock</code></th>
+<th><code>ReentrantReadWriteLock</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>引入版本</strong></td>
+<td>JDK 8</td>
+<td>JDK 5</td>
+</tr>
+<tr>
+<td><strong>锁类型</strong></td>
+<td>提供乐观读锁、悲观读锁和写锁</td>
+<td>提供悲观读锁和写锁</td>
+</tr>
+<tr>
+<td><strong>乐观读锁</strong></td>
+<td>支持（<code>tryOptimisticRead()</code>）</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td><strong>悲观读锁</strong></td>
+<td>支持（<code>readLock()</code>）</td>
+<td>支持（<code>readLock()</code>）</td>
+</tr>
+<tr>
+<td><strong>写锁</strong></td>
+<td>支持（<code>writeLock()</code>）</td>
+<td>支持（<code>writeLock()</code>）</td>
+</tr>
+<tr>
+<td><strong>锁升级</strong></td>
+<td>支持从乐观读锁升级到悲观读锁或写锁（<code>tryConvertToWriteLock()</code>等）</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td><strong>锁降级</strong></td>
+<td>支持从写锁降级为读锁（<code>tryConvertToReadLock()</code>）</td>
+<td>支持从写锁降级为读锁</td>
+</tr>
+<tr>
+<td><strong>锁管理复杂度</strong></td>
+<td>复杂，需要管理戳记，确保在转换锁时一致性</td>
+<td>相对简单，直接使用 <code>readLock()</code> 和 <code>writeLock()</code></td>
+</tr>
+<tr>
+<td><strong>性能优化</strong></td>
+<td>乐观读锁减少了锁竞争，提高了读取性能</td>
+<td>读写锁性能依赖于锁的竞争情况(大量并发读可能会导致写线程饥饿)</td>
+</tr>
+<tr>
+<td><strong>公平性</strong></td>
+<td>不提供公平性（锁的获取是非公平的）</td>
+<td>可以选择公平性（通过构造函数 <code>ReentrantReadWriteLock(true)</code>）</td>
+</tr>
+<tr>
+<td><strong>条件变量<code>Condition</code></strong></td>
+<td>不支持</td>
+<td>支持</td>
+</tr>
+</tbody></table>
+<p><strong>总结</strong></p>
+<p><strong><code>StampedLock</code></strong> 适用于需要高效读取性能的场景，通过乐观读锁减少锁竞争，同时支持锁的升级和降级，但锁的管理相对复杂，不支持重入，并且使用乐观读锁时需要遵循一定的顺序，所以使用时一定要谨慎。</p>
+<p><strong>参考链接：</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37883866/article/details/140664358">https://blog.csdn.net/qq_37883866/article/details/140664358</a></p>
+</blockquote>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
