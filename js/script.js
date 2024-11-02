@@ -623,6 +623,8 @@ function bind() {
     initArticle();
     $(".article_number").text($("#yelog_site_posts_number").val());
     $(".site_word_count").text($("#yelog_site_word_count").val());
+	
+	/*
     $(".site_uv").text($("#busuanzi_value_site_uv").text());
     $("#busuanzi_value_site_uv").bind("DOMNodeInserted", function (e) {
         $(".site_uv").text($(this).text())
@@ -631,6 +633,26 @@ function bind() {
     $("#busuanzi_value_site_pv").bind("DOMNodeInserted", function (e) {
         $(".site_pv").text($(this).text())
     });
+	*/
+	
+	// 选择你想要观察的节点
+	const site_uvNode = document.getElementById("busuanzi_value_site_uv");
+	const site_pvNode = document.getElementById("busuanzi_value_site_pv");
+	// 创建一个 MutationObserver 实例，并定义回调函数
+	const observer = new MutationObserver((mutationsList) => {
+		for (let mutation of mutationsList) {
+			if (mutation.type === 'childList') {
+				$(".site_uv").text(site_uvNode.textContent);
+				$(".site_pv").text(site_pvNode.textContent);
+			}
+		}
+	});
+	// 配置观察选项
+	const config = { childList: true, subtree: true };
+	// 启动观察
+	observer.observe(site_uvNode, config);
+	observer.observe(site_pvNode, config);
+	
     $("#post .pjax .index").find("br").remove();
     $("#post .pjax .index h1:eq(0)").addClass("article-title");
     //绑定文章内tag的搜索事件
