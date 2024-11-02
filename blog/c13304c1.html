@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>01-JUC进阶-线程基础 | George&#39;s Blog</title>
+  <title>02-UML图绘制工具 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , juc ">
-  <meta name="description" content="01-JUC进阶-线程基础 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 , UML ">
+  <meta name="description" content="02-UML图绘制工具 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="一、UML绘图工具UML绘制工具有很多，这里仅介绍两种。  IDEA自带插件：Diagrams 用于查看类与类之间的关联关系  UML绘制工具：Astah Professional 专业的UML绘图工具，这里使用的是 Astah Pro 8   1. IDEA自带插件：Diagrams1.1 设置 Diagrams在idea中，依次打开 File –&gt; Settings –&gt; Tool">
 <meta property="og:type" content="article">
@@ -1112,9 +1112,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-juc2/01-JUC进阶-线程基础" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/02-UML图绘制工具" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">01-JUC进阶-线程基础</h1>
+        <h1 class="article-title">02-UML图绘制工具</h1>
     
     <div class="article-meta">
         
@@ -1124,7 +1124,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JUC">JUC</a>
+            <a  data-rel="UML">UML</a>
             
         </span>
         
@@ -1132,21 +1132,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
+            <a class="color5">设计模式</a>
             
-            <a class="color4">juc</a>
+            <a class="color4">UML</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-18 16:10:02'>2024-09-18 22:32</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-02 11:40:07'>2024-11-02 09:57</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:632</span>
+        <span>字数:745</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1176,7 +1176,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Java%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-text">一、Java多线程相关概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B"><span class="toc-text">二、用户线程和守护线程</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81UML%E7%BB%98%E5%9B%BE%E5%B7%A5%E5%85%B7"><span class="toc-text">一、UML绘图工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-IDEA%E8%87%AA%E5%B8%A6%E6%8F%92%E4%BB%B6%EF%BC%9ADiagrams"><span class="toc-text">1. IDEA自带插件：Diagrams</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E8%AE%BE%E7%BD%AE-Diagrams"><span class="toc-text">1.1 设置 Diagrams</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BD%BF%E7%94%A8-Diagrams"><span class="toc-text">1.2 使用 Diagrams</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-text">1.2.1 示例代码</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-%E4%BD%BF%E7%94%A8IDEA%E6%9F%A5%E7%9C%8BUML%E5%85%B3%E7%B3%BB%E5%9B%BE"><span class="toc-text">1.2.2 使用IDEA查看UML关系图</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-3-%E5%9C%A8UML%E5%9B%BE%E4%B8%AD%E6%B7%BB%E5%8A%A0%E7%B1%BB%E6%88%96%E6%8E%A5%E5%8F%A3"><span class="toc-text">1.2.3 在UML图中添加类或接口</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-UML%E7%BB%98%E5%88%B6%E5%B7%A5%E5%85%B7%EF%BC%9AAstah-Professional"><span class="toc-text">2. UML绘制工具：Astah Professional</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%AE%89%E8%A3%85-Astah-Pro"><span class="toc-text">2.1 安装 Astah Pro</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%A0%B4%E8%A7%A3-Astah-Pro"><span class="toc-text">2.2 破解 Astah Pro</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B1%89%E5%8C%96-Astah-Pro"><span class="toc-text">2.3 汉化 Astah Pro</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1192,87 +1192,114 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、Java多线程相关概念"><a href="#一、Java多线程相关概念" class="headerlink" title="一、Java多线程相关概念"></a>一、Java多线程相关概念</h1><ul>
-<li><p><strong>进程</strong></p>
-<p>是程序的⼀次执⾏，是系统进⾏资源分配和调度的独⽴单位，每⼀个进程都有它⾃⼰的内存空间和系统资源</p>
-</li>
-<li><p><strong>线程</strong></p>
+        <h1 id="一、UML绘图工具"><a href="#一、UML绘图工具" class="headerlink" title="一、UML绘图工具"></a>一、UML绘图工具</h1><p>UML绘制工具有很多，这里仅介绍两种。</p>
 <ul>
-<li>在同⼀个进程内⼜可以执⾏多个任务，⽽这每⼀个任务我们就可以看做是⼀个线程</li>
-<li>⼀个进程会有1个或多个线程的</li>
-</ul>
+<li><p>IDEA自带插件：<code>Diagrams</code></p>
+<p>用于查看类与类之间的关联关系</p>
 </li>
-<li><p><strong>管程</strong></p>
-<p>Monitor(监视器)，也就是我们平时所说的锁</p>
-<p>Monitor其实是一种同步机制，他的义务是保证（同一时间）只有一个线程可以访问被保护的数据和代码。</p>
-<p>JVM中同步是基于进入和退出监视器对象(Monitor,管程对象)来实现的，每个对象实例都会有一个Monitor对象，</p>
-<pre><code class="highlight java"><span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();
-
-<span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
-    <span class="keyword">synchronized</span> (o)
-    &#123;
-
-    &#125;
-&#125;,<span class="string">&quot;t1&quot;</span>).start();
-</code></pre>
-
-<p>Monitor对象会和Java对象一同创建并销毁，它底层是由C++语言来实现的。</p>
+<li><p>UML绘制工具：Astah Professional</p>
+<p>专业的UML绘图工具，这里使用的是 <code>Astah Pro 8</code></p>
 </li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/18/20240918-153629.png" alt="同步指令"></p>
-<h1 id="二、用户线程和守护线程"><a href="#二、用户线程和守护线程" class="headerlink" title="二、用户线程和守护线程"></a>二、用户线程和守护线程</h1><p>Java线程分为用户线程和守护线程，<strong>线程的daemon属性为true表示是守护线程，false表示是用户线程</strong></p>
-<ul>
-<li><p>守护线程</p>
-<p>是一种特殊的线程，在后台默默地完成一些系统性的服务，比如垃圾回收线程</p>
-</li>
-<li><p>用户线程</p>
-<p>是系统的工作线程，它会完成这个程序需要完成的业务操作</p>
-</li>
-</ul>
-<p><strong>代码示例：</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * &lt;p&gt;</span>
-<span class="comment"> * 演示守护线程和用户线程</span>
-<span class="comment"> * &lt;/p&gt;</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DaemonDemo</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">Thread</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt; &#123;
-            System.out.println(Thread.currentThread().getName() + <span class="string">&quot; come in：\t&quot;</span>
-                    + (Thread.currentThread().isDaemon() ? <span class="string">&quot;守护线程&quot;</span> : <span class="string">&quot;用户线程&quot;</span>));
-            <span class="keyword">while</span> (<span class="literal">true</span>) &#123;
+<h2 id="1-IDEA自带插件：Diagrams"><a href="#1-IDEA自带插件：Diagrams" class="headerlink" title="1. IDEA自带插件：Diagrams"></a>1. IDEA自带插件：Diagrams</h2><h3 id="1-1-设置-Diagrams"><a href="#1-1-设置-Diagrams" class="headerlink" title="1.1 设置 Diagrams"></a>1.1 设置 Diagrams</h3><p>在idea中，依次打开 <code>File</code> –&gt; Settings –&gt; <code>Tools</code> –&gt; <code>Diagrams</code> </p>
+<p>设置Diagrams如下，选择： <code>字段</code>、<code>构造器</code>、<code>方法</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-101823.png" alt="设置 Diagrams"></p>
+<h3 id="1-2-使用-Diagrams"><a href="#1-2-使用-Diagrams" class="headerlink" title="1.2 使用 Diagrams"></a>1.2 使用 Diagrams</h3><h4 id="1-2-1-示例代码"><a href="#1-2-1-示例代码" class="headerlink" title="1.2.1 示例代码"></a>1.2.1 示例代码</h4><p>有如下三个类，<code>Computer</code>、<code>Moniter</code> 、<code>Mouse</code></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Computer</span> &#123;
+	<span class="keyword">private</span> Mouse mouse; <span class="comment">//鼠标可以和computer分离</span>
+	<span class="keyword">private</span> Moniter moniter;<span class="comment">//显示器可以和Computer分离</span>
+	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setMouse</span><span class="params">(Mouse mouse)</span> &#123;
+		<span class="built_in">this</span>.mouse = mouse;
+	&#125;
+	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setMoniter</span><span class="params">(Moniter moniter)</span> &#123;
+		<span class="built_in">this</span>.moniter = moniter;
+	&#125;
+	
+&#125;
 
-            &#125;
-        &#125;, <span class="string">&quot;a&quot;</span>);
-        a.setDaemon(<span class="literal">true</span>); <span class="comment">// daemon设置为true，表示该线程为守护线程</span>
-        <span class="comment">// setDaemon 必须在 start() 方法之前</span>
-        a.start();
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Moniter</span> &#123;
 
+&#125;
 
-        <span class="comment">//暂停几秒钟线程</span>
-        <span class="keyword">try</span> &#123;
-            TimeUnit.SECONDS.sleep(<span class="number">2</span>);
-        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
-            e.printStackTrace();
-        &#125;
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Mouse</span> &#123;
 
-        System.out.println(Thread.currentThread().getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot; ----task is over&quot;</span>);
-    &#125;
 &#125;</code></pre>
 
-<p>运行结果：</p>
-<pre><code class="highlight shell">a come in：	守护线程
-main	 ----task is over</code></pre>
+<p>从代码可以看出，他们之间为 <code>聚合关系（Aggregation）</code>，如果不知道什么是聚合关系，本篇后面会介绍。</p>
+<h4 id="1-2-2-使用IDEA查看UML关系图"><a href="#1-2-2-使用IDEA查看UML关系图" class="headerlink" title="1.2.2 使用IDEA查看UML关系图"></a>1.2.2 使用IDEA查看UML关系图</h4><p>同时选中这三个类，鼠标右键选择 Diagrams ， 然后选择 Show Diagram…</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-103131.png" alt="使用IDEA查看UML关系图"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-103440.png" alt="UML关系图"></p>
+<h4 id="1-2-3-在UML图中添加类或接口"><a href="#1-2-3-在UML图中添加类或接口" class="headerlink" title="1.2.3 在UML图中添加类或接口"></a>1.2.3 在UML图中添加类或接口</h4><p>UML图中鼠标右键 –&gt; <code>Content</code> –&gt; <code>Add Class to Diagram</code> </p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-103622.png" alt="在UML图中添加类或接口"></p>
+<p>找到要添加的类，选择它</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-103800.png" alt="添加类到UML图中"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-103847.png" alt="完成类在UML图中添加"></p>
+<h2 id="2-UML绘制工具：Astah-Professional"><a href="#2-UML绘制工具：Astah-Professional" class="headerlink" title="2. UML绘制工具：Astah Professional"></a>2. UML绘制工具：Astah Professional</h2><p>官网：<a target="_blank" rel="noopener" href="http://astah.net/cn/">http://astah.net/cn/</a></p>
+<p>Astah Professional 是一款专业的UML绘图工具，除了绘制UML图以外，还可以绘制ER图、流程图和数据流图等，这里仅介绍它的安装、破解、汉化。</p>
+<blockquote>
+</blockquote>
+<h3 id="2-1-安装-Astah-Pro"><a href="#2-1-安装-Astah-Pro" class="headerlink" title="2.1 安装 Astah Pro"></a>2.1 安装 Astah Pro</h3><p><strong>下载</strong></p>
+<p>百度网盘：<a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1Is0BpNy41uI5U9woFIVu_Q?pwd=0000">https://pan.baidu.com/s/1Is0BpNy41uI5U9woFIVu_Q?pwd=0000</a></p>
+<p><strong>解压</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110113.png" alt="安装包"></p>
+<p>从上往下依次是：破解包、汉化包、安装文件</p>
+<p><strong>开始安装</strong></p>
+<p>首先确保你的电脑上有JDK环境，我的电脑上目前已安装并配置好了JDK8的开发环境</p>
+<pre><code class="highlight shell">C:\Users\kd&gt;java -version
+java version &quot;1.8.0_241&quot;
+Java(TM) SE Runtime Environment (build 1.8.0_241-b07)
+Java HotSpot(TM) 64-Bit Server VM (build 25.241-b07, mixed mode)</code></pre>
 
-<p>结论：当主线程(用户线程)结束后，守护线程也随之结束了。</p>
-<p><strong>重点</strong></p>
-<ul>
-<li><p>当程序中所有用户线程执行完毕之后，不管守护线程是否结束，系统都会自动退出</p>
-<p>如果用户线程全部结束了，意味着程序需要完成的业务操作已经结束了，系统可以退出了。所以当系统只剩下守护进程的时候，java虚拟机会自动退出</p>
-</li>
-<li><p>设置守护线程，需要在start()方法之前进行</p>
-</li>
-</ul>
+
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110416.png" alt="选择语言"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110443.png" alt="next"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110514.png" alt="同意用户协议"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110544.png" alt="选择安装位置"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110630.png" alt="确保磁盘有足够的空间"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110658.png" alt="添加到开始菜单"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110742.png" alt="为所有用户安装"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110757.png" alt="开始安装"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110808.png" alt="软件安装中"></p>
+<p><strong>安装完成，取消勾选 <code>启用应用</code>， 再点击 Finish</strong></p>
+<p>这么做的目的是为了后面对软件做破解。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-110958.png" alt="安装完成"></p>
+<h3 id="2-2-破解-Astah-Pro"><a href="#2-2-破解-Astah-Pro" class="headerlink" title="2.2 破解 Astah Pro"></a>2.2 破解 Astah Pro</h3><p><strong>复制破解Jar包</strong></p>
+<p>将破解jar包复制到软件的安装目录中， 就是安装Astah时选择的路径，我这里安装到了：E:\software\astah-professional </p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-111158.png" alt="复制破解Jar包"></p>
+<p><strong>粘贴破解包</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-111507.png" alt="替换文件"></p>
+<p><strong>新建文件夹“License”</strong></p>
+<p> 在这个目录下新建一个文件夹“License”</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-111725.png" alt="新建文件夹“License”"></p>
+<p><strong>打开CMD</strong></p>
+<p>cd到破解jar所在目录</p>
+<p>执行命令：<code>java -jar dvt-AstahKeyfileMaker.jar</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112057.png" alt="执行Java命令"></p>
+<p>执行完java命令后，自动打开弹窗如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112129.png" alt="破解jar包弹窗"></p>
+<p><strong>选择 Astah Professional， 点击 Generate</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112252.png" alt="生成许可文件"></p>
+<p><strong>选择刚才创建的License目录，点击 保存</strong></p>
+<p>会在该目录下自动创建 license.xml 文件，此文件就用于激活 Astah</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112346.png" alt="生成激活文件"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112521.png" alt="文件生成成功"></p>
+<p><strong>激活Astah Pro</strong></p>
+<p>打开Astah， 点击 Help –&gt; License ，设置许可证为刚才生成的 xml 文件</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112656.png" alt="查看许可证"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112734.png" alt="设置许可证"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112756.png" alt="选择生成的xml文件"></p>
+<p>再次查看许可信息，发现有效期到 2030年。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-112936.png" alt="验证许可信息"></p>
+<h3 id="2-3-汉化-Astah-Pro"><a href="#2-3-汉化-Astah-Pro" class="headerlink" title="2.3 汉化 Astah Pro"></a>2.3 汉化 Astah Pro</h3><p>复制汉化文件：<code>astah-gui_zh_cn.properties</code> 到安装根目录即可</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-113141.png" alt="复制汉化文件"></p>
+<p>重新打开 Astah， 发现已汉化成功</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/02/20241102-113308.png" alt="汉化成功"></p>
+<p><strong>参考链接</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xsge/p/15871002.html">https://www.cnblogs.com/xsge/p/15871002.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/QingMings/astah-professional-8.1-zh_CN">https://github.com/QingMings/astah-professional-8.1-zh_CN</a></p>
+</blockquote>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
