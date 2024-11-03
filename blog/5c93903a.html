@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Docker部署Neo4j并导入CSV数据 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" linux , neo4j ">
+  <meta name="description" content="Docker部署Neo4j并导入CSV数据 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#x6f;&#114;&#103;&#101;&#95;&#57;&#x35;&#64;&#x31;&#x32;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#x6f;&#114;&#103;&#101;&#95;&#57;&#x35;&#64;&#x31;&#x32;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-06-20T13:44:04.221Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(68)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="设计模式">
+            
+            设计模式
+            <small>(2)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="neo4j">
+            
+            neo4j
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="UML">
+            
+            UML
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="68">
+<input type="hidden" id="yelog_site_word_count" value="326.5k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>设计模式</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>neo4j</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu18</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>UML</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90f1850a.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="03-UML类图">03-UML类图</span>
+            <span class="post-date" title="2024-11-02 14:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 UML "
+           href="/blog/c13304c1.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="02-UML图绘制工具">02-UML图绘制工具</span>
+            <span class="post-date" title="2024-11-02 09:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2e826df1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Docker环境下RTSP流转RTMP和HLS">Docker环境下RTSP流转RTMP和HLS</span>
+            <span class="post-date" title="2024-11-01 15:17:33">2024/11/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/cd625bba.html"
+           data-tag="设计模式,java"
+           data-author="" >
+            <span class="post-title" title="01-设计模式六大原则">01-设计模式六大原则</span>
+            <span class="post-date" title="2024-10-31 17:00:00">2024/10/31</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1a649f4c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="13-JUC进阶-ReentrantReadWriteLock与StampedLock">13-JUC进阶-ReentrantReadWriteLock与StampedLock</span>
+            <span class="post-date" title="2024-10-19 09:26:00">2024/10/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/5c93903a.html"
+           data-tag="linux,neo4j"
+           data-author="" >
+            <span class="post-title" title="Docker部署Neo4j并导入CSV数据">Docker部署Neo4j并导入CSV数据</span>
+            <span class="post-date" title="2024-10-17 15:00:30">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/ad38e6b1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Ubuntu18.04离线源环境搭建">Ubuntu18.04离线源环境搭建</span>
+            <span class="post-date" title="2024-10-17 09:47:33">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3fdbf0f6.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
+            <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3e0d7592.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
+            <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4502cffa.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
+            <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4de6a39b.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
+            <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/72329cf5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
+            <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/5e3757c1.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
+            <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-neo4j/Docker部署Neo4j并导入CSV数据" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">Docker部署Neo4j并导入CSV数据</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="neo4j">neo4j</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">linux</a>
+            
+            <a class="color1">neo4j</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2024-11-02 20:19:17'>2024-10-17 15:00</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:4.4k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%8B%E8%BD%BD%E5%B9%B6%E5%90%AF%E5%8A%A8Neo4j"><span class="toc-text">一、下载并启动Neo4j</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BF%AE%E6%94%B9Docker%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">1. 修改Docker配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%90%AF%E5%8A%A8neo4j"><span class="toc-text">2. 启动neo4j</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E6%B5%8B%E8%AF%95"><span class="toc-text">3. 浏览器访问测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Neo4j%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%A7%A3%E8%AF%BB"><span class="toc-text">4. Neo4j配置文件解读</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81CSV%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA"><span class="toc-text">二、CSV数据的导入导出</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%95%B0%E6%8D%AE%E5%87%86%E5%A4%87"><span class="toc-text">1. 数据准备</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-apoc-%E6%8F%92%E4%BB%B6"><span class="toc-text">2. 安装 apoc 插件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E4%B8%8B%E8%BD%BD%E6%8F%92%E4%BB%B6"><span class="toc-text">2.1  下载插件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">2.2 修改配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%B5%8B%E8%AF%95apoc%E6%8F%92%E4%BB%B6%E6%98%AF%E5%90%A6%E5%AE%89%E8%A3%85-%E6%88%90%E5%8A%9F"><span class="toc-text">2.3  测试apoc插件是否安装 成功</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AF%BC%E5%87%BACSV%E6%95%B0%E6%8D%AE"><span class="toc-text">3. 导出CSV数据</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%BC%80%E5%A7%8B%E5%AF%BC%E5%87%BA"><span class="toc-text">3.1 开始导出</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%9F%A5%E7%9C%8B%E5%AF%BC%E5%87%BA%E6%96%87%E4%BB%B6"><span class="toc-text">3.2 查看导出文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AF%BC%E5%85%A5CSV%E6%95%B0%E6%8D%AE"><span class="toc-text">4. 导入CSV数据</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>系统环境</strong></p>
+<blockquote>
+<p>操作系统：Ubuntu18.04.6</p>
+<p>Docker：24.0.2</p>
+<p>Neo4j: 3.5.35(社区版)</p>
+</blockquote>
+<h1 id="一、下载并启动Neo4j"><a href="#一、下载并启动Neo4j" class="headerlink" title="一、下载并启动Neo4j"></a>一、下载并启动Neo4j</h1><h2 id="1-修改Docker配置文件"><a href="#1-修改Docker配置文件" class="headerlink" title="1. 修改Docker配置文件"></a>1. 修改Docker配置文件</h2><p>neo4j镜像在国外服务器，国内直接pull会超时失败，这里需要配置一下代理。</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建docker默认的配置文件路径</span>
+mkdir -p /etc/docker
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">内容如下：直接拷贝粘贴</span>
+tee /etc/docker/daemon.json &lt;&lt;-&#x27;EOF&#x27;
+&#123;
+&quot;registry-mirrors&quot;: [&quot;https://docker-proxy.741001.xyz&quot;,&quot;https://registry.docker-cn.com&quot;]
+&#125;
+EOF
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">重启docker服务</span>
+systemctl daemon-reload
+systemctl restart docker</code></pre>
+
+
+
+<h2 id="2-启动neo4j"><a href="#2-启动neo4j" class="headerlink" title="2. 启动neo4j"></a>2. 启动neo4j</h2><ul>
+<li><p>拉取镜像</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">拉取镜像</span>
+docker pull neo4j:3.5.35
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">查看本地镜像，检验是否拉取成功</span>
+docker images</code></pre>
+
+
+</li>
+<li><p>创建挂载目录</p>
+<pre><code class="highlight shell">mkdir -p /opt/module /opt/software
+
+mkdir -p /opt/module/neo4j
+
+cd /opt/module/neo4j/
+
+mkdir -p data logs conf import plugins</code></pre>
+
+
+</li>
+<li><p>启动容器</p>
+<pre><code class="highlight shell">docker run -itd \
+    --name neo4j \
+    -p 7474:7474 -p 7687:7687 \
+    -v /opt/module/neo4j/data:/data \
+    -v /opt/module/neo4j/logs:/logs \
+    -v /opt/module/neo4j/conf:/var/lib/neo4j/conf \
+    -v /opt/module/neo4j/import:/var/lib/neo4j/import \
+    -v /opt/module/neo4j/plugins:/var/lib/neo4j/plugins \
+    --env NEO4J_AUTH=neo4j/123456 \
+    --restart=always \
+    neo4j:3.5.35</code></pre>
+
+<ul>
+<li><p>命令解析</p>
+<pre><code class="highlight shell">docker run -itd --name container_name \  //-d表示容器后台运行 --name指定容器名字
+	-p 7474:7474 -p 7687:7687 \  //映射容器的端口号到宿主机的端口号
+	-v /opt/module/neo4j/data:/data \  //把容器内的数据目录挂载到宿主机的对应目录下
+	-v /opt/module/neo4j/logs:/logs \  //挂载日志目录
+	-v /opt/module/neo4j/conf:/var/lib/neo4j/conf   //挂载配置目录
+	-v /opt/module/neo4j/import:/var/lib/neo4j/import \  //挂载数据导入目录
+	-v /opt/module/neo4j/plugins:/var/lib/neo4j/plugins \ // neo4j插件安装目录
+	--env NEO4J_AUTH=neo4j/123456 \  //设定数据库的名字的访问密码
+	--restart=always \ // 设置开机自启
+	neo4j:3.5.35 //指定使用的镜像</code></pre></li>
+</ul>
+<p>挂载目录可根据实际情况替换，neo4j密码不设置，默认为：<code>neo4j</code>,  这里设置成：<code>123456</code> 。如果希望neo4j没有密码，</p>
+<p>可以使用命令：<code>--env NEO4J_AUTH=none</code></p>
+</li>
+</ul>
+<h2 id="3-浏览器访问测试"><a href="#3-浏览器访问测试" class="headerlink" title="3. 浏览器访问测试"></a>3. 浏览器访问测试</h2><p>浏览器访问地址：<a target="_blank" rel="noopener" href="http://neo4j服务地址:7474/">http://Neo4j服务地址:7474</a></p>
+<ul>
+<li>数据库默认用户名：neo4j</li>
+<li>密码：启动命令设置的密码</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/17/20241017-162812.png" alt="登录Neo4j"></p>
+<h2 id="4-Neo4j配置文件解读"><a href="#4-Neo4j配置文件解读" class="headerlink" title="4. Neo4j配置文件解读"></a>4. Neo4j配置文件解读</h2><p>宿主机目录：<code>/opt/module/neo4j/conf/neo4j.conf</code></p>
+<p>启动后，配置文件会自动创建到挂在目录，默认内容如下：</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">事务保留策略，超过100MB会进行轮换</span>
+dbms.tx_log.rotation.retention_policy=100M size
+<span class="meta prompt_"># </span><span class="language-bash">设置了 Neo4j 的页面缓存大小为 512MB，页面缓存用于存储从磁盘加载到内存中的节点和关系数据，以提高数据库查询的性能。</span>
+dbms.memory.pagecache.size=512M
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">允许任何ip连接到数据库</span>
+dbms.connectors.default_listen_address=0.0.0.0
+<span class="meta prompt_"># </span><span class="language-bash">https请求的监听 地址:端口</span>
+dbms.connector.https.listen_address=0.0.0.0:7473
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">http请求的监听 地址:端口</span>
+dbms.connector.http.listen_address=0.0.0.0:7474
+<span class="meta prompt_"># </span><span class="language-bash">bolt请求的监听 地址:端口</span>
+dbms.connector.bolt.listen_address=0.0.0.0:7687
+<span class="meta prompt_"># </span><span class="language-bash">这是一个 Java 运行时参数，表明 Neo4j 是运行在 Docker 环境下的</span>
+wrapper.java.additional=-Dneo4j.ext.udc.source=docker
+<span class="meta prompt_"># </span><span class="language-bash">指定了 Neo4j 日志文件的存储目录为 /logs</span>
+dbms.directories.logs=/logs</code></pre>
+
+
+
+<h1 id="二、CSV数据的导入导出"><a href="#二、CSV数据的导入导出" class="headerlink" title="二、CSV数据的导入导出"></a>二、CSV数据的导入导出</h1><h2 id="1-数据准备"><a href="#1-数据准备" class="headerlink" title="1. 数据准备"></a>1. 数据准备</h2><p>上面只是通过docker启动了一个Neo4j数据库实例，此时还没有数据，在演示neo4j数据的导入、导出之前，需要先模拟一些数据到Neo4j中。</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">删除所有的节点和关系</span> 
+MATCH(n) OPTIONAL MATCH (n)-[r]-() DELETE n,r;
+<span class="meta prompt_">  </span>
+<span class="meta prompt_"># </span><span class="language-bash">创建Person 的节点</span> 
+CREATE (person:Person &#123;cid:1,name:&quot;范闲&quot;,age:24,gender:0,character:&quot;A&quot;,money:1000,description:&quot;范闲，是猫腻小说《庆余年》主人公，穿越人士，庆国数十年风雨画卷的见证者。其容貌俊美无双，尤胜于女子，生性淡薄刚毅，善良而腹黑，城府极深，重视恩情。最终隐居江南&quot;&#125;);
+
+CREATE (person:Person &#123;cid:2,name:&quot;林婉儿&quot;,age:20,gender:1,character:&quot;B&quot;,money:800,description:&quot;林婉儿是庆国宰相和长公主的私生女，电视剧《庆余年》里的女主人公，由李沁饰演&quot;&#125;);
+
+CREATE (person:Person &#123;cid:3,name:&quot;庆帝&quot;,age:49,gender:0,character:&quot;A&quot;,money:8900,description:&quot;庆帝，网文作家猫腻所著的权谋小说《庆余年》的角色之一，南庆国的皇帝，心中装有天下统一&quot;&#125;);
+
+CREATE (person:Person &#123;cid:4,name:&quot;长公主&quot;,age:46,gender:1,character:&quot;B&quot;,money:3700,description:&quot;《庆余年》中,长公主这个人不仅人设很复杂,就连她的感情生活还是挺复杂。长公主所处的身份就是庆国的公主,皇帝的妹妹,太子的姑姑,国家重要财权的掌管,林婉儿的母亲&quot;&#125;);
+
+CREATE (person:Person &#123;cid:5,name:&quot;宰相林若甫&quot;,age:47,gender:0,character:&quot;A&quot;,money:1600,description:&quot;林若甫，是电视剧《庆余年》登场的虚拟人物之一，南庆当朝宰相，林婉儿的亲生父亲。&quot;&#125;);
+
+
+CREATE (person:Person &#123;cid:6,name:&quot;叶灵儿&quot;,age:20,gender:1,character:&quot;C&quot;,money:700,description:&quot;叶灵儿，网文作家猫腻所著的权谋小说《庆余年》的角色之一，林婉儿的好友，最后嫁给了二皇子&quot;&#125;);
+
+CREATE (person:Person &#123;cid:7,name:&quot;九品射手燕小乙&quot;,age:47,gender:0,character:&quot;C&quot;,money:900,description:&quot;一品最低,九品最高。庆帝身边的燕小乙便是九品,而且是庆国独一无二的神射手,臂力、眼力、听力惊人&quot;&#125;);
+
+CREATE (person:Person &#123;cid:8,name:&quot;二皇子&quot;,age:26,gender:0,character:&quot;B&quot;,money:1700,description:&quot;《庆余年》中,二皇子结局自杀身亡。二皇子对庆帝也是意见很大,但以他的实力还掀不起什么水花,所以只能慢慢等待时机&quot;&#125;);
+
+CREATE (person:Person &#123;cid:9,name:&quot;靖王世子&quot;,age:25,gender:0,character:&quot;A&quot;,money:1600,description:&quot;在《庆余年》中,此靖王非彼靖王,但是同音之美也会让人会对靖王世子李弘成这个角色产生好感,而靖王世子李弘成的出场的确是帮助了范闲逃脱太子势力的纠缠&quot;&#125;);
+
+CREATE (person:Person &#123;cid:10,name:&quot;王启年&quot;,age:46,gender:0,character:&quot;C&quot;,money:1700,description:&quot;王启年，网文作家猫腻所著的权谋小说《庆余年》的角色之一，庆国监察院一处的文书，擅长追踪之术。&quot;&#125;);
+
+CREATE (person:Person &#123;cid:11,name:&quot;北齐圣女海棠朵朵&quot;,age:21,gender:1,character:&quot;A&quot;,money:2600,description:&quot;海棠朵朵是北齐国的才女,被人尊称为圣女,而且是北齐大宗师苦荷的关门弟子,在北齐国也算是举足轻重的人物&quot;&#125;);
+
+CREATE (person:Person &#123;cid:12,name:&quot;北齐小皇帝战豆豆&quot;,age:20,gender:0,character:&quot;A&quot;,money:4600,description:&quot;很多人想知道剧中的北齐小皇帝是谁呢?让小编告诉你们吧。 战豆豆是北齐第二任皇帝,乃前北魏一代大将战清风之孙,大宗师苦荷的叔侄女兼徒孙&quot;&#125;);
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">创建关系</span> 
+match(person:Person &#123;name:&quot;范闲&quot;&#125;),(person2:Person &#123;name:&quot;林婉儿&quot;&#125;) create(person)-[r:Couple]-&gt;(person2);
+match(person:Person &#123;name:&quot;范闲&quot;&#125;),(person2:Person &#123;name:&quot;王启年&quot;&#125;) create(person)-[r:Friends]-&gt;(person2);
+match(person:Person &#123;name:&quot;范闲&quot;&#125;),(person2:Person &#123;name:&quot;北齐圣女海棠朵朵&quot;&#125;) create(person)-[r:Friends]-&gt;(person2);
+match(person:Person &#123;name:&quot;范闲&quot;&#125;),(person2:Person &#123;name:&quot;庆帝&quot;&#125;) create(person)-[r:Father]-&gt;(person2);
+match(person:Person &#123;name:&quot;范闲&quot;&#125;),(person2:Person &#123;name:&quot;长公主&quot;&#125;) create(person)-[r:Wife_Mother]-&gt;(person2);
+match(person:Person &#123;name:&quot;庆帝&quot;&#125;),(person2:Person &#123;name:&quot;二皇子&quot;&#125;) create(person)-[r:Son]-&gt;(person2);
+match(person:Person &#123;name:&quot;庆帝&quot;&#125;),(person2:Person &#123;name:&quot;长公主&quot;&#125;) create(person)-[r:BrotherSister]-&gt;(person2);
+match(person:Person &#123;name:&quot;二皇子&quot;&#125;),(person2:Person &#123;name:&quot;靖王世子&quot;&#125;) create(person)-[r:Friends]-&gt;(person2);
+match(person:Person &#123;name:&quot;北齐圣女海棠朵朵&quot;&#125;),(person2:Person &#123;name:&quot;北齐小皇帝战豆豆&quot;&#125;) create(person)-[r:Friends]-&gt;(person2);
+match(person:Person &#123;name:&quot;林婉儿&quot;&#125;),(person2:Person &#123;name:&quot;叶灵儿&quot;&#125;) create(person)-[r:Friends]-&gt;(person2);
+match(person:Person &#123;name:&quot;林婉儿&quot;&#125;),(person2:Person &#123;name:&quot;宰相林若甫&quot;&#125;) create(person)-[r:Father]-&gt;(person2);
+match(person:Person &#123;name:&quot;林婉儿&quot;&#125;),(person2:Person &#123;name:&quot;长公主&quot;&#125;) create(person)-[r:Mother]-&gt;(person2);
+match(person:Person &#123;name:&quot;长公主&quot;&#125;),(person2:Person &#123;name:&quot;九品射手燕小乙&quot;&#125;) create(person)-[r:Friends]-&gt;(person2);</code></pre>
+
+
+
+<p>将上面的CQL语句，复制到Neo4j执行语句输入框中，注意：不能有注释内容。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/17/20241017-184620.png" alt="Neo4j数据初始化"></p>
+<h2 id="2-安装-apoc-插件"><a href="#2-安装-apoc-插件" class="headerlink" title="2. 安装 apoc 插件"></a>2. 安装 apoc 插件</h2><p>APOC（Awesome Procedures on Cypher）是Neo4j图数据库的一个插件，它提供了一组强大的过程和函数，扩展了Cypher查询语言的功能。APOC可以帮助你进行更高级的数据处理和操作，例如导入和导出数据、动态创建节点和关系、执行事务操作等。</p>
+<p>使用APOC插件需要先下载并安装它，然后在Neo4j的配置文件中启用它。一旦启用，你就可以在Cypher查询中使用APOC提供的各种过程和函数了。</p>
+<h3 id="2-1-下载插件"><a href="#2-1-下载插件" class="headerlink" title="2.1  下载插件"></a>2.1  下载插件</h3><p>neo4j这里使用的是 3.5社区版，所以 apoc 插件也选择3.5版本的。</p>
+<p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases">https://github.com/neo4j-contrib/neo4j-apoc-procedures/releases</a></p>
+<p>找到对应的版本后，下载到服务器的 plugins 文件夹中</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/17/20241017-190711.png" alt="apoc插件下载"></p>
+<p>Neo4j的插件安装目录在 <code>plugins</code> 路径下，Docker部署Neo4j时，将宿主机 <code>/opt/module/neo4j/plugins</code> 目录映射到了neo4j的插件安装目录： <code>/var/lib/neo4j/plugins</code>， 因此需要将 apoc 插件下载到此目录中，无需解压。</p>
+<pre><code class="highlight shell">root@csg-pc1:/opt/module/neo4j/plugins# pwd
+/opt/module/neo4j/plugins
+root@csg-pc1:/opt/module/neo4j/plugins# ls
+apoc-3.5.0.21-all.jar
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">修改插件jar包的权限(添加执行权限)</span>
+chmod 755 apoc-3.5.0.21-all.jar</code></pre>
+
+
+
+<h3 id="2-2-修改配置文件"><a href="#2-2-修改配置文件" class="headerlink" title="2.2 修改配置文件"></a>2.2 修改配置文件</h3><p>修改neo4j配置文件 <code>neo4j.conf</code> , 修改内容如下：</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">neo4j插件安装路径</span>
+dbms.directories.plugins=plugins
+<span class="meta prompt_"># </span><span class="language-bash">配置安全白名单，指定允许所有apoc开头的存储过程</span>
+dbms.security.procedures.whitelist=apoc.coll.*,apoc.load.*,apoc.*,gds.*
+<span class="meta prompt_"># </span><span class="language-bash">放宽apoc权限</span>
+dbms.security.procedures.unrestricted=apoc.*,algo.*
+<span class="meta prompt_"># </span><span class="language-bash">指定了 Neo4j 的数据导入目录</span>
+dbms.directories.import=import
+<span class="meta prompt_"># </span><span class="language-bash">开启文件导出功能</span>
+apoc.export.file.enabled=true
+<span class="meta prompt_"># </span><span class="language-bash">开启文件导入功能</span>
+apoc.import.file.enabled=true</code></pre>
+
+
+
+<h3 id="2-3-测试apoc插件是否安装-成功"><a href="#2-3-测试apoc插件是否安装-成功" class="headerlink" title="2.3  测试apoc插件是否安装 成功"></a>2.3  测试apoc插件是否安装 成功</h3><p>在浏览器中，执行 cypher-shell：</p>
+<pre><code class="highlight cypher">return apoc.version();</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/17/20241017-192551.png" alt="验证插件安装"></p>
+<h2 id="3-导出CSV数据"><a href="#3-导出CSV数据" class="headerlink" title="3. 导出CSV数据"></a>3. 导出CSV数据</h2><h3 id="3-1-开始导出"><a href="#3-1-开始导出" class="headerlink" title="3.1 开始导出"></a>3.1 开始导出</h3><p>neo4j 官方文档有说明，使用 neo4j-admin restore &#x2F; dump 导出和恢复数据库的时候需要停掉数据，否则会报数据库正在使用的错误：</p>
+<blockquote>
+<p>command failed: the database is in use — stop Neo4j and try again</p>
+</blockquote>
+<p>但问题是docker容器中是没办法停止neo4j进程的，现在进入容器shudown的话，neo4j容器会停掉（docker-run）或者重启数据库（docker-compose），所以这里采用的迂回的方法：</p>
+<ul>
+<li><p>首先停掉neo4j容器</p>
+<pre><code class="highlight shell">docker stop neo4j</code></pre>
+
+
+</li>
+<li><p>启动一个带有TTY新的容器，使用-v参数挂载data目录</p>
+<pre><code class="highlight shell">docker run -it \
+    --name neo4j-tmp \
+    -p 7474:7474 -p 7687:7687 \
+    -v /opt/module/neo4j/data:/data \
+    -v /opt/module/neo4j/conf:/var/lib/neo4j/conf \
+    -v /opt/module/neo4j/import:/var/lib/neo4j/import \
+    -v /opt/module/neo4j/plugins:/var/lib/neo4j/plugins \
+    --restart=always \
+    neo4j:3.5.35 /bin/bash</code></pre>
+
+
+</li>
+<li><p>以console方式启动neo4j容器</p>
+<p>这里有个坑，如果不用 <code>console</code> 启动容器， 而是使用 <code>bin/neo4j start</code> 启动临时neo4j容器，导出的csv文件格式有问题，会导入不了。</p>
+<pre><code class="highlight shell">bin/neo4j console</code></pre>
+
+
+</li>
+<li><p>导出CSV文件</p>
+<p>在浏览器 Neo4j 的 <code>cypher-shell</code> 输入框中执行语句</p>
+<ul>
+<li><p>方式一：批量导出全部数据到一个csv文件中, 【强烈不建议】</p>
+<pre><code class="highlight cypher">// 导出全部数据（包括了节点和关系）[这个不常用，了解就行]
+CALL apoc.export.csv.all(&quot;database-all-data.csv&quot;, &#123;&#125;);</code></pre>
+</li>
+<li><p>方式二：批量导出全部数据，但是会自动将 <code>节点数据</code> 和 <code>关系数据 </code> 自动分到不同到文件中 【本文采用的就是这种方式】</p>
+</li>
+</ul>
+<pre><code class="highlight cypher">// 批量导出【建议用这个，亲测可行】
+CALL apoc.export.csv.all(
+  &quot;all.csv&quot;, // 文件名和类型，也可以是txt格式
+   &#123; 
+    quotes:&#x27;none&#x27;, // 导出的文件中没有引号
+    useTypes:true, //  useTypes参数表明输出时是否表明type类型是node还是relationship
+    bulkImport:true, // 导出的数据，就按照nodes和relationships分开
+    delim: &quot;$&quot; // 指定导出数据分割符号
+   &#125;
+)</code></pre>
+
+<ul>
+<li><p>方式三：手动导出节点数据和关系数据</p>
+<pre><code class="highlight cypher">// 导出所有节点数据，忽略关系
+MATCH (person:Person)
+WITH collect(person) AS people
+CALL apoc.export.csv.query(
+    &quot;MATCH (p:Person) RETURN id(p) AS `:ID`, p.name AS `name`, p.age AS `age:long`, p.cid AS `cid:long`, p.character AS `character`, p.money AS `money:long`, p.gender AS `gender:long`, p.description AS `description`, head(labels(p)) AS `:LABEL`&quot;, 
+    &quot;all_nodes.csv&quot;, // 导出的文件
+	&#123;
+    	quotes:&#x27;none&#x27;, // 文件中没有引号
+    	delim: &quot;$&quot;, // 指定导出数据的分割符号
+        useTypes:true, //  useTypes参数表明输出时是否表明type类型是node还是relationship
+        arrayDelim: &quot;;&quot;
+	&#125;
+)
+YIELD file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
+RETURN file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
+
+
+
+// 导出特定的关系数据，忽略节点
+MATCH (start)-[r:BrotherSister]-&gt;(end)
+WITH start, end, r
+CALL apoc.export.csv.query(
+    &quot;MATCH (start:Person)-[r:BrotherSister]-&gt;(end:Person) RETURN id(start) AS `:START_ID`, id(end) AS `:END_ID`, type(r) AS `:TYPE`&quot;, 
+    &quot;BrotherSister.csv&quot;,
+	&#123;
+    	quotes:&#x27;none&#x27;, // 导出的文件中没有引号
+    	useTypes:true, //  useTypes参数表明输出时是否表明type类型是node还是relationship
+    	delim: &quot;$&quot; // 指定导出数据分割符号
+    &#125;
+)
+YIELD file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
+RETURN file, source, format, nodes, relationships, properties, time, rows, batchSize, batches, done, data
+</code></pre></li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/17/20241017-192845.png" alt="导出所有数据"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/18/20241018-141228.png" alt="导出全部数据，自动分割CSV文件"></p>
+<h3 id="3-2-查看导出文件"><a href="#3-2-查看导出文件" class="headerlink" title="3.2 查看导出文件"></a>3.2 查看导出文件</h3><ul>
+<li><p>导出文件在neo4j的 <code>import</code> 文件夹中，映射到宿主机：<code>/opt/module/neo4j/import</code> 路径，查看该路径：</p>
+<pre><code class="highlight shell">root@csg-pc1:/opt/module/neo4j/import# pwd
+/opt/module/neo4j/import
+root@csg-pc1:/opt/module/neo4j/import# ls
+all.nodes.Person.csv
+all.relationships.BrotherSister.csv
+all.relationships.Couple.csv
+all.relationships.Father.csv
+all.relationships.Friends.csv
+all.relationships.Mother.csv
+all.relationships.Son.csv
+all.relationships.Wife_Mother.csv</code></pre>
+
+
+</li>
+<li><p>查看CSV文件</p>
+<p>虽然CSV文件可以用wps、office等工具查看和修改，但是还是如果需要修改的话，用 nodepad++、vsCode等相对简单的文本编辑工具，如果不小心修改了文件编码，或者wps等工具在保存时修改了格式，CSV文件导入就会报错。</p>
+<p>文件要使用UTF-8编码，这也是默认的编码格式。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/18/20241018-142107.png" alt="节点数据"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/18/20241018-142132.png" alt="关系数据"></p>
+</li>
+</ul>
+<h2 id="4-导入CSV数据"><a href="#4-导入CSV数据" class="headerlink" title="4. 导入CSV数据"></a>4. 导入CSV数据</h2><p>前面已经将neo4j数据导出到一个个 CSV 文件中了，导入数据也使用 APOC 插件，但是不需要在 <code>bin/neo4j console</code> 启动环境中导入。可以退出并删除临时容器，启动原有的 ne4j 容器。</p>
+<ul>
+<li><p>删除临时容器</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">删除临时容器</span>
+docker rm -f neo4j-tmp</code></pre>
+
+
+</li>
+<li><p>启动原neo4j容器</p>
+<pre><code class="highlight shell">docker start neo4j</code></pre>
+
+
+</li>
+<li><p>清空数据库</p>
+<p>在浏览器 Neo4j 的 <code>cypher-shell</code> 输入框中执行语句</p>
+<pre><code class="highlight cypher">MATCH(n) OPTIONAL MATCH (n)-[r]-() DELETE n,r;</code></pre>
+
+
+</li>
+<li><p>将导出的csv文件拷贝到neo4j的 import 文件夹中</p>
+</li>
+<li><p>使用 APOC 插件导入CSV文件</p>
+<p>在浏览器 Neo4j 的 <code>cypher-shell</code> 输入框中执行语句</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">方式一：批量导入节点和节点的关系【本文使用的导入方式】</span>
+CALL apoc.import.csv(
+  [
+  	&#123;fileName: &#x27;file:/all.nodes.Person.csv&#x27;, labels: [&#x27;Person&#x27;]&#125;
+  ],
+  [
+  	&#123;fileName: &#x27;file:/all.relationships.Mother.csv&#x27;, type: &#x27;relationships&#x27;&#125;,
+  	&#123;fileName: &#x27;file:/all.relationships.BrotherSister.csv&#x27;, type: &#x27;relationships&#x27;&#125;,
+  	&#123;fileName: &#x27;file:/all.relationships.Couple.csv&#x27;, type: &#x27;relationships&#x27;&#125;,
+  	&#123;fileName: &#x27;file:/all.relationships.Father.csv&#x27;, type: &#x27;relationships&#x27;&#125;,
+  	&#123;fileName: &#x27;file:/all.relationships.Friends.csv&#x27;, type: &#x27;relationships&#x27;&#125;,
+  	&#123;fileName: &#x27;file:/all.relationships.Son.csv&#x27;, type: &#x27;relationships&#x27;&#125;,
+  	&#123;fileName: &#x27;file:/all.relationships.Wife_Mother.csv&#x27;, type: &#x27;relationships&#x27;&#125;
+  ],
+  &#123;
+  	delimiter: &#x27;$&#x27;, // 指定数据分隔符，导出时用的是$符号，导入也得用它
+  	arrayDelimiter: &#x27;;&#x27;,  // 指定数组元素分隔符，默认：;
+  	stringIds: false
+  &#125;
+)</code></pre>
+
+
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/18/20241018-142912.png" alt="批量导入节点和节点的关系"></p>
+<ul>
+<li>方式二，单独导入节点和关系</li>
+</ul>
+<pre><code class="highlight cypher">// 只导入节点，不导入关系
+CALL apoc.import.csv(
+  [
+  &#123;fileName: &#x27;file:/all_nodes.csv&#x27;, labels: [&#x27;Person&#x27;]&#125;
+  ],
+  [],  // 没有关系要在这个步骤中导入
+  &#123;
+  	delimiter: &#x27;$&#x27;, // 指定数据分隔符，导出时用的是$符号，导入也得用它
+  	arrayDelimiter: &#x27;;&#x27;,  // 指定数组元素分隔符，默认：;
+  	stringIds: false
+  &#125;
+)
+
+
+// 只导入关系，不导入节点（我试了，不行，报空指针）
+CALL apoc.import.csv(
+  [],
+  [
+  	&#123;fileName: &#x27;file:/BrotherSister.csv&#x27;, type: &#x27;BrotherSister&#x27;&#125;
+  ],
+  &#123;
+  	delimiter: &#x27;$&#x27;, // 指定数据分隔符，导出时用的是$符号，导入也得用它
+  	arrayDelimiter: &#x27;;&#x27;,  // 指定数组元素分隔符，默认：;
+  	stringIds: false
+  &#125;
+)
+
+
+// 同时导入节点和关系（可以）
+CALL apoc.import.csv(
+  [
+  &#123;fileName: &#x27;file:/all_nodes.csv&#x27;, labels: [&#x27;Person&#x27;]&#125;
+  ],
+  [&#123;fileName: &#x27;file:/BrotherSister.csv&#x27;, type: &#x27;BrotherSister&#x27;&#125;],  // 没有关系要在这个步骤中导入
+  &#123;
+  	delimiter: &#x27;$&#x27;, // 指定数据分隔符，导出时用的是$符号，导入也得用它
+  	arrayDelimiter: &#x27;;&#x27;,  // 指定数组元素分隔符，默认：;
+  	stringIds: false
+  &#125;
+)</code></pre></li>
+</ul>
+<p><strong>总结</strong></p>
+<p>neo4j数据的导出、导入坑很多，相对资料又比较少，以上都是亲自测试的可行方案。</p>
+<p>如今neo4j已经出到 5.x 版本了，这篇还是使用的 3.5 版本，主要是因为算法部门他们训练和测试使用的是这个版本，与他们保持一致，后续有时间的话再研究一下新版本。</p>
+<p><strong>参考链接</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.naughtyfox.top/neo4j%E7%9A%84%E5%AF%BC%E5%85%A5%E4%B8%8E%E5%AF%BC%E5%87%BA/#3-4-import-csv%E6%96%87%E4%BB%B6">https://blog.naughtyfox.top/neo4j%E7%9A%84%E5%AF%BC%E5%85%A5%E4%B8%8E%E5%AF%BC%E5%87%BA/#3-4-import-csv%E6%96%87%E4%BB%B6</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/caoyusang/p/13610408.html">https://www.cnblogs.com/caoyusang/p/13610408.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/Iven-L/p/17978724">https://www.cnblogs.com/Iven-L/p/17978724</a></p>
+</blockquote>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
