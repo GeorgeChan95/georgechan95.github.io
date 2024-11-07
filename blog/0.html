@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Ubuntu18.04离线源环境搭建 | George&#39;s Blog</title>
+  <title>George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" linux , ubuntu18 ">
-  <meta name="description" content="Ubuntu18.04离线源环境搭建 | George&#39;s Blog">
+  <meta name="keywords" content="">
+  <meta name="description" content="George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#x72;&#103;&#x65;&#x5f;&#57;&#53;&#64;&#49;&#50;&#54;&#46;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1123,41 +1123,22 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-linux/Ubuntu18.04离线源环境搭建" class="article article-type-post" itemscope itemprop="blogPost">
-    
-        <h1 class="article-title">Ubuntu18.04离线源环境搭建</h1>
+        <article id="post-neo4j/Spring Boot整合Neo4j实现增删改查" class="article article-type-post" itemscope itemprop="blogPost">
     
     <div class="article-meta">
         
         
         
-        <span class="book">
-            <i class="iconfont icon-category"></i>
-            
-            
-            <a  data-rel="linux">linux</a>
-            
-        </span>
-        
-        
-        <span class="tag">
-            <i class="iconfont icon-tag"></i>
-            
-            <a class="color1">linux</a>
-            
-            <a class="color4">ubuntu18</a>
-            
-        </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-10-17 13:46:20'>2024-10-17 09:47</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-06 18:57:12'>2024-11-06 18:55</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2.9k</span>
+        <span>字数:0</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1187,7 +1168,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%B6%E4%BD%9C%E7%A6%BB%E7%BA%BF%E6%BA%90%EF%BC%88%E5%8F%AF%E8%BF%9E%E5%A4%96%E7%BD%91%EF%BC%89"><span class="toc-text">一、制作离线源（可连外网）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ssh"><span class="toc-text">1. ssh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-vim"><span class="toc-text">2. vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-curl"><span class="toc-text">3. curl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-wget"><span class="toc-text">4. wget</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-unzip"><span class="toc-text">5. unzip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-net-tools"><span class="toc-text">6. net-tools</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-ffmpeg"><span class="toc-text">7. ffmpeg</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-ntp"><span class="toc-text">8. ntp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-apt-transport-https"><span class="toc-text">9. apt-transport-https</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-ca-certificates"><span class="toc-text">10. ca-certificates</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-software-properties-common"><span class="toc-text">11. software-properties-common</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-docker"><span class="toc-text">12. docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-nfs"><span class="toc-text">13. nfs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-sftp"><span class="toc-text">14. sftp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-dos2unix"><span class="toc-text">15. dos2unix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-%E7%A6%BB%E7%BA%BF%E6%BA%90%E6%89%93%E5%8C%85"><span class="toc-text">16. 离线源打包</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8%E7%A6%BB%E7%BA%BF%E6%BA%90%E5%AE%89%E8%A3%85%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">二、使用离线源安装服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8A%E4%BC%A0%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-text">1. 上传离线安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E7%A6%BB%E7%BA%BF%E6%BA%90"><span class="toc-text">2. 配置离线源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E5%AE%89%E8%A3%85"><span class="toc-text">3. 测试安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BD%BF%E7%94%A8%E7%A6%BB%E7%BA%BF%E6%BA%90%E5%AE%89%E8%A3%85docker"><span class="toc-text">4. 使用离线源安装docker</span></a></li></ol></li></ol>
+        
     
 <style>
     .left-col .switch-btn,
@@ -1203,375 +1184,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>系统环境</strong></p>
-<blockquote>
-<p>系统发行版：Ubuntu 18.04.6 LTS</p>
-<p>内核版本：5.4.0-150-generic</p>
-</blockquote>
-<p><strong>注意事项</strong></p>
-<p>使用此方式制作的离线源只能在相同的系统版本下用于离线的环境安装，即：Ubuntu18.04系统环境下制作的离线源，不能用于Ubuntu20.04系统的离线环境安装，如果环境不同可能导致在离线电脑上安装时会缺少部分依赖导致安装失败。</p>
-<h1 id="一、制作离线源（可连外网）"><a href="#一、制作离线源（可连外网）" class="headerlink" title="一、制作离线源（可连外网）"></a>一、制作离线源（可连外网）</h1><p>先在一台可以连接外网的Ubuntu18.04服务器制作离线源环境。</p>
-<ul>
-<li><p>创建离线源目录</p>
-<pre><code class="highlight shell">mkdir -p /opt/offline
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">修改权限</span>
-chmod 777 -R /opt/offline/</code></pre>
-
-<p>后面所有的安装包都会放到此目录，及子目录下。</p>
-</li>
-<li><p>安装 dpkg-dev 工具</p>
-<pre><code class="highlight shell">apt-get install -y dpkg-dev</code></pre>
-</li>
-<li><p>备份系统目录的安装包</p>
-<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建安装包备份目录</span>
-mkdir -p /opt/offline/default/archives
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">文件迁移</span>
-mv /var/cache/apt/archives/* /opt/offline/default/archives/
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">删除源安装包</span>
-rm -rf /var/cache/apt/archives/*</code></pre></li>
-</ul>
-<p>下面演示常用软件离线源制作</p>
-<h2 id="1-ssh"><a href="#1-ssh" class="headerlink" title="1. ssh"></a>1. ssh</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ssh/archives/
-
-cd /opt/offline/ssh/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances openssh-client openssh-server openssh-sftp-server | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中</span>
-cp Packages.gz ./archives
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">删除外部的依赖关系文件</span>
-rm -rf /opt/offline/ssh/Packages.gz</code></pre>
-
-
-
-<h2 id="2-vim"><a href="#2-vim" class="headerlink" title="2. vim"></a>2. vim</h2><pre><code class="highlight shell">mkdir -p /opt/offline/vim/archives/
-
-cd /opt/offline/vim/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances vim | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/vim/Packages.gz
-</code></pre>
-
-
-
-<h2 id="3-curl"><a href="#3-curl" class="headerlink" title="3. curl"></a>3. curl</h2><pre><code class="highlight shell">mkdir -p /opt/offline/curl/archives/
-
-cd /opt/offline/curl/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances curl | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/curl/Packages.gz</code></pre>
-
-
-
-<h2 id="4-wget"><a href="#4-wget" class="headerlink" title="4. wget"></a>4. wget</h2><pre><code class="highlight shell">mkdir -p /opt/offline/wget/archives/
-
-cd /opt/offline/wget/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances wget | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/wget/Packages.gz</code></pre>
-
-
-
-<h2 id="5-unzip"><a href="#5-unzip" class="headerlink" title="5. unzip"></a>5. unzip</h2><pre><code class="highlight shell">mkdir -p /opt/offline/unzip/archives/
-
-cd /opt/offline/unzip/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances unzip | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/unzip/Packages.gz</code></pre>
-
-
-
-<h2 id="6-net-tools"><a href="#6-net-tools" class="headerlink" title="6. net-tools"></a>6. net-tools</h2><pre><code class="highlight shell">mkdir -p /opt/offline/net-tools/archives/
-
-cd /opt/offline/net-tools/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances net-tools | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/net-tools/Packages.gz</code></pre>
-
-
-
-<h2 id="7-ffmpeg"><a href="#7-ffmpeg" class="headerlink" title="7. ffmpeg"></a>7. ffmpeg</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ffmpeg/archives/
-
-cd /opt/offline/ffmpeg/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ffmpeg | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ffmpeg/Packages.gz</code></pre>
-
-
-
-<h2 id="8-ntp"><a href="#8-ntp" class="headerlink" title="8. ntp"></a>8. ntp</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ntp/archives/
-
-cd /opt/offline/ntp/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ntp ntpdate | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ntp/Packages.gz</code></pre>
-
-
-
-<h2 id="9-apt-transport-https"><a href="#9-apt-transport-https" class="headerlink" title="9. apt-transport-https"></a>9. apt-transport-https</h2><pre><code class="highlight shell">mkdir -p /opt/offline/apt-transport-https/archives/
-
-cd /opt/offline/apt-transport-https/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances apt-transport-https | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/apt-transport-https/Packages.gz</code></pre>
-
-
-
-<h2 id="10-ca-certificates"><a href="#10-ca-certificates" class="headerlink" title="10. ca-certificates"></a>10. ca-certificates</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ca-certificates/archives/
-
-cd /opt/offline/ca-certificates/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ca-certificates | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ca-certificates/Packages.gz</code></pre>
-
-
-
-<h2 id="11-software-properties-common"><a href="#11-software-properties-common" class="headerlink" title="11. software-properties-common"></a>11. software-properties-common</h2><pre><code class="highlight shell">mkdir -p /opt/offline/software-properties-common/archives/
-
-cd /opt/offline/software-properties-common/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances software-properties-common | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/software-properties-common/Packages.gz</code></pre>
-
-
-
-<h2 id="12-docker"><a href="#12-docker" class="headerlink" title="12. docker"></a>12. docker</h2><p>docker的离线源制作稍稍复杂，需要GPG密钥，这里从阿里云下载Docker的GPG密钥，配置APT以从阿里云的Docker镜像仓库安装Docker.</p>
-<ul>
-<li><p>参考资料</p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/ecs/use-cases/install-and-use-docker-on-a-linux-ecs-instance#33f11a5f1800n">安装Docker并使用</a></p>
-</blockquote>
-</li>
-</ul>
-<pre><code class="highlight shell">sudo apt-get update -y
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">安装必要的包，包括证书、curl（用于数据传输）和gnupg（用于GPG密钥管理）。</span>
-sudo apt-get install -y ca-certificates curl gnupg
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">创建一个目录/etc/apt/keyrings，并设置其权限为755。</span>
-sudo install -m 0755 -d /etc/apt/keyrings
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">下载Docker的GPG密钥，并将其转换为适合APT使用的格式，保存到指定目录。</span>
-sudo curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">为docker.gpg文件添加可读权限，以便所有用户都可以读取它。</span>
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">将Docker的APT源添加到新的列表文件中，使用当前系统架构和版本代号。</span>
-echo \
-  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] http://mirrors.aliyun.com/docker-ce/linux/ubuntu \
-<span class="meta prompt_">  $</span><span class="language-bash">(. /etc/os-release &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$VERSION_CODENAME</span>&quot;</span>) stable<span class="string">&quot; | \</span></span>
-<span class="string"><span class="language-bash">  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null</span></span>
-<span class="meta prompt_">  </span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">再次更新包索引，以包括刚添加的Docker源。</span></span>
-sudo apt-get update -y
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">安装docker</span></span> 
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">查看docker版本信息</span></span>
-docker --version
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">创建docker离线源安装包目录</span></span>
-mkdir -p /opt/offline/docker/archives/
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">将docker安装时下载的缓存包，移动到离线源安装包路径中</span></span>
-mv /var/cache/apt/archives/* /opt/offline/docker/archives/
-
-cd /opt/offline/docker/
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash"><span class="string">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span></span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span></span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/docker/Packages.gz</code></pre>
-
-
-
-<h2 id="13-nfs"><a href="#13-nfs" class="headerlink" title="13. nfs"></a>13. nfs</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mrld/articles/14149708.html">https://www.cnblogs.com/mrld/articles/14149708.html</a></p>
-<pre><code class="highlight shell">mkdir -p /opt/offline/nfs/archives/
-
-cd /opt/offline/nfs/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances nfs-kernel-server nfs-common | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/nfs/Packages.gz</code></pre>
-
-
-
-<h2 id="14-sftp"><a href="#14-sftp" class="headerlink" title="14. sftp"></a>14. sftp</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhumengke/articles/11225040.html">https://www.cnblogs.com/zhumengke/articles/11225040.html</a></p>
-<pre><code class="highlight shell">mkdir -p /opt/offline/sftp/archives/
-
-cd /opt/offline/sftp/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances vsftpd | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/sftp/Packages.gz</code></pre>
-
-
-
-<h2 id="15-dos2unix"><a href="#15-dos2unix" class="headerlink" title="15. dos2unix"></a>15. dos2unix</h2><pre><code class="highlight shell">mkdir -p /opt/offline/dos2unix/archives/
-
-cd /opt/offline/dos2unix/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances dos2unix | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/dos2unix/Packages.gz</code></pre>
-
-
-
-<h2 id="16-离线源打包"><a href="#16-离线源打包" class="headerlink" title="16. 离线源打包"></a>16. 离线源打包</h2><p>将上面制作好的连线源安装包，打包</p>
-<pre><code class="highlight shell">cd /opt/offline
-
-tar -zcf offline-source.tar.gz ./*</code></pre>
-
-<p><code>offline-source.tar.gz</code> 就是制作好的离线包</p>
-<h1 id="二、使用离线源安装服务器"><a href="#二、使用离线源安装服务器" class="headerlink" title="二、使用离线源安装服务器"></a>二、使用离线源安装服务器</h1><p>上面基于可连外网的服务器制作了离线源，并将离线源打成了一个tar包 ：<code>offline-source.tar.gz</code> ，现在就使用这个打包好的离线源，在断网的服务器上安装环境。</p>
-<h2 id="1-上传离线安装包"><a href="#1-上传离线安装包" class="headerlink" title="1. 上传离线安装包"></a>1. 上传离线安装包</h2><p>将 <code>offline-source.tar.gz</code> 上传到服务器上，可以通过U盘拷贝的方式，或者内网文件服务器下载。</p>
-<h2 id="2-配置离线源"><a href="#2-配置离线源" class="headerlink" title="2. 配置离线源"></a>2. 配置离线源</h2><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建离线文件存放目录</span>
-mkdir -p /opt/offline
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">解压离线文件</span>
-tar -zxvf offline-source.tar.gz -C /opt/offline/
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">备份源文件</span>
-mv /etc/apt/sources.list /etc/apt/sources.list.bak
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">映射本地源，这里可以使用vi</span>
-cat &gt;&gt;/etc/apt/sources.list &lt;&lt;EOF
-deb [trusted=yes] file:///opt/offline/apt-transport-https/ archives/
-deb [trusted=yes] file:///opt/offline/ca-certificates/ archives/
-deb [trusted=yes] file:///opt/offline/curl/ archives/
-deb [trusted=yes] file:///opt/offline/docker/ archives/
-deb [trusted=yes] file:///opt/offline/ffmpeg/ archives/
-deb [trusted=yes] file:///opt/offline/net-tools/ archives/
-deb [trusted=yes] file:///opt/offline/nfs/ archives/
-deb [trusted=yes] file:///opt/offline/ntp/ archives/
-deb [trusted=yes] file:///opt/offline/sftp/ archives/
-deb [trusted=yes] file:///opt/offline/software-properties-common/ archives/
-deb [trusted=yes] file:///opt/offline/ssh/ archives/
-deb [trusted=yes] file:///opt/offline/unzip/ archives/
-deb [trusted=yes] file:///opt/offline/vim/ archives/
-deb [trusted=yes] file:///opt/offline/wget/ archives/
-deb [trusted=yes] file:///opt/offline/dos2unix/ archives/
-EOF
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">更新</span>
-apt-get update -y</code></pre>
-
-
-
-<h2 id="3-测试安装"><a href="#3-测试安装" class="headerlink" title="3. 测试安装"></a>3. 测试安装</h2><pre><code class="highlight shell">//根据自己需求进行安装，例如：
-apt-get install -y wget</code></pre>
-
-
-
-<h2 id="4-使用离线源安装docker"><a href="#4-使用离线源安装docker" class="headerlink" title="4. 使用离线源安装docker"></a>4. 使用离线源安装docker</h2><pre><code class="highlight shell">sudo apt-get install -y docker-ce docker-ce-cli containerd.io</code></pre>
-
-
-
-<p><strong>参考文档</strong></p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://always200.com/ubuntu-offline-sources/">ubuntu制作离线源</a></p>
-</blockquote>
-
+        
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
     </div>

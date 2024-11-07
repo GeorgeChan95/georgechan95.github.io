@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Ubuntu18.04离线源环境搭建 | George&#39;s Blog</title>
+  <title>06-原型模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" linux , ubuntu18 ">
-  <meta name="description" content="Ubuntu18.04离线源环境搭建 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="06-原型模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#x72;&#103;&#x65;&#x5f;&#57;&#53;&#64;&#49;&#50;&#54;&#46;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1123,9 +1123,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-linux/Ubuntu18.04离线源环境搭建" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/06-原型模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Ubuntu18.04离线源环境搭建</h1>
+        <h1 class="article-title">06-原型模式</h1>
     
     <div class="article-meta">
         
@@ -1135,7 +1135,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="linux">linux</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1143,21 +1143,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color1">linux</a>
-            
-            <a class="color4">ubuntu18</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-10-17 13:46:20'>2024-10-17 09:47</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-07 13:43:16'>2024-11-06 19:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2.9k</span>
+        <span>字数:2.8k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1187,7 +1185,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%B6%E4%BD%9C%E7%A6%BB%E7%BA%BF%E6%BA%90%EF%BC%88%E5%8F%AF%E8%BF%9E%E5%A4%96%E7%BD%91%EF%BC%89"><span class="toc-text">一、制作离线源（可连外网）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ssh"><span class="toc-text">1. ssh</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-vim"><span class="toc-text">2. vim</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-curl"><span class="toc-text">3. curl</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-wget"><span class="toc-text">4. wget</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-unzip"><span class="toc-text">5. unzip</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-net-tools"><span class="toc-text">6. net-tools</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-ffmpeg"><span class="toc-text">7. ffmpeg</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-ntp"><span class="toc-text">8. ntp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-apt-transport-https"><span class="toc-text">9. apt-transport-https</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-ca-certificates"><span class="toc-text">10. ca-certificates</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-software-properties-common"><span class="toc-text">11. software-properties-common</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-docker"><span class="toc-text">12. docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-nfs"><span class="toc-text">13. nfs</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-sftp"><span class="toc-text">14. sftp</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-dos2unix"><span class="toc-text">15. dos2unix</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#16-%E7%A6%BB%E7%BA%BF%E6%BA%90%E6%89%93%E5%8C%85"><span class="toc-text">16. 离线源打包</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8%E7%A6%BB%E7%BA%BF%E6%BA%90%E5%AE%89%E8%A3%85%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">二、使用离线源安装服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8A%E4%BC%A0%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-text">1. 上传离线安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%85%8D%E7%BD%AE%E7%A6%BB%E7%BA%BF%E6%BA%90"><span class="toc-text">2. 配置离线源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E5%AE%89%E8%A3%85"><span class="toc-text">3. 测试安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BD%BF%E7%94%A8%E7%A6%BB%E7%BA%BF%E6%BA%90%E5%AE%89%E8%A3%85docker"><span class="toc-text">4. 使用离线源安装docker</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E9%9C%80%E6%B1%82%EF%BC%9A%E5%85%8B%E9%9A%86%E7%BE%8A%E9%97%AE%E9%A2%98"><span class="toc-text">一、需求：克隆羊问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F%E8%A7%A3%E5%86%B3%E5%85%8B%E9%9A%86%E7%BE%8A%E9%97%AE%E9%A2%98"><span class="toc-text">1. 传统方式解决克隆羊问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90-%E5%9B%BE%E8%A7%A3"><span class="toc-text">1.1 思路分析(图解)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">1.2 代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E4%BC%A0%E7%BB%9F%E7%9A%84%E6%96%B9%E5%BC%8F%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">1.3 传统的方式的优缺点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E6%94%B9%E8%BF%9B%E7%9A%84%E6%80%9D%E8%B7%AF%E5%88%86%E6%9E%90"><span class="toc-text">1.4 改进的思路分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F"><span class="toc-text">二、原型模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-text">1. 基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%8E%9F%E7%90%86%E7%BB%93%E6%9E%84%E5%9B%BE-uml-%E7%B1%BB%E5%9B%BE"><span class="toc-text">2. 原型模式原理结构图-uml 类图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E8%A7%A3%E5%86%B3%E5%85%8B%E9%9A%86%E7%BE%8A%E9%97%AE%E9%A2%98"><span class="toc-text">3. 原型模式解决克隆羊问题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E4%BB%A3%E7%A0%81%E5%A6%82%E4%B8%8B"><span class="toc-text">3.1 代码如下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%A7%A3%E6%9E%90"><span class="toc-text">3.2 解析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E5%9C%A8-Spring-%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text">三、原型模式在 Spring 中的应用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%B5%85%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="toc-text">四、浅拷贝与深拷贝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%B5%85%E6%8B%B7%E8%B4%9D%E7%9A%84%E4%BB%8B%E7%BB%8D"><span class="toc-text">1. 浅拷贝的介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-text">2. 深拷贝基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B7%B1%E6%8B%B7%E8%B4%9D%E5%BA%94%E7%94%A8%E5%AE%9E%E4%BE%8B"><span class="toc-text">3. 深拷贝应用实例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E9%87%8D%E5%86%99-clone-%E6%96%B9%E6%B3%95"><span class="toc-text">3.1 方式一：重写 clone() 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E9%80%9A%E8%BF%87%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E5%AE%9E%E7%8E%B0-%E6%8E%A8%E8%8D%90"><span class="toc-text">3.2 通过对象的序列化实现 (推荐)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E5%92%8C%E7%BB%86%E8%8A%82"><span class="toc-text">五、原型模式的注意事项和细节</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1203,374 +1201,355 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>系统环境</strong></p>
+        <h1 id="一、需求：克隆羊问题"><a href="#一、需求：克隆羊问题" class="headerlink" title="一、需求：克隆羊问题"></a>一、需求：克隆羊问题</h1><p>现在有一只羊 tom ，姓名为: tom,  年龄为：1 ，颜色为： 白色，请编写程序创建和 tom 羊属性完全相同的 10 只羊。</p>
+<h2 id="1-传统方式解决克隆羊问题"><a href="#1-传统方式解决克隆羊问题" class="headerlink" title="1. 传统方式解决克隆羊问题"></a>1. 传统方式解决克隆羊问题</h2><h3 id="1-1-思路分析-图解"><a href="#1-1-思路分析-图解" class="headerlink" title="1.1 思路分析(图解)"></a>1.1 思路分析(图解)</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/06/20241106-191055.png" alt="传统方式克隆对象"></p>
+<h3 id="1-2-代码实现"><a href="#1-2-代码实现" class="headerlink" title="1.2 代码实现"></a>1.2 代码实现</h3><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sheep</span> &#123;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="type">int</span> age;
+    <span class="keyword">private</span> String color;
+
+    <span class="keyword">public</span> <span class="title function_">Sheep</span><span class="params">(String name, <span class="type">int</span> age, String color)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+        <span class="built_in">this</span>.age = age;
+        <span class="built_in">this</span>.color = color;
+    &#125;
+
+    <span class="comment">// 省略getter / setter</span>
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">//传统的方法</span>
+        <span class="type">Sheep</span> <span class="variable">sheep</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sheep</span>(<span class="string">&quot;tom&quot;</span>, <span class="number">1</span>, <span class="string">&quot;白色&quot;</span>);
+
+        <span class="type">Sheep</span> <span class="variable">sheep2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sheep</span>(sheep.getName(), sheep.getAge(), sheep.getColor());
+        <span class="type">Sheep</span> <span class="variable">sheep3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sheep</span>(sheep.getName(), sheep.getAge(), sheep.getColor());
+        <span class="type">Sheep</span> <span class="variable">sheep4</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sheep</span>(sheep.getName(), sheep.getAge(), sheep.getColor());
+        <span class="type">Sheep</span> <span class="variable">sheep5</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sheep</span>(sheep.getName(), sheep.getAge(), sheep.getColor());
+        <span class="comment">//....</span>
+
+        System.out.println(sheep);
+        System.out.println(sheep2);
+        System.out.println(sheep3);
+        System.out.println(sheep4);
+        System.out.println(sheep5);
+        <span class="comment">// ....</span>
+    &#125;
+&#125;</code></pre>
+
 <blockquote>
-<p>系统发行版：Ubuntu 18.04.6 LTS</p>
-<p>内核版本：5.4.0-150-generic</p>
+<p>运行结果：</p>
+<pre><code class="highlight shell">com.george.prototype.Sheep@1b6d3586
+com.george.prototype.Sheep@4554617c
+com.george.prototype.Sheep@74a14482
+com.george.prototype.Sheep@1540e19d
+com.george.prototype.Sheep@677327b6</code></pre>
 </blockquote>
-<p><strong>注意事项</strong></p>
-<p>使用此方式制作的离线源只能在相同的系统版本下用于离线的环境安装，即：Ubuntu18.04系统环境下制作的离线源，不能用于Ubuntu20.04系统的离线环境安装，如果环境不同可能导致在离线电脑上安装时会缺少部分依赖导致安装失败。</p>
-<h1 id="一、制作离线源（可连外网）"><a href="#一、制作离线源（可连外网）" class="headerlink" title="一、制作离线源（可连外网）"></a>一、制作离线源（可连外网）</h1><p>先在一台可以连接外网的Ubuntu18.04服务器制作离线源环境。</p>
-<ul>
-<li><p>创建离线源目录</p>
-<pre><code class="highlight shell">mkdir -p /opt/offline
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">修改权限</span>
-chmod 777 -R /opt/offline/</code></pre>
-
-<p>后面所有的安装包都会放到此目录，及子目录下。</p>
-</li>
-<li><p>安装 dpkg-dev 工具</p>
-<pre><code class="highlight shell">apt-get install -y dpkg-dev</code></pre>
-</li>
-<li><p>备份系统目录的安装包</p>
-<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建安装包备份目录</span>
-mkdir -p /opt/offline/default/archives
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">文件迁移</span>
-mv /var/cache/apt/archives/* /opt/offline/default/archives/
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">删除源安装包</span>
-rm -rf /var/cache/apt/archives/*</code></pre></li>
+<h3 id="1-3-传统的方式的优缺点"><a href="#1-3-传统的方式的优缺点" class="headerlink" title="1.3 传统的方式的优缺点"></a>1.3 传统的方式的优缺点</h3><ul>
+<li>优点是比较好理解，简单易操作。</li>
+<li>在创建新的对象时，总是需要重新获取原始对象的属性，如果创建的对象比较复杂时，效率较低</li>
+<li>总是需要重新初始化对象，而不是动态地获得对象运行时的状态,  不够灵活</li>
 </ul>
-<p>下面演示常用软件离线源制作</p>
-<h2 id="1-ssh"><a href="#1-ssh" class="headerlink" title="1. ssh"></a>1. ssh</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ssh/archives/
-
-cd /opt/offline/ssh/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances openssh-client openssh-server openssh-sftp-server | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中</span>
-cp Packages.gz ./archives
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">删除外部的依赖关系文件</span>
-rm -rf /opt/offline/ssh/Packages.gz</code></pre>
-
-
-
-<h2 id="2-vim"><a href="#2-vim" class="headerlink" title="2. vim"></a>2. vim</h2><pre><code class="highlight shell">mkdir -p /opt/offline/vim/archives/
-
-cd /opt/offline/vim/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances vim | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/vim/Packages.gz
-</code></pre>
-
-
-
-<h2 id="3-curl"><a href="#3-curl" class="headerlink" title="3. curl"></a>3. curl</h2><pre><code class="highlight shell">mkdir -p /opt/offline/curl/archives/
-
-cd /opt/offline/curl/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances curl | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/curl/Packages.gz</code></pre>
-
-
-
-<h2 id="4-wget"><a href="#4-wget" class="headerlink" title="4. wget"></a>4. wget</h2><pre><code class="highlight shell">mkdir -p /opt/offline/wget/archives/
-
-cd /opt/offline/wget/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances wget | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/wget/Packages.gz</code></pre>
-
-
-
-<h2 id="5-unzip"><a href="#5-unzip" class="headerlink" title="5. unzip"></a>5. unzip</h2><pre><code class="highlight shell">mkdir -p /opt/offline/unzip/archives/
-
-cd /opt/offline/unzip/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances unzip | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/unzip/Packages.gz</code></pre>
-
-
-
-<h2 id="6-net-tools"><a href="#6-net-tools" class="headerlink" title="6. net-tools"></a>6. net-tools</h2><pre><code class="highlight shell">mkdir -p /opt/offline/net-tools/archives/
-
-cd /opt/offline/net-tools/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances net-tools | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/net-tools/Packages.gz</code></pre>
-
-
-
-<h2 id="7-ffmpeg"><a href="#7-ffmpeg" class="headerlink" title="7. ffmpeg"></a>7. ffmpeg</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ffmpeg/archives/
-
-cd /opt/offline/ffmpeg/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ffmpeg | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ffmpeg/Packages.gz</code></pre>
-
-
-
-<h2 id="8-ntp"><a href="#8-ntp" class="headerlink" title="8. ntp"></a>8. ntp</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ntp/archives/
-
-cd /opt/offline/ntp/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ntp ntpdate | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ntp/Packages.gz</code></pre>
-
-
-
-<h2 id="9-apt-transport-https"><a href="#9-apt-transport-https" class="headerlink" title="9. apt-transport-https"></a>9. apt-transport-https</h2><pre><code class="highlight shell">mkdir -p /opt/offline/apt-transport-https/archives/
-
-cd /opt/offline/apt-transport-https/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances apt-transport-https | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/apt-transport-https/Packages.gz</code></pre>
-
-
-
-<h2 id="10-ca-certificates"><a href="#10-ca-certificates" class="headerlink" title="10. ca-certificates"></a>10. ca-certificates</h2><pre><code class="highlight shell">mkdir -p /opt/offline/ca-certificates/archives/
-
-cd /opt/offline/ca-certificates/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances ca-certificates | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/ca-certificates/Packages.gz</code></pre>
-
-
-
-<h2 id="11-software-properties-common"><a href="#11-software-properties-common" class="headerlink" title="11. software-properties-common"></a>11. software-properties-common</h2><pre><code class="highlight shell">mkdir -p /opt/offline/software-properties-common/archives/
-
-cd /opt/offline/software-properties-common/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances software-properties-common | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/software-properties-common/Packages.gz</code></pre>
-
-
-
-<h2 id="12-docker"><a href="#12-docker" class="headerlink" title="12. docker"></a>12. docker</h2><p>docker的离线源制作稍稍复杂，需要GPG密钥，这里从阿里云下载Docker的GPG密钥，配置APT以从阿里云的Docker镜像仓库安装Docker.</p>
+<h3 id="1-4-改进的思路分析"><a href="#1-4-改进的思路分析" class="headerlink" title="1.4 改进的思路分析"></a>1.4 改进的思路分析</h3><p>java 中 Object 类是所有类的根类，Object 类提供了一个 clone()方法，该方法可以将一个 Java 对象复制 一份，但是需要实现 clone 的 Java 类必须要实现一个接口 Cloneable，该接口表示该类能够复制且具有复制的能力， 这实际上就引入了后面要说的：<strong>原型模式</strong>。</p>
+<h1 id="二、原型模式"><a href="#二、原型模式" class="headerlink" title="二、原型模式"></a>二、原型模式</h1><h2 id="1-基本介绍"><a href="#1-基本介绍" class="headerlink" title="1. 基本介绍"></a>1. 基本介绍</h2><ul>
+<li>原型模式(Prototype 模式)是指：用原型实例指定创建对象的种类，并且通过拷贝这些原型，创建新的对象</li>
+<li>原型模式是一种创建型设计模式，允许一个对象再创建另外一个可定制的对象，无需知道如何创建的细节</li>
+<li>工作原理是:通过将一个原型对象传给那个要发动创建的对象，这个要发动创建的对象通过请求原型对象拷贝它们自己来实施创建，即 <strong>对象.clone()</strong></li>
+</ul>
+<h2 id="2-原型模式原理结构图-uml-类图"><a href="#2-原型模式原理结构图-uml-类图" class="headerlink" title="2. 原型模式原理结构图-uml 类图"></a>2. 原型模式原理结构图-uml 类图</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/06/20241106-192159.png" alt="原型模式原理结构图"></p>
+<p><strong>原理结构图说明</strong></p>
 <ul>
-<li><p>参考资料</p>
+<li>Prototype :  原型类，声明一个克隆自己的接口</li>
+<li>ConcretePrototype:  具体的原型类,  实现一个克隆自己的操作</li>
+<li>Client:  让一个原型对象克隆自己，从而创建一个新的对象(属性一样）</li>
+</ul>
+<h2 id="3-原型模式解决克隆羊问题"><a href="#3-原型模式解决克隆羊问题" class="headerlink" title="3. 原型模式解决克隆羊问题"></a>3. 原型模式解决克隆羊问题</h2><h3 id="3-1-代码如下"><a href="#3-1-代码如下" class="headerlink" title="3.1 代码如下"></a>3.1 代码如下</h3><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sheep</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span>&#123; <span class="comment">// 实现Cloneable接口， 重写clone方法</span>
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="type">int</span> age;
+    <span class="keyword">private</span> String color;
+
+    <span class="comment">// 对象.clone() 操作是浅拷贝，对于引用类型的属性，仅复制引用地址。</span>
+    <span class="keyword">public</span> Sheep friend; <span class="comment">// 这里添加了friend属性，属性值是一个引用类型</span>
+
+    <span class="keyword">public</span> <span class="title function_">Sheep</span><span class="params">(String name, <span class="type">int</span> age, String color)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+        <span class="built_in">this</span>.age = age;
+        <span class="built_in">this</span>.color = color;
+    &#125;
+
+    <span class="comment">// 省略 getter / setter 方法</span>
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> Sheep <span class="title function_">clone</span><span class="params">()</span> &#123;
+        <span class="type">Sheep</span> <span class="variable">sheep</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="keyword">try</span> &#123;
+            sheep = (Sheep) <span class="built_in">super</span>.clone();
+        &#125; <span class="keyword">catch</span> (Exception e) &#123;
+            e.printStackTrace();
+        &#125;
+        <span class="keyword">return</span> sheep;
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+
+	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+		System.out.println(<span class="string">&quot;原型模式完成对象的创建&quot;</span>);
+		<span class="type">Sheep</span> <span class="variable">sheep</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sheep</span>(<span class="string">&quot;tom&quot;</span>, <span class="number">1</span>, <span class="string">&quot;白色&quot;</span>);
+
+		sheep.friend = <span class="keyword">new</span> <span class="title class_">Sheep</span>(<span class="string">&quot;jack&quot;</span>, <span class="number">2</span>, <span class="string">&quot;黑色&quot;</span>);
+		
+		<span class="type">Sheep</span> <span class="variable">sheep2</span> <span class="operator">=</span> sheep.clone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep3</span> <span class="operator">=</span> sheep.clone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep4</span> <span class="operator">=</span> sheep.clone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep5</span> <span class="operator">=</span> sheep.clone(); <span class="comment">//克隆</span>
+		
+		System.out.println(<span class="string">&quot;sheep2 =&quot;</span> + sheep2 + <span class="string">&quot;sheep2.friend=&quot;</span> + sheep2.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep3 =&quot;</span> + sheep3 + <span class="string">&quot;sheep3.friend=&quot;</span> + sheep3.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep4 =&quot;</span> + sheep4 + <span class="string">&quot;sheep4.friend=&quot;</span> + sheep4.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep5 =&quot;</span> + sheep5 + <span class="string">&quot;sheep5.friend=&quot;</span> + sheep5.friend.hashCode());
+	&#125;
+
+&#125;</code></pre>
+
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://help.aliyun.com/zh/ecs/use-cases/install-and-use-docker-on-a-linux-ecs-instance#33f11a5f1800n">安装Docker并使用</a></p>
+<p>运行结果：</p>
+<pre><code class="highlight shell">原型模式完成对象的创建
+sheep2 =com.george.prototype.improve.Sheep@1b6d3586sheep2.friend=1163157884
+sheep3 =com.george.prototype.improve.Sheep@74a14482sheep3.friend=1163157884
+sheep4 =com.george.prototype.improve.Sheep@1540e19dsheep4.friend=1163157884
+sheep5 =com.george.prototype.improve.Sheep@677327b6sheep5.friend=1163157884</code></pre>
+</blockquote>
+<h3 id="3-2-解析"><a href="#3-2-解析" class="headerlink" title="3.2 解析"></a>3.2 解析</h3><ul>
+<li>通过对象实现Cloneable接口， 重写clone方法的形式，是原型模式的具体体现， 在对象较为复杂的情况下效率更高且无需暴露对象的实现细节。</li>
+<li>需要注意的是，这里的Sheep对象添加了引用类型的属性friend，而使用clone() 方法复制对象时，并不会完全复制引用类型的属性，仅仅复制了它的引用地址值。所以通过Cloneable复制对象的操作仅是 <strong>浅拷贝</strong> 。</li>
+</ul>
+<h1 id="三、原型模式在-Spring-中的应用"><a href="#三、原型模式在-Spring-中的应用" class="headerlink" title="三、原型模式在 Spring 中的应用"></a>三、原型模式在 Spring 中的应用</h1><ul>
+<li><p>场景一：用户请求的处理</p>
+<p>假设你有一个Web应用，其中每个用户请求需要一个独立的处理器（例如，RequestProcessor）来处理。由于每个请求可能包含不同的数据和处理逻辑，使用原型Bean可以为每个请求提供一个新的处理器实例，从而避免了由于实例之间的数据共享所带来的潜在冲突或安全问题。</p>
+<pre><code class="highlight java"><span class="meta">@Component</span>
+<span class="meta">@Scope(&quot;prototype&quot;)</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RequestProcessor</span> &#123;
+    <span class="comment">// 请求处理逻辑</span>
+&#125;</code></pre>
+</li>
+<li><p>场景二：多线程任务</p>
+<p>在执行多线程任务时，如果任务对象包含了任务执行状态，使用原型Bean可以为每个任务提供一个独立的实例。这样，即使任务是并行执行的，任务间也不会相互干扰，因为它们各自操作自己状态的独立副本。</p>
+<pre><code class="highlight java"><span class="meta">@Component</span>
+<span class="meta">@Scope(&quot;prototype&quot;)</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Task</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;
+    <span class="comment">// 实现Runnable接口的任务逻辑</span>
+&#125;</code></pre></li>
+</ul>
+<h1 id="四、浅拷贝与深拷贝"><a href="#四、浅拷贝与深拷贝" class="headerlink" title="四、浅拷贝与深拷贝"></a>四、浅拷贝与深拷贝</h1><h2 id="1-浅拷贝的介绍"><a href="#1-浅拷贝的介绍" class="headerlink" title="1. 浅拷贝的介绍"></a>1. 浅拷贝的介绍</h2><ul>
+<li><p>对于数据类型是基本数据类型的成员变量，浅拷贝会直接进行值传递，也就是将该属性值复制一份给新的对象</p>
+</li>
+<li><p>对于数据类型是引用数据类型的成员变量，比如说成员变量是某个数组、某个类的对象等，那么浅拷贝会进行 引用传递，也就是只是将该成员变量的引用值（内存地址）复制一份给新的对象。因为实际上两个对象的该成 员变量都指向同一个实例。在这种情况下，在一个对象中修改该成员变量会影响到另一个对象的该成员变量值</p>
+</li>
+<li><p>前面我们克隆羊就是浅拷贝</p>
+</li>
+<li><p>浅拷贝是使用默认的 clone()方法来实现</p>
+<blockquote>
+<p>sheep &#x3D; (Sheep) super.clone();</p>
 </blockquote>
 </li>
 </ul>
-<pre><code class="highlight shell">sudo apt-get update -y
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">安装必要的包，包括证书、curl（用于数据传输）和gnupg（用于GPG密钥管理）。</span>
-sudo apt-get install -y ca-certificates curl gnupg
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">创建一个目录/etc/apt/keyrings，并设置其权限为755。</span>
-sudo install -m 0755 -d /etc/apt/keyrings
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">下载Docker的GPG密钥，并将其转换为适合APT使用的格式，保存到指定目录。</span>
-sudo curl -fsSL http://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">为docker.gpg文件添加可读权限，以便所有用户都可以读取它。</span>
-sudo chmod a+r /etc/apt/keyrings/docker.asc
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">将Docker的APT源添加到新的列表文件中，使用当前系统架构和版本代号。</span>
-echo \
-  &quot;deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] http://mirrors.aliyun.com/docker-ce/linux/ubuntu \
-<span class="meta prompt_">  $</span><span class="language-bash">(. /etc/os-release &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$VERSION_CODENAME</span>&quot;</span>) stable<span class="string">&quot; | \</span></span>
-<span class="string"><span class="language-bash">  sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null</span></span>
-<span class="meta prompt_">  </span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">再次更新包索引，以包括刚添加的Docker源。</span></span>
-sudo apt-get update -y
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">安装docker</span></span> 
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">查看docker版本信息</span></span>
-docker --version
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">创建docker离线源安装包目录</span></span>
-mkdir -p /opt/offline/docker/archives/
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">将docker安装时下载的缓存包，移动到离线源安装包路径中</span></span>
-mv /var/cache/apt/archives/* /opt/offline/docker/archives/
+<h2 id="2-深拷贝基本介绍"><a href="#2-深拷贝基本介绍" class="headerlink" title="2. 深拷贝基本介绍"></a>2. 深拷贝基本介绍</h2><ul>
+<li>复制对象的所有基本数据类型的成员变量值</li>
+<li>为所有引用数据类型的成员变量申请存储空间，并复制每个引用数据类型成员变量所引用的对象，直到该对象 可达的所有对象。也就是说，<strong>对象进行深拷贝要对整个对象(包括对象的引用类型)进行拷贝</strong></li>
+<li>深拷贝实现方式 1 ：<strong>重写 clone</strong> 方法来实现深拷贝</li>
+<li>深拷贝实现方式 2 ：<strong>通过对象序列化实现深拷贝(推荐)</strong></li>
+</ul>
+<h2 id="3-深拷贝应用实例"><a href="#3-深拷贝应用实例" class="headerlink" title="3. 深拷贝应用实例"></a>3. 深拷贝应用实例</h2><h3 id="3-1-方式一：重写-clone-方法"><a href="#3-1-方式一：重写-clone-方法" class="headerlink" title="3.1 方式一：重写 clone() 方法"></a>3.1 方式一：重写 clone() 方法</h3><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SheepFriend</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="type">int</span> age;
+    <span class="keyword">private</span> String color;
 
-cd /opt/offline/docker/
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash"><span class="string">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span></span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="string">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span></span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/docker/Packages.gz</code></pre>
+    <span class="keyword">public</span> <span class="title function_">SheepFriend</span><span class="params">(String name, <span class="type">int</span> age, String color)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+        <span class="built_in">this</span>.age = age;
+        <span class="built_in">this</span>.color = color;
+    &#125;
+    <span class="comment">// 省略 getter / setter 方法</span>
 
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> SheepFriend <span class="title function_">clone</span><span class="params">()</span> &#123;
+        <span class="type">SheepFriend</span> <span class="variable">friend</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="keyword">try</span> &#123;
+            friend = (SheepFriend) <span class="built_in">super</span>.clone();
+        &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;
+            e.printStackTrace();
+        &#125;
+        <span class="keyword">return</span> friend;
+    &#125;
+&#125;
 
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sheep</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span>&#123; <span class="comment">// 实现Cloneable接口， 重写clone方法</span>
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="type">int</span> age;
+    <span class="keyword">private</span> String color;
 
-<h2 id="13-nfs"><a href="#13-nfs" class="headerlink" title="13. nfs"></a>13. nfs</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mrld/articles/14149708.html">https://www.cnblogs.com/mrld/articles/14149708.html</a></p>
-<pre><code class="highlight shell">mkdir -p /opt/offline/nfs/archives/
+    <span class="comment">// 对象.clone() 操作是浅拷贝，对于引用类型的属性，仅复制引用地址。</span>
+    <span class="keyword">public</span> SheepFriend friend; <span class="comment">// 这里添加了friend属性，属性值是一个引用类型</span>
 
-cd /opt/offline/nfs/archives/
+    <span class="keyword">public</span> <span class="title function_">Sheep</span><span class="params">(String name, <span class="type">int</span> age, String color)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+        <span class="built_in">this</span>.age = age;
+        <span class="built_in">this</span>.color = color;
+    &#125;
 
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances nfs-kernel-server nfs-common | grep &quot;^\w&quot; | sort -u)
+    <span class="comment">// 省略 getter / setter 方法</span>
 
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/nfs/Packages.gz</code></pre>
+    <span class="comment">/**</span>
+<span class="comment">     * 深拷贝方式一：重写 clone() 方法</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> Sheep <span class="title function_">clone</span><span class="params">()</span> &#123;
+        <span class="type">Sheep</span> <span class="variable">sheep</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="keyword">try</span> &#123;
+            sheep = (Sheep) <span class="built_in">super</span>.clone();
+            <span class="comment">// 将引用属性也调用clone() 方法复制一份</span>
+            <span class="type">SheepFriend</span> <span class="variable">sheepFriend</span> <span class="operator">=</span> friend.clone();
+            <span class="comment">// 重新设置引用属性</span>
+            sheep.friend = sheepFriend;
+        &#125; <span class="keyword">catch</span> (Exception e) &#123;
+            e.printStackTrace();
+        &#125;
+        <span class="keyword">return</span> sheep;
+    &#125;
 
+&#125;
 
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
 
-<h2 id="14-sftp"><a href="#14-sftp" class="headerlink" title="14. sftp"></a>14. sftp</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhumengke/articles/11225040.html">https://www.cnblogs.com/zhumengke/articles/11225040.html</a></p>
-<pre><code class="highlight shell">mkdir -p /opt/offline/sftp/archives/
+	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+		System.out.println(<span class="string">&quot;原型模式完成对象的创建&quot;</span>);
+		<span class="type">Sheep</span> <span class="variable">sheep</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sheep</span>(<span class="string">&quot;tom&quot;</span>, <span class="number">1</span>, <span class="string">&quot;白色&quot;</span>);
 
-cd /opt/offline/sftp/archives/
+		sheep.friend = <span class="keyword">new</span> <span class="title class_">SheepFriend</span>(<span class="string">&quot;jack&quot;</span>, <span class="number">2</span>, <span class="string">&quot;黑色&quot;</span>);
+		
+		<span class="type">Sheep</span> <span class="variable">sheep2</span> <span class="operator">=</span> sheep.clone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep3</span> <span class="operator">=</span> sheep.clone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep4</span> <span class="operator">=</span> sheep.clone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep5</span> <span class="operator">=</span> sheep.clone(); <span class="comment">//克隆</span>
+		
+		System.out.println(<span class="string">&quot;sheep2 =&quot;</span> + sheep2 + <span class="string">&quot;sheep2.friend=&quot;</span> + sheep2.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep3 =&quot;</span> + sheep3 + <span class="string">&quot;sheep3.friend=&quot;</span> + sheep3.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep4 =&quot;</span> + sheep4 + <span class="string">&quot;sheep4.friend=&quot;</span> + sheep4.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep5 =&quot;</span> + sheep5 + <span class="string">&quot;sheep5.friend=&quot;</span> + sheep5.friend.hashCode());
 
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances vsftpd | grep &quot;^\w&quot; | sort -u)
+	&#125;
 
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/sftp/Packages.gz</code></pre>
+&#125;</code></pre>
 
-
-
-<h2 id="15-dos2unix"><a href="#15-dos2unix" class="headerlink" title="15. dos2unix"></a>15. dos2unix</h2><pre><code class="highlight shell">mkdir -p /opt/offline/dos2unix/archives/
-
-cd /opt/offline/dos2unix/archives/
-
-sudo apt-get download $(apt-cache depends --recurse --no-recommends --no-suggests --no-conflicts --no-breaks --no-replaces --no-enhances dos2unix | grep &quot;^\w&quot; | sort -u)
-
-cd ..
-<span class="meta prompt_"></span>
-<span class="meta prompt_">#</span><span class="language-bash">带上-m，会将所有包全部建立依赖关系到 Packages.gz中，如此会有重复，但无需剔除重复的包</span>
-sudo dpkg-scanpackages -m . /dev/null | gzip -9c &gt; Packages.gz
-<span class="meta prompt_"> </span>
-<span class="meta prompt_"># </span><span class="language-bash">复制依赖关系文件到archives中,并删除无用的依赖关系文件</span>
-cp Packages.gz ./archives &amp;&amp; rm -rf /opt/offline/dos2unix/Packages.gz</code></pre>
-
-
-
-<h2 id="16-离线源打包"><a href="#16-离线源打包" class="headerlink" title="16. 离线源打包"></a>16. 离线源打包</h2><p>将上面制作好的连线源安装包，打包</p>
-<pre><code class="highlight shell">cd /opt/offline
-
-tar -zcf offline-source.tar.gz ./*</code></pre>
-
-<p><code>offline-source.tar.gz</code> 就是制作好的离线包</p>
-<h1 id="二、使用离线源安装服务器"><a href="#二、使用离线源安装服务器" class="headerlink" title="二、使用离线源安装服务器"></a>二、使用离线源安装服务器</h1><p>上面基于可连外网的服务器制作了离线源，并将离线源打成了一个tar包 ：<code>offline-source.tar.gz</code> ，现在就使用这个打包好的离线源，在断网的服务器上安装环境。</p>
-<h2 id="1-上传离线安装包"><a href="#1-上传离线安装包" class="headerlink" title="1. 上传离线安装包"></a>1. 上传离线安装包</h2><p>将 <code>offline-source.tar.gz</code> 上传到服务器上，可以通过U盘拷贝的方式，或者内网文件服务器下载。</p>
-<h2 id="2-配置离线源"><a href="#2-配置离线源" class="headerlink" title="2. 配置离线源"></a>2. 配置离线源</h2><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建离线文件存放目录</span>
-mkdir -p /opt/offline
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">解压离线文件</span>
-tar -zxvf offline-source.tar.gz -C /opt/offline/
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">备份源文件</span>
-mv /etc/apt/sources.list /etc/apt/sources.list.bak
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">映射本地源，这里可以使用vi</span>
-cat &gt;&gt;/etc/apt/sources.list &lt;&lt;EOF
-deb [trusted=yes] file:///opt/offline/apt-transport-https/ archives/
-deb [trusted=yes] file:///opt/offline/ca-certificates/ archives/
-deb [trusted=yes] file:///opt/offline/curl/ archives/
-deb [trusted=yes] file:///opt/offline/docker/ archives/
-deb [trusted=yes] file:///opt/offline/ffmpeg/ archives/
-deb [trusted=yes] file:///opt/offline/net-tools/ archives/
-deb [trusted=yes] file:///opt/offline/nfs/ archives/
-deb [trusted=yes] file:///opt/offline/ntp/ archives/
-deb [trusted=yes] file:///opt/offline/sftp/ archives/
-deb [trusted=yes] file:///opt/offline/software-properties-common/ archives/
-deb [trusted=yes] file:///opt/offline/ssh/ archives/
-deb [trusted=yes] file:///opt/offline/unzip/ archives/
-deb [trusted=yes] file:///opt/offline/vim/ archives/
-deb [trusted=yes] file:///opt/offline/wget/ archives/
-deb [trusted=yes] file:///opt/offline/dos2unix/ archives/
-EOF
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">更新</span>
-apt-get update -y</code></pre>
-
-
-
-<h2 id="3-测试安装"><a href="#3-测试安装" class="headerlink" title="3. 测试安装"></a>3. 测试安装</h2><pre><code class="highlight shell">//根据自己需求进行安装，例如：
-apt-get install -y wget</code></pre>
-
-
-
-<h2 id="4-使用离线源安装docker"><a href="#4-使用离线源安装docker" class="headerlink" title="4. 使用离线源安装docker"></a>4. 使用离线源安装docker</h2><pre><code class="highlight shell">sudo apt-get install -y docker-ce docker-ce-cli containerd.io</code></pre>
-
-
-
-<p><strong>参考文档</strong></p>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://always200.com/ubuntu-offline-sources/">ubuntu制作离线源</a></p>
+<p>运行结果：</p>
+<pre><code class="highlight shell">原型模式完成对象的创建
+sheep2 =com.george.prototype.deepclone.Sheep@1b6d3586sheep2.friend=1163157884
+sheep3 =com.george.prototype.deepclone.Sheep@74a14482sheep3.friend=356573597
+sheep4 =com.george.prototype.deepclone.Sheep@677327b6sheep4.friend=21685669
+sheep5 =com.george.prototype.deepclone.Sheep@7f31245asheep5.friend=1836019240</code></pre>
 </blockquote>
+<h3 id="3-2-通过对象的序列化实现-推荐"><a href="#3-2-通过对象的序列化实现-推荐" class="headerlink" title="3.2 通过对象的序列化实现 (推荐)"></a>3.2 通过对象的序列化实现 (推荐)</h3><p><strong>对象需要实现序列化接口</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Sheep</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span>, Cloneable&#123; <span class="comment">// 实现Cloneable接口， 重写clone方法</span>
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="type">int</span> age;
+    <span class="keyword">private</span> String color;
+
+    <span class="comment">// 对象.clone() 操作是浅拷贝，对于引用类型的属性，仅复制引用地址。</span>
+    <span class="keyword">public</span> SheepFriend friend; <span class="comment">// 这里添加了friend属性，属性值是一个引用类型</span>
+
+    <span class="keyword">public</span> <span class="title function_">Sheep</span><span class="params">(String name, <span class="type">int</span> age, String color)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+        <span class="built_in">this</span>.age = age;
+        <span class="built_in">this</span>.color = color;
+    &#125;
+
+    <span class="comment">// 省略 getter / setter 方法</span>
+
+    <span class="comment">/**</span>
+<span class="comment">     * 深拷贝-方式2：通过对象序列化实现(推荐)</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> Sheep <span class="title function_">deepClone</span><span class="params">()</span> &#123;
+        <span class="comment">// 创建流对象</span>
+        <span class="type">ByteArrayOutputStream</span> <span class="variable">bos</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="type">ObjectOutputStream</span> <span class="variable">oos</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="type">ByteArrayInputStream</span> <span class="variable">bis</span> <span class="operator">=</span> <span class="literal">null</span>;
+        <span class="type">ObjectInputStream</span> <span class="variable">ois</span> <span class="operator">=</span> <span class="literal">null</span>;
+
+        <span class="keyword">try</span> &#123;
+            <span class="comment">// 序列化</span>
+            bos = <span class="keyword">new</span> <span class="title class_">ByteArrayOutputStream</span>();
+            oos = <span class="keyword">new</span> <span class="title class_">ObjectOutputStream</span>(bos);
+            oos.writeObject(<span class="built_in">this</span>); <span class="comment">// 将当前对象以对象流的形式输出</span>
+
+            <span class="comment">// 反序列化</span>
+            bis = <span class="keyword">new</span> <span class="title class_">ByteArrayInputStream</span>(bos.toByteArray());
+            ois = <span class="keyword">new</span> <span class="title class_">ObjectInputStream</span>(bis);
+            <span class="type">Sheep</span> <span class="variable">sheep</span> <span class="operator">=</span> (Sheep) ois.readObject();
+            <span class="keyword">return</span> sheep;
+        &#125; <span class="keyword">catch</span> (IOException e) &#123;
+            e.printStackTrace();
+        &#125; <span class="keyword">catch</span> (ClassNotFoundException e) &#123;
+            e.printStackTrace();
+        &#125;
+        <span class="keyword">return</span> <span class="literal">null</span>;
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SheepFriend</span> <span class="keyword">implements</span> <span class="title class_">Serializable</span> &#123;
+    <span class="keyword">private</span> String name;
+    <span class="keyword">private</span> <span class="type">int</span> age;
+    <span class="keyword">private</span> String color;
+
+    <span class="keyword">public</span> <span class="title function_">SheepFriend</span><span class="params">(String name, <span class="type">int</span> age, String color)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+        <span class="built_in">this</span>.age = age;
+        <span class="built_in">this</span>.color = color;
+    &#125;
+
+    <span class="comment">// 省略 getter / setter 方法</span>
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+
+	<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+		System.out.println(<span class="string">&quot;原型模式完成对象的创建&quot;</span>);
+		<span class="type">Sheep</span> <span class="variable">sheep</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Sheep</span>(<span class="string">&quot;tom&quot;</span>, <span class="number">1</span>, <span class="string">&quot;白色&quot;</span>);
+
+		sheep.friend = <span class="keyword">new</span> <span class="title class_">SheepFriend</span>(<span class="string">&quot;jack&quot;</span>, <span class="number">2</span>, <span class="string">&quot;黑色&quot;</span>);
+
+		<span class="type">Sheep</span> <span class="variable">sheep2</span> <span class="operator">=</span> sheep.deepClone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep3</span> <span class="operator">=</span> sheep.deepClone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep4</span> <span class="operator">=</span> sheep.deepClone(); <span class="comment">//克隆</span>
+		<span class="type">Sheep</span> <span class="variable">sheep5</span> <span class="operator">=</span> sheep.deepClone(); <span class="comment">//克隆</span>
+		
+		System.out.println(<span class="string">&quot;sheep2 =&quot;</span> + sheep2 + <span class="string">&quot;sheep2.friend=&quot;</span> + sheep2.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep3 =&quot;</span> + sheep3 + <span class="string">&quot;sheep3.friend=&quot;</span> + sheep3.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep4 =&quot;</span> + sheep4 + <span class="string">&quot;sheep4.friend=&quot;</span> + sheep4.friend.hashCode());
+		System.out.println(<span class="string">&quot;sheep5 =&quot;</span> + sheep5 + <span class="string">&quot;sheep5.friend=&quot;</span> + sheep5.friend.hashCode());
+
+	&#125;
+
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">原型模式完成对象的创建
+sheep2 =com.george.prototype.deepclone.Sheep@3feba861sheep2.friend=1531448569
+sheep3 =com.george.prototype.deepclone.Sheep@6f496d9fsheep3.friend=1915910607
+sheep4 =com.george.prototype.deepclone.Sheep@10f87f48sheep4.friend=189568618
+sheep5 =com.george.prototype.deepclone.Sheep@2f4d3709sheep5.friend=1313922862</code></pre>
+</blockquote>
+<h1 id="五、原型模式的注意事项和细节"><a href="#五、原型模式的注意事项和细节" class="headerlink" title="五、原型模式的注意事项和细节"></a>五、原型模式的注意事项和细节</h1><ul>
+<li>创建新的对象比较复杂时，可以利用原型模式简化对象的创建过程，同时也能够提高效率</li>
+<li>不用重新初始化对象，而是动态地获得对象运行时的状态</li>
+<li>如果原始对象发生变化(增加或者减少属性) ，其它克隆对象的也会发生相应的变化，无需修改代码</li>
+<li>在实现深克隆的时候可能需要比较复杂的代码</li>
+<li><strong>缺点：</strong>需要为每一个类配备一个克隆方法，这对全新的类来说不是很难，但对已有的类进行改造时，需要修改 其源代码，违背了ocp 原则.</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
