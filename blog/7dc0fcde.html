@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>10-JUC进阶-Java对象内存布局和对象头 | George&#39;s Blog</title>
+  <title>Spring Boot整合Neo4j实现增删改查 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , juc ">
-  <meta name="description" content="10-JUC进阶-Java对象内存布局和对象头 | George&#39;s Blog">
+  <meta name="keywords" content=" neo4j , SpringBoot ">
+  <meta name="description" content="Spring Boot整合Neo4j实现增删改查 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#x6f;&#114;&#x67;&#101;&#x5f;&#x39;&#x35;&#x40;&#x31;&#x32;&#54;&#46;&#99;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1127,9 +1127,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-juc2/10-JUC进阶-Java对象内存布局和对象头" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-neo4j/Spring Boot整合Neo4j实现增删改查" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">10-JUC进阶-Java对象内存布局和对象头</h1>
+        <h1 class="article-title">Spring Boot整合Neo4j实现增删改查</h1>
     
     <div class="article-meta">
         
@@ -1139,7 +1139,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JUC">JUC</a>
+            <a  data-rel="neo4j">neo4j</a>
             
         </span>
         
@@ -1147,21 +1147,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
+            <a class="color1">neo4j</a>
             
-            <a class="color4">juc</a>
+            <a class="color1">SpringBoot</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-10-08 12:46:24'>2024-10-04 09:54</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-07 20:51:01'>2024-11-07 19:04</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.1k</span>
+        <span>字数:2.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1191,7 +1191,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AF%B9%E8%B1%A1%E5%9C%A8%E5%A0%86%E5%86%85%E5%AD%98%E4%B8%AD%E5%B8%83%E5%B1%80"><span class="toc-text">一、对象在堆内存中布局</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%98%E6%96%B9%E5%AE%9A%E4%B9%89"><span class="toc-text">1. 官方定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AF%B9%E8%B1%A1%E5%9C%A8%E5%A0%86%E5%86%85%E5%AD%98%E4%B8%AD%E7%9A%84%E5%AD%98%E5%82%A8%E5%B8%83%E5%B1%80"><span class="toc-text">2. 对象在堆内存中的存储布局</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%AF%B9%E8%B1%A1%E5%A4%B4"><span class="toc-text">2.1 对象头</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E5%AF%B9%E8%B1%A1%E6%A0%87%E8%AE%B0Mark-Word"><span class="toc-text">2.1.1 对象标记Mark Word</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E7%B1%BB%E5%85%83%E4%BF%A1%E6%81%AF-%E5%8F%88%E5%8F%AB%E7%B1%BB%E5%9E%8B%E6%8C%87%E9%92%88"><span class="toc-text">2.1.2 类元信息(又叫类型指针)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-%E5%AF%B9%E8%B1%A1%E5%A4%B4%E5%A4%9A%E5%A4%A7"><span class="toc-text">2.1.3 对象头多大</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AE%9E%E4%BE%8B%E6%95%B0%E6%8D%AE"><span class="toc-text">2.2 实例数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%AF%B9%E9%BD%90%E5%A1%AB%E5%85%85"><span class="toc-text">2.3 对齐填充</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%98%E7%BD%91%E7%90%86%E8%AE%BA"><span class="toc-text">3. 官网理论</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%86%8D%E8%AF%B4%E5%AF%B9%E8%B1%A1%E5%A4%B4%E7%9A%84MarkWord"><span class="toc-text">二、再说对象头的MarkWord</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-32%E4%BD%8D%E8%99%9A%E6%8B%9F%E6%9C%BA-%E4%BA%86%E8%A7%A3"><span class="toc-text">1. 32位虚拟机(了解)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-64%E4%BD%8D%E8%99%9A%E6%8B%9F%E6%9C%BA-%E9%87%8D%E8%A6%81"><span class="toc-text">2. 64位虚拟机(重要)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%88%86%E6%9E%90Object-obj-new-Object"><span class="toc-text">三、分析Object obj &#x3D; new Object()</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-JOL%E8%AF%81%E6%98%8E"><span class="toc-text">1. JOL证明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-JOL%E5%AE%98%E7%BD%91"><span class="toc-text">1.1 JOL官网</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%B5%8B%E8%AF%95%E6%A1%88%E4%BE%8B"><span class="toc-text">1.2 测试案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B2"><span class="toc-text">2. 案例2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%86%E4%BB%A3%E5%B9%B4%E9%BE%84"><span class="toc-text">3. 分代年龄</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">4. 参数说明</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81pom%E6%96%87%E4%BB%B6%E5%A6%82%E4%B8%8B"><span class="toc-text">一、pom文件如下</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%9Aapplication-yml"><span class="toc-text">二、配置文件：application.yml</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%90%AF%E5%8A%A8%E7%B1%BB-Neo4jApplication"><span class="toc-text">三、启动类 Neo4jApplication</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="toc-text">四、项目结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5"><span class="toc-text">五、增删改查</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81API%E6%B5%8B%E8%AF%95"><span class="toc-text">六、API测试</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1207,135 +1207,536 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、对象在堆内存中布局"><a href="#一、对象在堆内存中布局" class="headerlink" title="一、对象在堆内存中布局"></a>一、对象在堆内存中布局</h1><h2 id="1-官方定义"><a href="#1-官方定义" class="headerlink" title="1. 官方定义"></a>1. 官方定义</h2><p>在HotSpot虚拟机里,对象在堆内存中的存储布局可以划分为三个部分: 对象头(Header), 实例数据(Instance Data), 对齐填充(Padding).</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-104806.png" alt="对象内存存储布局"></p>
-<h2 id="2-对象在堆内存中的存储布局"><a href="#2-对象在堆内存中的存储布局" class="headerlink" title="2. 对象在堆内存中的存储布局"></a>2. 对象在堆内存中的存储布局</h2><h3 id="2-1-对象头"><a href="#2-1-对象头" class="headerlink" title="2.1 对象头"></a>2.1 对象头</h3><h4 id="2-1-1-对象标记Mark-Word"><a href="#2-1-1-对象标记Mark-Word" class="headerlink" title="2.1.1 对象标记Mark Word"></a>2.1.1 对象标记Mark Word</h4><p><strong>Mark Word保存什么?</strong></p>
-<p>默认存储对象的HashCode、分代年龄和锁标志位等信息。<br>这些信息都是与对象自身定义无关的数据，所以MarkWord被设计成一个非固定的数据结构以便在极小的空间内存存储尽量多的数据。<br>它会根据对象的状态复用自己的存储空间，也就是说在运行期间MarkWord里存储的数据会随着锁标志位的变化而变化。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-105323.png" alt="对象内部结构图"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-105333.png" alt="mark word"></p>
-<p>在64位系统中，Mark Word占了8个字节，类型指针占了8个字节，一共是16个字节</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-110133.png" alt="Mark Word 的存储结构"></p>
-<h4 id="2-1-2-类元信息-又叫类型指针"><a href="#2-1-2-类元信息-又叫类型指针" class="headerlink" title="2.1.2 类元信息(又叫类型指针)"></a>2.1.2 类元信息(又叫类型指针)</h4><p>类型指针指向方法区中类的元数据.</p>
-<p>对象指向它的类元数据的指针，虚拟机通过这个指针来确定这个对象是哪个类的实例。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-110248.png" alt="类型指针"></p>
-<h4 id="2-1-3-对象头多大"><a href="#2-1-3-对象头多大" class="headerlink" title="2.1.3 对象头多大"></a>2.1.3 对象头多大</h4><p>在64位系统中，Mark Word占了8个字节，类型指针占了8个字节，一共是16个字节。</p>
-<p>(在实际运行的过程中,JVM会默认开启压缩指针,压缩后对象头没有16个子节这么大.)</p>
-<h3 id="2-2-实例数据"><a href="#2-2-实例数据" class="headerlink" title="2.2 实例数据"></a>2.2 实例数据</h3><p>存放类的属性(Field)数据信息，包括父类的属性信息，<br>如果是<strong>数组</strong>的实例部分还包括<strong>数组的长度</strong>，这部分内存按4字节对齐。</p>
-<h3 id="2-3-对齐填充"><a href="#2-3-对齐填充" class="headerlink" title="2.3 对齐填充"></a>2.3 对齐填充</h3><p>虚拟机要求对象起始地址必须是8字节的整数倍。填充数据不是必须存在的，仅仅是为了字节对齐, 这部分内存按8字节补充对齐。</p>
-<h2 id="3-官网理论"><a href="#3-官网理论" class="headerlink" title="3. 官网理论"></a>3. 官网理论</h2><ul>
-<li><p>Hotspot术语表官网</p>
-<p><a target="_blank" rel="noopener" href="http://openjdk.java.net/groups/hotspot/docs/HotSpotGlossary.html">http://openjdk.java.net/groups/hotspot/docs/HotSpotGlossary.html</a></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-111833.png" alt="Hotspot术语表官网"></p>
-</li>
-<li><p>底层源码理论证明</p>
-<p><a target="_blank" rel="noopener" href="http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/89fb452b3688/src/share/vm/oops/oop.hpp">http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/89fb452b3688/src/share/vm/oops/oop.hpp</a></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-111932.png" alt="hotspot源码"></p>
-</li>
-</ul>
-<p><code>_mark</code>字段是 mark word，<code>_metadata</code> 是类指针 klass pointer，<br>对象头（object header）即是由这两个字段组成，这些术语可以参考Hotspot术语表，</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-112042.png" alt="说明"></p>
-<h1 id="二、再说对象头的MarkWord"><a href="#二、再说对象头的MarkWord" class="headerlink" title="二、再说对象头的MarkWord"></a>二、再说对象头的MarkWord</h1><h2 id="1-32位虚拟机-了解"><a href="#1-32位虚拟机-了解" class="headerlink" title="1. 32位虚拟机(了解)"></a>1. 32位虚拟机(了解)</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-112158.png" alt="32位虚拟机"></p>
-<h2 id="2-64位虚拟机-重要"><a href="#2-64位虚拟机-重要" class="headerlink" title="2. 64位虚拟机(重要)"></a>2. 64位虚拟机(重要)</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-112508.png" alt="64位虚拟机"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-112836.png" alt="对象内部结构图"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-112923.png" alt="HotSpot的实现"></p>
-<p>对象布局、GC回收和后面的锁升级就是对象标记MarkWord里面标志位的变化</p>
-<h1 id="三、分析Object-obj-new-Object"><a href="#三、分析Object-obj-new-Object" class="headerlink" title="三、分析Object obj &#x3D; new Object()"></a>三、分析Object obj &#x3D; new Object()</h1><h2 id="1-JOL证明"><a href="#1-JOL证明" class="headerlink" title="1. JOL证明"></a>1. JOL证明</h2><h3 id="1-1-JOL官网"><a href="#1-1-JOL官网" class="headerlink" title="1.1 JOL官网"></a>1.1 JOL官网</h3><p><a target="_blank" rel="noopener" href="http://openjdk.java.net/projects/code-tools/jol/">http://openjdk.java.net/projects/code-tools/jol/</a></p>
-<p><strong>pom</strong></p>
-<pre><code class="highlight xml"><span class="comment">&lt;!--</span>
-<span class="comment">官网：http://openjdk.java.net/projects/code-tools/jol/</span>
-<span class="comment">定位：分析对象在JVM的大小和分布</span>
-<span class="comment">--&gt;</span>
-<span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
-    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.openjdk.jol<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
-    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>jol-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
-    <span class="tag">&lt;<span class="name">version</span>&gt;</span>0.9<span class="tag">&lt;/<span class="name">version</span>&gt;</span>
-<span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></code></pre>
+        <p><strong>演示环境：</strong></p>
+<blockquote>
+<p>Neo4j: 3.5.5</p>
+<p>JDK: 1.8</p>
+<p>SpringBoot: 2.3.4</p>
+<p>Maven: 3.8</p>
+</blockquote>
+<p>关于如何搭建neo4j数据库，参考：<a href="https://georgechan95.github.io/blog/5c93903a.html">Docker部署Neo4j并导入CSV数据</a></p>
+<h1 id="一、pom文件如下"><a href="#一、pom文件如下" class="headerlink" title="一、pom文件如下"></a>一、pom文件如下</h1><pre><code class="highlight xml"><span class="tag">&lt;<span class="name">parent</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.3.4.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">relativePath</span>/&gt;</span> <span class="comment">&lt;!-- lookup parent from repository --&gt;</span>
+<span class="tag">&lt;/<span class="name">parent</span>&gt;</span>
+
+<span class="tag">&lt;<span class="name">properties</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">maven.compiler.source</span>&gt;</span>8<span class="tag">&lt;/<span class="name">maven.compiler.source</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">maven.compiler.target</span>&gt;</span>8<span class="tag">&lt;/<span class="name">maven.compiler.target</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">project.build.sourceEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.build.sourceEncoding</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">project.reporting.outputEncoding</span>&gt;</span>UTF-8<span class="tag">&lt;/<span class="name">project.reporting.outputEncoding</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">maven.test.skip</span>&gt;</span>true<span class="tag">&lt;/<span class="name">maven.test.skip</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">spring-boot.version</span>&gt;</span>2.3.4.RELEASE<span class="tag">&lt;/<span class="name">spring-boot.version</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">commons-lang3.version</span>&gt;</span>3.12.0<span class="tag">&lt;/<span class="name">commons-lang3.version</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">hutool-all.version</span>&gt;</span>5.8.6<span class="tag">&lt;/<span class="name">hutool-all.version</span>&gt;</span>
+<span class="tag">&lt;/<span class="name">properties</span>&gt;</span>
+
+<span class="tag">&lt;<span class="name">dependencies</span>&gt;</span>
+    <span class="comment">&lt;!--web依赖--&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+    <span class="comment">&lt;!-- spring boot 服务监控--&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-actuator<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+    <span class="comment">&lt;!-- aop --&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-aop<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+    <span class="comment">&lt;!--springboot读取自定义配置依赖--&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">optional</span>&gt;</span>true<span class="tag">&lt;/<span class="name">optional</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+    <span class="comment">&lt;!-- 测试依赖 --&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">exclusions</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">exclusion</span>&gt;</span>
+                <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.junit.vintage<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+                <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit-vintage-engine<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+            <span class="tag">&lt;/<span class="name">exclusion</span>&gt;</span>
+        <span class="tag">&lt;/<span class="name">exclusions</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+    <span class="comment">&lt;!-- commons-lang3 --&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.commons<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-lang3<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;commons-lang3.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+    <span class="comment">&lt;!-- lombok --&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">scope</span>&gt;</span>provided<span class="tag">&lt;/<span class="name">scope</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+    <span class="comment">&lt;!-- hutool工具 --&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>cn.hutool<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>hutool-all<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;hutool-all.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+    <span class="comment">&lt;!--整合neo4j--&gt;</span>
+    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-neo4j<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span>
+<span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span>
+
+<span class="tag">&lt;<span class="name">build</span>&gt;</span>
+    <span class="comment">&lt;!--配置jar包名称--&gt;</span>
+    <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>ioms-data-service<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">plugins</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">version</span>&gt;</span>$&#123;spring-boot.version&#125;<span class="tag">&lt;/<span class="name">version</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span>
+                <span class="tag">&lt;<span class="name">includeSystemScope</span>&gt;</span>true<span class="tag">&lt;/<span class="name">includeSystemScope</span>&gt;</span>
+                <span class="tag">&lt;<span class="name">fork</span>&gt;</span>true<span class="tag">&lt;/<span class="name">fork</span>&gt;</span>     <span class="comment">&lt;!--fork :  如果没有该项配置devtools不会起作用，即应用不会restart --&gt;</span>
+            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span>
+        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span>
+        <span class="tag">&lt;<span class="name">plugin</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.8.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span>
+            <span class="tag">&lt;<span class="name">configuration</span>&gt;</span>
+                <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span>
+                <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span>
+            <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span>
+        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span>
+    <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span>
+<span class="tag">&lt;/<span class="name">build</span>&gt;</span></code></pre>
 
 
 
-<h3 id="1-2-测试案例"><a href="#1-2-测试案例" class="headerlink" title="1.2 测试案例"></a>1.2 测试案例</h3><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyObject</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;
-        <span class="comment">//VM的细节详细情况</span>
-        System.out.println(VM.current().details());
-        <span class="comment">//所有的对象分配的字节都是8的整数倍。</span>
-        System.out.println(VM.current().objectAlignment());
+
+
+<h1 id="二、配置文件：application-yml"><a href="#二、配置文件：application-yml" class="headerlink" title="二、配置文件：application.yml"></a>二、配置文件：application.yml</h1><pre><code class="highlight yaml"><span class="attr">server:</span>
+  <span class="comment"># 程序启动端口</span>
+  <span class="attr">port:</span> <span class="number">1180</span>
+<span class="attr">spring:</span>
+  <span class="attr">data:</span>
+    <span class="attr">neo4j:</span>
+      <span class="comment"># neo4j用户名</span>
+      <span class="attr">username:</span> <span class="string">neo4j</span>
+      <span class="comment"># neo4j密码</span>
+      <span class="attr">password:</span> <span class="number">123456</span>
+      <span class="comment"># 程序链接数据库地址</span>
+      <span class="attr">uri:</span> <span class="string">bolt://192.168.6.131:7687</span>
+<span class="attr">logging:</span>
+  <span class="attr">level:</span>
+    <span class="comment"># 打印neo4j日志</span>
+    <span class="attr">org.springframework.data.neo4j:</span> <span class="string">debug</span></code></pre>
+
+
+
+
+
+<h1 id="三、启动类-Neo4jApplication"><a href="#三、启动类-Neo4jApplication" class="headerlink" title="三、启动类 Neo4jApplication"></a>三、启动类 Neo4jApplication</h1><pre><code class="highlight java"><span class="meta">@Slf4j</span>
+<span class="meta">@SpringBootApplication</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Neo4jApplication</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        SpringApplication.run(Neo4jApplication.class, args);
+        log.info(<span class="string">&quot;neo4j-demo启动成功&quot;</span>);
     &#125;
 &#125;</code></pre>
 
-<p>打印如下:</p>
-<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">WARNING: Unable to get Instrumentation. Dynamic Attach failed. You may add this JAR as -javaagent manually, or supply -Djdk.attach.allowAttachSelf</span>
-<span class="meta prompt_"># </span><span class="language-bash">Running 64-bit HotSpot VM.</span>
-<span class="meta prompt_"># </span><span class="language-bash">Using compressed oop with 3-bit <span class="built_in">shift</span>.</span>
-<span class="meta prompt_"># </span><span class="language-bash">Using compressed klass with 0x0000000800000000 base address and 0-bit <span class="built_in">shift</span>.</span>
-<span class="meta prompt_"># </span><span class="language-bash">Objects are 8 bytes aligned.</span>
-<span class="meta prompt_"># </span><span class="language-bash">Field sizes by <span class="built_in">type</span>: 4, 1, 1, 2, 2, 4, 4, 8, 8 [bytes]</span>
-<span class="meta prompt_"># </span><span class="language-bash">Array element sizes: 4, 1, 1, 2, 2, 4, 4, 8, 8 [bytes]</span>
 
-8</code></pre>
 
-<p>从日志可以看出,对象是 8 子节对齐的.</p>
-<h2 id="2-案例2"><a href="#2-案例2" class="headerlink" title="2. 案例2"></a>2. 案例2</h2><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MyObject</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;
-        <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();
-        System.out.println( ClassLayout.parseInstance(o).toPrintable());
+
+
+<h1 id="四、项目结构"><a href="#四、项目结构" class="headerlink" title="四、项目结构"></a>四、项目结构</h1><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-202636.png" alt="项目结构"></p>
+<h1 id="五、增删改查"><a href="#五、增删改查" class="headerlink" title="五、增删改查"></a>五、增删改查</h1><p>这里演示简单的单表增删改查操作，关于节点的关系维护，后面再做讲解。</p>
+<blockquote>
+<p>数据实体类：CompanyEntryNode</p>
+<p>主键：uuid，通过@Id标识，通过@GeneratedValue在插入数据库时自动生成</p>
+</blockquote>
+<pre><code class="highlight java"><span class="meta">@NodeEntity(value = &quot;CompanyNode&quot;, label = &quot;公司节点&quot;)</span> <span class="comment">// value：节点的Lable，label:用户描述该类</span>
+<span class="meta">@Data</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CompanyEntryNode</span> &#123;
+    <span class="meta">@Id</span>
+    <span class="meta">@GeneratedValue(strategy = UuidStrategy.class)</span> <span class="comment">// 将字段ID标识为主键，配合 @GeneratedValue 自动生成id值， 生成策略默认是 InternalIdStrategy.class 生成的Long值</span>
+    <span class="keyword">private</span> String uuid;
+    <span class="comment">/**</span>
+<span class="comment">     * 名称</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String name;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 公司表id</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String companyId;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 类型</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String type;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 别名</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String aliasName;
+    <span class="comment">/**</span>
+<span class="comment">     * 行业</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String industry;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 经营范围</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String scope;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 简介</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String introduction;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 图片路径</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String imagePath;
+    <span class="comment">/**</span>
+<span class="comment">     * 状态 0草稿 1已审核</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String status;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 修改人Id</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String modifyUserId;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 修改时间</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> Long modifyTime;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 创建人Id</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> String createUserId;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 创建时间</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> Long createTime;
+&#125;</code></pre>
+
+
+
+<blockquote>
+<p>持久层：CompanyEntryRepository</p>
+<p>通过继承 Neo4jRepository&lt;Entity, ID&gt;, spring-data-neo4j 已经替我们完成大部分的增删改查的操作了，但是仍不能满足复杂查询，删除的需要。所以这里也通过 Cypher 语句以及传参的形式完成复杂需求的开发。</p>
+</blockquote>
+<pre><code class="highlight java"><span class="meta">@Repository</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">CompanyEntryRepository</span> <span class="keyword">extends</span> <span class="title class_">Neo4jRepository</span>&lt;CompanyEntryNode, String&gt; &#123; <span class="comment">// &lt;实体类, 主键&gt;</span>
+
+    <span class="comment">/**</span>
+<span class="comment">     * 根据公司id判断 公司是否已经存在</span>
+<span class="comment">     * match(n:CompanyNode &#123;companyId: &quot;id1&quot;&#125;) return n.aliasName;</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId 查询参数companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@Query(&quot;match(n:CompanyNode &#123;companyId: &#123;companyId&#125;&#125;) return n.introduction&quot;)</span>
+    List&lt;String&gt; <span class="title function_">existsByCompanyId</span><span class="params">(String companyId)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 根据companyId删除数据</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId 查询参数companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@Query(&quot;match(n:CompanyNode &#123;companyId: &#123;companyId&#125;&#125;) delete n&quot;)</span>
+    <span class="keyword">void</span> <span class="title function_">deleteByCompanyId</span><span class="params">(String companyId)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 删除实体类的某个属性</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId 查询参数companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@Query(&quot;match(n:CompanyNode &#123;companyId: &#123;companyId&#125;&#125;) remove n.type&quot;)</span>
+    <span class="keyword">void</span> <span class="title function_">removeTypeByCompanyId</span><span class="params">(String companyId)</span>;
+&#125;</code></pre>
+
+
+
+<blockquote>
+<p>Service层：CompanyEntryService、CompanyEntryServiceImpl、</p>
+<p>通过调用 CompanyEntryRepository 完成数据的操作</p>
+</blockquote>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">CompanyEntryService</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 新增数据</span>
+<span class="comment">     * <span class="doctag">@param</span> entryNode</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    R <span class="title function_">save</span><span class="params">(CompanyEntryNode entryNode)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 根据主键ID，主键：uuid</span>
+<span class="comment">     * <span class="doctag">@param</span> uuid</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    R <span class="title function_">deleteById</span><span class="params">(String uuid)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 根据 companyId 属性删除数据</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    R <span class="title function_">deleteByCompanyId</span><span class="params">(String companyId)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 删除实体类的type属性</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId 查询参数companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    R <span class="title function_">removeType</span><span class="params">(String companyId)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 数据更新</span>
+<span class="comment">     * <span class="doctag">@param</span> entryNode</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    R <span class="title function_">update</span><span class="params">(CompanyEntryNode entryNode)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 获取所有数据</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    List&lt;CompanyEntryNode&gt; <span class="title function_">getAll</span><span class="params">()</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 根据companyId查询</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    List&lt;String&gt; <span class="title function_">getByCompanyId</span><span class="params">(String companyId)</span>;
+
+&#125;
+
+
+<span class="meta">@Slf4j</span>
+<span class="meta">@Service</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CompanyEntryServiceImpl</span> <span class="keyword">implements</span> <span class="title class_">CompanyEntryService</span> &#123;
+    <span class="meta">@Autowired</span>
+    <span class="keyword">private</span> CompanyEntryRepository companyEntryRepository;
+
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> R <span class="title function_">save</span><span class="params">(CompanyEntryNode entryNode)</span> &#123;
+        <span class="type">CompanyEntryNode</span> <span class="variable">data</span> <span class="operator">=</span> companyEntryRepository.save(entryNode);
+        <span class="keyword">if</span> (ObjectUtils.isEmpty(data)) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>(<span class="literal">false</span>, CommonConstants.FAIL, <span class="string">&quot;操作失败&quot;</span>);
+
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>(data);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> R <span class="title function_">deleteById</span><span class="params">(String uuid)</span> &#123;
+        companyEntryRepository.deleteById(uuid);
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>();
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> R <span class="title function_">deleteByCompanyId</span><span class="params">(String companyId)</span> &#123;
+        <span class="keyword">try</span> &#123;
+            companyEntryRepository.deleteByCompanyId(companyId);
+        &#125; <span class="keyword">catch</span> (Exception e) &#123;
+            e.printStackTrace();
+            <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>(<span class="literal">false</span>, CommonConstants.FAIL, <span class="string">&quot;操作失败&quot;</span>);
+        &#125;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>();
+    &#125;
+
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> R <span class="title function_">removeType</span><span class="params">(String companyId)</span> &#123;
+        companyEntryRepository.removeTypeByCompanyId(companyId);
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>();
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> R <span class="title function_">update</span><span class="params">(CompanyEntryNode entryNode)</span> &#123;
+        <span class="keyword">if</span> (StringUtils.isEmpty(entryNode.getUuid())) <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>(<span class="literal">false</span>, CommonConstants.FAIL, <span class="string">&quot;操作失败，参数异常&quot;</span>);
+
+        <span class="type">CompanyEntryNode</span> <span class="variable">data</span> <span class="operator">=</span> companyEntryRepository.save(entryNode);
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>(data);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> List&lt;CompanyEntryNode&gt; <span class="title function_">getAll</span><span class="params">()</span> &#123;
+        Iterable&lt;CompanyEntryNode&gt; all = companyEntryRepository.findAll();
+        List&lt;CompanyEntryNode&gt; companyEntryNodes = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+        CollectionUtil.addAll(companyEntryNodes, all);
+        <span class="keyword">return</span> companyEntryNodes;
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> List&lt;String&gt; <span class="title function_">getByCompanyId</span><span class="params">(String companyId)</span> &#123;
+        List&lt;String&gt; names = companyEntryRepository.existsByCompanyId(companyId);
+        <span class="keyword">return</span> names;
     &#125;
 &#125;</code></pre>
 
-<p>打印如下:</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-115343.png" alt="jdk8"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-114547.png" alt="image-20241004114546567"></p>
-<table>
-<thead>
-<tr>
-<th>属性</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>OFFSET</td>
-<td>偏移量，也就是到这个字段位置所占用的byte数</td>
-</tr>
-<tr>
-<td>SIZE</td>
-<td>后面类型的字节大小</td>
-</tr>
-<tr>
-<td>TYPE</td>
-<td>是Class中定义的类型</td>
-</tr>
-<tr>
-<td>DESCRIPTION</td>
-<td>DESCRIPTION是类型的描述</td>
-</tr>
-<tr>
-<td>VALUE</td>
-<td>VALUE是TYPE在内存中的值</td>
-</tr>
-</tbody></table>
-<h2 id="3-分代年龄"><a href="#3-分代年龄" class="headerlink" title="3. 分代年龄"></a>3. 分代年龄</h2><p>GC年龄采用4位bit存储，最大为15，例如 <code>-XX:MaxTenuringThreshold=15</code> 参数默认值就是15</p>
-<p>如果设置参数超过15则会报错:</p>
-<pre><code class="highlight shell">Error: Could not create the Java Virtual Machine.
-Error: A fatal exception has occurred. Program will exit.
-MaxTenuringThreshold of 16 is invalid; must be between 0 and 15</code></pre>
+
+
+<blockquote>
+<p>Controller层：CompanyEntryController</p>
+<p>对Service层调用</p>
+</blockquote>
+<pre><code class="highlight java"><span class="meta">@Slf4j</span>
+<span class="meta">@RestController</span>
+<span class="meta">@RequestMapping(value = &quot;/companyEntry&quot;)</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CompanyEntryController</span> &#123;
+    <span class="meta">@Autowired</span>
+    <span class="keyword">private</span> CompanyEntryService companyEntryService;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 新增数据</span>
+<span class="comment">     * <span class="doctag">@param</span> node</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@PostMapping(&quot;/save&quot;)</span>
+    <span class="keyword">public</span> R <span class="title function_">save</span><span class="params">(<span class="meta">@RequestBody</span> CompanyEntryNode node)</span> &#123;
+        <span class="type">R</span> <span class="variable">result</span> <span class="operator">=</span> companyEntryService.save(node);
+        <span class="keyword">return</span> result;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 根据主键删除</span>
+<span class="comment">     * <span class="doctag">@param</span> uuid</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@DeleteMapping(&quot;/deleteById&quot;)</span>
+    <span class="keyword">public</span> R <span class="title function_">deleteById</span><span class="params">(<span class="meta">@RequestParam(value = &quot;uuid&quot;, required = false)</span> String uuid)</span> &#123;
+        <span class="type">R</span> <span class="variable">result</span> <span class="operator">=</span> companyEntryService.deleteById(uuid);
+        <span class="keyword">return</span> result;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 根据属性查询后删除</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId 查询条件companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@DeleteMapping(&quot;/deleteByParam&quot;)</span>
+    <span class="keyword">public</span> R <span class="title function_">deleteByParam</span><span class="params">(<span class="meta">@RequestParam(value = &quot;companyId&quot;, required = false)</span> String companyId)</span> &#123;
+        <span class="type">R</span> <span class="variable">result</span> <span class="operator">=</span> companyEntryService.deleteByCompanyId(companyId);
+        <span class="keyword">return</span> result;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 删除实体类的某个属性字段</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId 查询条件companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@GetMapping(&quot;/removeType&quot;)</span>
+    <span class="keyword">public</span> R <span class="title function_">removeType</span><span class="params">(<span class="meta">@RequestParam(value = &quot;companyId&quot;, required = false)</span> String companyId)</span> &#123;
+        <span class="type">R</span> <span class="variable">result</span> <span class="operator">=</span> companyEntryService.removeType(companyId);
+        <span class="keyword">return</span> result;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 数据更新</span>
+<span class="comment">     * <span class="doctag">@param</span> node</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@PostMapping(&quot;/update&quot;)</span>
+    <span class="keyword">public</span> R <span class="title function_">update</span><span class="params">(<span class="meta">@RequestBody</span> CompanyEntryNode node)</span> &#123;
+        <span class="type">R</span> <span class="variable">result</span> <span class="operator">=</span> companyEntryService.update(node);
+        <span class="keyword">return</span> result;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 获取所有Company数据</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@GetMapping(&quot;/getAll&quot;)</span>
+    <span class="keyword">public</span> R&lt;List&lt;CompanyEntryNode&gt;&gt; <span class="title function_">getAll</span><span class="params">()</span> &#123;
+        List&lt;CompanyEntryNode&gt; list = companyEntryService.getAll();
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>(list);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 根据CompanyId查询</span>
+<span class="comment">     * <span class="doctag">@param</span> companyId</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@GetMapping(&quot;/getNameByCompanyId&quot;)</span>
+    <span class="keyword">public</span> R&lt;List&lt;String&gt;&gt; <span class="title function_">getNameByCompanyId</span><span class="params">(<span class="meta">@RequestParam(value = &quot;companyId&quot;, required = false)</span> String companyId)</span> &#123;
+        List&lt;String&gt; names = companyEntryService.getByCompanyId(companyId);
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">R</span>&lt;&gt;(names);
+    &#125;
+&#125;</code></pre>
 
 
 
-<h2 id="4-参数说明"><a href="#4-参数说明" class="headerlink" title="4. 参数说明"></a>4. 参数说明</h2><ul>
-<li><p>查看默认的参数</p>
-<p><code>java -XX:+PrintCommandLineFlags -version</code></p>
-<pre><code class="highlight plaintext">-XX:InitialHeapSize=532618688 -XX:MaxHeapSize=8521899008 -XX:+PrintCommandLineFlags -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation -XX:+UseParallelGC
-java version &quot;1.8.0_241&quot;
-Java(TM) SE Runtime Environment (build 1.8.0_241-b07)
-Java HotSpot(TM) 64-Bit Server VM (build 25.241-b07, mixed mode)</code></pre>
 
-<p><code>-XX:+UseCompressedClassPointers</code> 表示默认开启了压缩指针, 因此对象头打印结果,类型指针不是理论上的8子节,变成了4子节.</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-115751.png" alt="自动对齐"></p>
-</li>
-<li><p>手动关闭压缩</p>
-<p><code>-XX:-UseCompressedClassPointers</code></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/10/04/20241004-120017.png" alt="关闭了自动压缩"></p>
-</li>
-</ul>
+
+<h1 id="六、API测试"><a href="#六、API测试" class="headerlink" title="六、API测试"></a>六、API测试</h1><blockquote>
+<p>01-新增数据</p>
+</blockquote>
+<pre><code class="highlight json"><span class="punctuation">&#123;</span>
+    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;肯德基&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;companyId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;f1&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fast food&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;aliasName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;肯德基&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;industry&quot;</span><span class="punctuation">:</span> <span class="string">&quot;food&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;introduction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;做快餐肯德基&quot;</span>
+<span class="punctuation">&#125;</span></code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-203759.png" alt="新增数据"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-203930.png" alt="新增数据"></p>
+<blockquote>
+<p>02-根据主键删除</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-203850.png" alt="02-根据主键删除"></p>
+<blockquote>
+<p>03-根据属性查询后删除</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-204428.png" alt="03-根据属性查询后删除"></p>
+<blockquote>
+<p>04-删除实体类的某个属性字段</p>
+<p>这里将匹配到Company对象的type属性置为null</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-204125.png" alt="image-20241107204124647"></p>
+<blockquote>
+<p>05-更新数据</p>
+</blockquote>
+<pre><code class="highlight json"><span class="punctuation">&#123;</span>
+    <span class="attr">&quot;uuid&quot;</span><span class="punctuation">:</span> <span class="string">&quot;d7de403d-0262-4589-9116-87dde707aae4&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;肯德基&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;companyId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;f1&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;fast food&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;aliasName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;肯德基&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;industry&quot;</span><span class="punctuation">:</span> <span class="string">&quot;food&quot;</span><span class="punctuation">,</span>
+    <span class="attr">&quot;introduction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;做快餐肯德基更新了~~~~&quot;</span>
+<span class="punctuation">&#125;</span></code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-204355.png" alt="05-更新数据"></p>
+<blockquote>
+<p>06-查询所有数据</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-204600.png" alt="06-查询所有数据"></p>
+<blockquote>
+<p>07-根据参数查询</p>
+</blockquote>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/07/20241107-204656.png" alt="07-根据参数查询"></p>
+<p>到此基于Spring Boot对Neo4j的增删该查就完成了，后面再更新如果通过Java对节点间的关系进行维护。</p>
+<blockquote>
+<p>参考链接</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/column/c_1364222745673261056">https://www.zhihu.com/column/c_1364222745673261056</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_35754073/article/details/137144515">https://blog.csdn.net/qq_35754073/article/details/137144515</a></p>
+</blockquote>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
