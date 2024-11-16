@@ -9,17 +9,26 @@
   <meta name="keywords" content=" java , juc ">
   <meta name="description" content="07-JUC进阶-CAS | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#114;&#103;&#x65;&#x5f;&#x39;&#x35;&#64;&#49;&#50;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta name="description" content="一、传统方式解决手机操作问题现在对不同手机类型的不同品牌实现操作编程（比如：开机、关机、上网，打电话等），如图：  UML类图  问题分析  扩展性问题（类爆炸）：如果我们再增加手机的样式（旋转式），就需要增加各个品牌手机的类；同样如果我们增加一个手机品牌，也要在各个手机样式类下增加 违反了单一职责原则，当我们增加手机样式时，要同时增加所有品牌的手机，这样增加了代码维护成本  解决方案-使用桥接模">
+<meta property="og:type" content="article">
+<meta property="og:title" content="09-桥接模式">
+<meta property="og:url" content="https://georgechan95.github.io/blog/c7419cfa.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#114;&#103;&#x65;&#x5f;&#x39;&#x35;&#64;&#49;&#50;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="一、传统方式解决手机操作问题现在对不同手机类型的不同品牌实现操作编程（比如：开机、关机、上网，打电话等），如图：  UML类图  问题分析  扩展性问题（类爆炸）：如果我们再增加手机的样式（旋转式），就需要增加各个品牌手机的类；同样如果我们增加一个手机品牌，也要在各个手机样式类下增加 违反了单一职责原则，当我们增加手机样式时，要同时增加所有品牌的手机，这样增加了代码维护成本  解决方案-使用桥接模">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
-<meta property="article:modified_time" content="2024-06-22T10:36:12.823Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-120934.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-121006.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-121618.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-133618.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-135126.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-135208.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-135432.png">
+<meta property="article:published_time" content="2024-11-14T12:51:00.000Z">
+<meta property="article:modified_time" content="2024-11-16T06:03:46.011Z">
 <meta property="article:author" content="George">
+<meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-120934.png">
 
 
 <link rel="icon" href="/img/favicon.png">
