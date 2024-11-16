@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>09-ThreadPool-线程池 | George&#39;s Blog</title>
+  <title>09-桥接模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , juc ">
-  <meta name="description" content="09-ThreadPool-线程池 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="09-桥接模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#114;&#103;&#x65;&#x5f;&#x39;&#x35;&#64;&#49;&#50;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1163,9 +1163,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-juc/09-ThreadPool-线程池" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/09-桥接模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">09-ThreadPool-线程池</h1>
+        <h1 class="article-title">09-桥接模式</h1>
     
     <div class="article-meta">
         
@@ -1175,7 +1175,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JUC">JUC</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1183,21 +1183,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
-            
-            <a class="color4">juc</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-18 15:30:50'>2024-09-13 20:10</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-16 14:02:39'>2024-11-14 20:51</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:3.2k</span>
+        <span>字数:1.4k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1227,7 +1225,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%AE%80%E4%BB%8B"><span class="toc-text">一、线程池简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%8F%82%E6%95%B0%E8%AF%B4%E6%98%8E"><span class="toc-text">二、线程池参数说明</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%B8%B8%E7%94%A8%E5%8F%82%E6%95%B0-%E9%87%8D%E7%82%B9"><span class="toc-text">1. 常用参数(重点)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%8B%92%E7%BB%9D%E7%AD%96%E7%95%A5-%E9%87%8D%E7%82%B9"><span class="toc-text">2. 拒绝策略(重点)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E7%A7%8D%E7%B1%BB%E4%B8%8E%E5%88%9B%E5%BB%BA"><span class="toc-text">三、线程池的种类与创建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-newCachedThreadPool-%E5%B8%B8%E7%94%A8"><span class="toc-text">1. newCachedThreadPool(常用)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-newFixedThreadPool-%E5%B8%B8%E7%94%A8"><span class="toc-text">2. newFixedThreadPool(常用)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-newSingleThreadExecutor-%E5%B8%B8%E7%94%A8"><span class="toc-text">3. newSingleThreadExecutor(常用)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-newScheduleThreadPool-%E4%BA%86%E8%A7%A3"><span class="toc-text">4. newScheduleThreadPool(了解)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-newWorkStealingPool"><span class="toc-text">5. newWorkStealingPool</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">四、线程池入门案例</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%BA%95%E5%B1%82%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86-%E9%87%8D%E8%A6%81"><span class="toc-text">五、线程池底层工作原理(重要)</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9-%E9%87%8D%E8%A6%81"><span class="toc-text">六、注意事项(重要)</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BC%A0%E7%BB%9F%E6%96%B9%E5%BC%8F%E8%A7%A3%E5%86%B3%E6%89%8B%E6%9C%BA%E6%93%8D%E4%BD%9C%E9%97%AE%E9%A2%98"><span class="toc-text">一、传统方式解决手机操作问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F-Bridge-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-text">二、桥接模式(Bridge)-基本介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E6%9C%AC%E4%BB%8B%E7%BB%8D"><span class="toc-text">1. 基本介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F-Bridge-%E5%8E%9F%E7%90%86%E7%B1%BB%E5%9B%BE"><span class="toc-text">2. 桥接模式(Bridge)-原理类图</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A1%A5%E6%8E%A5%E6%A8%A1%E5%BC%8F%E8%A7%A3%E5%86%B3%E6%89%8B%E6%9C%BA%E6%93%8D%E4%BD%9C%E9%97%AE%E9%A2%98"><span class="toc-text">三、桥接模式解决手机操作问题</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%AE%BE%E8%AE%A1UML%E7%B1%BB%E5%9B%BE"><span class="toc-text">1. 设计UML类图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">2. 代码实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81JDK-%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90"><span class="toc-text">四、JDK 源码分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9%E5%92%8C%E7%BB%86%E8%8A%82"><span class="toc-text">五、注意事项和细节</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1243,291 +1241,261 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、线程池简介"><a href="#一、线程池简介" class="headerlink" title="一、线程池简介"></a>一、线程池简介</h1><p>线程池（英语：thread pool）：一种线程使用模式。线程过多会带来调度开销，进而影响缓存局部性和整体性能。而线程池维护着多个线程，等待着监督管理者分配可并发执行的任务。这避免了在处理短时间任务时创建与销毁线程的代价。线程池不仅能够保证内核的充分利用，还能防止过分调度。</p>
-<p>例子： 10 年前单核 CPU 电脑，假的多线程，像马戏团小丑玩多个球，CPU 需要来回切换。 现在是多核电脑，多个线程各自跑在独立的 CPU 上，不用切换效率高</p>
-<p><strong>线程池的优势：</strong> 线程池做的工作只要是控制运行的线程数量，处理过程中将任务放入队列，然后在线程创建后启动这些任务，如果线程数量超过了最大数量，超出数量的线程排队等候，等其他线程执行完毕，再从队列中取出任务来执行。</p>
-<p><strong>它的主要特点为：</strong></p>
+        <h1 id="一、传统方式解决手机操作问题"><a href="#一、传统方式解决手机操作问题" class="headerlink" title="一、传统方式解决手机操作问题"></a>一、传统方式解决手机操作问题</h1><p>现在对不同手机类型的不同品牌实现操作编程（比如：开机、关机、上网，打电话等），如图：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-120934.png" alt="桥接模式-手机型号"></p>
+<p><strong>UML类图</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-121006.png" alt="桥接模式-UML类图"></p>
+<p><strong>问题分析</strong></p>
 <ul>
-<li>降低资源消耗: 通过重复利用已创建的线程降低线程创建和销毁造成的销耗。</li>
-<li>提高响应速度: 当任务到达时，任务可以不需要等待线程创建就能立即执行。</li>
-<li>提高线程的可管理性: 线程是稀缺资源，如果无限制的创建，不仅会销耗系统资源，还会降低系统的稳定性，使用线程池可以进行统一的分配，调优和监控。</li>
-<li><strong>Java</strong> <strong>中的线程池是通过</strong> <strong>Executor</strong> <strong>框架实现的，该框架中用到了</strong> <strong>Executor，Executors,  ExecutorService，ThreadPoolExecutor这几个类</strong></li>
+<li><strong>扩展性问题（类爆炸）</strong>：如果我们再增加手机的样式（旋转式），就需要增加各个品牌手机的类；同样如果我们增加一个手机品牌，也要在各个手机样式类下增加</li>
+<li><strong>违反了单一职责原则</strong>，当我们增加手机样式时，要同时增加所有品牌的手机，这样增加了代码维护成本</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/16/20240916-103643.png" alt="Executors继承体系"></p>
-<h1 id="二、线程池参数说明"><a href="#二、线程池参数说明" class="headerlink" title="二、线程池参数说明"></a>二、线程池参数说明</h1><p>介绍 5 种类型的线程池</p>
-<h2 id="1-常用参数-重点"><a href="#1-常用参数-重点" class="headerlink" title="1. 常用参数(重点)"></a>1. 常用参数(重点)</h2><ul>
-<li>corePoolSize 线程池的核心线程数</li>
-<li>maximumPoolSize 能容纳的最大线程数</li>
-<li>keepAliveTime 空闲线程存活时间</li>
-<li>unit 存活的时间单位</li>
-<li>workQueue 存放提交但未执行任务的队列</li>
-<li>threadFactory 创建线程的工厂类</li>
-<li>handler 等待队列满后的拒绝策略</li>
+<p><strong>解决方案-使用桥接模式</strong></p>
+<h1 id="二、桥接模式-Bridge-基本介绍"><a href="#二、桥接模式-Bridge-基本介绍" class="headerlink" title="二、桥接模式(Bridge)-基本介绍"></a>二、桥接模式(Bridge)-基本介绍</h1><h2 id="1-基本介绍"><a href="#1-基本介绍" class="headerlink" title="1. 基本介绍"></a>1. 基本介绍</h2><ul>
+<li><strong>桥接模式(Bridge 模式)是指</strong>：将实现与抽象放在两个不同的类层次中，使两个层次可以独立改变。</li>
+<li>是一种结构型设计模式</li>
+<li>Bridge 模式基于类的最小设计原则，通过使用封装、聚合及继承等行为让不同的类承担不同的职责。它的主要 特点是把抽象(Abstraction)与行为实现(Implementation)分离开来，从而可以保持各部分的独立性以及应对他们的 功能扩展</li>
 </ul>
-<p>线程池中，有三个重要的参数，决定影响了拒绝策略：corePoolSize - 核心线程数，也即最小的线程数。workQueue - 阻塞队列 。 maximumPoolSize - 最大线程数</p>
-<p>当提交任务数大于 corePoolSize 的时候，会优先将任务放到 workQueue 阻塞队列中。当阻塞队列饱和后，会扩充线程池中线程数，直到达到 maximumPoolSize 最大线程数配置。此时，再多余的任务，则会触发线程池的拒绝策略了。</p>
-<p>总结起来，也就是一句话，当提交的任务数大于（<code>workQueue.size()</code> + <code>maximumPoolSize</code> ），就会触发线程池的拒绝策略。</p>
-<h2 id="2-拒绝策略-重点"><a href="#2-拒绝策略-重点" class="headerlink" title="2. 拒绝策略(重点)"></a>2. 拒绝策略(重点)</h2><ul>
-<li><strong>CallerRunsPolicy</strong>: 当触发拒绝策略，只要线程池没有关闭的话，则使用调用线程直接运行任务。一般并发比较小，性能要求不高，不允许失败。但是，由于调用者自己运行任务，如果任务提交速度过快，可能导致程序阻塞，性能效率上必然的损失较大</li>
-<li><strong>AbortPolicy</strong>: 丢弃任务，并抛出拒绝执行 RejectedExecutionException 异常信息。线程池默认的拒绝策略。必须处理好抛出的异常，否则会打断当前的执行流程，影响后续的任务执行。</li>
-<li><strong>DiscardPolicy</strong>: 直接丢弃，其他啥都没有</li>
-<li><strong>DiscardOldestPolicy</strong>: 当触发拒绝策略，只要线程池没有关闭的话，丢弃阻塞队列 workQueue 中最老的一个任务，并将新任务加入</li>
-</ul>
-<h1 id="三、线程池的种类与创建"><a href="#三、线程池的种类与创建" class="headerlink" title="三、线程池的种类与创建"></a>三、线程池的种类与创建</h1><h2 id="1-newCachedThreadPool-常用"><a href="#1-newCachedThreadPool-常用" class="headerlink" title="1. newCachedThreadPool(常用)"></a>1. newCachedThreadPool(常用)</h2><p><strong>作用</strong>：创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程.</p>
-<p><strong>特点</strong>: </p>
+<h2 id="2-桥接模式-Bridge-原理类图"><a href="#2-桥接模式-Bridge-原理类图" class="headerlink" title="2. 桥接模式(Bridge)-原理类图"></a>2. 桥接模式(Bridge)-原理类图</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-121618.png" alt="桥接模式-原理类图"></p>
+<p><strong>类图说明</strong></p>
 <ul>
-<li>线程池中数量没有固定，可达到最大值（<code>Interger. MAX_VALUE</code>）</li>
-<li>线程池中的线程可进行缓存重复利用和回收（回收默认时间为 1 分钟）</li>
-<li>当线程池中，没有可用线程，会重新创建一个线程</li>
+<li>Client 类：桥接模式的调用者</li>
+<li>抽象类(Abstraction) :维护了 Implementor &#x2F;  即它的实现类 ConcreteImplementorA.., 二者是聚合关系, Abstraction 充当桥接类</li>
+<li>RefinedAbstraction :  是 Abstraction 抽象类的子类</li>
+<li>Implementor :  行为实现类的接口</li>
+<li>ConcreteImplementorA&#x2F;B  ：行为的具体实现类</li>
+<li>从 UML 图：这里的抽象类和接口是聚合的关系，其实调用和被调用关系</li>
 </ul>
-<p><strong>创建方式：</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 可缓存线程池</span>
-<span class="comment"> *</span>
-<span class="comment"> * <span class="doctag">@return</span></span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title function_">newCachedThreadPool</span><span class="params">()</span> &#123;
+<h1 id="三、桥接模式解决手机操作问题"><a href="#三、桥接模式解决手机操作问题" class="headerlink" title="三、桥接模式解决手机操作问题"></a>三、桥接模式解决手机操作问题</h1><p>使用桥接模式改进传统方式，让程序具有搞好的扩展性，利用程序维护</p>
+<h2 id="1-设计UML类图"><a href="#1-设计UML类图" class="headerlink" title="1. 设计UML类图"></a>1. 设计UML类图</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-133618.png" alt="image-20241116133617754"></p>
+<h2 id="2-代码实现"><a href="#2-代码实现" class="headerlink" title="2. 代码实现"></a>2. 代码实现</h2><pre><code class="highlight java"><span class="comment">// 定义实现，对应 UML中的 Implementation</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Brand</span> &#123;
 
-    <span class="comment">/**</span>
-<span class="comment">     * corePoolSize 线程池的核心线程数</span>
-<span class="comment">     * maximumPoolSize 能容纳的最大线程数</span>
-<span class="comment">     * keepAliveTime 空闲线程存活时间</span>
-<span class="comment">     * unit 存活的时间单位</span>
-<span class="comment">     * workQueue 存放提交但未执行任务的队列</span>
-<span class="comment">     * threadFactory 创建线程的工厂类:可以省略</span>
-<span class="comment">     * handler 等待队列满后的拒绝策略:可以省略</span>
-<span class="comment">     */</span>
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(<span class="number">0</span>,
-            Integer.MAX_VALUE,
-            <span class="number">60L</span>,
-            TimeUnit.SECONDS,
-            <span class="keyword">new</span> <span class="title class_">SynchronousQueue</span>&lt;&gt;(),
-            Executors.defaultThreadFactory(),
-            <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy());
-&#125;</code></pre>
+    <span class="comment">// 开机</span>
+    <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span>;
 
-<p><strong>场景:</strong> 适用于创建一个可无限扩大的线程池，服务器负载压力较轻，执行时间较短，任务多的场景</p>
-<h2 id="2-newFixedThreadPool-常用"><a href="#2-newFixedThreadPool-常用" class="headerlink" title="2. newFixedThreadPool(常用)"></a>2. newFixedThreadPool(常用)</h2><p><strong>作用</strong>：创建一个可重用固定线程数的线程池，以共享的无界队列方式来运行这些线程。在任意点，在大多数线程会处于处理任务的活动状态。如果在所有线程处于活动状态时提交附加任务，则在有可用线程之前，附加任务将在队列中等待。如果在关闭前的执行期间由于失败而导致任何线程终止，那么一个新线程将代替它执行后续的任务（如果需要）。在某个线程被显式地关闭之前，池中的线程将一直存在。</p>
-<p><strong>特征：</strong></p>
-<ul>
-<li>线程池中的线程处于一定的量，可以很好的控制线程的并发量</li>
-<li>线程可以重复被使用，在显示关闭之前，都将一直存在</li>
-<li>超出一定量的线程被提交时候需在队列中等待</li>
-</ul>
-<p><strong>创建方式</strong>：</p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 固定长度线程池</span>
-<span class="comment"> * <span class="doctag">@return</span></span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title function_">newFixedThreadPool</span><span class="params">()</span>&#123;
-    <span class="comment">/**</span>
-<span class="comment">     * corePoolSize 线程池的核心线程数</span>
-<span class="comment">     * maximumPoolSize 能容纳的最大线程数</span>
-<span class="comment">     * keepAliveTime 空闲线程存活时间</span>
-<span class="comment">     * unit 存活的时间单位</span>
-<span class="comment">     * workQueue 存放提交但未执行任务的队列</span>
-<span class="comment">     * threadFactory 创建线程的工厂类:可以省略</span>
-<span class="comment">     * handler 等待队列满后的拒绝策略:可以省略</span>
-<span class="comment">     */</span>
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(<span class="number">10</span>,
-            <span class="number">10</span>,
-            <span class="number">0L</span>,
-            TimeUnit.SECONDS,
-            <span class="keyword">new</span> <span class="title class_">LinkedBlockingQueue</span>&lt;&gt;(),
-            Executors.defaultThreadFactory(),
-            <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy());
-&#125;</code></pre>
+    <span class="comment">// 关机</span>
+    <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span>;
 
-<p><strong>场景:</strong> 适用于可以预测线程数量的业务中，或者服务器负载较重，对线程数有严格限制的场景</p>
-<h2 id="3-newSingleThreadExecutor-常用"><a href="#3-newSingleThreadExecutor-常用" class="headerlink" title="3. newSingleThreadExecutor(常用)"></a>3. newSingleThreadExecutor(常用)</h2><p><strong>作用</strong>：创建一个使用单个 worker 线程的 Executor，以无界队列方式来运行该线程。（注意，如果因为在关闭前的执行期间出现失败而终止了此单个线程，那么如果需要，一个新线程将代替它执行后续的任务）。可保证顺序地执行各个任务，并且在任意给定的时间不会有多个线程是活动的。与其他等效的 newFixedThreadPool 不同，可保证无需重新配置此方法所返回的执行程序即可使用其他的线程。</p>
-<p><strong>特征：</strong> 线程池中最多执行 1 个线程，之后提交的线程活动将会排在队列中以此执行</p>
-<p><strong>创建方式：</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 单一线程池</span>
-<span class="comment"> *</span>
-<span class="comment"> * <span class="doctag">@return</span></span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title function_">newSingleThreadExecutor</span><span class="params">()</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">    * corePoolSize 线程池的核心线程数</span>
-<span class="comment">    * maximumPoolSize 能容纳的最大线程数</span>
-<span class="comment">    * keepAliveTime 空闲线程存活时间</span>
-<span class="comment">    * unit 存活的时间单位</span>
-<span class="comment">    * workQueue 存放提交但未执行任务的队列</span>
-<span class="comment">    * threadFactory 创建线程的工厂类:可以省略</span>
-<span class="comment">    * handler 等待队列满后的拒绝策略:可以省略</span>
-<span class="comment">    */</span>
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(<span class="number">1</span>,
-            <span class="number">1</span>,
-            <span class="number">0L</span>,
-            TimeUnit.SECONDS,
-            <span class="keyword">new</span> <span class="title class_">LinkedBlockingQueue</span>&lt;&gt;(),
-            Executors.defaultThreadFactory(),
-            <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy());
-&#125;</code></pre>
+    <span class="comment">// 打电话</span>
+    <span class="keyword">void</span> <span class="title function_">call</span><span class="params">()</span>;
 
-<p><strong>场景:</strong> 适用于需要保证顺序执行各个任务，并且在任意时间点，不会同时有多个线程的场景</p>
-<h2 id="4-newScheduleThreadPool-了解"><a href="#4-newScheduleThreadPool-了解" class="headerlink" title="4. newScheduleThreadPool(了解)"></a>4. newScheduleThreadPool(了解)</h2><p><strong>作用:</strong> 线程池支持定时以及周期性执行任务，创建一个 corePoolSize 为传入参数，最大线程数为整形的最大数的线程池</p>
-<p><strong>特征:</strong></p>
-<ul>
-<li>线程池中具有指定数量的线程，即便是空线程也将保留 </li>
-<li>可定时或者延迟执行线程活动</li>
-</ul>
-<p><strong>创建方式:</strong></p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title function_">newScheduledThreadPool</span><span class="params">(<span class="type">int</span> corePoolSize,</span>
-<span class="params">                                                              ThreadFactory threadFactory)</span> &#123;
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ScheduledThreadPoolExecutor</span>(corePoolSize,
-                                           threadFactory);
-&#125;</code></pre>
+    <span class="comment">// 设置手机款式</span>
+    <span class="keyword">void</span> <span class="title function_">setStype</span><span class="params">(String stype)</span>;
+&#125;
 
-<p><strong>场景:</strong> 适用于需要多个后台线程执行周期任务的场景</p>
-<h2 id="5-newWorkStealingPool"><a href="#5-newWorkStealingPool" class="headerlink" title="5. newWorkStealingPool"></a>5. newWorkStealingPool</h2><p>jdk1.8 提供的线程池，底层使用的是 ForkJoinPool 实现，创建一个拥有多个任务队列的线程池，可以减少连接数，创建当前可用 cpu 核数的线程来并行执行任务</p>
-<p><strong>创建方式:</strong></p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title function_">newWorkStealingPool</span><span class="params">(<span class="type">int</span> parallelism)</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">     * parallelism：并行级别，通常默认为 JVM 可用的处理器个数</span>
-<span class="comment">     * factory：用于创建 ForkJoinPool 中使用的线程。</span>
-<span class="comment">     * handler：用于处理工作线程未处理的异常，默认为 null</span>
-<span class="comment">     * asyncMode：用于控制 WorkQueue 的工作模式:队列---反队列</span>
-<span class="comment">     */</span>
-    <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ForkJoinPool</span>(parallelism,
-            ForkJoinPool.defaultForkJoinWorkerThreadFactory,
-            <span class="literal">null</span>,
-            <span class="literal">true</span>);
-&#125;</code></pre>
 
-<p><strong>场景:</strong> 适用于大耗时，可并行执行的场景</p>
-<h1 id="四、线程池入门案例"><a href="#四、线程池入门案例" class="headerlink" title="四、线程池入门案例"></a>四、线程池入门案例</h1><p><strong>场景: 火车站 3 个售票口, 10 个用户买票</strong></p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadPoolDemo1</span> &#123;
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Vivo</span> <span class="keyword">implements</span> <span class="title class_">Brand</span>&#123;
+    <span class="comment">// 款式</span>
+    <span class="keyword">private</span> String style;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> &#123;
+        System.out.println(<span class="built_in">this</span>.style + <span class="string">&quot; Vivo手机开机 &quot;</span>);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;
+        System.out.println(<span class="built_in">this</span>.style + <span class="string">&quot; Vivo手机关机 &quot;</span>);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">call</span><span class="params">()</span> &#123;
+        System.out.println(<span class="built_in">this</span>.style + <span class="string">&quot; Vivo手机打电话 &quot;</span>);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStype</span><span class="params">(String stype)</span> &#123;
+        <span class="built_in">this</span>.style = stype;
+    &#125;
+&#125;
+
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">XiaoMi</span> <span class="keyword">implements</span> <span class="title class_">Brand</span> &#123;
+
+	<span class="comment">// 款式</span>
+	<span class="keyword">private</span> String style;
+
+	<span class="meta">@Override</span>
+	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> &#123;
+		System.out.println(<span class="built_in">this</span>.style + <span class="string">&quot; 小米手机开机&quot;</span>);
+	&#125;
+
+	<span class="meta">@Override</span>
+	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;
+		System.out.println(<span class="built_in">this</span>.style + <span class="string">&quot; 小米手机关机 &quot;</span>);
+	&#125;
+
+	<span class="meta">@Override</span>
+	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">call</span><span class="params">()</span> &#123;
+		System.out.println(<span class="built_in">this</span>.style + <span class="string">&quot; 小米手机打电话&quot;</span>);
+	&#125;
+
+	<span class="meta">@Override</span>
+	<span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStype</span><span class="params">(String stype)</span> &#123;
+		<span class="built_in">this</span>.style = stype;
+	&#125;
+
+&#125;
+
+
+<span class="comment">// 定时抽象类，对应UML中的 Abstraction</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Phone</span> &#123;
+
+    <span class="comment">// 聚合实现</span>
+    <span class="keyword">private</span> Brand brand;
+
+    <span class="keyword">public</span> <span class="title function_">Phone</span><span class="params">(Brand brand, String style)</span> &#123;
+        <span class="built_in">this</span>.brand = brand;
+        <span class="built_in">this</span>.brand.setStype(style);
+    &#125;
+
+    <span class="comment">// 通过聚合，让抽象类具有 Implementation 的功能</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> &#123;
+        <span class="built_in">this</span>.brand.open();
+    &#125;
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;
+        brand.close();
+    &#125;
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">call</span><span class="params">()</span> &#123;
+        brand.call();
+    &#125;
+&#125;
+
+
+<span class="comment">// 折叠手机</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FoldedPhone</span> <span class="keyword">extends</span> <span class="title class_">Phone</span> &#123;
+
+    <span class="keyword">public</span> <span class="title function_">FoldedPhone</span><span class="params">(Brand brand)</span> &#123;
+        <span class="built_in">super</span>(brand, <span class="string">&quot;折叠式&quot;</span>);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> &#123;
+        <span class="built_in">super</span>.open();
+
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;
+        <span class="built_in">super</span>.close();
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">call</span><span class="params">()</span> &#123;
+        <span class="built_in">super</span>.call();
+    &#125;
+&#125;
+
+
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">UpRightPhone</span> <span class="keyword">extends</span> <span class="title class_">Phone</span>&#123;
+    <span class="keyword">public</span> <span class="title function_">UpRightPhone</span><span class="params">(Brand brand)</span> &#123;
+        <span class="built_in">super</span>(brand, <span class="string">&quot;直板式&quot;</span>);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">open</span><span class="params">()</span> &#123;
+        <span class="built_in">super</span>.open();
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">close</span><span class="params">()</span> &#123;
+        <span class="built_in">super</span>.close();
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> <span class="keyword">void</span> <span class="title function_">call</span><span class="params">()</span> &#123;
+        <span class="built_in">super</span>.call();
+    &#125;
+&#125;
+
+
+<span class="comment">// 测试类</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+
     <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">//一池五线程</span>
-        <span class="type">ExecutorService</span> <span class="variable">threadPool1</span> <span class="operator">=</span> Executors.newFixedThreadPool(<span class="number">3</span>); <span class="comment">//5个窗口</span>
+        <span class="type">FoldedPhone</span> <span class="variable">foldedXiaomi</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FoldedPhone</span>(<span class="keyword">new</span> <span class="title class_">XiaoMi</span>());
+        foldedXiaomi.open();
+        foldedXiaomi.call();
+        foldedXiaomi.close();
+        System.out.println(<span class="string">&quot;========================&quot;</span>);
 
-        <span class="comment">//一池一线程</span>
-        <span class="type">ExecutorService</span> <span class="variable">threadPool2</span> <span class="operator">=</span> Executors.newSingleThreadExecutor(); <span class="comment">//一个窗口</span>
+        <span class="type">FoldedPhone</span> <span class="variable">foldedVivo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">FoldedPhone</span>(<span class="keyword">new</span> <span class="title class_">Vivo</span>());
+        foldedVivo.open();
+        foldedVivo.call();
+        foldedVivo.close();
+        System.out.println(<span class="string">&quot;========================&quot;</span>);
 
-        <span class="comment">//一池可扩容线程</span>
-        <span class="type">ExecutorService</span> <span class="variable">threadPool3</span> <span class="operator">=</span> Executors.newCachedThreadPool();
+        <span class="type">UpRightPhone</span> <span class="variable">upXiaomi</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UpRightPhone</span>(<span class="keyword">new</span> <span class="title class_">XiaoMi</span>());
+        upXiaomi.open();
+        upXiaomi.call();
+        upXiaomi.close();
+        System.out.println(<span class="string">&quot;========================&quot;</span>);
 
-        <span class="comment">// 创建当前可用的CPU核数的线程数的线程池</span>
-        <span class="type">ExecutorService</span> <span class="variable">threadPool4</span> <span class="operator">=</span> Executors.newWorkStealingPool();
-        <span class="comment">//10个顾客请求</span>
-        <span class="keyword">try</span> &#123;
-            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">10</span>; i++) &#123;
-                <span class="keyword">final</span> <span class="type">int</span> <span class="variable">num</span> <span class="operator">=</span> i;
-                <span class="comment">//执行</span>
-                threadPool1.execute(() -&gt; &#123;
-                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot;开始办理业务&quot;</span> + num);
-                    <span class="keyword">try</span> &#123;
-                        TimeUnit.SECONDS.sleep(<span class="number">5</span>);
-                    &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
-                        e.printStackTrace();
-                    &#125;
-                    System.out.println(Thread.currentThread().getName() + <span class="string">&quot;结束办理业务&quot;</span> + num);
-                &#125;);
-            &#125;
-        &#125; <span class="keyword">catch</span> (Exception e) &#123;
-            e.printStackTrace();
-        &#125; <span class="keyword">finally</span> &#123;
-            <span class="comment">//关闭线程池</span>
-            threadPool1.shutdown();
-        &#125;
-
+        <span class="type">UpRightPhone</span> <span class="variable">upVivo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">UpRightPhone</span>(<span class="keyword">new</span> <span class="title class_">XiaoMi</span>());
+        upVivo.open();
+        upVivo.call();
+        upVivo.close();
+        System.out.println(<span class="string">&quot;========================&quot;</span>);
     &#125;
 &#125;</code></pre>
 
-<p><strong>运行结果:</strong></p>
-<pre><code class="highlight shell">pool-1-thread-1开始办理业务1
-pool-1-thread-2开始办理业务2
-pool-1-thread-3开始办理业务3
-pool-1-thread-2结束办理业务2
-pool-1-thread-1结束办理业务1
-pool-1-thread-1开始办理业务5
-pool-1-thread-3结束办理业务3
-pool-1-thread-2开始办理业务4
-pool-1-thread-3开始办理业务6
-pool-1-thread-1结束办理业务5
-pool-1-thread-3结束办理业务6
-pool-1-thread-3开始办理业务8
-pool-1-thread-2结束办理业务4
-pool-1-thread-2开始办理业务9
-pool-1-thread-1开始办理业务7
-pool-1-thread-2结束办理业务9
-pool-1-thread-2开始办理业务10
-pool-1-thread-1结束办理业务7
-pool-1-thread-3结束办理业务8
-pool-1-thread-2结束办理业务10</code></pre>
-
-
-
-
-
-<h1 id="五、线程池底层工作原理-重要"><a href="#五、线程池底层工作原理-重要" class="headerlink" title="五、线程池底层工作原理(重要)"></a>五、线程池底层工作原理(重要)</h1><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/16/20240916-115726.png" alt="线程池底层工作原理"></p>
-<ul>
-<li>在创建了线程池后，线程池中的线程数为零</li>
-<li>当调用 execute()方法添加一个请求任务时，线程池会做出如下判断<ul>
-<li>如果正在运行的线程数量小于 corePoolSize，那么马上创建线程运行这个任务；</li>
-<li>如果正在运行的线程数量大于或等于 corePoolSize，那么将这个任务放入队列；</li>
-<li>如果这个时候队列满了且正在运行的线程数量还小于maximumPoolSize，那么还是要创建非核心线程立刻运行这个任务；</li>
-<li>如果队列满了且正在运行的线程数量大于或等于 maximumPoolSize，那么线程池会启动饱和拒绝策略来执行。</li>
-</ul>
-</li>
-<li>当一个线程完成任务时，它会从队列中取下一个任务来执行</li>
-<li>当一个线程无事可做超过一定的时间（keepAliveTime）时，线程会判断<ul>
-<li>如果当前运行的线程数大于 corePoolSize，那么这个线程就被停掉。</li>
-<li>所以线程池的所有任务完成后，它最终会收缩到 corePoolSize 的大小。</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/16/20240916-120237.png" alt="JDK内置拒绝策略"></p>
-<h1 id="六、注意事项-重要"><a href="#六、注意事项-重要" class="headerlink" title="六、注意事项(重要)"></a>六、注意事项(重要)</h1><ul>
-<li><p>项目中创建多线程时，使用常见的三种线程池创建方式，单一、可变、定长都有一定问题，原因是 FixedThreadPool 和 SingleThreadExecutor 底层都是用 LinkedBlockingQueue 实现的，这个队列最大长度为 Integer.MAX_VALUE，容易导致 OOM。所以实际生产一般自己通过 ThreadPoolExecutor 的 7 个参数，自定义线程池</p>
-</li>
-<li><p>创建线程池推荐适用 ThreadPoolExecutor 及其 7 个参数手动创建</p>
-<ul>
-<li>corePoolSize 线程池的核心线程数</li>
-<li>maximumPoolSize 能容纳的最大线程数</li>
-<li>keepAliveTime 空闲线程存活时间</li>
-<li>unit 存活的时间单位</li>
-<li>workQueue 存放提交但未执行任务的队列</li>
-<li>threadFactory 创建线程的工厂类</li>
-<li>handler 等待队列满后的拒绝策略</li>
-</ul>
-</li>
-<li><p>为什么不允许适用不允许 Executors.的方式手动创建线程池,如下图</p>
-</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/16/20240916-120936.png" alt="阿里巴巴开发手册关于线程池创建要求"></p>
-<pre><code class="highlight java"><span class="comment">//自定义线程池创建</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ThreadPoolDemo2</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">ExecutorService</span> <span class="variable">threadPool</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>(
-                <span class="number">2</span>,
-                <span class="number">5</span>,
-                <span class="number">2L</span>,
-                TimeUnit.SECONDS,
-                <span class="keyword">new</span> <span class="title class_">ArrayBlockingQueue</span>&lt;&gt;(<span class="number">3</span>),
-                Executors.defaultThreadFactory(),
-                <span class="keyword">new</span> <span class="title class_">ThreadPoolExecutor</span>.AbortPolicy()
-        );
-
-        <span class="comment">//10个顾客请求</span>
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">折叠式 小米手机开机
+折叠式 小米手机打电话
+折叠式 小米手机关机 
+========================
+折叠式 Vivo手机开机 
+折叠式 Vivo手机打电话 
+折叠式 Vivo手机关机 
+========================
+直板式 小米手机开机
+直板式 小米手机打电话
+直板式 小米手机关机 
+========================
+直板式 小米手机开机
+直板式 小米手机打电话
+直板式 小米手机关机 
+========================</code></pre>
+</blockquote>
+<h1 id="四、JDK-源码分析"><a href="#四、JDK-源码分析" class="headerlink" title="四、JDK 源码分析"></a>四、JDK 源码分析</h1><p>JDBC 的 Driver 接口：如果从桥接模式来看，Driver 就是一个接口，下面可以有 MySQL 的 Driver、Oracle 的 Driver，这些就可以当做实现接口类</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-135126.png" alt="jdk-Connection继承体系"></p>
+<p><strong>Connection 继承体系</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-135208.png" alt="Connection 继承体系"></p>
+<p><strong>Driver源码</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Driver</span> <span class="keyword">extends</span> <span class="title class_">NonRegisteringDriver</span> <span class="keyword">implements</span> <span class="title class_">java</span>.sql.Driver &#123;
+    <span class="keyword">static</span> &#123;
         <span class="keyword">try</span> &#123;
-            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;=<span class="number">10</span>; i++) &#123;
-                <span class="comment">//执行</span>
-                threadPool.execute(()-&gt;&#123;
-                    System.out.println(Thread.currentThread().getName()+<span class="string">&quot; 办理业务&quot;</span>);
-                &#125;);
-            &#125;
-        &#125;<span class="keyword">catch</span> (Exception e) &#123;
-            e.printStackTrace();
-        &#125;<span class="keyword">finally</span> &#123;
-            <span class="comment">//关闭</span>
-            threadPool.shutdown();
+            java.sql.DriverManager.registerDriver(<span class="keyword">new</span> <span class="title class_">Driver</span>());
+        &#125; <span class="keyword">catch</span> (SQLException E) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;Can&#x27;t register driver!&quot;</span>);
         &#125;
+    &#125;
+    <span class="keyword">public</span> <span class="title function_">Driver</span><span class="params">()</span> <span class="keyword">throws</span> SQLException &#123;
+        <span class="comment">// Required for Class.forName().newInstance()</span>
     &#125;
 &#125;</code></pre>
 
+
+
+<p><strong>DriverManager 结构</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-135432.png" alt="DriverManager 结构"></p>
+<p><strong>说明</strong></p>
+<ul>
+<li>MySQL 有自己的 Connectionlmpl 类，同样 Oracle 也有对应的实现类</li>
+<li>Driver 和 Connection 之间是通过 DriverManager 类进行桥连接的</li>
+</ul>
+<h1 id="五、注意事项和细节"><a href="#五、注意事项和细节" class="headerlink" title="五、注意事项和细节"></a>五、注意事项和细节</h1><ul>
+<li>实现了抽象和实现部分的分离，从而极大的提供了系统的灵活性，让抽象部分和实现部分独立开来。这有助于系统进行分层设计，从而产生更好的结构化系统</li>
+</ul>
+<ol start="2">
+<li>对于系统的高层部分，只需要知道抽象部分和实现部分的接口就可以了，其它的部分由具体业务来完成</li>
+<li>桥接模式替代多层继承方案，可以减少子类的个数，降低系统的管理和维护成本</li>
+<li>桥接模式的引入增加了系统的理解和设计难度，由于聚合关联关系建立在抽象层，要求开发者针对抽象进行设计和编程</li>
+<li>桥接模式要求正确识别出系统中两个独立变化的维度，因此其使用范围有一定的后限性，即需要有这样的应用场景</li>
+</ol>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
