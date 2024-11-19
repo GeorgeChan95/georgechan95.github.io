@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>01-多线程的基本概念 | George&#39;s Blog</title>
+  <title>11-组合模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , juc ">
-  <meta name="description" content="01-多线程的基本概念 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="11-组合模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#111;&#x72;&#103;&#101;&#95;&#x39;&#53;&#x40;&#49;&#x32;&#x36;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1190,9 +1190,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-juc/01-多线程的基本概念" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/11-组合模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">01-多线程的基本概念</h1>
+        <h1 class="article-title">11-组合模式</h1>
     
     <div class="article-meta">
         
@@ -1202,7 +1202,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JUC">JUC</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1210,21 +1210,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
-            
-            <a class="color4">juc</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-31 11:39:29'>2024-08-30 19:03</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-19 20:59:32'>2024-11-16 17:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.1k</span>
+        <span>字数:1.9k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1254,7 +1252,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%BF%9B%E7%A8%8B%E5%92%8C%E7%BA%BF%E7%A8%8B"><span class="toc-text">一、进程和线程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%BA%BF%E7%A8%8B%E7%9A%84%E7%8A%B6%E6%80%81"><span class="toc-text">二、线程的状态</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81wait%E5%92%8Csleep"><span class="toc-text">三、wait和sleep</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%B9%B6%E5%8F%91%E4%B8%8E%E5%B9%B6%E8%A1%8C"><span class="toc-text">四、并发与并行</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%AE%A1%E7%A8%8B%EF%BC%88monitor%EF%BC%89"><span class="toc-text">五、管程（monitor）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E7%94%A8%E6%88%B7%E7%BA%BF%E7%A8%8B%E5%92%8C%E5%AE%88%E6%8A%A4%E7%BA%BF%E7%A8%8B"><span class="toc-text">六、用户线程和守护线程</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F"><span class="toc-text">一、什么是组合模式?</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84%E5%92%8C%E6%A1%88%E4%BE%8B"><span class="toc-text">二、组合模式的结构和案例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A1%88%E4%BE%8B%E4%B8%80-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-text">1. 案例一: 文件结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B%E4%BA%8C-%E5%85%AC%E5%8F%B8%E7%BB%84%E7%BB%87%E6%9E%B6%E6%9E%84"><span class="toc-text">2. 案例二: 公司组织架构</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">三、组合模式的使用场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%80%BB%E7%BB%93"><span class="toc-text">四、组合模式的总结</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F%E5%AF%B9%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%85%AD%E5%A4%A7%E5%8E%9F%E5%88%99%E7%9A%84%E8%BF%90%E7%94%A8"><span class="toc-text">五、组合模式对设计模式六大原则的运用</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1270,107 +1268,263 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、进程和线程"><a href="#一、进程和线程" class="headerlink" title="一、进程和线程"></a>一、进程和线程</h1><ul>
-<li>进程（Process）是计算机中的程序关于某数据集合上的一次运行活动，是系统进行资源分配和调度的基本单位，是操作系统结构的基础。在早期面向进程设计的计算机结构中，进程是程序的基本执行实体；在当代面向线程设计的计算机结构中，进程是线程的容器。程序是指令、数据及其组织形式的描述，进程是程序的实体。</li>
-<li>线程（thread）是操作系统能够进行运算调度的最小单位。它被包含在进程之中，是进程中的实际运作单位。一条线程指的是进程中一个单一顺序的控制流，一个进程中可以并发多个线程，每条线程并行执行不同的任务。</li>
-</ul>
-<p>总结来说：</p>
-<ul>
-<li>进程：指在系统中正在运行的一个应用程序；程序一旦运行就是进程；进程是资源分配的最小单位</li>
-<li>线程：系统分配处理器时间资源的基本单元，或者说进程之内独立执行的一个单元执行流。线程时程序执行的最小单位</li>
-</ul>
-<h1 id="二、线程的状态"><a href="#二、线程的状态" class="headerlink" title="二、线程的状态"></a>二、线程的状态</h1><p>进入 java.lang.Thread 类，找到内部类 State ，代码如下</p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">State</span> &#123;
-        <span class="comment">/**</span>
-<span class="comment">         * Thread state for a thread which has not yet started.</span>
-<span class="comment">         */</span>
-        NEW,(新建)
+        <h1 id="一、什么是组合模式"><a href="#一、什么是组合模式" class="headerlink" title="一、什么是组合模式?"></a>一、什么是组合模式?</h1><p>组合模式定义了如何将容器对象和叶子对象进行递归组合，使得客户在使用的过程中无须进行区分到底是容器对象还是叶子对象，可以对他们进行一致的处理。</p>
+<p>组合模式通过组合多个对象形成树形结构来表示“整体-部分”的结构层次。</p>
+<p>组合模式对单个对象(叶子对象)和组合对象(组合对象)具有一致性，它将对象组织到树结构中，可以用来描述整体与部分的关系。同时它也模糊了**简单元素(叶子对象)和复杂元素(容器对象)**的概念，使得客户能够像处理简单元素一样来处理复杂元素，从而使客户程序能够与复杂元素的内部结构解耦。</p>
+<p>到底是什么意思呢? 来看看下面的图片:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/16/20241116-170711.png" alt="组合模式的示例"></p>
+<p>现在有文件夹, 文件夹下可以有文件和文件夹. 这种递归调用, 我们拆分来看, 文件可以看做是叶子节点, 文件夹可以看做是容器. 文件夹容器下还有文件和文件夹. 使用组合模式来实现他们之间的关系.</p>
+<p><strong>组合模式的关键是: 设计一个抽象的组合类, 让它可以代表组合对象和叶子对象。这样的好处是，客户端不需要区分到底是组合对象还是叶子对象了，只需要全部当成组合对象来处理即可。</strong></p>
+<h1 id="二、组合模式的结构和案例"><a href="#二、组合模式的结构和案例" class="headerlink" title="二、组合模式的结构和案例"></a>二、组合模式的结构和案例</h1><h2 id="1-案例一-文件结构"><a href="#1-案例一-文件结构" class="headerlink" title="1. 案例一: 文件结构"></a>1. 案例一: 文件结构</h2><p>下面就来看看如何实现文件结构. 先来看看UML图:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/19/20241119-201713.png" alt="组合模式-文件结构"></p>
+<p>首先定义一个抽象类 <code>File</code>, 然后单个的具体文件和文件夹都实现了抽象文件接口, 在文件夹接口里面还有一个存放抽象文件的集合. 实现了文件和文件夹的组合.</p>
+<p><strong>代码实现:</strong></p>
+<pre><code class="highlight java"><span class="comment">// 抽象类</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">File</span> &#123;
 
-        <span class="comment">/**</span>
-<span class="comment">         * Thread state for a runnable thread.  A thread in the runnable</span>
-<span class="comment">         * state is executing in the Java virtual machine but it may</span>
-<span class="comment">         * be waiting for other resources from the operating system</span>
-<span class="comment">         * such as processor.</span>
-<span class="comment">         */</span>
-        RUNNABLE,（准备就绪）
+    <span class="keyword">public</span> String name;
 
-        <span class="comment">/**</span>
-<span class="comment">         * Thread state for a thread blocked waiting for a monitor lock.</span>
-<span class="comment">         * A thread in the blocked state is waiting for a monitor lock</span>
-<span class="comment">         * to enter a synchronized block/method or</span>
-<span class="comment">         * reenter a synchronized block/method after calling</span>
-<span class="comment">         * &#123;<span class="doctag">@link</span> Object#wait() Object.wait&#125;.</span>
-<span class="comment">         */</span>
-        BLOCKED,（阻塞）
+    <span class="keyword">public</span> <span class="title function_">File</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+    &#125;
 
-        <span class="comment">/**</span>
-<span class="comment">         * Thread state for a waiting thread.</span>
-<span class="comment">         * A thread is in the waiting state due to calling one of the</span>
-<span class="comment">         * following methods:</span>
-<span class="comment">         * &lt;ul&gt;</span>
-<span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> Object#wait() Object.wait&#125; with no timeout&lt;/li&gt;</span>
-<span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> #join() Thread.join&#125; with no timeout&lt;/li&gt;</span>
-<span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#park() LockSupport.park&#125;&lt;/li&gt;</span>
-<span class="comment">         * &lt;/ul&gt;</span>
-<span class="comment">         *</span>
-<span class="comment">         * &lt;p&gt;A thread in the waiting state is waiting for another thread to</span>
-<span class="comment">         * perform a particular action.</span>
-<span class="comment">         *</span>
-<span class="comment">         * For example, a thread that has called &lt;tt&gt;Object.wait()&lt;/tt&gt;</span>
-<span class="comment">         * on an object is waiting for another thread to call</span>
-<span class="comment">         * &lt;tt&gt;Object.notify()&lt;/tt&gt; or &lt;tt&gt;Object.notifyAll()&lt;/tt&gt; on</span>
-<span class="comment">         * that object. A thread that has called &lt;tt&gt;Thread.join()&lt;/tt&gt;</span>
-<span class="comment">         * is waiting for a specified thread to terminate.</span>
-<span class="comment">         */</span>
-        WAITING,（不限时间等待）
+    <span class="comment">/**</span>
+<span class="comment">     * 文件打印</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span>;
+&#125;
 
-        <span class="comment">/**</span>
-<span class="comment">         * Thread state for a waiting thread with a specified waiting time.</span>
-<span class="comment">         * A thread is in the timed waiting state due to calling one of</span>
-<span class="comment">         * the following methods with a specified positive waiting time:</span>
-<span class="comment">         * &lt;ul&gt;</span>
-<span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> #sleep Thread.sleep&#125;&lt;/li&gt;</span>
-<span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> Object#wait(long) Object.wait&#125; with timeout&lt;/li&gt;</span>
-<span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> #join(long) Thread.join&#125; with timeout&lt;/li&gt;</span>
-<span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#parkNanos LockSupport.parkNanos&#125;&lt;/li&gt;</span>
-<span class="comment">         *   &lt;li&gt;&#123;<span class="doctag">@link</span> LockSupport#parkUntil LockSupport.parkUntil&#125;&lt;/li&gt;</span>
-<span class="comment">         * &lt;/ul&gt;</span>
-<span class="comment">         */</span>
-        TIMED_WAITING,（限时等待）
 
-        <span class="comment">/**</span>
-<span class="comment">         * Thread state for a terminated thread.</span>
-<span class="comment">         * The thread has completed execution.</span>
-<span class="comment">         */</span>
-        TERMINATED;(终结)
+<span class="comment">// 文本文件</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TextFile</span> <span class="keyword">extends</span> <span class="title class_">File</span> &#123; <span class="comment">// 继承File</span>
+    <span class="keyword">public</span> <span class="title function_">TextFile</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">super</span>(name);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;文本文件展示-----------&quot;</span>);
+    &#125;
+&#125;
+
+
+<span class="comment">// 图像文件</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ImageFile</span> <span class="keyword">extends</span> <span class="title class_">File</span> &#123; <span class="comment">// 继承File</span>
+    <span class="keyword">public</span> <span class="title function_">ImageFile</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">super</span>(name);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;图片文件展示-----------&quot;</span>);
+    &#125;
+&#125;
+
+
+<span class="comment">// 音频文件</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AudioFile</span> <span class="keyword">extends</span> <span class="title class_">File</span> &#123; <span class="comment">// 继承File</span>
+    <span class="keyword">public</span> <span class="title function_">AudioFile</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">super</span>(name);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;图片文件展示-----------&quot;</span>);
+    &#125;
+&#125;
+
+
+<span class="comment">// 视频文件</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VideoFile</span> <span class="keyword">extends</span> <span class="title class_">File</span> &#123; <span class="comment">// 继承File</span>
+    <span class="keyword">public</span> <span class="title function_">VideoFile</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">super</span>(name);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;视频文件展示-----------&quot;</span>);
+    &#125;
+&#125;
+
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Folder</span> <span class="keyword">extends</span> <span class="title class_">File</span> &#123; <span class="comment">// 继承File</span>
+
+    <span class="comment">// 组合File</span>
+    <span class="keyword">private</span> List&lt;File&gt; files = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    <span class="keyword">public</span> <span class="title function_">Folder</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">super</span>(name);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(File file)</span> &#123;
+        files.add(file);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123; <span class="comment">// 递归调用 show() 方法</span>
+        System.out.println(<span class="string">&quot;这是 &quot;</span> + <span class="built_in">this</span>.name + <span class="string">&quot; 的show方法&quot;</span>);
+        <span class="keyword">for</span> (File file : files) &#123;
+            file.show();
+        &#125;
+    &#125;
+&#125;
+
+
+<span class="comment">// 测试类</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">FileClient</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">File</span> <span class="variable">textFile1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TextFile</span>(<span class="string">&quot;text1文件&quot;</span>);
+        <span class="type">File</span> <span class="variable">imageFile1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ImageFile</span>(<span class="string">&quot;image1文件&quot;</span>);
+        <span class="type">File</span> <span class="variable">audioFile1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AudioFile</span>(<span class="string">&quot;audio1文件&quot;</span>);
+        <span class="type">File</span> <span class="variable">videoFile1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VideoFile</span>(<span class="string">&quot;video1文件&quot;</span>);
+        <span class="type">Folder</span> <span class="variable">folder1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Folder</span>(<span class="string">&quot;folder1&quot;</span>);
+        folder1.add(textFile1);
+        folder1.add(imageFile1);
+        folder1.add(audioFile1);
+        folder1.add(videoFile1);
+
+        <span class="type">File</span> <span class="variable">textFile2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TextFile</span>(<span class="string">&quot;text2文件&quot;</span>);
+        <span class="type">File</span> <span class="variable">imageFile2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ImageFile</span>(<span class="string">&quot;image2文件&quot;</span>);
+        <span class="type">Folder</span> <span class="variable">folder2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Folder</span>(<span class="string">&quot;folder2&quot;</span>);
+        folder2.add(textFile2);
+        folder2.add(imageFile2);
+
+        <span class="comment">// 将文件夹2 添加到文件夹1中</span>
+        folder1.add(folder2);
+
+        folder1.show();
+    &#125;
 &#125;</code></pre>
 
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">这是 folder1 的show方法
+文本文件展示-----------
+图片文件展示-----------
+图片文件展示-----------
+视频文件展示-----------
+这是 folder2 的show方法
+文本文件展示-----------
+图片文件展示-----------</code></pre>
+</blockquote>
+<p>最终展示的文件效果如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/19/20241119-203431.png" alt="文件组合结果示意"></p>
+<h2 id="2-案例二-公司组织架构"><a href="#2-案例二-公司组织架构" class="headerlink" title="2. 案例二: 公司组织架构"></a>2. 案例二: 公司组织架构</h2><p>先来看uml图: </p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/19/20241119-203859.png" alt="组合模式-部门"></p>
+<p>这里面通常公司下面会下设很多部门, 部门下面在设置子部门, 其组织架构如下图:</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/19/20241119-204031.png" alt="组织架构图"></p>
+<p><strong>代码实现</strong> </p>
+<pre><code class="highlight java"><span class="comment">// 第一步: 部门抽象接口</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Department</span> &#123;
+
+    <span class="comment">// 打印部门信息</span>
+    <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span>;
+&#125;
+
+
+<span class="comment">// 第二步: 叶子部门, 下面没有其他任何部门</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">LeafDepartment</span> <span class="keyword">implements</span> <span class="title class_">Department</span> &#123;
+    <span class="comment">// 部门名称</span>
+    <span class="keyword">public</span> String name;
+
+    <span class="keyword">public</span> <span class="title function_">LeafDepartment</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;
+        System.out.println(<span class="built_in">this</span>.name);
+    &#125;
+&#125;
+
+
+<span class="comment">// 第三步: 聚合部门, 也就是下面还有子部门</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AggregateDepartment</span> <span class="keyword">implements</span> <span class="title class_">Department</span> &#123;
+    <span class="keyword">private</span> String name;
+
+    <span class="comment">// 聚合下属部门</span>
+    List&lt;Department&gt; departmentList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    <span class="keyword">public</span> <span class="title function_">AggregateDepartment</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+    &#125;
+
+    <span class="comment">// 添加部门</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">addDepartment</span><span class="params">(Department department)</span> &#123;
+        departmentList.add(department);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">show</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;当前部门为：&quot;</span> + <span class="built_in">this</span>.name + <span class="string">&quot; 下属部门为：&quot;</span>);
+        <span class="keyword">for</span> (Department department : departmentList) &#123;
+            department.show();
+        &#125;
+    &#125;
+&#125;
+
+
+<span class="comment">// 第四步: 客户端调用</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DepartmentClient</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">AggregateDepartment</span> <span class="variable">company</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AggregateDepartment</span>(<span class="string">&quot;公司&quot;</span>);
+
+        <span class="type">Department</span> <span class="variable">fawu</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LeafDepartment</span>(<span class="string">&quot;法务部&quot;</span>);
+        <span class="type">Department</span> <span class="variable">xingzheng</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LeafDepartment</span>(<span class="string">&quot;行政部&quot;</span>);
+        <span class="type">Department</span> <span class="variable">renshi</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LeafDepartment</span>(<span class="string">&quot;人事部&quot;</span>);
+        <span class="type">AggregateDepartment</span> <span class="variable">jishu</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AggregateDepartment</span>(<span class="string">&quot;技术部&quot;</span>);
+
+        <span class="type">Department</span> <span class="variable">java</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LeafDepartment</span>(<span class="string">&quot;Java事业部&quot;</span>);
+        <span class="type">Department</span> <span class="variable">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LeafDepartment</span>(<span class="string">&quot;C++事业部&quot;</span>);
+        <span class="type">Department</span> <span class="variable">go</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LeafDepartment</span>(<span class="string">&quot;GO事业部&quot;</span>);
+        <span class="type">Department</span> <span class="variable">front</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">LeafDepartment</span>(<span class="string">&quot;大前端事业部&quot;</span>);
+
+        company.addDepartment(fawu);
+        company.addDepartment(xingzheng);
+        company.addDepartment(renshi);
+        company.addDepartment(jishu);
+
+        jishu.addDepartment(java);
+        jishu.addDepartment(c);
+        jishu.addDepartment(go);
+        jishu.addDepartment(front);
+
+        company.show();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">当前部门为：公司 下属部门为：
+法务部
+行政部
+人事部
+当前部门为：技术部 下属部门为：
+Java事业部
+C++事业部
+GO事业部
+大前端事业部</code></pre>
+</blockquote>
+<p>通过组合模式, 我们就将一个公司的组织架构画出来了, 即使是更复杂的架构, 使用这种方式也可实现.</p>
+<h1 id="三、组合模式的使用场景"><a href="#三、组合模式的使用场景" class="headerlink" title="三、组合模式的使用场景"></a>三、组合模式的使用场景</h1><p>组合模式在我们日常生活中非常常见, 比如: 公司组织架构中架构关系. 总公司和分公司的关系, 下面分析它适用的以下应用场景。</p>
 <ul>
-<li>NEW,(新建)</li>
-<li>RUNNABLE,（准备就绪）</li>
-<li>BLOCKED,（阻塞）</li>
-<li>WAITING,（不限时等待）</li>
-<li>TIMED_WAITING,（限时等待）</li>
-<li>TERMINATED;(终结)</li>
+<li>在需要表示一个对象整体与部分的层次结构的场合。</li>
+<li>要求对用户隐藏组合对象与单个对象的不同，用户可以用统一的接口使用组合结构中的所有对象的场合。</li>
 </ul>
-<h1 id="三、wait和sleep"><a href="#三、wait和sleep" class="headerlink" title="三、wait和sleep"></a>三、wait和sleep</h1><ul>
-<li>sleep 是 Thread 的静态方法，wait 是 Object 的方法，任何对象实例都能调用。</li>
-<li>sleep 不会释放锁，它也不需要占用锁；wait会释放锁，但调用它的前提是当前线程占有锁（即代码要在synchronized中）</li>
-<li>它们都可以被 <code>interrupt</code> 方法中断</li>
+<h1 id="四、组合模式的总结"><a href="#四、组合模式的总结" class="headerlink" title="四、组合模式的总结"></a>四、组合模式的总结</h1><ul>
+<li>简化客户端操作。客户端只需要面对一致的对象而不用考虑整体部分或者节点叶子的问题。</li>
+<li>具有较强的扩展性。当我们要更改组合对象时，我们只需要调整内部的层次关系，客户端不用做出任何改动.</li>
+<li>方便创建出复杂的层次结构。客户端不用理会组合里面的组成细节，容易添加节点或者叶子从而创建出复杂的 树形结构</li>
+<li><strong>方便创建出复杂的层次结构。客户端不用理会组合里面的组成细节，容易添加节点或者叶子从而创建出复杂的 树形结构</strong></li>
+<li>要求较高的抽象性，如果节点和叶子有很多差异性的话，比如很多方法和属性都不一样，不适合使用组合模式</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/30/20240830-191847.png" alt="线程状态"></p>
-<h1 id="四、并发与并行"><a href="#四、并发与并行" class="headerlink" title="四、并发与并行"></a>四、并发与并行</h1><ul>
-<li>并发：同一时间间隔内多个线程正在执行，实际上是宏观上并行，微观上串行</li>
-<li>并行：同一时刻多个线程正在执行</li>
-</ul>
-<h1 id="五、管程（monitor）"><a href="#五、管程（monitor）" class="headerlink" title="五、管程（monitor）"></a>五、管程（monitor）</h1><p>管程(monitor)是保证了同一时刻只有一个进程在管程内活动,即管程内定义的操作在同一时刻只被一个进程调用(由编译器实现).但是这样并不能保证进程以设计的顺序执行。</p>
-<p>JVM 中同步是基于进入和退出管程(monitor)对象实现的，每个对象都会有一个管程(monitor)对象，管程(monitor)会随着 java 对象一同创建和销毁。</p>
-<p>执行线程首先要持有管程对象，然后才能执行方法，当方法完成之后会释放管程，方法在执行时候会持有管程，其他线程无法再获取同一个管程</p>
-<h1 id="六、用户线程和守护线程"><a href="#六、用户线程和守护线程" class="headerlink" title="六、用户线程和守护线程"></a>六、用户线程和守护线程</h1><ul>
-<li><strong>用户线程</strong>：自定义线程</li>
-<li><strong>守护线程</strong>:运行在后台,是一种特殊的线程,比如垃圾回收</li>
-<li>当主线程结束后,用户线程还在运行,JVM 存活</li>
-<li>如果没有用户线程,都是守护线程,JVM 结束</li>
+<h1 id="五、组合模式对设计模式六大原则的运用"><a href="#五、组合模式对设计模式六大原则的运用" class="headerlink" title="五、组合模式对设计模式六大原则的运用"></a>五、组合模式对设计模式六大原则的运用</h1><ul>
+<li>单一职责原则: 一个接口只做一件事</li>
+<li>里式替换原则: 父类出现的地方都可以使用子类替换, 这里父类方法都是接口</li>
+<li>接口隔离原则: 最小接口, 不要出现胖接口</li>
+<li>依赖倒置原则: 面向接口编程,而不是面向具体编程</li>
+<li>迪米特法则: 和最少的对象产生关联</li>
+<li>开闭原则: 对修改开放, 对扩展关闭</li>
 </ul>
 
       
