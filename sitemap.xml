@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://georgechan95.github.io/blog/60fd53f.html</loc>
+    
+    <lastmod>2024-11-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://georgechan95.github.io/blog/4930323d.html</loc>
     
     <lastmod>2024-11-23</lastmod>
@@ -200,7 +209,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/blog/4de6a39b.html</loc>
+    <loc>https://georgechan95.github.io/blog/4502cffa.html</loc>
     
     <lastmod>2024-10-08</lastmod>
     
@@ -209,7 +218,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/blog/4502cffa.html</loc>
+    <loc>https://georgechan95.github.io/blog/4de6a39b.html</loc>
     
     <lastmod>2024-10-08</lastmod>
     
@@ -299,7 +308,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/blog/31919959.html</loc>
+    <loc>https://georgechan95.github.io/blog/a0197c15.html</loc>
     
     <lastmod>2024-09-18</lastmod>
     
@@ -308,7 +317,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/blog/a0197c15.html</loc>
+    <loc>https://georgechan95.github.io/blog/31919959.html</loc>
     
     <lastmod>2024-09-18</lastmod>
     
@@ -765,6 +774,13 @@
   </url>
   
   <url>
+    <loc>https://georgechan95.github.io/tags/%E4%BA%8C%E5%88%86%E6%B3%95/</loc>
+    <lastmod>2024-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://georgechan95.github.io/tags/%E4%BA%8C%E8%BF%9B%E5%88%B6/</loc>
     <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -773,13 +789,6 @@
   
   <url>
     <loc>https://georgechan95.github.io/tags/%E4%BD%8D%E8%BF%90%E7%AE%97/</loc>
-    <lastmod>2024-11-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/tags/%E4%BA%8C%E5%88%86%E6%B3%95/</loc>
     <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -870,13 +879,6 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/tags/juc/</loc>
-    <lastmod>2024-11-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://georgechan95.github.io/tags/sitemap/</loc>
     <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
@@ -884,14 +886,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/tags/jvm/</loc>
-    <lastmod>2024-11-23</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/tags/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/</loc>
+    <loc>https://georgechan95.github.io/tags/juc/</loc>
     <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -912,7 +907,21 @@
   </url>
   
   <url>
+    <loc>https://georgechan95.github.io/tags/jvm/</loc>
+    <lastmod>2024-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://georgechan95.github.io/tags/jenkins/</loc>
+    <lastmod>2024-11-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/tags/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%9C%BA%E5%88%B6/</loc>
     <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -977,14 +986,14 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/JVM/</loc>
+    <loc>https://georgechan95.github.io/categories/linux/</loc>
     <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/linux/</loc>
+    <loc>https://georgechan95.github.io/categories/JVM/</loc>
     <lastmod>2024-11-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

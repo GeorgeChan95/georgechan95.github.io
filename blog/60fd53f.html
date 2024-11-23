@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>二进制和位运算 | George&#39;s Blog</title>
+  <title>16-命令模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 算法 , 二进制 , 位运算 ">
-  <meta name="description" content="二进制和位运算 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="16-命令模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#103;&#101;&#95;&#x39;&#53;&#x40;&#49;&#50;&#54;&#x2e;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1226,9 +1226,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-algorithm/二进制和位运算" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/16-命令模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">二进制和位运算</h1>
+        <h1 class="article-title">16-命令模式</h1>
     
     <div class="article-meta">
         
@@ -1238,7 +1238,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="算法">算法</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1246,23 +1246,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color3">算法</a>
-            
-            <a class="color4">二进制</a>
-            
-            <a class="color4">位运算</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 12:17:33'>2024-06-20 08:04</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-23 15:04:41'>2024-11-23 20:30</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:3.1k</span>
+        <span>字数:2.2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1292,7 +1288,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80"><span class="toc-text">一、二进制基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%8E%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-text">1、二进制与十进制的转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0%E4%B8%8E%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="toc-text">2、有符号数与无符号数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E6%BA%90%E7%A0%81%E3%80%81%E5%8F%8D%E7%A0%81%E4%B8%8E%E8%A1%A5%E7%A0%81"><span class="toc-text">3、源码、反码与补码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%8D%81%E8%BF%9B%E5%88%B6%E8%B4%9F%E6%95%B0%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2%E6%88%90%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-text">4、十进制负数如何转换成二进制数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E8%B4%9F%E6%95%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E5%A6%82%E4%BD%95%E8%BD%AC%E6%88%90%E5%8D%81%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-text">5、负数二进制数如何转成十进制数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81Java%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-text">6、Java如何定义一个二进制数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E8%BD%AC%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-text">7、二进制数转十六进制数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%8D%E8%BF%90%E7%AE%97%E5%9F%BA%E7%A1%80"><span class="toc-text">二、位运算基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%9B%B8%E5%8F%8D%E6%95%B0"><span class="toc-text">1、相反数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E5%A6%82%E4%BD%95%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AA%E6%95%B0%E7%9A%84%E7%9B%B8%E5%8F%8D%E6%95%B0%EF%BC%9F"><span class="toc-text">1.1、如何得到一个数的相反数？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BD%8D%E8%BF%90%E7%AE%97-%E3%80%81-%E3%80%81-%E3%80%81-%E3%80%81%E3%80%81"><span class="toc-text">2、常见的位运算(|、&amp;、^、~、&lt;&lt;、&gt;&gt;、&gt;&gt;&gt;)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E6%8C%89%E4%BD%8D%E6%88%96%E8%BF%90%E7%AE%97%E7%AC%A6-I"><span class="toc-text">2.1、按位或运算符(I)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E6%8C%89%E4%BD%8D%E4%B8%8E%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">2.2、按位与运算符(&amp;)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81%E6%8C%89%E4%BD%8D%E5%BC%82%E6%88%96%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">2.3、按位异或运算符(^)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E3%80%81%E6%8C%89%E4%BD%8D%E5%8F%96%E5%8F%8D"><span class="toc-text">2.4、按位取反(~)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5%E3%80%81%E5%B7%A6%E7%A7%BB"><span class="toc-text">2.5、左移(&lt;&lt;)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6%E3%80%81%E5%B8%A6%E7%AC%A6%E5%8F%B7%E5%8F%B3%E7%A7%BB"><span class="toc-text">2.6、带符号右移(&gt;&gt;)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7%E3%80%81%E6%97%A0%E7%AC%A6%E5%8F%B7%E5%8F%B3%E7%A7%BB"><span class="toc-text">2.7、无符号右移(&gt;&gt;&gt;)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%A6%82%E6%AD%A4%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-text">三、二进制如此设计的原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%A7%A3%E6%9E%90%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%89%93%E5%8D%B0%E5%87%BD%E6%95%B0"><span class="toc-text">四、解析二进制打印函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%89%93%E5%8D%B0%E5%87%BD%E6%95%B0%E5%A6%82%E4%B8%8B"><span class="toc-text">1、二进制打印函数如下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E6%9E%90"><span class="toc-text">2、解析</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">一、命令模式的结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A1%88%E4%BE%8B%EF%BC%9AAudioPlayer%E7%B3%BB%E7%BB%9F"><span class="toc-text">二、案例：AudioPlayer系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%8F%E5%91%BD%E4%BB%A4"><span class="toc-text">三、宏命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">四、命令模式的优点</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1308,388 +1304,391 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、二进制基础"><a href="#一、二进制基础" class="headerlink" title="一、二进制基础"></a>一、二进制基础</h1><h2 id="1、二进制与十进制的转换"><a href="#1、二进制与十进制的转换" class="headerlink" title="1、二进制与十进制的转换"></a>1、二进制与十进制的转换</h2><ul>
-<li><p>举例：<code>0101</code> –&gt; <code>5</code></p>
-<p>二进制[0101] 表示:  0 * 2<sup>3</sup> + 1 * 2<sup>2</sup> + 0 * 2<sup>1</sup> + 1 * 2<sup>0</sup> &#x3D; 5</p>
-</li>
-</ul>
-<p>计算结果正好等于十进制数：5</p>
-<p>上面的计算使用的是4位二进制数来表示的，<strong>4位二进制数可表示的10进制数有 2<sup>4</sup> &#x3D; 16 个，表示十进制数的范围是 0 ~ 2<sup>4</sup> -1 ，即：0 ~ 15 。</strong></p>
-<h2 id="2、有符号数与无符号数"><a href="#2、有符号数与无符号数" class="headerlink" title="2、有符号数与无符号数"></a>2、有符号数与无符号数</h2><ul>
-<li><p>无符号数</p>
-<p>一个二进制数上的所有 0 和 1 都表示数字。</p>
-</li>
-<li><p>有符号数</p>
-<p>二进制数上最左边的数字表示：<strong>符号位</strong></p>
+        <p><strong>命令模式属于对象的行为模式。命令模式又称为行动(Action)模式或交易(Transaction)模式。</strong></p>
+<p><strong>命令模式把一个请求或者操作封装到一个对象中。命令模式允许系统使用不同的请求把客户端参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。</strong></p>
+<h1 id="一、命令模式的结构"><a href="#一、命令模式的结构" class="headerlink" title="一、命令模式的结构"></a>一、命令模式的结构</h1><p>命令模式是对命令的封装。命令模式把发出命令的责任和执行命令的责任分割开，委派给不同的对象。</p>
+<p>每一个命令都是一个操作：请求的一方发出请求要求执行一个操作；接收的一方收到请求，并执行操作。命令模式允许请求的一方和接收的一方独立开来，使得请求的一方不必知道接收请求的一方的接口，更不必知道请求是怎么被接收，以及操作是否被执行、何时被执行，以及是怎么被执行的。</p>
+<p>命令允许请求的一方和接收请求的一方能够独立演化，从而具有以下的优点：</p>
 <ul>
-<li>0：表示该二进制为正数</li>
-<li>1：表示该二进制为负数</li>
-</ul>
+<li><p>命令模式使新的命令很容易地被加入到系统里。</p>
+</li>
+<li><p>允许接收请求的一方决定是否要否决请求。</p>
+</li>
+<li><p>能较容易地设计一个命令队列。</p>
+</li>
+<li><p>可以容易地实现对请求的撤销和恢复。</p>
+</li>
+<li><p>在需要的情况下，可以较容易地将命令记入日志。</p>
 </li>
 </ul>
-<p><strong>举例说明：</strong></p>
-<p>比如一个4位长度的二进制数，它能表示的十进制数依然有 2<sup>4</sup> &#x3D; 16 个，表示的正数只有 2<sup>3</sup> 个，负数也是 2<sup>3</sup>,即：</p>
+<p>下面以一个示意性的系统，说明命令模式的结构。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-140717.png" alt="命令模式UML"></p>
+<p>命令模式涉及到五个角色，它们分别是：</p>
 <ul>
-<li><p>正数：0000 ~ 0111 </p>
-<p>十进制表示：0 ~ 7</p>
-</li>
-<li><p>负数：1111 ~ 1000 【计算机中负数的表示，与正数不同】</p>
-<p>十进制表示：-1 ~ -8</p>
-</li>
+<li><strong>客户端(Client)角色：</strong>创建一个具体命令(ConcreteCommand)对象并确定其接收者。</li>
+<li><strong>命令(Command)角色：</strong>声明了一个给所有具体命令类的抽象接口。</li>
+<li><strong>具体命令(ConcreteCommand)角色：</strong>定义一个接收者和行为之间的弱耦合；实现execute()方法，负责调用接收者的相应操作。execute()方法通常叫做执行方法。</li>
+<li><strong>请求者(Invoker)角色：</strong>负责调用命令对象执行请求，相关的方法叫做行动方法。</li>
+<li><strong>接收者(Receiver)角色：</strong>负责具体实施和执行一个请求。任何一个类都可以成为接收者，实施和执行请求的方法叫做行动方法。</li>
 </ul>
-<h2 id="3、源码、反码与补码"><a href="#3、源码、反码与补码" class="headerlink" title="3、源码、反码与补码"></a>3、源码、反码与补码</h2><ul>
-<li><p>应用范围：源码、补码、反码只能应用在整数中：正整数、负整数</p>
-</li>
-<li><p>在正整数中：源码 &#x3D;反码 &#x3D;补码</p>
-</li>
-<li><p>在负整数中：如果是负数，将源码的符号位不变，其余各位取反，得到反码。</p>
-<ul>
-<li>如果是负数，将反码加1，得到补码</li>
-</ul>
-</li>
-<li><p>举例：int a &#x3D; 3 ;</p>
-</li>
-</ul>
-<pre><code class="highlight java"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">3</span> ; <span class="comment">// int整型为4字节，32个bit位</span>
-<span class="comment">//源码：00000000 00000000 00000000 00000011</span>
-<span class="comment">//反码：00000000 00000000 00000000 00000011</span>
-<span class="comment">//补码：00000000 00000000 00000000 00000011</span>
-<span class="comment">//因为是正整数所以 源码=反码=补码</span></code></pre>
-
-<ul>
-<li>举例：int a &#x3D; -3 ;</li>
-</ul>
-<pre><code class="highlight java"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> -<span class="number">3</span> ; <span class="comment">// int 为整型4个字节32个bit位</span>
-<span class="comment">//因为是负数，所以最高位是 1</span>
-<span class="comment">//源码：10000000 00000000 00000000 00000011</span>
-<span class="comment">//源码符号位不变，其余各个位按位取反，得到反码</span>
-<span class="comment">//反码：11111111 11111111 11111111 11111100</span>
-<span class="comment">//反码+1，得到补码</span>
-<span class="comment">//补码：11111111 11111111 11111111 11111101</span></code></pre>
-
-
-
-<ul>
-<li>工具：<a target="_blank" rel="noopener" href="https://www.lddgo.net/convert/number-binary-code">在线转换：源码、反码、补码</a></li>
-</ul>
-<h2 id="4、十进制负数如何转换成二进制数"><a href="#4、十进制负数如何转换成二进制数" class="headerlink" title="4、十进制负数如何转换成二进制数"></a>4、十进制负数如何转换成二进制数</h2><p>十进制负数转成二进制数的转换逻辑大致是，先将负数取正，转成二进制数，再减1，然后取反。下面举例说明转换过程：</p>
-<ul>
-<li><em>示例1，十进制数：<code>-1</code></em><ul>
-<li>先将 <code>-1</code> 转成 正数 <code>1</code>，并得到正数 <code>1</code> 的二进制数 <code>0001</code> </li>
-<li>再将二进制数 <code>0001</code> 减去 <code>1</code> ，得到二进制数 <code>0000</code></li>
-<li>然后将二进制数 <code>0000</code> 取反，得到 二进制数 <code>1111</code></li>
-<li>此时就得到了 -1 的 二进制表示：<code>1111</code></li>
-</ul>
-</li>
-<li><em>示例2，十进制数：<code>-7</code></em><ul>
-<li>先将 <code>-7</code> 转成 正数 <code>7</code>，并得到正数 <code>7</code> 的二进制数 <code>0111</code> </li>
-<li>再将二进制数 <code>0111</code> 减去 <code>1</code> ，得到二进制数 <code>0110</code></li>
-<li>然后将二进制数 <code>0110</code> 取反，得到 二进制数 <code>1001</code></li>
-<li>此时就得到了 -7 的 二进制表示：<code>1001</code></li>
-</ul>
-</li>
-<li><em>示例3，十进制数：<code>-8</code></em><ul>
-<li>先将 <code>-8</code> 转成 正数 <code>8</code>，并得到正数 <code>8</code> 的二进制数 <code>1000</code> </li>
-<li>再将二进制数 <code>1000</code> 减去 <code>1</code> ，得到二进制数 <code>0111</code></li>
-<li>然后将二进制数 <code>0111</code> 取反，得到 二进制数 <code>1000</code></li>
-<li>此时就得到了 -8 的 二进制表示：<code>1000</code></li>
-</ul>
-</li>
-</ul>
-<p><strong>注意：上面的方法得到的都是对应负数的二进制补码。</strong></p>
-<h2 id="5、负数二进制数如何转成十进制数"><a href="#5、负数二进制数如何转成十进制数" class="headerlink" title="5、负数二进制数如何转成十进制数"></a>5、负数二进制数如何转成十进制数</h2><p>根据有符号数的定义：如果一个二进制数表示一个负数，那么在这个二进制数中，最左侧的数一定是1。确定符号位是否为负数，是后面进行转换的前提。</p>
-<p>负数二进制数转十进制数 与 负数十进制数转二进制的过程正好相反，转换逻辑大致是，先将负数二进制数整体取反，然后再加1，得到十进制数的二进制表示，转成十进制数，再将10进制数取反，得到负的十进制数。</p>
-<ul>
-<li>示例1，二进制数：<code>1001</code><ul>
-<li>首位是1，表示它是一个负数</li>
-<li>先将二进制数 <code>1001</code> 整体取反得到 <code>0110</code></li>
-<li>再将取反后的二进制数 <code>0110</code> + 1 得到二进制数 <code>0111</code> </li>
-<li><code>0111</code> 表示十进制数 <code>7</code></li>
-<li>再将十进制数 <code>7</code> 取反，得到负数 <code>-7</code></li>
-<li>所以二进制数 <code>1001</code> 对应的十进制数为 <code>-7</code></li>
-</ul>
-</li>
-<li>示例2，二进制数：<code>1000</code><ul>
-<li>首位是1，表示它是一个负数</li>
-<li>先将二进制数 <code>1000</code> 整体取反得到 <code>0111</code></li>
-<li>再将取反后的二进制数 <code>0111</code> + 1 得到二进制数 <code>1000</code> </li>
-<li><code>1000</code> 表示十进制数 <code>8</code></li>
-<li>再将十进制数 <code>8</code> 取反，得到负数 <code>-8</code></li>
-<li>所以二进制数 <code>1000</code> 对应的十进制数为 <code>-8</code></li>
-</ul>
-</li>
-</ul>
-<p><strong><code>1000</code> 在无符号二进制数中表示 <code>8</code>，在有符号二进制数中表示 <code>-8</code> 。</strong></p>
-<p><strong>上面的方法，都是使用负数的补码进行运算的，<code>1001</code>、<code>1000</code> 都是补码</strong></p>
-<h2 id="6、Java如何定义一个二进制数"><a href="#6、Java如何定义一个二进制数" class="headerlink" title="6、Java如何定义一个二进制数"></a>6、Java如何定义一个二进制数</h2><pre><code class="highlight java"><span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0b0000101110</span>; <span class="comment">// 使用 0b 开头，后面是 0和1 定义一个二进制数</span>
-System.out.println(c);</code></pre>
-
-<p>16进制数字定义使用 <code>0x</code> 开头，例如：0x4e</p>
-<h2 id="7、二进制数转十六进制数"><a href="#7、二进制数转十六进制数" class="headerlink" title="7、二进制数转十六进制数"></a>7、二进制数转十六进制数</h2><ul>
-<li><p>概念：</p>
-<ul>
-<li>二进制是由数字0和1组成，十六进制是由：[ 0、1、2、3、4、5、6、7、8、9、a、b、c、d、e、f ]  共16个数字和字母组成，逢十六进一。</li>
-</ul>
-</li>
-<li><p>二进制数与十六进制数的对照关系</p>
-<ul>
-<li>二进制数 –&gt; 十六进制数</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>二进制数</th>
-<th>十六进制数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0000</td>
-<td>0</td>
-</tr>
-<tr>
-<td>0001</td>
-<td>1</td>
-</tr>
-<tr>
-<td>0010</td>
-<td>2</td>
-</tr>
-<tr>
-<td>0011</td>
-<td>3</td>
-</tr>
-<tr>
-<td>0100</td>
-<td>4</td>
-</tr>
-<tr>
-<td>0101</td>
-<td>5</td>
-</tr>
-<tr>
-<td>0110</td>
-<td>6</td>
-</tr>
-<tr>
-<td>0111</td>
-<td>7</td>
-</tr>
-<tr>
-<td>1000</td>
-<td>8</td>
-</tr>
-<tr>
-<td>1001</td>
-<td>9</td>
-</tr>
-<tr>
-<td>1010</td>
-<td>a</td>
-</tr>
-<tr>
-<td>1011</td>
-<td>b</td>
-</tr>
-<tr>
-<td>1100</td>
-<td>c</td>
-</tr>
-<tr>
-<td>1101</td>
-<td>d</td>
-</tr>
-<tr>
-<td>1110</td>
-<td>e</td>
-</tr>
-<tr>
-<td>1111</td>
-<td>f</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<p>由上表可以进下面具体的进制转换了，举例说明。</p>
-<ul>
-<li>二进制数：<code>0b01100111</code><ul>
-<li><code>0b</code> 表示这是一个二进制数</li>
-<li>前四位 <code>0110</code> 对应十六进制数 <code>6</code></li>
-<li>后四位 <code>0111</code> 对应十六进制数 <code>7</code></li>
-<li>所以这个二进制数对应十六进制数为 <code>0x67</code>， <code>0x</code> 表示这是一个十六进制数</li>
-</ul>
-</li>
-<li>二进制数：<code>0b01101111</code><ul>
-<li><code>0b</code> 表示这是一个二进制数</li>
-<li>前四位 <code>0110</code> 对应十六进制数 <code>6</code></li>
-<li>后四位 <code>1111</code> 对应十六进制数 <code>f</code></li>
-<li>所以这个二进制数对应十六进制数为 <code>0x6f </code> , <code>0x</code> 表示这是一个十六进制数</li>
-</ul>
-</li>
-</ul>
-<h1 id="二、位运算基础"><a href="#二、位运算基础" class="headerlink" title="二、位运算基础"></a>二、位运算基础</h1><h2 id="1、相反数"><a href="#1、相反数" class="headerlink" title="1、相反数"></a>1、相反数</h2><ul>
-<li>概念：相反数是一个数学术语，指绝对值相等，正负号相反的两个数互为相反数。</li>
-<li>举例：1 的相反数是 -1，78 的相反数是 -78</li>
-</ul>
-<h3 id="1-1、如何得到一个数的相反数？"><a href="#1-1、如何得到一个数的相反数？" class="headerlink" title="1.1、如何得到一个数的相反数？"></a>1.1、如何得到一个数的相反数？</h3><p>答案：需要对一个数进行 <strong>取反 ，再加1</strong> 即可得到一个数的相反数。</p>
-<pre><code class="highlight java"><span class="comment">// ~、相反数</span>
-System.out.println(a); <span class="comment">// 打印结果：78</span>
-printBinary(a); <span class="comment">// 打印结果：00000000000000000000000001001110</span>
-printBinary(~a); <span class="comment">// 打印结果：11111111111111111111111110110001</span>
-<span class="type">int</span> <span class="variable">e</span> <span class="operator">=</span> ~a + <span class="number">1</span>;
-System.out.println(e); <span class="comment">// 打印结果：-78</span>
-printBinary(e); <span class="comment">// 打印结果：11111111111111111111111110110010</span>
-System.out.println(<span class="string">&quot;===e===&quot;</span>);</code></pre>
-
-<p><strong>注意：int、long的最小值，取相反数、绝对值，都是自己</strong></p>
-<h2 id="2、常见的位运算-、-、-、-、、"><a href="#2、常见的位运算-、-、-、-、、" class="headerlink" title="2、常见的位运算(|、&amp;、^、~、&lt;&lt;、&gt;&gt;、&gt;&gt;&gt;)"></a>2、常见的位运算(|、&amp;、^、~、&lt;&lt;、&gt;&gt;、&gt;&gt;&gt;)</h2><h3 id="2-1、按位或运算符-I"><a href="#2-1、按位或运算符-I" class="headerlink" title="2.1、按位或运算符(I)"></a>2.1、按位或运算符(I)</h3><ul>
-<li><p>参加运算的两个对象，按二进制位进行“或”运算。</p>
-</li>
-<li><p>运算规则:0|0&#x3D;0；0|1&#x3D;1；1|0&#x3D;1；1|1&#x3D;1。</p>
-<ul>
-<li>即:参加运算的两个对象只要有一个为1，其值为1.</li>
-<li>例如:3|5 即 0000 0011 | 0000 0101&#x3D;0000 0111 因此，3|5的值得7.</li>
-</ul>
-<p><strong>负数按补码形式参加按位或运算。</strong></p>
-</li>
-</ul>
-<h3 id="2-2、按位与运算符"><a href="#2-2、按位与运算符" class="headerlink" title="2.2、按位与运算符(&amp;)"></a>2.2、按位与运算符(&amp;)</h3><ul>
-<li><p>参加运算的两个数据，按二进制位进行“与”运算。</p>
-</li>
-<li><p>运算规则:0&amp;0&#x3D;0;0&amp;1&#x3D;0;1&amp;0&#x3D;0;1&amp;1&#x3D;1;</p>
-<ul>
-<li>即:两位同时为“1”，结果才为“1”，否则为0</li>
-<li>例如:3&amp;5 即 0000 0011 &amp; 0000 0101 &#x3D; 0000 0001 因此，3&amp;5的值得1.</li>
-</ul>
-<p><strong>负数按补码形式参加按位与运算。</strong></p>
-</li>
-</ul>
-<h3 id="2-3、按位异或运算符"><a href="#2-3、按位异或运算符" class="headerlink" title="2.3、按位异或运算符(^)"></a>2.3、按位异或运算符(^)</h3><ul>
-<li>参加运算的两个数据，按二进制位进行“异或”运算</li>
-<li>运算规则:0^0&#x3D;0; 0^1&#x3D;1; 1^0&#x3D;1; 1^1&#x3D;0;<ul>
-<li>即:参加运算的两个对象，如果两个相应位为“异”(值不同)，则该位结果为1，否则为0.</li>
-<li>例如:3&amp;5 即 0000 0011 ^ 0000 0101 &#x3D; 0000 0110 因此，3^5的值得6.</li>
-</ul>
-</li>
-<li>任何数与0异或都等于自身</li>
-<li>任何数与自己异或都为0</li>
-</ul>
-<p><strong>负数按补码形式参加按位与运算。</strong></p>
-<h3 id="2-4、按位取反"><a href="#2-4、按位取反" class="headerlink" title="2.4、按位取反(~)"></a>2.4、按位取反(~)</h3><ul>
-<li>运算规则：按照二进制位是0则变为1，是1则变成0<ul>
-<li>即：~1 &#x3D; 0     ~0 &#x3D; 1</li>
-<li>符号位也取反</li>
-</ul>
-</li>
-<li>举例<ul>
-<li>78 的二进制表示：00000000000000000000000001001110</li>
-<li>取反后二进制表示：11111111111111111111111110110001</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-5、左移"><a href="#2-5、左移" class="headerlink" title="2.5、左移(&lt;&lt;)"></a>2.5、左移(&lt;&lt;)</h3><ul>
-<li>左移表示的是某数的各二进位全部左移若干位，高位丢弃，低位补0</li>
-</ul>
-<pre><code class="highlight java"><span class="comment">// 举例:</span>
-print(<span class="number">123</span>);			<span class="comment">// 00000000000000000000000001111011</span>
-print(<span class="number">123</span> &lt;&lt; <span class="number">1</span>);	<span class="comment">// 00000000000000000000000011110110	</span>
-<span class="comment">// 整体左移1位，高位丢弃，低位补0</span></code></pre>
-
-<ul>
-<li>应用</li>
-</ul>
-<pre><code class="highlight java"><span class="comment">// 左移1位相当于在原数的基础上乘以2</span>
-System.out.println(<span class="number">123</span>);	<span class="comment">// 123</span>
-System.out.println(<span class="number">123</span>&lt;&lt;<span class="number">1</span>);	<span class="comment">// 246</span>
-<span class="comment">// 左移2位相当于在原数的基础上乘以4</span>
-System.out.println(<span class="number">2</span>);		<span class="comment">// 2</span>
-System.out.println(<span class="number">2</span>&lt;&lt;<span class="number">2</span>);	<span class="comment">// 8</span>
-<span class="comment">// 左移3位、4位...以此类推</span></code></pre>
-
-
-
-<h3 id="2-6、带符号右移"><a href="#2-6、带符号右移" class="headerlink" title="2.6、带符号右移(&gt;&gt;)"></a>2.6、带符号右移(&gt;&gt;)</h3><ul>
-<li><strong>带符号右移（&gt;&gt;）</strong>指的是各二进位全部右移若干位，低位丢弃，高位补为符号位</li>
-</ul>
-<pre><code class="highlight java"><span class="comment">// 举例</span>
-printBinary(<span class="number">8</span>); <span class="comment">// 00000000000000000000000000001000</span>
-System.out.println(<span class="number">8</span>&gt;&gt;<span class="number">1</span>); <span class="comment">// 4</span>
-printBinary(<span class="number">8</span>&gt;&gt;<span class="number">1</span>); <span class="comment">// 00000000000000000000000000000100</span></code></pre>
-
-<ul>
-<li>应用</li>
-</ul>
-<pre><code class="highlight java">System.out.println(<span class="number">8</span>);	<span class="comment">// 8</span>
-System.out.println(<span class="number">8</span>&gt;&gt;<span class="number">1</span>);	<span class="comment">// 4</span>
-<span class="comment">// 无符号右移2位相当于在原数的基础上除以4</span>
-System.out.println(<span class="number">8</span>);		<span class="comment">// 8</span>
-System.out.println(<span class="number">8</span>&gt;&gt;<span class="number">2</span>);	<span class="comment">// 2</span>
-<span class="comment">// 负数右移规则也适用</span>
-System.out.println(-<span class="number">8</span>&gt;&gt;<span class="number">1</span>); <span class="comment">// -4</span>
-<span class="comment">// 右移3位、4位...以此类推</span></code></pre>
-
-
-
-<h3 id="2-7、无符号右移"><a href="#2-7、无符号右移" class="headerlink" title="2.7、无符号右移(&gt;&gt;&gt;)"></a>2.7、无符号右移(&gt;&gt;&gt;)</h3><ul>
-<li><strong>无符号右移（&gt;&gt;&gt;）</strong>指的是各二进位全部右移若干位，低位丢弃，高位补0</li>
-<li>如果是<strong>负数进行无符号右移，需要使用负数的二进制补码</strong>进行运算。</li>
-<li>如果是正数进行无符号右移，则与 &gt;&gt; 规则相同，右移n位，就相当于除以 2<sup>n</sup></li>
-</ul>
-<pre><code class="highlight java"><span class="comment">// 正数无符号右移</span>
-System.out.println(<span class="number">8</span>&gt;&gt;&gt;<span class="number">1</span>);
-printBinary(<span class="number">8</span>);
-printBinary(<span class="number">8</span>&gt;&gt;&gt;<span class="number">1</span>);
-<span class="comment">// 负数无符号右移</span>
-System.out.println(-<span class="number">8</span>&gt;&gt;&gt;<span class="number">1</span>); <span class="comment">// 2147483644</span>
-printBinary(-<span class="number">8</span>); <span class="comment">// 二进制补码：11111111111111111111111111111000</span>
-printBinary(-<span class="number">8</span>&gt;&gt;&gt;<span class="number">1</span>); <span class="comment">// 01111111111111111111111111111100</span>
-System.out.println(<span class="string">&quot;=== &gt;&gt;&gt;无符号右移 ===&quot;</span>);</code></pre>
-
-
-
-
-
-<h1 id="三、二进制如此设计的原因"><a href="#三、二进制如此设计的原因" class="headerlink" title="三、二进制如此设计的原因"></a>三、二进制如此设计的原因</h1><p>这么设计二进制是为了保证加法的逻辑是一套逻辑，没有条件转移。</p>
-<p>也就是说无论是 正数+正数、正数+负数、负数加负数 都是遵循同一套逻辑，可以提高计算机的运行效率。</p>
-<h1 id="四、解析二进制打印函数"><a href="#四、解析二进制打印函数" class="headerlink" title="四、解析二进制打印函数"></a>四、解析二进制打印函数</h1><h2 id="1、二进制打印函数如下"><a href="#1、二进制打印函数如下" class="headerlink" title="1、二进制打印函数如下"></a>1、二进制打印函数如下</h2><pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment">  * 打印一个int类型的数字，32位进制的状态</span>
-<span class="comment">  * 左侧是高位，右侧是低位</span>
-<span class="comment">  * 这里打印的是num的二进制补码。</span>
-<span class="comment">  * <span class="doctag">@param</span> num 十进制数值</span>
-<span class="comment">  */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printBinary</span><span class="params">(<span class="type">int</span> num)</span> &#123;
-    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">31</span>; i &gt;= <span class="number">0</span>; i--) &#123;
-        <span class="comment">// 下面这句写法，可以改成 :</span>
-        <span class="comment">// System.out.print((a &amp; (1 &lt;&lt; i)) != 0 ? &quot;1&quot; : &quot;0&quot;);</span>
-        <span class="comment">// 但不可以改成 :</span>
-        <span class="comment">// System.out.print((a &amp; (1 &lt;&lt; i)) == 1 ? &quot;1&quot; : &quot;0&quot;);</span>
-        <span class="comment">// 因为a如果第i位有1，那么(a &amp; (1 &lt;&lt; i))是2的i次方，而不一定是1</span>
-        <span class="comment">// 比如，a = 0010011</span>
-        <span class="comment">// a的第0位是1，第1位是1，第4位是1</span>
-        <span class="comment">// (a &amp; (1&lt;&lt;4)) == 16（不是1），说明a的第4位是1状态</span>
-        System.out.print((num &amp; (<span class="number">1</span> &lt;&lt; i)) == <span class="number">0</span> ? <span class="string">&quot;0&quot;</span> : <span class="string">&quot;1&quot;</span>);
+<p><strong>代码示例</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 命令接收者</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Receiver</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 真正执行命令相应的操作</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">action</span><span class="params">()</span>&#123;
+        System.out.println(<span class="string">&quot;==命令接收者执行操作==&quot;</span>);
     &#125;
-    System.out.println();
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 抽象命令角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Command</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 执行方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体命令角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
+    <span class="comment">// 聚合命令接收者</span>
+    <span class="keyword">private</span> Receiver receiver;
+
+    <span class="keyword">public</span> <span class="title function_">ConcreteCommand</span><span class="params">(Receiver receiver)</span> &#123;
+        <span class="built_in">this</span>.receiver = receiver;
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
+        <span class="comment">// 调用接收者执行具体的方法</span>
+        receiver.action();
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 请求者角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Invoker</span> &#123;
+    <span class="comment">// 聚合抽象命令角色</span>
+    <span class="keyword">private</span> Command command;
+
+    <span class="keyword">public</span> <span class="title function_">Invoker</span><span class="params">(Command command)</span> &#123;
+        <span class="built_in">this</span>.command = command;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 行动方法：调用命令对象执行请求</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">action</span><span class="params">()</span> &#123;
+        command.execute();
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 命令接收者</span>
+        <span class="type">Receiver</span> <span class="variable">receiver</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Receiver</span>();
+
+        <span class="comment">// 创建命令对象，将命令接受者设置进去</span>
+        <span class="type">Command</span> <span class="variable">command</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteCommand</span>(receiver);
+
+        <span class="comment">// 创建请求执行者，并将命令对象设置进去</span>
+        <span class="type">Invoker</span> <span class="variable">invoker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Invoker</span>(command);
+
+        <span class="comment">// 执行命令</span>
+        invoker.action();
+    &#125;
 &#125;</code></pre>
 
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">==命令接收者执行操作==</code></pre>
+</blockquote>
+<h1 id="二、案例：AudioPlayer系统"><a href="#二、案例：AudioPlayer系统" class="headerlink" title="二、案例：AudioPlayer系统"></a>二、案例：AudioPlayer系统</h1><p>小女孩茱丽(Julia)有一个盒式录音机，此录音机有播音(Play)、倒带(Rewind)和停止(Stop)功能，录音机的键盘便是请求者(Invoker)角色；茱丽(Julia)是客户端角色，而录音机便是接收者角色。Command类扮演抽象命令角色，而PlayCommand、StopCommand和RewindCommand便是具体命令类。茱丽(Julia)不需要知道播音(play)、倒带(rewind)和停止(stop)功能是怎么具体执行的，这些命令执行的细节全都由键盘(Keypad)具体实施。茱丽(Julia)只需要在键盘上按下相应的键便可以了。</p>
+<p>录音机是典型的命令模式。录音机按键把客户端与录音机的操作细节分割开来。</p>
+<p><strong>UML类图</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-142909.png" alt="命令模式案例：AudioPlayer系统"></p>
+<p><strong>代码如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 接收者角色：录音机</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AudioPlayer</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">play</span><span class="params">()</span>&#123;
+        System.out.println(<span class="string">&quot;录音机播放...&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span>&#123;
+        System.out.println(<span class="string">&quot;录音机倒带...&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stop</span><span class="params">()</span>&#123;
+        System.out.println(<span class="string">&quot;录音机停止...&quot;</span>);
+    &#125;
+&#125;
 
 
-<h2 id="2、解析"><a href="#2、解析" class="headerlink" title="2、解析"></a>2、解析</h2><ul>
-<li>一个int类型的数在java中有32位，如果需要打印它的二进制表示，就需要知道它在二进制数中，每一位是0还是1。</li>
-<li>根据位运算符 按位&amp; 的特点，相同位都为1，按位&amp;计算为1，否则为0的特点来实现这一需求。</li>
-<li><code>1 &lt;&lt; i</code> 表示打印第 i 位上的二进制数<ul>
-<li>例如：num等于8，那么它的二进制表示为：00000000000000000000000000001000</li>
-<li>i 从高位(31) 到低位(0) 依次打印。</li>
-<li>i 等于31时，1 &lt;&lt; 31 的值表示的二进制为：10000000000000000000000000000000</li>
-<li>此时 <code>num &amp; (1 &lt;&lt; i)</code> 的值就是0，所以 num 的二进制值，在第31位上为0。</li>
-<li>i 递减，依次往后打印出 num 每一位二进制数。</li>
-</ul>
+<span class="comment">/**</span>
+<span class="comment"> * 命令角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Command</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 执行方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体命令角色：播放命令</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlayCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
+    <span class="comment">// 命令接收者</span>
+    <span class="keyword">private</span> AudioPlayer audioPlayer;
+
+    <span class="keyword">public</span> <span class="title function_">PlayCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
+        <span class="built_in">this</span>.audioPlayer = audioPlayer;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 执行方法</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
+        audioPlayer.play();
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体命令角色：倒带命令</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RewindCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
+    <span class="comment">// 命令接收者</span>
+    <span class="keyword">private</span> AudioPlayer audioPlayer;
+
+    <span class="keyword">public</span> <span class="title function_">RewindCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
+        <span class="built_in">this</span>.audioPlayer = audioPlayer;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 执行方法</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
+        audioPlayer.rewind();
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体命令角色：停止命令</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StopCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
+    <span class="comment">// 命令接收者</span>
+    <span class="keyword">private</span> AudioPlayer audioPlayer;
+
+    <span class="keyword">public</span> <span class="title function_">StopCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
+        <span class="built_in">this</span>.audioPlayer = audioPlayer;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 执行方法</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
+        audioPlayer.stop();
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 请求者角色：键盘</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Keypad</span> &#123;
+    <span class="keyword">private</span> Command playCommand;
+    <span class="keyword">private</span> Command rewindCommand;
+    <span class="keyword">private</span> Command stopCommand;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setPlayCommand</span><span class="params">(Command playCommand)</span> &#123;
+        <span class="built_in">this</span>.playCommand = playCommand;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setRewindCommand</span><span class="params">(Command rewindCommand)</span> &#123;
+        <span class="built_in">this</span>.rewindCommand = rewindCommand;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStopCommand</span><span class="params">(Command stopCommand)</span> &#123;
+        <span class="built_in">this</span>.stopCommand = stopCommand;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 执行播放方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">play</span><span class="params">()</span>&#123;
+        playCommand.execute();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 执行倒带方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span>&#123;
+        rewindCommand.execute();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 执行播放方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stop</span><span class="params">()</span>&#123;
+        stopCommand.execute();
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Julia</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 创建接收者对象</span>
+        <span class="type">AudioPlayer</span> <span class="variable">audioPlayer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AudioPlayer</span>();
+
+        <span class="comment">// 创建命令对象</span>
+        <span class="type">Command</span> <span class="variable">playCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PlayCommand</span>(audioPlayer);
+        <span class="type">Command</span> <span class="variable">rewindCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RewindCommand</span>(audioPlayer);
+        <span class="type">Command</span> <span class="variable">stopCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StopCommand</span>(audioPlayer);
+
+        <span class="comment">// 创建请求者对象</span>
+        <span class="type">Keypad</span> <span class="variable">keypad</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Keypad</span>();
+        keypad.setPlayCommand(playCommand);
+        keypad.setRewindCommand(rewindCommand);
+        keypad.setStopCommand(stopCommand);
+
+        <span class="comment">// 测试</span>
+        keypad.play();
+        keypad.stop();
+        keypad.rewind();
+        keypad.stop();
+        keypad.play();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">录音机播放...
+录音机停止...
+录音机倒带...
+录音机停止...
+录音机播放...</code></pre>
+</blockquote>
+<h1 id="三、宏命令"><a href="#三、宏命令" class="headerlink" title="三、宏命令"></a>三、宏命令</h1><p>所谓宏命令简单点说就是包含多个命令的命令，是一个命令的组合。</p>
+<p>设想茱丽的录音机有一个记录功能，可以把一个一个的命令记录下来，再在任何需要的时候重新把这些记录下来的命令一次性执行，这就是所谓的宏命令集功能。因此，茱丽的录音机系统现在有四个键，分别为播音、倒带、停止和宏命令功能。此时系统的设计与前面的设计相比有所增强，主要体现在Julia类现在有了一个新方法，用以操作宏命令键。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-144947.png" alt="宏命令"></p>
+<p><strong>代码如下：</strong></p>
+<p>系统需要一个代表宏命令的接口，以定义出具体宏命令所需要的接口。</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 系统需要一个代表宏命令的接口，以定义出具体宏命令所需要的接口。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MacroCommand</span> <span class="keyword">extends</span> <span class="title class_">Command</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 宏命令聚集的管理方法，可以添加一个成员命令</span>
+<span class="comment">     * <span class="doctag">@param</span> cmd</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Command cmd)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 宏命令聚集的管理方法, 可以删除一个成员命令</span>
+<span class="comment">     * <span class="doctag">@param</span> cmd</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Command cmd)</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体的宏命令MacroAudioCommand类负责把个别的命令合成宏命令。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MacroAudioCommand</span> <span class="keyword">implements</span> <span class="title class_">MacroCommand</span> &#123;
+    List&lt;Command&gt; commandList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Command cmd)</span> &#123;
+        commandList.add(cmd);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Command cmd)</span> &#123;
+        commandList.remove(cmd);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 执行方法</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
+        <span class="keyword">for</span> (Command command : commandList) &#123;
+            command.execute();
+        &#125;
+    &#125;
+
+&#125;
+
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Julia</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 创建接收者对象</span>
+
+        <span class="type">AudioPlayer</span> <span class="variable">audioPlayer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AudioPlayer</span>();
+        <span class="comment">//创建命令对象</span>
+        <span class="type">Command</span> <span class="variable">playCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PlayCommand</span>(audioPlayer);
+        <span class="type">Command</span> <span class="variable">rewindCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RewindCommand</span>(audioPlayer);
+        <span class="type">Command</span> <span class="variable">stopCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StopCommand</span>(audioPlayer);
+
+        <span class="type">MacroCommand</span> <span class="variable">marco</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MacroAudioCommand</span>();
+
+        marco.add(playCommand);
+        marco.add(rewindCommand);
+        marco.add(stopCommand);
+        marco.execute();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">录音机播放...
+录音机倒带...
+录音机停止..</code></pre>
+</blockquote>
+<h1 id="四、命令模式的优点"><a href="#四、命令模式的优点" class="headerlink" title="四、命令模式的优点"></a>四、命令模式的优点</h1><ul>
+<li><p><strong>更松散的耦合</strong></p>
+<p>命令模式使得发起命令的对象——客户端，和具体实现命令的对象——接收者对象完全解耦，也就是说发起命令的对象完全不知道具体实现对象是谁，也不知道如何实现。</p>
 </li>
-<li>如果num是一个负数，这个函数打印的就是负数二进制数的表示的补码。<ul>
-<li>例如：num等于 -8 ，此函数打印出它的二进制补码为：11111111111111111111111111111000</li>
-</ul>
+<li><p><strong>更动态的控制</strong></p>
+<p>命令模式把请求封装起来，可以动态地对它进行参数化、队列化和日志化等操作，从而使得系统更灵活。</p>
+</li>
+<li><p><strong>很自然的复合命令</strong></p>
+<p>命令模式中的命令对象能够很容易地组合成复合命令，也就是宏命令，从而使系统操作更简单，功能更强大。</p>
+</li>
+<li><p><strong>更好的扩展性</strong></p>
+<p>由于发起命令的对象和具体的实现完全解耦，因此扩展新的命令就很容易，只需要实现新的命令对象，然后在装配的时候，把具体的实现对象设置到命令对象中，然后就可以使用这个命令对象，已有的实现完全不用变化。</p>
 </li>
 </ul>
-<p><strong>正数的二进制 原码、反码、补码是相同的。</strong></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
