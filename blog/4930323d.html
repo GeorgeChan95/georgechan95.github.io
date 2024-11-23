@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>给博客网站添加站点地图-sitemap | George&#39;s Blog</title>
+  <title>15-模板方法模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" hexo , github pages , sitemap ">
-  <meta name="description" content="给博客网站添加站点地图-sitemap | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="15-模板方法模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#x65;&#x6f;&#114;&#x67;&#x65;&#x5f;&#x39;&#x35;&#64;&#x31;&#50;&#54;&#x2e;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1217,9 +1217,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hexo/博客添加Sitemap" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/15-模板方法模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">给博客网站添加站点地图-sitemap</h1>
+        <h1 class="article-title">15-模板方法模式</h1>
     
     <div class="article-meta">
         
@@ -1229,7 +1229,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="Hexo">Hexo</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1237,23 +1237,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">hexo</a>
-            
-            <a class="color3">github pages</a>
-            
-            <a class="color3">sitemap</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 12:17:33'>2023-11-21 20:00</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-23 13:12:17'>2024-11-23 19:40</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:393</span>
+        <span>字数:2.5k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1283,7 +1279,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-text">站点地图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%B7%BB%E5%8A%A0sitemap"><span class="toc-text">一、添加sitemap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-text">1. 安装插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9-config-yml%E9%85%8D%E7%BD%AE"><span class="toc-text">2. 修改_config.yml配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BC%96%E8%AF%91%E5%8D%9A%E5%AE%A2"><span class="toc-text">3. 编译博客</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%9F%A5%E7%9C%8Bsitemap%E6%96%87%E4%BB%B6"><span class="toc-text">4. 查看sitemap文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%9F%A5%E7%9C%8B%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BE"><span class="toc-text">5. 查看站点地图</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-text">参考链接</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="toc-text">一、什么是模板方法设计模式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E7%9A%84%E7%94%A8%E9%80%94"><span class="toc-text">1. 模板方法的用途</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-text">2. 模板方法的定义</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E7%9A%84%E6%AD%A5%E9%AA%A4"><span class="toc-text">二、定义模板方法的步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%9A%E4%B9%89%E6%A8%A1%E6%9D%BF%E7%B1%BB"><span class="toc-text">1. 定义模板类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95"><span class="toc-text">1.1 模板方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%9F%BA%E6%9C%AC%E6%96%B9%E6%B3%95"><span class="toc-text">1.2 基本方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%9A%E4%B9%89%E5%85%B7%E4%BD%93%E5%AD%90%E7%B1%BB"><span class="toc-text">2. 定义具体子类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%9A%E4%B9%89%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8"><span class="toc-text">3. 定义客户端调用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%9E%E4%BE%8B%E6%BC%94%E7%A4%BA"><span class="toc-text">4. 实例演示</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%A1%88%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">三、案例解析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A1%88%E4%BE%8B1%EF%BC%9A-%E4%B8%80%E6%97%A5%E8%A7%84%E5%88%92"><span class="toc-text">1. 案例1： 一日规划</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B2%EF%BC%9A-%E9%92%A9%E5%AD%90%E6%96%B9%E6%B3%95"><span class="toc-text">2. 案例2： 钩子方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">四、模板方法的优缺点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">五、使用场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E5%AF%B9%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E5%85%AD%E5%A4%A7%E5%8E%9F%E5%88%99%E7%9A%84%E5%BA%94%E7%94%A8%E6%80%9D%E8%80%83"><span class="toc-text">六、对设计模式六大原则的应用思考</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1299,40 +1295,311 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
-<p>系统 : Windows 10</p>
-<p>NodeJS : 14.21.3</p>
+        <h1 id="一、什么是模板方法设计模式"><a href="#一、什么是模板方法设计模式" class="headerlink" title="一、什么是模板方法设计模式"></a>一、什么是模板方法设计模式</h1><p>从字面意义上理解, 模板方法就是定义出来一套方法, 作为模板, 也就是基础。 在这个基础上, 我们可以进行加工，实现个性化的实现。比如：一日餐三. 早餐, 中餐, 晚餐. 每个人都要吃三餐, 但每个人的三餐吃的可能都不一样. 一日三餐定义了模板–早中晚, 每个人的三餐就是模板的具体实现.</p>
+<h2 id="1-模板方法的用途"><a href="#1-模板方法的用途" class="headerlink" title="1. 模板方法的用途"></a>1. 模板方法的用途</h2><ul>
+<li>将不变的行为从子类搬到超类，去除了子类中的重复代码。</li>
+<li>规范子类的结构</li>
+</ul>
+<h2 id="2-模板方法的定义"><a href="#2-模板方法的定义" class="headerlink" title="2. 模板方法的定义"></a>2. 模板方法的定义</h2><p>定义一个操作中的算法骨架，而将算法的一些步骤延迟到子类中，使得子类可以不改变该算法结构的情况下重定义该算法的某些特定步骤。它是一种类<strong>行为型模式</strong>。</p>
+<h1 id="二、定义模板方法的步骤"><a href="#二、定义模板方法的步骤" class="headerlink" title="二、定义模板方法的步骤"></a>二、定义模板方法的步骤</h1><blockquote>
+<p>第一步: 定义模板类 </p>
+<p>第二步: 定义具体子类 </p>
+<p>第三步: 客户端调用</p>
 </blockquote>
-<h1 id="站点地图"><a href="#站点地图" class="headerlink" title="站点地图"></a>站点地图</h1><p>站点地图是一个网站所有链接的容器。很多网站的连接层次比较深，爬虫很难抓取到，站点地图可以方便爬虫抓取网站页面，通过抓取网站页面，清晰了解网站的架构，网站地图一般存放在根目录下并命名 sitemap，为爬虫指路，增加网站重要内容页面的收录。</p>
-<p>站点地图就是根据网站的结构、框架、内容，生成的导航网页文件。站点地图对于提高用户体验有好处，它们为网站访问者指明方向，并帮助迷失的访问者找到他们想看的页面。</p>
-<h1 id="一、添加sitemap"><a href="#一、添加sitemap" class="headerlink" title="一、添加sitemap"></a>一、添加sitemap</h1><h2 id="1-安装插件"><a href="#1-安装插件" class="headerlink" title="1. 安装插件"></a>1. 安装插件</h2><p>打开命令行工具，进入博客根目录，使用npm执行如下命令</p>
-<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">谷歌、Bing 网站地图插件</span>
-npm install hexo-generator-sitemap --save
-<span class="meta prompt_"># </span><span class="language-bash">百度网站地图插件</span>
-npm install hexo-generator-baidu-sitemap --save</code></pre>
+<p>下面来了解每一个步骤：</p>
+<h2 id="1-定义模板类"><a href="#1-定义模板类" class="headerlink" title="1. 定义模板类"></a>1. 定义模板类</h2><p>通常模板类是抽象类，负责给出算法的轮廓或者框架。他是有若干个<strong>模板方法</strong>和若干个<strong>基本方法</strong>构成。</p>
+<h3 id="1-1-模板方法"><a href="#1-1-模板方法" class="headerlink" title="1.1 模板方法"></a>1.1 模板方法</h3><p>定义了算法的骨架， 定义了方法调用的顺序， 其中包含一个或者多个基本方法</p>
+<h3 id="1-2-基本方法"><a href="#1-2-基本方法" class="headerlink" title="1.2 基本方法"></a>1.2 基本方法</h3><p>基本方法有三种类型：</p>
+<ul>
+<li>抽象方法：子类必须重写的方法。没有默认实现。</li>
+<li>具体方法：父类定义的默认实现，有实现逻辑，可以被具体的子类继承或重写</li>
+<li>钩子方法：判断的逻辑方法和需要子类重写的空方法两种。</li>
+</ul>
+<h2 id="2-定义具体子类"><a href="#2-定义具体子类" class="headerlink" title="2. 定义具体子类"></a>2. 定义具体子类</h2><p>具体子类，也就是具体的实现类， 实现抽象类中的抽象方法。他们是抽象的模板方法中一个组成部分。</p>
+<h2 id="3-定义客户端调用"><a href="#3-定义客户端调用" class="headerlink" title="3. 定义客户端调用"></a>3. 定义客户端调用</h2><p>客户端调用抽象类， 实例化的时候实例化具体类， 只需要调用抽象类的模板方法就可以了。</p>
+<h2 id="4-实例演示"><a href="#4-实例演示" class="headerlink" title="4. 实例演示"></a>4. 实例演示</h2><p>下面来看一下抽象类和子类之间的UML图和源码实现</p>
+<p><strong>UML类图</strong></p>
+<img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-102632.png" alt="模板方法设计模式" style="zoom: 50%;" />
+
+<p>从图中可以看出抽象类的结构可以定义三类方法。 可以有一个也可以有多个。子类必须需要实现抽象类中的抽象方法，可以选择性重写父类的具体方法。子类实现接口的时候，要多思考设计模式的六大原则。</p>
+<p><strong>代码实现</strong></p>
+<ul>
+<li><p>先定义抽象类， 也就是框架。</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象类, 定义模板</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractClass</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 模板方法</span>
+<span class="comment">     * 规范了流程的框架</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">templateMethod</span><span class="params">()</span> &#123;
+        <span class="comment">// 先调用具体方法</span>
+        specificMethod();
+        <span class="comment">// 在调用抽象方法</span>
+        abstractMethod();
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">specificMethod</span><span class="params">()</span> &#123;
+        <span class="comment">// 具体的公共逻辑, 父子类通用</span>
+        System.out.println(<span class="string">&quot;具体方法---父子类通用逻辑&quot;</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 抽象方法</span>
+<span class="comment">     * 抽象方法, 子类必须重写</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">abstractMethod</span><span class="params">()</span>;
+&#125;</code></pre>
+</li>
+<li><p>定义具体的实现类， 实现父类的抽象方法</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 具体实现类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteClass</span> <span class="keyword">extends</span> <span class="title class_">AbstractClass</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 重写父类的抽象方法</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">abstractMethod</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;具体实现类--重写父类的抽象方法&quot;</span>);
+    &#125;
+&#125;</code></pre>
+</li>
+<li><p>最后定义客户端调用</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 模板方法客户端</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TemplateClient</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">AbstractClass</span> <span class="variable">abstractClass</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteClass</span>();
+        abstractClass.templateMethod();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">具体方法---父子类通用逻辑
+具体实现类--重写父类的抽象方法</code></pre></blockquote>
+</li>
+</ul>
+<p>对照模板方法设计模式，我们来看一个具体的案例。</p>
+<h1 id="三、案例解析"><a href="#三、案例解析" class="headerlink" title="三、案例解析"></a>三、案例解析</h1><h2 id="1-案例1：-一日规划"><a href="#1-案例1：-一日规划" class="headerlink" title="1. 案例1： 一日规划"></a>1. 案例1： 一日规划</h2><p>每个人的一日安排都有三餐， 早餐， 中餐，晚参。 但每个人的三餐食物不尽相同，我们来看看每个人的三餐变化， 以及三餐前后要做的事情。</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 一日三餐抽象类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">ArrangementAbstract</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 模板方法</span>
+<span class="comment">     * 规定了一天的框架</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">templateMethod</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;一日安排如下: &quot;</span>);
+        getUp();
+        breakfast();
+        lunch();
+        dinner();
+        getDown();
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">getUp</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;起床&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">getDown</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;睡觉&quot;</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 早餐抽象类</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">breakfast</span><span class="params">()</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 午餐抽象类</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">lunch</span><span class="params">()</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 晚餐抽象类</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">dinner</span><span class="params">()</span>;
+&#125;</code></pre>
+
+<p>定义一日三餐抽象类。每个人的日程安排都是，起床，早餐，中餐，晚餐，睡觉。 其中起床和睡觉是每个人都要做的事情，三餐也是，但三餐的食物不同，于是我们将三餐定义为抽象</p>
+<p>一日安排实现类</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 张三的一日三餐安排</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PersonArrangement</span> <span class="keyword">extends</span> <span class="title class_">ArrangementAbstract</span> &#123;
+    <span class="keyword">private</span> String name;
+
+    <span class="keyword">public</span> <span class="title function_">PersonArrangement</span><span class="params">(String name)</span> &#123;
+        <span class="built_in">this</span>.name = name;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 早餐抽象类</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">breakfast</span><span class="params">()</span> &#123;
+        System.out.println(name + <span class="string">&quot;--早餐吃牛奶面包&quot;</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 午餐抽象类</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">lunch</span><span class="params">()</span> &#123;
+        System.out.println(name + <span class="string">&quot;--中餐吃食堂&quot;</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 晚餐抽象类</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">dinner</span><span class="params">()</span> &#123;
+        System.out.println(name + <span class="string">&quot;--晚餐吃水果&quot;</span>);
+    &#125;
+&#125;</code></pre>
 
 
 
-<h2 id="2-修改-config-yml配置"><a href="#2-修改-config-yml配置" class="headerlink" title="2. 修改_config.yml配置"></a>2. 修改_config.yml配置</h2><p>修改博客根目录下的 _config.yml 文件,添加如下配置。</p>
-<pre><code class="highlight yaml"><span class="comment"># 配置后自动生成sitemap</span>
-<span class="attr">sitemap:</span>
-    <span class="attr">path:</span> <span class="string">sitemap.xml</span>
-<span class="attr">baidusitemap:</span>
-    <span class="attr">path:</span> <span class="string">baidusitemap.xml</span></code></pre>
+<p>客户端调用</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">ArrangementAbstract</span> <span class="variable">arrangementAbstract</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PersonArrangement</span>(<span class="string">&quot;张三&quot;</span>);
+        arrangementAbstract.templateMethod();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">一日安排如下: 
+起床
+张三--早餐吃牛奶面包
+张三--中餐吃食堂
+张三--晚餐吃水果
+睡觉</code></pre>
+</blockquote>
+<p>可以看出， 完全按照模板方法的步骤实现。</p>
+<h2 id="2-案例2：-钩子方法"><a href="#2-案例2：-钩子方法" class="headerlink" title="2. 案例2： 钩子方法"></a>2. 案例2： 钩子方法</h2><p>我们上面说了, 模板方法设计模式中, 基本方法包括抽象方法,具体方法和钩子方法. 如果能够使用好钩子方法, 可以在程序中完美实现子类控制父类的行为. 我们来看下面的案例:</p>
+<p>我们在抽象方法中定义一个钩子方法 <code>hookMethod()</code> , 在模板方法 <code>templateMethod()</code> 中,钩子方法控制了代码的流程.</p>
+<p><strong>UML类图</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-121856.png" alt="模板方法模式-钩子方法"></p>
+<p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象类, 定义模板</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractClass</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 定义模板方法</span>
+<span class="comment">     * 规范了流程的框架</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">templateMethod</span><span class="params">()</span> &#123;
+        <span class="comment">// 调用具体方法</span>
+        specificMethod();
+        <span class="comment">// 钩子方法控制下一步骤</span>
+        <span class="keyword">if</span> (hookMethod()) &#123;
+            <span class="comment">// 调用抽象方法</span>
+            abstractMethod();
+        &#125;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 具体方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">specificMethod</span><span class="params">()</span> &#123;
+        <span class="comment">// 具体的公共逻辑, 父子类通用</span>
+        System.out.println(<span class="string">&quot;具体方法---父子类通用逻辑&quot;</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 抽象方法</span>
+<span class="comment">     *</span>
+<span class="comment">     * 抽象方法, 子类必须重写</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">abstractMethod</span><span class="params">()</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 钩子方法</span>
+<span class="comment">     * 钩子方法是有具体实现的,</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hookMethod</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> <span class="literal">true</span>;
+    &#125;
+&#125;
 
 
+<span class="comment">/**</span>
+<span class="comment"> * 具体实现类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteClass</span> <span class="keyword">extends</span> <span class="title class_">AbstractClass</span>&#123;
 
-<h2 id="3-编译博客"><a href="#3-编译博客" class="headerlink" title="3. 编译博客"></a>3. 编译博客</h2><pre><code class="highlight shell">hexo clean &amp; hexo g</code></pre>
+    <span class="comment">/**</span>
+<span class="comment">     * 重写父类的抽象方法</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">abstractMethod</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;具体实现类--重写父类的抽象方法&quot;</span>);
+    &#125;
 
+    <span class="comment">/**</span>
+<span class="comment">     * 子类重写钩子方法，非必须</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hookMethod</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;重写了父类的钩子方法, 反向控制父类的行为&quot;</span>);
+        <span class="keyword">return</span> <span class="literal">false</span>;
+    &#125;
+&#125;
 
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TemplateClient</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">AbstractClass</span> <span class="variable">abstractClass</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteClass</span>();
+        abstractClass.templateMethod();
+    &#125;
+&#125;</code></pre>
 
-<h2 id="4-查看sitemap文件"><a href="#4-查看sitemap文件" class="headerlink" title="4. 查看sitemap文件"></a>4. 查看sitemap文件</h2><p>进入博客根目录下的 <code>public</code> 文件夹下，发现已经生成了 <code>sitemap.xml</code> 和 <code>baidusitemap.xml</code> 两个文件，表示添加网站地图文件操作成功！</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/21/20231121-101144.png" alt="image-20231121101143695"></p>
-<h2 id="5-查看站点地图"><a href="#5-查看站点地图" class="headerlink" title="5. 查看站点地图"></a>5. 查看站点地图</h2><p>Github Pages 站点跟路径 + sitemap.xml 可查看站点地图</p>
-<p><a href="https://georgechan95.github.io/sitemap.xml">sitemap.xml</a></p>
-<p><a href="https://georgechan95.github.io/baidusitemap.xml">baidusitemap.xml</a></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/21/20231121-101910.png" alt="image-20231121101909570"></p>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://jueee.github.io/2020/08/2020-08-09-%E5%8D%9A%E5%AE%A2%E7%BD%91%E5%9D%80%E5%A2%9E%E5%8A%A0%E7%AB%99%E7%82%B9%E5%9C%B0%E5%9B%BEsitemap/">博客网址增加站点地图 sitemap</a></p>
+<blockquote>
+<p>运行结果</p>
+<pre><code class="highlight shell">具体方法---父子类通用逻辑
+重写了父类的钩子方法, 反向控制父类的行为</code></pre>
+</blockquote>
+<p>如果子类钩子方法 <code>HookMethod()</code> 的代码改变，则程序的运行结果也会发生改变。</p>
+<h1 id="四、模板方法的优缺点"><a href="#四、模板方法的优缺点" class="headerlink" title="四、模板方法的优缺点"></a>四、模板方法的优缺点</h1><p><strong>优点</strong></p>
+<ul>
+<li>规范了框架, 封装了不变的部分, 扩展了可变的部分. 父类定义框架, 并抽象了公共不变的部分, 子类通过重写扩展完善了框架的实现.</li>
+<li>使用了”开闭原则”, 对扩展开放, 对修改关闭. 子类可以通过重写父类的抽象方法来扩展父类的实现.</li>
+<li>行为集中有父类控制, 规范流程。</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>每一种实现都需要定义一个具体实现类, 增加类的数量, 系统更加复杂</li>
+<li>继承的缺点, 一旦父类增加一个抽象方法, 所有子类都需要增加. 这一点违背”开闭原则”.</li>
+<li>父类中的抽象方法由子类实现, 子类的执行结果影响父类, 这种”反向控制”结构, 会增加代码的复杂性。</li>
+</ul>
+<h1 id="五、使用场景"><a href="#五、使用场景" class="headerlink" title="五、使用场景"></a>五、使用场景</h1><ul>
+<li>算法的整体步骤是固定的，但个别部分容易发生变化时，可以考虑使用模板方法设计模式，将容易发生变化的部分抽象出来，提供给子类去实现。</li>
+<li>当多个子类存在公共的行为时，可以将其提取出来并集中到一个公共父类中以避免代码重复。首先，要识别现有代码中的不同之处，并且将不同之处分离为新的操作。最后，用一个调用这些新的操作的模板方法来替换这些不同的代码。</li>
+<li>当需要控制子类的扩展时，模板方法只在特定点调用钩子操作，这样就只允许在这些点进行扩展。</li>
+<li>重构时，模板方法模式是一个经常使用到的模式，把相同的代码抽取到父类中，通过钩子函数约束其行为</li>
+</ul>
+<h1 id="六、对设计模式六大原则的应用思考"><a href="#六、对设计模式六大原则的应用思考" class="headerlink" title="六、对设计模式六大原则的应用思考"></a>六、对设计模式六大原则的应用思考</h1><ul>
+<li>单一职责原则: 一个方法只有一个引起变化的原因, 这个不太好看出, 要看子类代码的具体实现</li>
+<li>里式替换原则： 父类出现的地方都可以使用子类替换,并且结果保持一致. 子类重写了父类的方法。 模板方法设计模式可能违背里式替换原则, 不过，这正是能够“反向控制”的原理</li>
+<li>接口隔离原则: 依赖于最小的单一接口, 而不是胖接口. 符合</li>
+<li>依赖倒置原则: 依赖于抽象, 而不是依赖于具体. 符合</li>
+<li>迪米特法则: 最少知识原则. 之和朋友沟通, 减少和朋友的沟通. 这个需要看子类具体实现是否符合</li>
+<li>开闭原则: 违背开闭原则,  一旦父类增加一个抽象方法， 所有子类都需要对应增加</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
