@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>二进制和位运算 | George&#39;s Blog</title>
+  <title>17-访问者模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 算法 , 二进制 , 位运算 ">
-  <meta name="description" content="二进制和位运算 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="17-访问者模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#x72;&#103;&#101;&#x5f;&#x39;&#53;&#x40;&#x31;&#x32;&#x36;&#46;&#x63;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1244,9 +1244,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-algorithm/二进制和位运算" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/17-访问者模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">二进制和位运算</h1>
+        <h1 class="article-title">17-访问者模式</h1>
     
     <div class="article-meta">
         
@@ -1256,7 +1256,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="算法">算法</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1264,23 +1264,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color3">算法</a>
-            
-            <a class="color4">二进制</a>
-            
-            <a class="color4">位运算</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-07 19:37:29'>2024-06-20 08:04</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-24 12:09:51'>2024-11-23 21:55</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:3.1k</span>
+        <span>字数:3.9k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1310,7 +1306,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%9F%BA%E7%A1%80"><span class="toc-text">一、二进制基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E4%B8%8E%E5%8D%81%E8%BF%9B%E5%88%B6%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-text">1、二进制与十进制的转换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E6%9C%89%E7%AC%A6%E5%8F%B7%E6%95%B0%E4%B8%8E%E6%97%A0%E7%AC%A6%E5%8F%B7%E6%95%B0"><span class="toc-text">2、有符号数与无符号数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E6%BA%90%E7%A0%81%E3%80%81%E5%8F%8D%E7%A0%81%E4%B8%8E%E8%A1%A5%E7%A0%81"><span class="toc-text">3、源码、反码与补码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E5%8D%81%E8%BF%9B%E5%88%B6%E8%B4%9F%E6%95%B0%E5%A6%82%E4%BD%95%E8%BD%AC%E6%8D%A2%E6%88%90%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-text">4、十进制负数如何转换成二进制数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5%E3%80%81%E8%B4%9F%E6%95%B0%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E5%A6%82%E4%BD%95%E8%BD%AC%E6%88%90%E5%8D%81%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-text">5、负数二进制数如何转成十进制数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6%E3%80%81Java%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%E4%B8%80%E4%B8%AA%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-text">6、Java如何定义一个二进制数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E8%BD%AC%E5%8D%81%E5%85%AD%E8%BF%9B%E5%88%B6%E6%95%B0"><span class="toc-text">7、二进制数转十六进制数</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%8D%E8%BF%90%E7%AE%97%E5%9F%BA%E7%A1%80"><span class="toc-text">二、位运算基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E7%9B%B8%E5%8F%8D%E6%95%B0"><span class="toc-text">1、相反数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1%E3%80%81%E5%A6%82%E4%BD%95%E5%BE%97%E5%88%B0%E4%B8%80%E4%B8%AA%E6%95%B0%E7%9A%84%E7%9B%B8%E5%8F%8D%E6%95%B0%EF%BC%9F"><span class="toc-text">1.1、如何得到一个数的相反数？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E5%B8%B8%E8%A7%81%E7%9A%84%E4%BD%8D%E8%BF%90%E7%AE%97-%E3%80%81-%E3%80%81-%E3%80%81-%E3%80%81%E3%80%81"><span class="toc-text">2、常见的位运算(|、&amp;、^、~、&lt;&lt;、&gt;&gt;、&gt;&gt;&gt;)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1%E3%80%81%E6%8C%89%E4%BD%8D%E6%88%96%E8%BF%90%E7%AE%97%E7%AC%A6-I"><span class="toc-text">2.1、按位或运算符(I)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2%E3%80%81%E6%8C%89%E4%BD%8D%E4%B8%8E%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">2.2、按位与运算符(&amp;)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3%E3%80%81%E6%8C%89%E4%BD%8D%E5%BC%82%E6%88%96%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="toc-text">2.3、按位异或运算符(^)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4%E3%80%81%E6%8C%89%E4%BD%8D%E5%8F%96%E5%8F%8D"><span class="toc-text">2.4、按位取反(~)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5%E3%80%81%E5%B7%A6%E7%A7%BB"><span class="toc-text">2.5、左移(&lt;&lt;)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6%E3%80%81%E5%B8%A6%E7%AC%A6%E5%8F%B7%E5%8F%B3%E7%A7%BB"><span class="toc-text">2.6、带符号右移(&gt;&gt;)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7%E3%80%81%E6%97%A0%E7%AC%A6%E5%8F%B7%E5%8F%B3%E7%A7%BB"><span class="toc-text">2.7、无符号右移(&gt;&gt;&gt;)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%A6%82%E6%AD%A4%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%8E%9F%E5%9B%A0"><span class="toc-text">三、二进制如此设计的原因</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E8%A7%A3%E6%9E%90%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%89%93%E5%8D%B0%E5%87%BD%E6%95%B0"><span class="toc-text">四、解析二进制打印函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%89%93%E5%8D%B0%E5%87%BD%E6%95%B0%E5%A6%82%E4%B8%8B"><span class="toc-text">1、二进制打印函数如下</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81%E8%A7%A3%E6%9E%90"><span class="toc-text">2、解析</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%86%E6%B4%BE%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-text">一、分派的概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9D%99%E6%80%81%E5%88%86%E6%B4%BE"><span class="toc-text">1. 静态分派</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8A%A8%E6%80%81%E5%88%86%E6%B4%BE"><span class="toc-text">2. 动态分派</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%88%86%E6%B4%BE%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">3. 分派的类型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8F%8C%E9%87%8D%E5%88%86%E6%B4%BE"><span class="toc-text">4. 双重分派</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">二、访问者模式的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A1%88%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">1. 案例解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%87%86%E5%A4%87%E8%BF%87%E7%A8%8B%E6%97%B6%E5%BA%8F%E5%9B%BE"><span class="toc-text">2. 准备过程时序图</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%AE%BF%E9%97%AE%E8%BF%87%E7%A8%8B%E6%97%B6%E5%BA%8F%E5%9B%BE"><span class="toc-text">3. 访问过程时序图</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%BF%E9%97%AE%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="toc-text">三、访问者模式的优缺点</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1326,388 +1322,411 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、二进制基础"><a href="#一、二进制基础" class="headerlink" title="一、二进制基础"></a>一、二进制基础</h1><h2 id="1、二进制与十进制的转换"><a href="#1、二进制与十进制的转换" class="headerlink" title="1、二进制与十进制的转换"></a>1、二进制与十进制的转换</h2><ul>
-<li><p>举例：<code>0101</code> –&gt; <code>5</code></p>
-<p>二进制[0101] 表示:  0 * 2<sup>3</sup> + 1 * 2<sup>2</sup> + 0 * 2<sup>1</sup> + 1 * 2<sup>0</sup> &#x3D; 5</p>
-</li>
-</ul>
-<p>计算结果正好等于十进制数：5</p>
-<p>上面的计算使用的是4位二进制数来表示的，<strong>4位二进制数可表示的10进制数有 2<sup>4</sup> &#x3D; 16 个，表示十进制数的范围是 0 ~ 2<sup>4</sup> -1 ，即：0 ~ 15 。</strong></p>
-<h2 id="2、有符号数与无符号数"><a href="#2、有符号数与无符号数" class="headerlink" title="2、有符号数与无符号数"></a>2、有符号数与无符号数</h2><ul>
-<li><p>无符号数</p>
-<p>一个二进制数上的所有 0 和 1 都表示数字。</p>
-</li>
-<li><p>有符号数</p>
-<p>二进制数上最左边的数字表示：<strong>符号位</strong></p>
-<ul>
-<li>0：表示该二进制为正数</li>
-<li>1：表示该二进制为负数</li>
-</ul>
-</li>
-</ul>
-<p><strong>举例说明：</strong></p>
-<p>比如一个4位长度的二进制数，它能表示的十进制数依然有 2<sup>4</sup> &#x3D; 16 个，表示的正数只有 2<sup>3</sup> 个，负数也是 2<sup>3</sup>,即：</p>
-<ul>
-<li><p>正数：0000 ~ 0111 </p>
-<p>十进制表示：0 ~ 7</p>
-</li>
-<li><p>负数：1111 ~ 1000 【计算机中负数的表示，与正数不同】</p>
-<p>十进制表示：-1 ~ -8</p>
-</li>
-</ul>
-<h2 id="3、源码、反码与补码"><a href="#3、源码、反码与补码" class="headerlink" title="3、源码、反码与补码"></a>3、源码、反码与补码</h2><ul>
-<li><p>应用范围：源码、补码、反码只能应用在整数中：正整数、负整数</p>
-</li>
-<li><p>在正整数中：源码 &#x3D;反码 &#x3D;补码</p>
-</li>
-<li><p>在负整数中：如果是负数，将源码的符号位不变，其余各位取反，得到反码。</p>
-<ul>
-<li>如果是负数，将反码加1，得到补码</li>
-</ul>
-</li>
-<li><p>举例：int a &#x3D; 3 ;</p>
-</li>
-</ul>
-<pre><code class="highlight java"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> <span class="number">3</span> ; <span class="comment">// int整型为4字节，32个bit位</span>
-<span class="comment">//源码：00000000 00000000 00000000 00000011</span>
-<span class="comment">//反码：00000000 00000000 00000000 00000011</span>
-<span class="comment">//补码：00000000 00000000 00000000 00000011</span>
-<span class="comment">//因为是正整数所以 源码=反码=补码</span></code></pre>
+        <p><strong>访问者模式是对象的行为模式。访问者模式的目的是封装一些施加于某种数据结构元素之上的操作。一旦这些操作需要修改的话，接受这个操作的数据结构则可以保持不变。</strong></p>
+<h1 id="一、分派的概念"><a href="#一、分派的概念" class="headerlink" title="一、分派的概念"></a>一、分派的概念</h1><p>变量被声明时的类型叫做变量的静态类型(Static Type)，有些人又把静态类型叫做明显类型(Apparent Type)；而变量所引用的对象的真实类型又叫做变量的实际类型(Actual Type)。比如：</p>
+<pre><code class="highlight java"><span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="literal">null</span>;
+list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>();</code></pre>
 
-<ul>
-<li>举例：int a &#x3D; -3 ;</li>
-</ul>
-<pre><code class="highlight java"><span class="type">int</span> <span class="variable">a</span> <span class="operator">=</span> -<span class="number">3</span> ; <span class="comment">// int 为整型4个字节32个bit位</span>
-<span class="comment">//因为是负数，所以最高位是 1</span>
-<span class="comment">//源码：10000000 00000000 00000000 00000011</span>
-<span class="comment">//源码符号位不变，其余各个位按位取反，得到反码</span>
-<span class="comment">//反码：11111111 11111111 11111111 11111100</span>
-<span class="comment">//反码+1，得到补码</span>
-<span class="comment">//补码：11111111 11111111 11111111 11111101</span></code></pre>
+<p>声明了一个变量list，它的静态类型（也叫明显类型）是List，而它的实际类型是ArrayList。</p>
+<p>根据对象的类型而对方法进行的选择，就是分派(Dispatch)，分派(Dispatch)又分为两种，即<strong>静态分派</strong>和<strong>动态分派</strong>。</p>
+<p>**静态分派(Static Dispatch)**发生在编译时期，分派根据静态类型信息发生。静态分派对于我们来说并不陌生，方法重载就是静态分派。</p>
+<p>**动态分派(Dynamic Dispatch)**发生在运行时期，动态分派动态地置换掉某个方法。</p>
+<h2 id="1-静态分派"><a href="#1-静态分派" class="headerlink" title="1. 静态分派"></a>1. 静态分派</h2><p>Java通过方法重载支持静态分派。用墨子骑马的故事作为例子，墨子可以骑白马或者黑马。墨子与白马、黑马和马的类图如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-155058.png" alt="分派"></p>
+<p>在这个系统中，墨子由Mozi类代表</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 静态分派：方法重载是根据静态类型进行的</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Mozi</span> &#123;
 
-
-
-<ul>
-<li>工具：<a target="_blank" rel="noopener" href="https://www.lddgo.net/convert/number-binary-code">在线转换：源码、反码、补码</a></li>
-</ul>
-<h2 id="4、十进制负数如何转换成二进制数"><a href="#4、十进制负数如何转换成二进制数" class="headerlink" title="4、十进制负数如何转换成二进制数"></a>4、十进制负数如何转换成二进制数</h2><p>十进制负数转成二进制数的转换逻辑大致是，先将负数取正，转成二进制数，再减1，然后取反。下面举例说明转换过程：</p>
-<ul>
-<li><em>示例1，十进制数：<code>-1</code></em><ul>
-<li>先将 <code>-1</code> 转成 正数 <code>1</code>，并得到正数 <code>1</code> 的二进制数 <code>0001</code> </li>
-<li>再将二进制数 <code>0001</code> 减去 <code>1</code> ，得到二进制数 <code>0000</code></li>
-<li>然后将二进制数 <code>0000</code> 取反，得到 二进制数 <code>1111</code></li>
-<li>此时就得到了 -1 的 二进制表示：<code>1111</code></li>
-</ul>
-</li>
-<li><em>示例2，十进制数：<code>-7</code></em><ul>
-<li>先将 <code>-7</code> 转成 正数 <code>7</code>，并得到正数 <code>7</code> 的二进制数 <code>0111</code> </li>
-<li>再将二进制数 <code>0111</code> 减去 <code>1</code> ，得到二进制数 <code>0110</code></li>
-<li>然后将二进制数 <code>0110</code> 取反，得到 二进制数 <code>1001</code></li>
-<li>此时就得到了 -7 的 二进制表示：<code>1001</code></li>
-</ul>
-</li>
-<li><em>示例3，十进制数：<code>-8</code></em><ul>
-<li>先将 <code>-8</code> 转成 正数 <code>8</code>，并得到正数 <code>8</code> 的二进制数 <code>1000</code> </li>
-<li>再将二进制数 <code>1000</code> 减去 <code>1</code> ，得到二进制数 <code>0111</code></li>
-<li>然后将二进制数 <code>0111</code> 取反，得到 二进制数 <code>1000</code></li>
-<li>此时就得到了 -8 的 二进制表示：<code>1000</code></li>
-</ul>
-</li>
-</ul>
-<p><strong>注意：上面的方法得到的都是对应负数的二进制补码。</strong></p>
-<h2 id="5、负数二进制数如何转成十进制数"><a href="#5、负数二进制数如何转成十进制数" class="headerlink" title="5、负数二进制数如何转成十进制数"></a>5、负数二进制数如何转成十进制数</h2><p>根据有符号数的定义：如果一个二进制数表示一个负数，那么在这个二进制数中，最左侧的数一定是1。确定符号位是否为负数，是后面进行转换的前提。</p>
-<p>负数二进制数转十进制数 与 负数十进制数转二进制的过程正好相反，转换逻辑大致是，先将负数二进制数整体取反，然后再加1，得到十进制数的二进制表示，转成十进制数，再将10进制数取反，得到负的十进制数。</p>
-<ul>
-<li>示例1，二进制数：<code>1001</code><ul>
-<li>首位是1，表示它是一个负数</li>
-<li>先将二进制数 <code>1001</code> 整体取反得到 <code>0110</code></li>
-<li>再将取反后的二进制数 <code>0110</code> + 1 得到二进制数 <code>0111</code> </li>
-<li><code>0111</code> 表示十进制数 <code>7</code></li>
-<li>再将十进制数 <code>7</code> 取反，得到负数 <code>-7</code></li>
-<li>所以二进制数 <code>1001</code> 对应的十进制数为 <code>-7</code></li>
-</ul>
-</li>
-<li>示例2，二进制数：<code>1000</code><ul>
-<li>首位是1，表示它是一个负数</li>
-<li>先将二进制数 <code>1000</code> 整体取反得到 <code>0111</code></li>
-<li>再将取反后的二进制数 <code>0111</code> + 1 得到二进制数 <code>1000</code> </li>
-<li><code>1000</code> 表示十进制数 <code>8</code></li>
-<li>再将十进制数 <code>8</code> 取反，得到负数 <code>-8</code></li>
-<li>所以二进制数 <code>1000</code> 对应的十进制数为 <code>-8</code></li>
-</ul>
-</li>
-</ul>
-<p><strong><code>1000</code> 在无符号二进制数中表示 <code>8</code>，在有符号二进制数中表示 <code>-8</code> 。</strong></p>
-<p><strong>上面的方法，都是使用负数的补码进行运算的，<code>1001</code>、<code>1000</code> 都是补码</strong></p>
-<h2 id="6、Java如何定义一个二进制数"><a href="#6、Java如何定义一个二进制数" class="headerlink" title="6、Java如何定义一个二进制数"></a>6、Java如何定义一个二进制数</h2><pre><code class="highlight java"><span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">0b0000101110</span>; <span class="comment">// 使用 0b 开头，后面是 0和1 定义一个二进制数</span>
-System.out.println(c);</code></pre>
-
-<p>16进制数字定义使用 <code>0x</code> 开头，例如：0x4e</p>
-<h2 id="7、二进制数转十六进制数"><a href="#7、二进制数转十六进制数" class="headerlink" title="7、二进制数转十六进制数"></a>7、二进制数转十六进制数</h2><ul>
-<li><p>概念：</p>
-<ul>
-<li>二进制是由数字0和1组成，十六进制是由：[ 0、1、2、3、4、5、6、7、8、9、a、b、c、d、e、f ]  共16个数字和字母组成，逢十六进一。</li>
-</ul>
-</li>
-<li><p>二进制数与十六进制数的对照关系</p>
-<ul>
-<li>二进制数 –&gt; 十六进制数</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>二进制数</th>
-<th>十六进制数</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>0000</td>
-<td>0</td>
-</tr>
-<tr>
-<td>0001</td>
-<td>1</td>
-</tr>
-<tr>
-<td>0010</td>
-<td>2</td>
-</tr>
-<tr>
-<td>0011</td>
-<td>3</td>
-</tr>
-<tr>
-<td>0100</td>
-<td>4</td>
-</tr>
-<tr>
-<td>0101</td>
-<td>5</td>
-</tr>
-<tr>
-<td>0110</td>
-<td>6</td>
-</tr>
-<tr>
-<td>0111</td>
-<td>7</td>
-</tr>
-<tr>
-<td>1000</td>
-<td>8</td>
-</tr>
-<tr>
-<td>1001</td>
-<td>9</td>
-</tr>
-<tr>
-<td>1010</td>
-<td>a</td>
-</tr>
-<tr>
-<td>1011</td>
-<td>b</td>
-</tr>
-<tr>
-<td>1100</td>
-<td>c</td>
-</tr>
-<tr>
-<td>1101</td>
-<td>d</td>
-</tr>
-<tr>
-<td>1110</td>
-<td>e</td>
-</tr>
-<tr>
-<td>1111</td>
-<td>f</td>
-</tr>
-</tbody></table>
-</li>
-</ul>
-<p>由上表可以进下面具体的进制转换了，举例说明。</p>
-<ul>
-<li>二进制数：<code>0b01100111</code><ul>
-<li><code>0b</code> 表示这是一个二进制数</li>
-<li>前四位 <code>0110</code> 对应十六进制数 <code>6</code></li>
-<li>后四位 <code>0111</code> 对应十六进制数 <code>7</code></li>
-<li>所以这个二进制数对应十六进制数为 <code>0x67</code>， <code>0x</code> 表示这是一个十六进制数</li>
-</ul>
-</li>
-<li>二进制数：<code>0b01101111</code><ul>
-<li><code>0b</code> 表示这是一个二进制数</li>
-<li>前四位 <code>0110</code> 对应十六进制数 <code>6</code></li>
-<li>后四位 <code>1111</code> 对应十六进制数 <code>f</code></li>
-<li>所以这个二进制数对应十六进制数为 <code>0x6f </code> , <code>0x</code> 表示这是一个十六进制数</li>
-</ul>
-</li>
-</ul>
-<h1 id="二、位运算基础"><a href="#二、位运算基础" class="headerlink" title="二、位运算基础"></a>二、位运算基础</h1><h2 id="1、相反数"><a href="#1、相反数" class="headerlink" title="1、相反数"></a>1、相反数</h2><ul>
-<li>概念：相反数是一个数学术语，指绝对值相等，正负号相反的两个数互为相反数。</li>
-<li>举例：1 的相反数是 -1，78 的相反数是 -78</li>
-</ul>
-<h3 id="1-1、如何得到一个数的相反数？"><a href="#1-1、如何得到一个数的相反数？" class="headerlink" title="1.1、如何得到一个数的相反数？"></a>1.1、如何得到一个数的相反数？</h3><p>答案：需要对一个数进行 <strong>取反 ，再加1</strong> 即可得到一个数的相反数。</p>
-<pre><code class="highlight java"><span class="comment">// ~、相反数</span>
-System.out.println(a); <span class="comment">// 打印结果：78</span>
-printBinary(a); <span class="comment">// 打印结果：00000000000000000000000001001110</span>
-printBinary(~a); <span class="comment">// 打印结果：11111111111111111111111110110001</span>
-<span class="type">int</span> <span class="variable">e</span> <span class="operator">=</span> ~a + <span class="number">1</span>;
-System.out.println(e); <span class="comment">// 打印结果：-78</span>
-printBinary(e); <span class="comment">// 打印结果：11111111111111111111111110110010</span>
-System.out.println(<span class="string">&quot;===e===&quot;</span>);</code></pre>
-
-<p><strong>注意：int、long的最小值，取相反数、绝对值，都是自己</strong></p>
-<h2 id="2、常见的位运算-、-、-、-、、"><a href="#2、常见的位运算-、-、-、-、、" class="headerlink" title="2、常见的位运算(|、&amp;、^、~、&lt;&lt;、&gt;&gt;、&gt;&gt;&gt;)"></a>2、常见的位运算(|、&amp;、^、~、&lt;&lt;、&gt;&gt;、&gt;&gt;&gt;)</h2><h3 id="2-1、按位或运算符-I"><a href="#2-1、按位或运算符-I" class="headerlink" title="2.1、按位或运算符(I)"></a>2.1、按位或运算符(I)</h3><ul>
-<li><p>参加运算的两个对象，按二进制位进行“或”运算。</p>
-</li>
-<li><p>运算规则:0|0&#x3D;0；0|1&#x3D;1；1|0&#x3D;1；1|1&#x3D;1。</p>
-<ul>
-<li>即:参加运算的两个对象只要有一个为1，其值为1.</li>
-<li>例如:3|5 即 0000 0011 | 0000 0101&#x3D;0000 0111 因此，3|5的值得7.</li>
-</ul>
-<p><strong>负数按补码形式参加按位或运算。</strong></p>
-</li>
-</ul>
-<h3 id="2-2、按位与运算符"><a href="#2-2、按位与运算符" class="headerlink" title="2.2、按位与运算符(&amp;)"></a>2.2、按位与运算符(&amp;)</h3><ul>
-<li><p>参加运算的两个数据，按二进制位进行“与”运算。</p>
-</li>
-<li><p>运算规则:0&amp;0&#x3D;0;0&amp;1&#x3D;0;1&amp;0&#x3D;0;1&amp;1&#x3D;1;</p>
-<ul>
-<li>即:两位同时为“1”，结果才为“1”，否则为0</li>
-<li>例如:3&amp;5 即 0000 0011 &amp; 0000 0101 &#x3D; 0000 0001 因此，3&amp;5的值得1.</li>
-</ul>
-<p><strong>负数按补码形式参加按位与运算。</strong></p>
-</li>
-</ul>
-<h3 id="2-3、按位异或运算符"><a href="#2-3、按位异或运算符" class="headerlink" title="2.3、按位异或运算符(^)"></a>2.3、按位异或运算符(^)</h3><ul>
-<li>参加运算的两个数据，按二进制位进行“异或”运算</li>
-<li>运算规则:0^0&#x3D;0; 0^1&#x3D;1; 1^0&#x3D;1; 1^1&#x3D;0;<ul>
-<li>即:参加运算的两个对象，如果两个相应位为“异”(值不同)，则该位结果为1，否则为0.</li>
-<li>例如:3&amp;5 即 0000 0011 ^ 0000 0101 &#x3D; 0000 0110 因此，3^5的值得6.</li>
-</ul>
-</li>
-<li>任何数与0异或都等于自身</li>
-<li>任何数与自己异或都为0</li>
-</ul>
-<p><strong>负数按补码形式参加按位与运算。</strong></p>
-<h3 id="2-4、按位取反"><a href="#2-4、按位取反" class="headerlink" title="2.4、按位取反(~)"></a>2.4、按位取反(~)</h3><ul>
-<li>运算规则：按照二进制位是0则变为1，是1则变成0<ul>
-<li>即：~1 &#x3D; 0     ~0 &#x3D; 1</li>
-<li>符号位也取反</li>
-</ul>
-</li>
-<li>举例<ul>
-<li>78 的二进制表示：00000000000000000000000001001110</li>
-<li>取反后二进制表示：11111111111111111111111110110001</li>
-</ul>
-</li>
-</ul>
-<h3 id="2-5、左移"><a href="#2-5、左移" class="headerlink" title="2.5、左移(&lt;&lt;)"></a>2.5、左移(&lt;&lt;)</h3><ul>
-<li>左移表示的是某数的各二进位全部左移若干位，高位丢弃，低位补0</li>
-</ul>
-<pre><code class="highlight java"><span class="comment">// 举例:</span>
-print(<span class="number">123</span>);			<span class="comment">// 00000000000000000000000001111011</span>
-print(<span class="number">123</span> &lt;&lt; <span class="number">1</span>);	<span class="comment">// 00000000000000000000000011110110	</span>
-<span class="comment">// 整体左移1位，高位丢弃，低位补0</span></code></pre>
-
-<ul>
-<li>应用</li>
-</ul>
-<pre><code class="highlight java"><span class="comment">// 左移1位相当于在原数的基础上乘以2</span>
-System.out.println(<span class="number">123</span>);	<span class="comment">// 123</span>
-System.out.println(<span class="number">123</span>&lt;&lt;<span class="number">1</span>);	<span class="comment">// 246</span>
-<span class="comment">// 左移2位相当于在原数的基础上乘以4</span>
-System.out.println(<span class="number">2</span>);		<span class="comment">// 2</span>
-System.out.println(<span class="number">2</span>&lt;&lt;<span class="number">2</span>);	<span class="comment">// 8</span>
-<span class="comment">// 左移3位、4位...以此类推</span></code></pre>
-
-
-
-<h3 id="2-6、带符号右移"><a href="#2-6、带符号右移" class="headerlink" title="2.6、带符号右移(&gt;&gt;)"></a>2.6、带符号右移(&gt;&gt;)</h3><ul>
-<li><strong>带符号右移（&gt;&gt;）</strong>指的是各二进位全部右移若干位，低位丢弃，高位补为符号位</li>
-</ul>
-<pre><code class="highlight java"><span class="comment">// 举例</span>
-printBinary(<span class="number">8</span>); <span class="comment">// 00000000000000000000000000001000</span>
-System.out.println(<span class="number">8</span>&gt;&gt;<span class="number">1</span>); <span class="comment">// 4</span>
-printBinary(<span class="number">8</span>&gt;&gt;<span class="number">1</span>); <span class="comment">// 00000000000000000000000000000100</span></code></pre>
-
-<ul>
-<li>应用</li>
-</ul>
-<pre><code class="highlight java">System.out.println(<span class="number">8</span>);	<span class="comment">// 8</span>
-System.out.println(<span class="number">8</span>&gt;&gt;<span class="number">1</span>);	<span class="comment">// 4</span>
-<span class="comment">// 无符号右移2位相当于在原数的基础上除以4</span>
-System.out.println(<span class="number">8</span>);		<span class="comment">// 8</span>
-System.out.println(<span class="number">8</span>&gt;&gt;<span class="number">2</span>);	<span class="comment">// 2</span>
-<span class="comment">// 负数右移规则也适用</span>
-System.out.println(-<span class="number">8</span>&gt;&gt;<span class="number">1</span>); <span class="comment">// -4</span>
-<span class="comment">// 右移3位、4位...以此类推</span></code></pre>
-
-
-
-<h3 id="2-7、无符号右移"><a href="#2-7、无符号右移" class="headerlink" title="2.7、无符号右移(&gt;&gt;&gt;)"></a>2.7、无符号右移(&gt;&gt;&gt;)</h3><ul>
-<li><strong>无符号右移（&gt;&gt;&gt;）</strong>指的是各二进位全部右移若干位，低位丢弃，高位补0</li>
-<li>如果是<strong>负数进行无符号右移，需要使用负数的二进制补码</strong>进行运算。</li>
-<li>如果是正数进行无符号右移，则与 &gt;&gt; 规则相同，右移n位，就相当于除以 2<sup>n</sup></li>
-</ul>
-<pre><code class="highlight java"><span class="comment">// 正数无符号右移</span>
-System.out.println(<span class="number">8</span>&gt;&gt;&gt;<span class="number">1</span>);
-printBinary(<span class="number">8</span>);
-printBinary(<span class="number">8</span>&gt;&gt;&gt;<span class="number">1</span>);
-<span class="comment">// 负数无符号右移</span>
-System.out.println(-<span class="number">8</span>&gt;&gt;&gt;<span class="number">1</span>); <span class="comment">// 2147483644</span>
-printBinary(-<span class="number">8</span>); <span class="comment">// 二进制补码：11111111111111111111111111111000</span>
-printBinary(-<span class="number">8</span>&gt;&gt;&gt;<span class="number">1</span>); <span class="comment">// 01111111111111111111111111111100</span>
-System.out.println(<span class="string">&quot;=== &gt;&gt;&gt;无符号右移 ===&quot;</span>);</code></pre>
-
-
-
-
-
-<h1 id="三、二进制如此设计的原因"><a href="#三、二进制如此设计的原因" class="headerlink" title="三、二进制如此设计的原因"></a>三、二进制如此设计的原因</h1><p>这么设计二进制是为了保证加法的逻辑是一套逻辑，没有条件转移。</p>
-<p>也就是说无论是 正数+正数、正数+负数、负数加负数 都是遵循同一套逻辑，可以提高计算机的运行效率。</p>
-<h1 id="四、解析二进制打印函数"><a href="#四、解析二进制打印函数" class="headerlink" title="四、解析二进制打印函数"></a>四、解析二进制打印函数</h1><h2 id="1、二进制打印函数如下"><a href="#1、二进制打印函数如下" class="headerlink" title="1、二进制打印函数如下"></a>1、二进制打印函数如下</h2><pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment">  * 打印一个int类型的数字，32位进制的状态</span>
-<span class="comment">  * 左侧是高位，右侧是低位</span>
-<span class="comment">  * 这里打印的是num的二进制补码。</span>
-<span class="comment">  * <span class="doctag">@param</span> num 十进制数值</span>
-<span class="comment">  */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">printBinary</span><span class="params">(<span class="type">int</span> num)</span> &#123;
-    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">31</span>; i &gt;= <span class="number">0</span>; i--) &#123;
-        <span class="comment">// 下面这句写法，可以改成 :</span>
-        <span class="comment">// System.out.print((a &amp; (1 &lt;&lt; i)) != 0 ? &quot;1&quot; : &quot;0&quot;);</span>
-        <span class="comment">// 但不可以改成 :</span>
-        <span class="comment">// System.out.print((a &amp; (1 &lt;&lt; i)) == 1 ? &quot;1&quot; : &quot;0&quot;);</span>
-        <span class="comment">// 因为a如果第i位有1，那么(a &amp; (1 &lt;&lt; i))是2的i次方，而不一定是1</span>
-        <span class="comment">// 比如，a = 0010011</span>
-        <span class="comment">// a的第0位是1，第1位是1，第4位是1</span>
-        <span class="comment">// (a &amp; (1&lt;&lt;4)) == 16（不是1），说明a的第4位是1状态</span>
-        System.out.print((num &amp; (<span class="number">1</span> &lt;&lt; i)) == <span class="number">0</span> ? <span class="string">&quot;0&quot;</span> : <span class="string">&quot;1&quot;</span>);
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ride</span><span class="params">(Horse h)</span>&#123;
+        System.out.println(<span class="string">&quot;骑马&quot;</span>);
     &#125;
-    System.out.println();
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ride</span><span class="params">(WhiteHorse wh)</span>&#123;
+        System.out.println(<span class="string">&quot;骑白马&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">ride</span><span class="params">(BlackHorse bh)</span>&#123;
+        System.out.println(<span class="string">&quot;骑黑马&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">Horse</span> <span class="variable">wh</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">WhiteHorse</span>();
+        <span class="type">Horse</span> <span class="variable">bh</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BlackHorse</span>();
+        <span class="type">Mozi</span> <span class="variable">mozi</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Mozi</span>();
+        mozi.ride(wh);
+        mozi.ride(bh);
+    &#125;
 &#125;</code></pre>
 
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">骑马
+骑马</code></pre>
+</blockquote>
+<p>显然，Mozi类的ride()方法是由三个方法重载而成的。这三个方法分别接受马(Horse)、白马(WhiteHorse)、黑马(BlackHorse)等类型的参数。</p>
+<p>那么在运行时，程序会打印出什么结果呢？结果是程序会打印出相同的两行“骑马”。换言之，墨子发现他所骑的都是马。</p>
+<p>为什么呢？两次对ride()方法的调用传入的是不同的参数，也就是wh和bh。它们虽然具有不同的真实类型，但是它们的静态类型都是一样的，均是Horse类型。</p>
+<p><strong>重载方法</strong>的分派是根据<strong>静态类型</strong>进行的，这个分派过程在编译时期就完成了。</p>
+<h2 id="2-动态分派"><a href="#2-动态分派" class="headerlink" title="2. 动态分派"></a>2. 动态分派</h2><p>Java通过<strong>方法的重写</strong>支持动态分派。用马吃草的故事作为例子，代码如下所示：</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Horse</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">eat</span><span class="params">()</span>&#123;
+        System.out.println(<span class="string">&quot;马吃草&quot;</span>);
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BlackHorse</span> <span class="keyword">extends</span> <span class="title class_">Horse</span> &#123;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">eat</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;黑马吃草&quot;</span>);
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">WhiteHorse</span> <span class="keyword">extends</span> <span class="title class_">Horse</span> &#123;
+    
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">eat</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;白马吃草&quot;</span>);
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">Horse</span> <span class="variable">h</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BlackHorse</span>();
+        h.eat();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">黑马吃草</code></pre>
+</blockquote>
+<p>变量h的静态类型是Horse，而真实类型是BlackHorse。如果上面最后一行的eat()方法调用的是BlackHorse类的eat()方法，那么上面打印的就是“黑马吃草”；相反，如果上面的eat()方法调用的是Horse类的eat()方法，那么打印的就是“马吃草”。</p>
+<p>所以，问题的核心就是Java编译器在编译时期并不总是知道哪些代码会被执行，因为编译器仅仅知道对象的静态类型，而不知道对象的真实类型；而方法的调用则是根据对象的真实类型，而不是静态类型。这样一来，上面最后一行的eat()方法调用的是BlackHorse类的eat()方法，打印的是“黑马吃草”。</p>
+<h2 id="3-分派的类型"><a href="#3-分派的类型" class="headerlink" title="3. 分派的类型"></a>3. 分派的类型</h2><p>一个方法所属的对象叫做方法的接收者，方法的接收者与方法的参数统称做方法的宗量。比如下面例子中的Test类:</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">print</span><span class="params">(String str)</span>&#123;
+        System.out.println(str);
+    &#125;
+&#125;</code></pre>
+
+<p>在上面的类中，print()方法属于Test对象，所以它的接收者也就是Test对象了。print()方法有一个参数是str,它的类型是String。</p>
+<p>根据分派可以基于多少种宗量，可以将面向对象的语言划分为单分派语言(Uni-Dispatch)和多分派语言(Multi-Dispatch)。单分派语言根据一个宗量的类型进行对方法的选择，多分派语言根据多于一个的宗量的类型对方法进行选择。</p>
+<p>C++和Java均是单分派语言，多分派语言的例子包括CLOS和Cecil。按照这样的区分，Java就是<strong>动态的单分派语言</strong>，因为这种语言的动态分派仅仅会考虑到方法的接收者的类型，同时又是<strong>静态的多分派语言</strong>，因为这种语言对重载方法的分派会考虑到方法的接收者的类型以及方法的所有参数的类型。</p>
+<p>在一个支持动态单分派的语言里面，有两个条件决定了一个请求会调用哪一个操作：一是请求的名字，二是接收者的真实类型。单分派限制了方法的选择过程，使得只有一个宗量可以被考虑到，这个宗量通常就是方法的接收者。在Java语言里面，如果一个操作是作用于某个类型不明的对象上面，那么对这个对象的真实类型测试仅会发生一次，这就是动态的单分派的特征。</p>
+<h2 id="4-双重分派"><a href="#4-双重分派" class="headerlink" title="4. 双重分派"></a>4. 双重分派</h2><p>一个方法根据两个宗量的类型来决定执行不同的代码，这就是“双重分派”。Java语言不支持动态的多分派，也就意味着Java不支持动态的双分派。但是通过使用设计模式，也可以在Java语言里实现动态的双重分派。</p>
+<p>在Java中可以通过两次方法调用来达到两次分派的目的。类图如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-161136.png" alt="双重分派"></p>
+<p>在图中有两个对象，左边的叫做West，右边的叫做East。现在West对象首先调用East对象的 <code>goEast()</code> 方法，并将它自己传入。在East对象被调用时，立即根据传入的参数知道了调用者是谁，于是反过来调用“调用者”对象的 <code>goWest()</code> 方法。通过两次调用将程序控制权轮番交给两个对象，其时序图如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-161216.png" alt="双重分派-时序图"></p>
+<p>这样就出现了两次方法调用，程序控制权被两个对象像传球一样，首先由West对象传给了East对象，然后又被返传给了West对象。</p>
+<p>但是仅仅返传了一下球，并不能解决双重分派的问题。关键是怎样利用这两次调用，以及Java语言的动态单分派功能，使得在这种传球的过程中，能够触发两次单分派。</p>
+<p>动态单分派在Java语言中是在子类重写父类的方法时发生的。换言之，West和East都必须分别置身于自己的类型等级结构中，如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-161503.png" alt="双重分派实现"></p>
+<p><strong>代码实现：</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">West</span> &#123;
+
+    <span class="comment">// 传入East子类作为参数</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">goWest1</span><span class="params">(SubEast1 east)</span>;
+
+    <span class="comment">// 传入East子类作为参数</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">goWest2</span><span class="params">(SubEast2 east)</span>;
+&#125;
+
+ 
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SubWest1</span> <span class="keyword">extends</span> <span class="title class_">West</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">goWest1</span><span class="params">(SubEast1 east)</span> &#123;
+        System.out.println(<span class="string">&quot;SubWest1 + &quot;</span> + east.myName1());
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">goWest2</span><span class="params">(SubEast2 east)</span> &#123;
+        System.out.println(<span class="string">&quot;SubWest1 + &quot;</span> + east.myName2());
+    &#125;
+&#125;
 
 
-<h2 id="2、解析"><a href="#2、解析" class="headerlink" title="2、解析"></a>2、解析</h2><ul>
-<li>一个int类型的数在java中有32位，如果需要打印它的二进制表示，就需要知道它在二进制数中，每一位是0还是1。</li>
-<li>根据位运算符 按位&amp; 的特点，相同位都为1，按位&amp;计算为1，否则为0的特点来实现这一需求。</li>
-<li><code>1 &lt;&lt; i</code> 表示打印第 i 位上的二进制数<ul>
-<li>例如：num等于8，那么它的二进制表示为：00000000000000000000000000001000</li>
-<li>i 从高位(31) 到低位(0) 依次打印。</li>
-<li>i 等于31时，1 &lt;&lt; 31 的值表示的二进制为：10000000000000000000000000000000</li>
-<li>此时 <code>num &amp; (1 &lt;&lt; i)</code> 的值就是0，所以 num 的二进制值，在第31位上为0。</li>
-<li>i 递减，依次往后打印出 num 每一位二进制数。</li>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SubWest2</span> <span class="keyword">extends</span> <span class="title class_">West</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">goWest1</span><span class="params">(SubEast1 east)</span> &#123;
+        System.out.println(<span class="string">&quot;SubWest2 + &quot;</span> + east.myName1());
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">goWest2</span><span class="params">(SubEast2 east)</span> &#123;
+        System.out.println(<span class="string">&quot;SubWest2 + &quot;</span> + east.myName2());
+    &#125;
+&#125;
+
+
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">East</span> &#123;
+    <span class="comment">// 传入West接口作为参数</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">goEast</span><span class="params">(West west)</span>;
+&#125;
+
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SubEast1</span> <span class="keyword">extends</span> <span class="title class_">East</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">goEast</span><span class="params">(West west)</span> &#123;
+        west.goWest1(<span class="built_in">this</span>);
+    &#125;
+
+    <span class="keyword">public</span> String <span class="title function_">myName1</span><span class="params">()</span>&#123;
+        <span class="keyword">return</span> <span class="string">&quot;SubEast1&quot;</span>;
+    &#125;
+&#125;
+
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SubEast2</span> <span class="keyword">extends</span> <span class="title class_">East</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">goEast</span><span class="params">(West west)</span> &#123;
+        west.goWest2(<span class="built_in">this</span>);
+    &#125;
+
+    <span class="keyword">public</span> String <span class="title function_">myName2</span><span class="params">()</span>&#123;
+        <span class="keyword">return</span> <span class="string">&quot;SubEast2&quot;</span>;
+    &#125;
+&#125;
+
+
+<span class="comment">// 测试类</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 组合1</span>
+        <span class="type">East</span> <span class="variable">east</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SubEast1</span>();
+        <span class="type">West</span> <span class="variable">west</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SubWest1</span>();
+        east.goEast(west);
+
+        <span class="comment">// 组合2</span>
+        east = <span class="keyword">new</span> <span class="title class_">SubEast2</span>();
+        west = <span class="keyword">new</span> <span class="title class_">SubWest2</span>();
+        east.goEast(west);
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">SubWest1 + SubEast1
+SubWest2 + SubEast2</code></pre>
+</blockquote>
+<p>系统运行时，会首先创建SubWest1和SubEast1对象，然后客户端调用SubEast1的goEast()方法，并将SubWest1对象传入。由于SubEast1对象重写了其超类East的goEast()方法，因此，这个时候就发生了一次动态的单分派。当SubEast1对象接到调用时，会从参数中得到SubWest1对象，所以它就立即调用这个对象的goWest1()方法，并将自己传入。由于SubEast1对象有权选择调用哪一个对象，因此，在此时又进行一次动态的方法分派。</p>
+<p>这个时候SubWest1对象就得到了SubEast1对象。通过调用这个对象myName1()方法，就可以打印出自己的名字和SubEast对象的名字，其时序图如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-165652.png" alt="动态双重分派时序图"></p>
+<p>由于这两个名字一个来自East等级结构，另一个来自West等级结构中，因此，它们的组合式是动态决定的。这就是动态双重分派的实现机制。</p>
+<h1 id="二、访问者模式的结构"><a href="#二、访问者模式的结构" class="headerlink" title="二、访问者模式的结构"></a>二、访问者模式的结构</h1><p>访问者模式适用于数据结构相对未定的系统，它把数据结构和作用于结构上的操作之间的耦合解脱开，使得操作集合可以相对自由地演化。访问者模式的简略图如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-165944.png" alt="访问者模式结构示意"></p>
+<h2 id="1-案例解析"><a href="#1-案例解析" class="headerlink" title="1. 案例解析"></a>1. 案例解析</h2><p>数据结构的每一个节点都可以接受一个访问者的调用，此节点向访问者对象传入节点对象，而访问者对象则反过来执行节点对象的操作。这样的过程叫做“双重分派”。节点调用访问者，将它自己传入，访问者则将某算法针对此节点执行。访问者模式的示意性类图如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-170342.png" alt="访问者模式"></p>
+<p>访问者模式涉及到的角色如下：</p>
+<ul>
+<li><strong>抽象访问者(Visitor)角色：</strong>声明了一个或者多个方法操作，形成所有的具体访问者角色必须实现的接口。</li>
+<li><strong>具体访问者(ConcreteVisitor)角色：</strong>实现抽象访问者所声明的接口，也就是抽象访问者所声明的各个访问操作。</li>
+<li><strong>抽象节点(Node)角色：</strong>声明一个接受操作，接受一个访问者对象作为一个参数。</li>
+<li><strong>具体节点(ConcreteNode)角色：</strong>实现了抽象节点所规定的接受操作。</li>
+<li><strong>结构对象(ObjectStructure)角色：</strong>有如下的责任，可以遍历结构中的所有元素；如果需要，提供一个高层次的接口让访问者对象可以访问每一个元素；如果需要，可以设计成一个复合对象或者一个聚集，如List或Set。</li>
 </ul>
+<p><strong>代码实现如下：</strong></p>
+<p>可以看到，抽象访问者角色为每一个具体节点都准备了一个访问操作。由于有两个节点，因此，对应就有两个访问操作。</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象访问者对象</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Visitor</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 对于具体节点NodeA的访问操作</span>
+<span class="comment">     * <span class="doctag">@param</span> nodeA</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">visit</span><span class="params">(NodeA nodeA)</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 对于具体节点NodeB的访问操作</span>
+<span class="comment">     * <span class="doctag">@param</span> nodeB</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">visit</span><span class="params">(NodeB nodeB)</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体的访问者A类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VisitorA</span> <span class="keyword">implements</span> <span class="title class_">Visitor</span> &#123;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">visit</span><span class="params">(NodeA nodeA)</span> &#123;
+        System.out.println(nodeA.operationA());
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">visit</span><span class="params">(NodeB nodeB)</span> &#123;
+        System.out.println(nodeB.operationB());
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体的访问者B类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VisitorB</span> <span class="keyword">implements</span> <span class="title class_">Visitor</span> &#123;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">visit</span><span class="params">(NodeA nodeA)</span> &#123;
+        System.out.println(nodeA.operationA());
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">visit</span><span class="params">(NodeB nodeB)</span> &#123;
+        System.out.println(nodeB.operationB());
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 抽象节点类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Node</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 接受操作</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(Visitor visitor)</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体节点类A</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NodeA</span> <span class="keyword">extends</span> <span class="title class_">Node</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 接受操作</span>
+<span class="comment">     * <span class="doctag">@param</span> visitor</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(Visitor visitor)</span> &#123;
+        visitor.visit(<span class="built_in">this</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * NodeA特有的方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> String <span class="title function_">operationA</span><span class="params">()</span>&#123;
+        <span class="keyword">return</span> <span class="string">&quot;NodeA&quot;</span>;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体节点类A</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NodeB</span> <span class="keyword">extends</span> <span class="title class_">Node</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 接受操作</span>
+<span class="comment">     * <span class="doctag">@param</span> visitor</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">accept</span><span class="params">(Visitor visitor)</span> &#123;
+        visitor.visit(<span class="built_in">this</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * NodeB特有的方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> String <span class="title function_">operationB</span><span class="params">()</span>&#123;
+        <span class="keyword">return</span> <span class="string">&quot;NodeB&quot;</span>;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 结构对象角色类，</span>
+<span class="comment"> * 这个结构对象角色持有一个聚集，并向外界提供add()方法作为对聚集的管理操作。通过调用这个方法，可以动态地增加一个新的节点。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ObjectStructure</span> &#123;
+
+    <span class="keyword">private</span> List&lt;Node&gt; nodes = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    <span class="comment">/**</span>
+<span class="comment">     * 执行方法操作</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">action</span><span class="params">(Visitor visitor)</span> &#123;
+        <span class="keyword">for</span> (Node node : nodes) &#123;
+            node.accept(visitor);
+        &#125;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 添加一个新元素</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Node node)</span> &#123;
+        nodes.add(node);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 客户端类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 创建一个结构对象</span>
+        <span class="type">ObjectStructure</span> <span class="variable">os</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ObjectStructure</span>();
+        <span class="comment">//给结构增加一个节点</span>
+        os.add(<span class="keyword">new</span> <span class="title class_">NodeA</span>());
+        <span class="comment">//给结构增加一个节点</span>
+        os.add(<span class="keyword">new</span> <span class="title class_">NodeB</span>());
+
+        <span class="type">Visitor</span> <span class="variable">visitor</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VisitorA</span>();
+        os.action(visitor);
+
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">NodeA
+NodeB</code></pre>
+</blockquote>
+<p>虽然在这个示意性的实现里并没有出现一个复杂的具有多个树枝节点的对象树结构，但是，在实际系统中访问者模式通常是用来处理复杂的对象树结构的，而且访问者模式可以用来处理跨越多个等级结构的树结构问题。这正是访问者模式的功能强大之处。</p>
+<h2 id="2-准备过程时序图"><a href="#2-准备过程时序图" class="headerlink" title="2. 准备过程时序图"></a>2. 准备过程时序图</h2><ul>
+<li>首先，这个示意性的客户端创建了一个结构对象，然后将一个新的NodeA对象和一个新的NodeB对象传入。</li>
+<li>其次，客户端创建了一个VisitorA对象，并将此对象传给结构对象。</li>
+<li>然后，客户端调用结构对象聚集管理方法，将NodeA和NodeB节点加入到结构对象中去。</li>
+<li>最后，客户端调用结构对象的行动方法action()，启动访问过程。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-173733.png" alt="准备过程时序图"></p>
+<h2 id="3-访问过程时序图"><a href="#3-访问过程时序图" class="headerlink" title="3. 访问过程时序图"></a>3. 访问过程时序图</h2><p>结构对象会遍历它自己所保存的聚集中的所有节点，在本系统中就是节点NodeA和NodeB。首先NodeA会被访问到，这个访问是由以下的操作组成的：</p>
+<ul>
+<li>NodeA对象的接受方法accept()被调用，并将VisitorA对象本身传入；</li>
+<li>NodeA对象反过来调用VisitorA对象的访问方法，并将NodeA对象本身传入；</li>
+<li>VisitorA对象调用NodeA对象的特有方法operationA()。</li>
+</ul>
+<p>从而就完成了双重分派过程，接着，NodeB会被访问，这个访问的过程和NodeA被访问的过程是一样的，这里不再叙述。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-173749.png" alt="访问过程时序图"></p>
+<h1 id="三、访问者模式的优缺点"><a href="#三、访问者模式的优缺点" class="headerlink" title="三、访问者模式的优缺点"></a>三、访问者模式的优缺点</h1><p><strong>访问者模式的优点</strong></p>
+<ul>
+<li><p><strong>好的扩展性</strong></p>
+<p>能够在不修改对象结构中的元素的情况下，为对象结构中的元素添加新的功能。</p>
 </li>
-<li>如果num是一个负数，这个函数打印的就是负数二进制数的表示的补码。<ul>
-<li>例如：num等于 -8 ，此函数打印出它的二进制补码为：11111111111111111111111111111000</li>
-</ul>
+<li><p><strong>好的复用性</strong></p>
+<p>可以通过访问者来定义整个对象结构通用的功能，从而提高复用程度。</p>
+</li>
+<li><p><strong>分离无关行为</strong></p>
+<p>可以通过访问者来分离无关的行为，把相关的行为封装在一起，构成一个访问者，这样每一个访问者的功能都比较单一。</p>
 </li>
 </ul>
-<p><strong>正数的二进制 原码、反码、补码是相同的。</strong></p>
+<p><strong>访问者模式的缺点</strong></p>
+<ul>
+<li><p><strong>对象结构变化很困难</strong></p>
+<p>不适用于对象结构中的类经常变化的情况，因为对象结构发生了改变，访问者的接口和访问者的实现都要发生相应的改变，代价太高。</p>
+</li>
+<li><p><strong>破坏封装</strong></p>
+<p>访问者模式通常需要对象结构开放内部数据给访问者和 ObjectStructrue，这破坏了对象的封装性。</p>
+</li>
+</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
