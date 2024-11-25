@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>05-JUC进阶-Java内存模型-JMM | George&#39;s Blog</title>
+  <title>19-观察者模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , juc ">
-  <meta name="description" content="05-JUC进阶-Java内存模型-JMM | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="19-观察者模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#x67;&#x65;&#x5f;&#x39;&#x35;&#x40;&#x31;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1253,9 +1253,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-juc2/05-JUC进阶-Java内存模型-JMM" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/19-观察者模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">05-JUC进阶-Java内存模型-JMM</h1>
+        <h1 class="article-title">19-观察者模式</h1>
     
     <div class="article-meta">
         
@@ -1265,7 +1265,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JUC">JUC</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1273,21 +1273,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
-            
-            <a class="color4">juc</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-25 13:09:23'>2024-09-23 23:01</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-25 20:38:17'>2024-11-25 21:07</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:3.7k</span>
+        <span>字数:3.3k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1317,7 +1315,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E5%AD%98%E5%82%A8%E4%BD%93%E7%B3%BB"><span class="toc-text">一、计算机硬件存储体系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B-JMM"><span class="toc-text">二、Java内存模型-JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-JMM%E6%A6%82%E8%BF%B0"><span class="toc-text">1. JMM概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-JMM%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">2. JMM的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-text">3. JMM规范下，三大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-text">3.1 可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text">3.2 原子性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="toc-text">3.3. 有序性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E8%AF%BB%E5%86%99%E8%BF%87%E7%A8%8B"><span class="toc-text">三、JMM规范下，多线程对变量的读写过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%88%E8%A1%8C%E5%8F%91%E7%94%9F%E5%8E%9F%E5%88%99%E4%B9%8Bhappens-before"><span class="toc-text">四、JMM规范下，多线程先行发生原则之happens-before</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-x-%E3%80%81y%E6%A1%88%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-text">1. x 、y案例说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%85%88%E8%A1%8C%E5%B9%B6%E5%8F%91%E5%8E%9F%E5%88%99%E8%AF%B4%E6%98%8E"><span class="toc-text">2. 先行并发原则说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-happens-before%E6%80%BB%E5%8E%9F%E5%88%99"><span class="toc-text">3. happens-before总原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-happens-before%E4%B9%8B8%E6%9D%A1%E8%A7%84%E5%88%99"><span class="toc-text">4. happens-before之8条规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-happens-before-%E6%80%BB%E7%BB%93"><span class="toc-text">5. happens-before 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%A1%88%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-text">6. 案例说明</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">一、观察者模式的结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%8E%A8%E6%A8%A1%E5%9E%8B%E5%92%8C%E6%8B%89%E6%A8%A1%E5%9E%8B"><span class="toc-text">二、推模型和拉模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%8B%89%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%8A%BD%E8%B1%A1%E8%A7%82%E5%AF%9F%E8%80%85%E7%B1%BB"><span class="toc-text">1. 拉模型的抽象观察者类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%A4%E7%A7%8D%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%AF%94%E8%BE%83"><span class="toc-text">2. 两种模式的比较</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81JAVA%E6%8F%90%E4%BE%9B%E7%9A%84%E5%AF%B9%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-text">三、JAVA提供的对观察者模式的支持</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Observer%E6%8E%A5%E5%8F%A3"><span class="toc-text">1. Observer接口</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Observable%E7%B1%BB"><span class="toc-text">2. Observable类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%80%8E%E6%A0%B7%E4%BD%BF%E7%94%A8JAVA%E5%AF%B9%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E6%94%AF%E6%8C%81"><span class="toc-text">四、怎样使用JAVA对观察者模式的支持</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1333,169 +1331,452 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、计算机硬件存储体系"><a href="#一、计算机硬件存储体系" class="headerlink" title="一、计算机硬件存储体系"></a>一、计算机硬件存储体系</h1><p> 计算机存储结构，从本地磁盘 到 主内存 到 CPU缓存，也就是从硬盘 -&gt; 内存 -&gt; CPU。</p>
-<p>一般对应的程序的操作就是从数据库查数据到内存然后到CPU进行计算</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-162409.png" alt="计算机硬件存储体系"></p>
-<p>由于CPU和物理主内存的速度不一致（CPU速度远快于主内存），因此CPU和主内存之间需要多级缓存。</p>
-<p>CPU的运行并不是直接操作内存而是先把内存里边的数据读到缓存，而内存的读和写操作的时候就会造成不一致的问题。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-162728.png" alt="CPU-缓存-内存"></p>
-<p>Java虚拟机规范中试图定义一种Java内存模型（java Memory Model，简称JMM) 来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。</p>
-<h1 id="二、Java内存模型-JMM"><a href="#二、Java内存模型-JMM" class="headerlink" title="二、Java内存模型-JMM"></a>二、Java内存模型-JMM</h1><h2 id="1-JMM概述"><a href="#1-JMM概述" class="headerlink" title="1. JMM概述"></a>1. JMM概述</h2><p>JMM(Java内存模型Java Memory Model，简称JMM)本身是一种抽象的概念并不真实存在<strong>它仅仅描述的是一组约定或规范</strong>，通过这组规范定义了程序中(尤其是多线程)各个变量的读写访问方式并决定一个线程对共享变量的写入何时以及如何变成对另一个线程可见，<strong>关键技术点都是围绕多线程的原子性、可见性和有序性展开的</strong>。</p>
-<h2 id="2-JMM的作用"><a href="#2-JMM的作用" class="headerlink" title="2. JMM的作用"></a>2. JMM的作用</h2><ul>
-<li>通过JMM来实现线程和主内存之间的抽象关系</li>
-<li>屏蔽各个硬件平台和操作系统的内存访问差异以实现让Java程序在各种平台下都能达到一致的内存访问效果。</li>
-</ul>
-<h2 id="3-JMM规范下，三大特性"><a href="#3-JMM规范下，三大特性" class="headerlink" title="3. JMM规范下，三大特性"></a>3. JMM规范下，三大特性</h2><ul>
-<li><p>可见性</p>
-</li>
-<li><p>原子性</p>
-</li>
-<li><p>有序性</p>
-</li>
-</ul>
-<h3 id="3-1-可见性"><a href="#3-1-可见性" class="headerlink" title="3.1 可见性"></a>3.1 可见性</h3><p>是指当一个线程修改了某一个共享变量的值，其他线程是否能够立即知道该变更 ，JMM规定了所有的变量都存储在主内存中。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-165016.png" alt="CPU-缓存-主存"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-165023.png" alt="多线程修改同一个变量"></p>
-<p><strong>Java中普通的共享变量不保证可见性</strong>，因为数据修改被写入内存的时机是不确定的，多线程并发下很可能出现**”脏读”<strong>，所以每个线程都有自己的</strong>工作内存<strong>，线程自己的工作内存中保存了该线程使用到的变量的</strong>主内存副本拷贝**，线程对变量的所有操作（读取，赋值等 ）都必需在线程自己的工作内存中进行，而不能够直接读写主内存中的变量。不同线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-164824.png" alt="线程-主存-工作内存的关系"></p>
-<p> <strong>线程脏读：如果没有可见性保证</strong></p>
+        <p><strong>观察者模式是对象的行为模式，又叫发布-订阅(Publish&#x2F;Subscribe)模式、模型-视图(Model&#x2F;View)模式、源-监听器(Source&#x2F;Listener)模式或从属者(Dependents)模式。</strong></p>
+<p><strong>观察者模式定义了一种一对多的依赖关系，让多个观察者对象同时监听某一个主题对象。这个主题对象在状态上发生变化时，会通知所有观察者对象，使它们能够自动更新自己。</strong></p>
+<h1 id="一、观察者模式的结构"><a href="#一、观察者模式的结构" class="headerlink" title="一、观察者模式的结构"></a>一、观察者模式的结构</h1><p>一个软件系统里面包含了各种对象，就像一片欣欣向荣的森林充满了各种生物一样。在一片森林中，各种生物彼此依赖和约束，形成一个个生物链。一种生物的状态变化会造成其他一些生物的相应行动，每一个生物都处于别的生物的互动之中。</p>
+<p>同样，一个软件系统常常要求在某一个对象的状态发生变化的时候，某些其他的对象做出相应的改变。做到这一点的设计方案有很多，但是为了使系统能够易于复用，应该选择低耦合度的设计方案。减少对象之间的耦合有利于系统的复用，但是同时设计师需要使这些低耦合度的对象之间能够维持行动的协调一致，保证高度的协作。观察者模式是满足这一要求的各种设计方案中最重要的一种。</p>
+<p>下面以一个简单的示意性实现为例，讨论观察者模式的结构。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/25/20241125-193801.png" alt="观察者模式"></p>
+<p><em>观察者模式所涉及的角色有：</em></p>
 <ul>
-<li>主内存中有变量 x，初始值为 0</li>
-<li>线程 A 要将 x 加 1，先将 x&#x3D;0 拷贝到自己的私有内存中，然后更新 x 的值</li>
-<li>线程 A 将更新后的 x 值回刷到主内存的时间是不固定的</li>
-<li>刚好在线程 A 没有回刷 x 到主内存时，线程 B 同样从主内存中读取 x，此时为 0，和线程 A 一样的操作，最后期盼的 x&#x3D;2 就会变成 x&#x3D;1</li>
+<li><strong>抽象主题(Subject)角色：</strong>抽象主题角色把所有对观察者对象的引用保存在一个聚集（比如ArrayList对象）里，每个主题都可以有任何数量的观察者。抽象主题提供一个接口，可以增加和删除观察者对象，抽象主题角色又叫做抽象被观察者(Observable)角色。</li>
+<li><strong>具体主题(ConcreteSubject)角色：</strong>将有关状态存入具体观察者对象；在具体主题的内部状态改变时，给所有登记过的观察者发出通知。具体主题角色又叫做具体被观察者(Concrete Observable)角色。</li>
+<li><strong>抽象观察者(Observer)角色：</strong>为所有的具体观察者定义一个接口，在得到主题的通知时更新自己，这个接口叫做更新接口。</li>
+<li><strong>具体观察者(ConcreteObserver)角色：</strong>存储与主题的状态自恰的状态。具体观察者角色实现抽象观察者角色所要求的更新接口，以便使本身的状态与主题的状态相协调。如果需要，具体观察者角色可以保持一个指向具体主题对象的引用。</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-170757.png" alt="线程脏读"></p>
-<h3 id="3-2-原子性"><a href="#3-2-原子性" class="headerlink" title="3.2 原子性"></a>3.2 原子性</h3><p>指一个操作是不可被打断的，即多线程环境下，操作不能被其他线程干扰</p>
-<h3 id="3-3-有序性"><a href="#3-3-有序性" class="headerlink" title="3.3. 有序性"></a>3.3. 有序性</h3><p>对于一个线程的执行代码而言，我们总是习惯性地认为代码的执行总是从上到下，有序执行。但为了提升性能，编译器和处理器通常会对指令序列进行重新排序。Java规范规定JVM线程内部维持顺序化语义，即只要程序的最终结果与它顺序化执行的结果相等，那么指令的执行顺序可以与代码顺序不一致，此过程叫指令的重排序。</p>
-<p>  <strong>优缺点：</strong></p>
-<ul>
-<li>JVM能根据处理器特性（CPU多级缓存系统、多核处理器等）适当的对机器指令进行重排序，使机器指令更符合CPU的执行特性，最大限度的发挥机器性能</li>
-<li>​    但是指令重排可以保证串行语义一致，<strong>但没有义务保证多线程的语义也一致（即可能产生“脏读”）</strong>，简单而言就是两行以上不相干的代码在执行的时候有可能先执行的不是第一条，不见得是从上到下顺序执行，执行顺序会被优化。</li>
-</ul>
-<p>从源码到最终执行示例图</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-171944.png" alt="原码编译到执行"></p>
-<ul>
-<li><p>单线程环境里面确保程序最终执行结果和代码顺序执行的结果一致。处理器在进行重排序时必须要考虑指令之间的数据依赖性。</p>
-</li>
-<li><p>多线程环境中线程交替执行,由于编译器优化重排的存在，两个线程中使用的变量能否保证一致性是无法确定的,结果无法预测</p>
-</li>
-</ul>
-<h1 id="三、JMM规范下，多线程对变量的读写过程"><a href="#三、JMM规范下，多线程对变量的读写过程" class="headerlink" title="三、JMM规范下，多线程对变量的读写过程"></a>三、JMM规范下，多线程对变量的读写过程</h1><p><strong>读取过程</strong></p>
-<p>由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存(有些地方称为栈空间)，工作内存是每个线程的私有数据区域，而Java内存模型中规定所有变量都存储在<strong>主内存</strong>，主内存是共享内存区域，所有线程都可以访问，但<strong>线程对变量的操作(读取赋值等)必须在工作内存中进行，首先要将变量从主内存拷贝到的线程自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存</strong>，不能直接操作主内存中的变量，各个线程中的工作内存中存储着主内存中的变量副本拷贝，因此不同的线程间无法访问对方的工作内存，线程间的通信(传值)必须通过主内存来完成，其简要访问过程如下图:</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-172630.png" alt="多线程操作主内存变量"></p>
-<p><strong>JMM定义了线程和主内存之间的抽象关系：</strong></p>
-<ul>
-<li>线程之间的共享变量存储在主内存中（从硬件角度讲就是内存条）</li>
-<li>每个线程都有一个自己的本地工作内存，本地工作内存中存储了该线程用来读写共享变量的副本（从硬件角度来说就是CPU的缓存）</li>
-</ul>
-<p><strong>总结</strong></p>
-<ul>
-<li>我们定义的所有共享变量都储存在<strong>物理主内存中</strong></li>
-<li>每个线程都有自己独立的工作内存，里面保证该线程使用到的共享变量的副本（主内存中该变量的一份拷贝）</li>
-<li>线程对共享变量所有的操作都必须先在线程自己的工作内存中进行后写回主内存，不能直接从主内存在读写（不能越级）</li>
-<li>不同线程之间也无法直接访问其他线程的工作内存中的变量，线程间变量值的传递需要通过主内存来进行（同级不能互相访问）。</li>
-</ul>
-<h1 id="四、JMM规范下，多线程先行发生原则之happens-before"><a href="#四、JMM规范下，多线程先行发生原则之happens-before" class="headerlink" title="四、JMM规范下，多线程先行发生原则之happens-before"></a>四、JMM规范下，多线程先行发生原则之happens-before</h1><p>在JVM中，如果一个操作执行的结果需要对另一个操作可见或者代码重排序，那么这两个操作之间必须存在 happens-before（先行发生）原则，逻辑上的先后关系。</p>
-<h2 id="1-x-、y案例说明"><a href="#1-x-、y案例说明" class="headerlink" title="1. x 、y案例说明"></a>1. x 、y案例说明</h2><ul>
-<li>x&#x3D;5;线程A执行</li>
-<li>y&#x3D;x;线程B执行</li>
-<li>问：y一定等于5吗？</li>
-</ul>
-<p><strong>答案：不一定</strong></p>
-<p>如果线程A的操作（x&#x3D; 5）happens-before(先行发生)线程B的操作（y &#x3D; x）,那么可以确定线程B执行后y &#x3D; 5 一定成立;</p>
-<p>如果他们不存在happens-before原则，那么y &#x3D; 5 不一定成立。</p>
-<p><strong>这就是happens-before原则的为例———–&gt;包含可见性和有序性的约束</strong></p>
-<h2 id="2-先行并发原则说明"><a href="#2-先行并发原则说明" class="headerlink" title="2. 先行并发原则说明"></a>2. 先行并发原则说明</h2><p>如果Java内存模型中所有的有序性都仅靠 <code>volatile</code> 和 <code>synchronized</code> 来完成，那么有很多操作都将变得非常罗嗦，但是我们在编写Java并发代码的时候并没有察觉到这一点。</p>
-<p>我们没有时时、处处、次次，添加volatile和synchronized来完成程序，这是因为Java语言中JMM原则下，有一个“先行发生”（happens-before）的原则限制和规矩，给你理好了规矩！</p>
-<p>这个原则非常重要：它是判断数据是否存在竞争，线程是否安全的非常有用的手段。依赖这个原则，我们可以通过几条简单规则解决并发环境下两个操作之间是否可能存在冲突的所有问题，而不需要陷入Java内存模型晦涩难懂的底层编译原理之中。</p>
-<h2 id="3-happens-before总原则"><a href="#3-happens-before总原则" class="headerlink" title="3. happens-before总原则"></a>3. happens-before总原则</h2><ul>
-<li>如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前</li>
-<li>如果两个操作之间存在happens-before关系，并不意味着一定要按照happens-before原则制定的顺序来执行。如果重排之后的执行结果与按照happens-before关系来执行的结果一致，那么这种重排序并不非法。</li>
-</ul>
-<h2 id="4-happens-before之8条规则"><a href="#4-happens-before之8条规则" class="headerlink" title="4. happens-before之8条规则"></a>4. happens-before之8条规则</h2><p>从JDK 5开始，Java使用新的JSR-133内存模型，提供了 happens-before 原则来辅助保证程序执行的原子性、可见性以及有序性的问题，它是判断数据是否存在竞争、线程是否安全的依据，happens-before 原则内容如下：</p>
-<ol>
-<li><p>次序规则：一个线程内，按照代码的顺序，写在前面的操作先行发生于写在后面的操作，也就是说前一个操作的结果可以被后续的操作获取（保证语义串行性，按照代码顺序执行）。比如前一个操作把变量x赋值为1，那后面一个操作肯定能知道x已经变成了1</p>
-</li>
-<li><p>锁定规则：一个 <code>unLock</code> 操作先行发生于后面对同一个锁的<code>lock</code>操作（后面指时间上的先后）</p>
-<p>​	解释：A线程的 unlock 操作，先行发生于 B线程的 lock 操作。</p>
-</li>
-<li><p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作，前面的写对后面的读是可见的，这里的后面同样指时间上的先后</p>
-</li>
-<li><p>传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C。</p>
-</li>
-<li><p>线程启动规则（Thread start Rule）：Thread对象的start()方法先行发生于此线程的每一个动作</p>
-</li>
-<li><p>线程中断规则（Thread Interruption Rule）：</p>
-<ol>
-<li>对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生</li>
-<li>可以通过Thread.interrupted()检测到是否发生中断</li>
-<li>也就是说你要先调用interrupt()方法设置过中断标志位，我才能检测到中断发生</li>
-</ol>
-<p>解释：这里其实都是重排序问题，如果没有的此规则就变成了你写的前面设置终止状态，判断结果理应是true，但指令重排序有可能给你改成先判断结果就是false了</p>
-</li>
-<li><p>线程终止规则（Thread Termination Rule）：线程中的所有操作都优先发生于对此线程的终止检测，我们可以通过isAlive()等手段检测线程是否已经终止执行。</p>
-</li>
-<li><p>对象终结规则（Finalizer Rule）：一个对象的初始化完成（构造函数执行结束）先行发生于它的finalize(）方法的开始——-&gt;对象没有完成初始化之前，是不能调用finalized()方法的</p>
-</li>
-</ol>
-<h2 id="5-happens-before-总结"><a href="#5-happens-before-总结" class="headerlink" title="5. happens-before 总结"></a>5. happens-before 总结</h2><ul>
-<li>在Java语言里面，Happens-before 的语义本质上是一种可见性</li>
-<li>A happens-before B ,意味着A发生过的事情对B而言是可见的，无论A事件和B事件是否发生在同一线程里</li>
-<li>JVM的设计分为两部分：<ul>
-<li>一部分是面向我们程序员提供的，也就是happens-before规则，它通俗易懂的向我们程序员阐述了一个强内存模型，我们只要理解happens-before规则，就可以编写并发安全的程序了</li>
-<li>另一部分是针对JVM实现的，为了尽可能少的对编译器和处理器做约束从而提升性能，JMM在不影响程序执行结果的前提下对其不做要求，即允许优化重排序，我们只要关注前者就好了，也就是理解happens-before规则即可，其他繁杂的内容由JMM规范结合操作系统给我们搞定，我们只写好代码即可。</li>
-</ul>
-</li>
-</ul>
-<h2 id="6-案例说明"><a href="#6-案例说明" class="headerlink" title="6. 案例说明"></a>6. 案例说明</h2><pre><code class="highlight java"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
-<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> value;
+<p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象主题角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Subject</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 保存注册的观察者对象</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> List&lt;Observer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    <span class="comment">/**</span>
+<span class="comment">     * 注册观察者</span>
+<span class="comment">     * <span class="doctag">@param</span> observer</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">attach</span><span class="params">(Observer observer)</span> &#123;
+        list.add(observer);
+        System.out.println(<span class="string">&quot;注册了一个观察者对象&quot;</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 移除观察者</span>
+<span class="comment">     * <span class="doctag">@param</span> observer</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">detach</span><span class="params">(Observer observer)</span> &#123;
+        list.remove(observer);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 通知所有的观察者对象</span>
+<span class="comment">     * <span class="doctag">@param</span> newState</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">notifyObservers</span><span class="params">(String newState)</span> &#123;
+        <span class="keyword">for</span> (Observer observer : list) &#123;
+            observer.update(newState);
+        &#125;
+    &#125;
 &#125;
-<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> ++value;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体的观察者对象</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteSubject</span> <span class="keyword">extends</span> <span class="title class_">Subject</span> &#123;
+    <span class="keyword">private</span> String state;
+
+    <span class="keyword">public</span> String <span class="title function_">getState</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> state;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 主题状态更新方法</span>
+<span class="comment">     * <span class="doctag">@param</span> newState 新状态</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">change</span><span class="params">(String newState)</span> &#123;
+        <span class="built_in">this</span>.state = newState;
+        System.out.println(<span class="string">&quot;主题状态为：&quot;</span> + state);
+        <span class="comment">//状态发生改变，通知各个观察者</span>
+        <span class="built_in">super</span>.notifyObservers(newState);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 抽象观察者</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Observer</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 观察者更新接口</span>
+<span class="comment">     * <span class="doctag">@param</span> newState</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(String newState)</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体的观察者</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteObserver</span> <span class="keyword">implements</span> <span class="title class_">Observer</span> &#123;
+
+    <span class="comment">// 观察者的状态</span>
+    <span class="keyword">private</span> String observerState;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(String newState)</span> &#123;
+        <span class="built_in">this</span>.observerState = newState;
+        <span class="comment">/**</span>
+<span class="comment">         * 更新观察者的状态，使其与目标的状态保持一致</span>
+<span class="comment">         */</span>
+        System.out.println(<span class="string">&quot;观察者的状态更新为：&quot;</span> + <span class="built_in">this</span>.observerState);
+    &#125;
+&#125;
+
+
+<span class="comment">// 测试类</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 创建观察者</span>
+        <span class="type">Observer</span> <span class="variable">observer1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteObserver</span>();
+        <span class="type">Observer</span> <span class="variable">observer2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteObserver</span>();
+
+        <span class="comment">// 创建具体的主题</span>
+        <span class="type">ConcreteSubject</span> <span class="variable">subject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteSubject</span>();
+        <span class="comment">// 给主题注册观察者</span>
+        subject.attach(observer1);
+        subject.attach(observer2);
+        <span class="comment">// 更新主题状态</span>
+        subject.change(<span class="string">&quot;doWork&quot;</span>);
+
+        <span class="comment">// 主题移除观察者</span>
+        subject.detach(observer2);
+        <span class="comment">// 更新主题状态</span>
+        subject.change(<span class="string">&quot;sleep&quot;</span>);
+    &#125;
 &#125;</code></pre>
 
-<p>问题描述：假设存在线程A和B，线程A先（时间上的先后）调用了setValue()方法，然后线程B调用了同一个对象的getValue()方法，那么线程B收到的返回值是什么？</p>
-<p><strong>答案：不一定</strong></p>
-<p><strong>分析如下：</strong></p>
-<p>分析happens-before规则（规则5，6，7，8可以忽略，和代码无关）</p>
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">注册了一个观察者对象
+注册了一个观察者对象
+主题状态为：doWork
+观察者的状态更新为：doWork
+观察者的状态更新为：doWork
+主题状态为：sleep
+观察者的状态更新为：sleep</code></pre>
+</blockquote>
+<p>在运行时，这个客户端首先创建了具体主题类的实例，以及一个观察者对象。然后，它调用主题对象的attach()方法，将这个观察者对象向主题对象登记，也就是将它加入到主题对象的聚集中去。</p>
+<p>这时，客户端调用主题的change()方法，改变了主题对象的内部状态。主题对象在状态发生变化时，调用超类的notifyObservers()方法，通知所有登记过的观察者对象。</p>
+<h1 id="二、推模型和拉模型"><a href="#二、推模型和拉模型" class="headerlink" title="二、推模型和拉模型"></a>二、推模型和拉模型</h1><p>在观察者模式中，又分为推模型和拉模型两种方式。</p>
 <ul>
-<li>由于两个方法由不同线程调用，不满足一个线程的条件，不满足程序次序规则</li>
-<li>两个方法都没有用锁，不满足锁定规则</li>
-<li>变量没有使用volatile修饰，所以不满足volatile变量规则</li>
-<li>传递规则肯定不满足</li>
+<li><p><strong>推模型</strong></p>
+<p>主题对象向观察者推送主题的详细信息，不管观察者是否需要，推送的信息通常是主题对象的全部或部分数据。</p>
+</li>
+<li><p><strong>拉模型</strong></p>
+<p>主题对象在通知观察者的时候，只传递少量信息。如果观察者需要更具体的信息，由观察者主动到主题对象中获取，相当于是观察者从主题对象中拉数据。一般这种模型的实现中，会把主题对象自身通过update()方法传递给观察者，这样在观察者需要获取数据的时候，就可以通过这个引用来获取了。</p>
+</li>
 </ul>
-<p>综上：无法通过happens-before原则推导出线程A happens-before 线程B，虽然可以确定时间上线程A优于线程B，但就是无法确定线程B获得的结果是什么，所以这段代码不是线程安全的</p>
-<p>注意：如果两个操作的执行次序无法从happens-before原则推导出来，那么就不能保证他们的有序性，虚拟机可以随意对他们进行重排序</p>
-<p><strong>解决方案：</strong></p>
-<ul>
-<li><p>方案一：</p>
-<ul>
-<li><p>把getter&#x2F;setter方法都定义为synchronized方法——-&gt;<strong>不好，重量锁，并发性下降</strong></p>
-<pre><code class="highlight java"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
-<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> value;
+<p>　根据上面的描述，发现前面的例子就是典型的推模型，下面给出一个拉模型的实例。</p>
+<h2 id="1-拉模型的抽象观察者类"><a href="#1-拉模型的抽象观察者类" class="headerlink" title="1. 拉模型的抽象观察者类"></a>1. 拉模型的抽象观察者类</h2><p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">// 拉模型通常都是把主题对象当做参数传递。</span>
+<span class="comment">/**</span>
+<span class="comment"> * 抽象观察者角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Observer</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 更新接口</span>
+<span class="comment">     * <span class="doctag">@param</span> subject 传入主题对象，方面获取相应的主题对象的状态</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(Subject subject)</span>;
 &#125;
-<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> ++value;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体的观察者</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteObserver</span> <span class="keyword">implements</span> <span class="title class_">Observer</span> &#123;
+
+    <span class="comment">// 观察者的状态</span>
+    <span class="keyword">private</span> String observerState;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(Subject subject)</span> &#123;
+
+        <span class="built_in">this</span>.observerState = ((ConcreteSubject) subject).getState();
+        <span class="comment">/**</span>
+<span class="comment">         * 更新观察者的状态，使其与目标的状态保持一致</span>
+<span class="comment">         */</span>
+        System.out.println(<span class="string">&quot;观察者的状态更新为：&quot;</span> + <span class="built_in">this</span>.observerState);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 抽象主题角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Subject</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 保存注册的观察者对象</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> List&lt;Observer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    <span class="comment">/**</span>
+<span class="comment">     * 注册观察者</span>
+<span class="comment">     * <span class="doctag">@param</span> observer</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">attach</span><span class="params">(Observer observer)</span> &#123;
+        list.add(observer);
+        System.out.println(<span class="string">&quot;注册了一个观察者对象&quot;</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 移除观察者</span>
+<span class="comment">     * <span class="doctag">@param</span> observer</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">detach</span><span class="params">(Observer observer)</span> &#123;
+        list.remove(observer);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 通知所有的观察者对象</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">notifyObservers</span><span class="params">()</span> &#123;
+        <span class="keyword">for</span> (Observer observer : list) &#123;
+            observer.update(<span class="built_in">this</span>);
+        &#125;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体的观察者对象</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteSubject</span> <span class="keyword">extends</span> <span class="title class_">Subject</span> &#123;
+    <span class="keyword">private</span> String state;
+
+    <span class="keyword">public</span> String <span class="title function_">getState</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> state;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 主题状态更新方法</span>
+<span class="comment">     * <span class="doctag">@param</span> newState 新状态</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">change</span><span class="params">(String newState)</span> &#123;
+        <span class="built_in">this</span>.state = newState;
+        System.out.println(<span class="string">&quot;主题状态为：&quot;</span> + state);
+        <span class="comment">//状态发生改变，通知各个观察者</span>
+        <span class="built_in">super</span>.notifyObservers();
+    &#125;
+&#125;
+
+
+<span class="comment">// 测试类</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 创建观察者</span>
+        <span class="type">Observer</span> <span class="variable">observer1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteObserver</span>();
+        <span class="type">Observer</span> <span class="variable">observer2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteObserver</span>();
+
+        <span class="comment">// 创建具体的主题</span>
+        <span class="type">ConcreteSubject</span> <span class="variable">subject</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteSubject</span>();
+        <span class="comment">// 给主题注册观察者</span>
+        subject.attach(observer1);
+        subject.attach(observer2);
+        <span class="comment">// 更新主题状态</span>
+        subject.change(<span class="string">&quot;doWork&quot;</span>);
+
+        <span class="comment">// 主题移除观察者</span>
+        subject.detach(observer2);
+        <span class="comment">// 更新主题状态</span>
+        subject.change(<span class="string">&quot;sleep&quot;</span>);
+    &#125;
 &#125;</code></pre>
-</li>
-<li><p>把 value 定义为 volatile 变量，由于setter方法对value的修改不依赖value的原值，满足volatile关键字使用场景</p>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">注册了一个观察者对象
+注册了一个观察者对象
+主题状态为：doWork
+观察者的状态更新为：doWork
+观察者的状态更新为：doWork
+主题状态为：sleep
+观察者的状态更新为：sleep</code></pre>
+</blockquote>
+<h2 id="2-两种模式的比较"><a href="#2-两种模式的比较" class="headerlink" title="2. 两种模式的比较"></a>2. 两种模式的比较</h2><ul>
+<li>推模型是假定主题对象知道观察者需要的数据；而拉模型是主题对象不知道观察者具体需要什么数据，没有办法的情况下，干脆把自身传递给观察者，让观察者自己去按需要取值。</li>
+<li>推模型可能会使得观察者对象难以复用，因为观察者的 <code>update()</code> 方法是按需要定义的参数，可能无法兼顾没有考虑到的使用情况。这就意味着出现新情况的时候，就可能提供新的 <code>update()</code> 方法，或者是干脆重新实现观察者；而拉模型就不会造成这样的情况，因为拉模型下，<code>update()</code> 方法的参数是主题对象本身，这基本上是主题对象能传递的最大数据集合了，基本上可以适应各种情况的需要。</li>
+</ul>
+<h1 id="三、JAVA提供的对观察者模式的支持"><a href="#三、JAVA提供的对观察者模式的支持" class="headerlink" title="三、JAVA提供的对观察者模式的支持"></a>三、JAVA提供的对观察者模式的支持</h1><p>在JAVA语言的java.util库里面，提供了一个<code>Observable类</code> 以及一个 <code>Observer接口</code> ，构成JAVA语言对观察者模式的支持。</p>
+<h2 id="1-Observer接口"><a href="#1-Observer接口" class="headerlink" title="1. Observer接口"></a>1. Observer接口</h2><p>这个接口只定义了一个方法，即 <code>update()</code> 方法，当被观察者对象的状态发生变化时，被观察者对象的notifyObservers()方法就会调用这一方法。</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Observer</span> &#123;
+    <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(Observable o, Object arg)</span>;
+&#125;</code></pre>
+
+
+
+<h2 id="2-Observable类"><a href="#2-Observable类" class="headerlink" title="2. Observable类"></a>2. Observable类</h2><p>被观察者类都是 <code>java.util.Observable</code> 类的子类。<code>java.util.Observable</code> 提供公开的方法支持观察者对象，这些方法中有两个对Observable的子类非常重要：一个是 <code>setChanged()</code>，另一个是 <code>notifyObservers()</code> 。第一方法 <code>setChanged()</code> 被调用之后会设置一个内部标记变量，代表被观察者对象的状态发生了变化。第二个是 <code>notifyObservers()</code>，这个方法被调用时，会调用所有登记过的观察者对象的update()方法，使这些观察者对象可以更新自己。</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Observable</span> &#123;
+    <span class="keyword">private</span> <span class="type">boolean</span> <span class="variable">changed</span> <span class="operator">=</span> <span class="literal">false</span>;
+    <span class="keyword">private</span> Vector obs;
+   
+    <span class="comment">/** Construct an Observable with zero Observers. */</span>
+
+    <span class="keyword">public</span> <span class="title function_">Observable</span><span class="params">()</span> &#123;
+    obs = <span class="keyword">new</span> <span class="title class_">Vector</span>();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 将一个观察者添加到观察者聚集上面</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">addObserver</span><span class="params">(Observer o)</span> &#123;
+        <span class="keyword">if</span> (o == <span class="literal">null</span>)
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NullPointerException</span>();
+    <span class="keyword">if</span> (!obs.contains(o)) &#123;
+        obs.addElement(o);
+    &#125;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 将一个观察者从观察者聚集上删除</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">deleteObserver</span><span class="params">(Observer o)</span> &#123;
+        obs.removeElement(o);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">notifyObservers</span><span class="params">()</span> &#123;
+    notifyObservers(<span class="literal">null</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 如果本对象有变化（那时hasChanged 方法会返回true）</span>
+<span class="comment">     * 调用本方法通知所有登记的观察者，即调用它们的update()方法</span>
+<span class="comment">     * 传入this和arg作为参数</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">notifyObservers</span><span class="params">(Object arg)</span> &#123;
+
+        Object[] arrLocal;
+
+    <span class="keyword">synchronized</span> (<span class="built_in">this</span>) &#123;
+
+        <span class="keyword">if</span> (!changed)
+                <span class="keyword">return</span>;
+            arrLocal = obs.toArray();
+            clearChanged();
+        &#125;
+
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> arrLocal.length-<span class="number">1</span>; i&gt;=<span class="number">0</span>; i--)
+            ((Observer)arrLocal[i]).update(<span class="built_in">this</span>, arg);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 将观察者聚集清空</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">deleteObservers</span><span class="params">()</span> &#123;
+    obs.removeAllElements();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 将“已变化”设置为true</span>
+<span class="comment">     */</span>
+    <span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">setChanged</span><span class="params">()</span> &#123;
+    changed = <span class="literal">true</span>;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 将“已变化”重置为false</span>
+<span class="comment">     */</span>
+    <span class="keyword">protected</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">clearChanged</span><span class="params">()</span> &#123;
+    changed = <span class="literal">false</span>;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 检测本对象是否已变化</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">boolean</span> <span class="title function_">hasChanged</span><span class="params">()</span> &#123;
+    <span class="keyword">return</span> changed;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * Returns the number of observers of this &lt;tt&gt;Observable&lt;/tt&gt; object.</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@return</span>  the number of observers of this object.</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">countObservers</span><span class="params">()</span> &#123;
+    <span class="keyword">return</span> obs.size();
+    &#125;
+&#125;</code></pre>
+
+<p>这个类代表一个被观察者对象，有时称之为主题对象。一个被观察者对象可以有数个观察者对象，每个观察者对象都是实现Observer接口的对象。在被观察者发生变化时，会调用Observable的 <code>notifyObservers()</code> 方法，此方法调用所有的具体观察者的update()方法，从而使所有的观察者都被通知更新自己。</p>
+<h1 id="四、怎样使用JAVA对观察者模式的支持"><a href="#四、怎样使用JAVA对观察者模式的支持" class="headerlink" title="四、怎样使用JAVA对观察者模式的支持"></a>四、怎样使用JAVA对观察者模式的支持</h1><p>这里给出一个非常简单的例子，说明怎样使用JAVA所提供的对观察者模式的支持。在这个例子中，被观察对象叫做 <code>Watched</code>；而观察者对象叫做 <code>Watcher</code>。<code>Watched</code> 对象继承自 <code>java.util.Observable</code> 类；而<code>Watcher</code>对象实现了 <code>java.util.Observer</code> 接口。另外有一个Test类扮演客户端角色。</p>
+<p><strong>代码实现如下：</strong></p>
 <pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment">* 利用volatile保证读取操作的可见性，</span>
-<span class="comment">* 利用synchronized保证符合操作的原子性结合使用锁和volatile变量来减少同步的开销</span>
-<span class="comment">*/</span>
-<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
-<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> value;
+<span class="comment"> * 主题角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Watched</span> <span class="keyword">extends</span> <span class="title class_">Observable</span> &#123;
+    <span class="keyword">private</span> String data;
+
+    <span class="keyword">public</span> String <span class="title function_">getData</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> data;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setData</span><span class="params">(String data)</span> &#123;
+        <span class="keyword">if</span> (!data.equals(<span class="built_in">this</span>.data)) &#123;
+            <span class="built_in">this</span>.data = data;
+            <span class="comment">// 调用父类方法，更新 changed标识</span>
+            setChanged();
+        &#125;
+        <span class="comment">// 调用父类方法， 更新观察者</span>
+        notifyObservers();
+    &#125;
 &#125;
-<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> ++value;
-&#125;</code></pre></li>
-</ul>
-</li>
-</ul>
+
+
+<span class="comment">// 观察者角色</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Watcher</span> <span class="keyword">implements</span> <span class="title class_">Observer</span> &#123;
+
+    <span class="keyword">public</span> <span class="title function_">Watcher</span><span class="params">(Observable observable)</span> &#123;
+        <span class="comment">// 添加观察者到主题中</span>
+        observable.addObserver(<span class="built_in">this</span>);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">update</span><span class="params">(Observable o, Object arg)</span> &#123;
+        System.out.println(<span class="string">&quot;主题状态发生改变：&quot;</span> + ((Watched)o).getData());
+    &#125;
+&#125;
+
+
+<span class="comment">// 测试类</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Test</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+
+        <span class="comment">//创建被观察者对象</span>
+        <span class="type">Watched</span> <span class="variable">watched</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Watched</span>();
+        <span class="comment">//创建观察者对象，并将被观察者对象登记</span>
+        <span class="type">Observer</span> <span class="variable">watcher</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Watcher</span>(watched);
+        <span class="comment">//给被观察者状态赋值</span>
+        watched.setData(<span class="string">&quot;start&quot;</span>);
+        watched.setData(<span class="string">&quot;run&quot;</span>);
+        watched.setData(<span class="string">&quot;stop&quot;</span>);
+
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">主题状态发生改变：start
+主题状态发生改变：run
+主题状态发生改变：stop</code></pre>
+</blockquote>
+<p>Test对象首先创建了Watched和Watcher对象。在创建Watcher对象时，将Watched对象作为参数传入；然后Test对象调用Watched对象的setData()方法，触发Watched对象的内部状态变化；Watched对象进而通知实现登记过的Watcher对象，也就是调用它的update()方法。</p>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/java-my-life/archive/2012/05/16/2502279.html">https://www.cnblogs.com/java-my-life/archive/2012/05/16/2502279.html</a></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>

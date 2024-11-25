@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>05-JUC进阶-Java内存模型-JMM | George&#39;s Blog</title>
+  <title>18-迭代器模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , juc ">
-  <meta name="description" content="05-JUC进阶-Java内存模型-JMM | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="18-迭代器模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#x67;&#x65;&#x5f;&#x39;&#x35;&#x40;&#x31;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1253,9 +1253,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-juc2/05-JUC进阶-Java内存模型-JMM" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/18-迭代器模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">05-JUC进阶-Java内存模型-JMM</h1>
+        <h1 class="article-title">18-迭代器模式</h1>
     
     <div class="article-meta">
         
@@ -1265,7 +1265,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JUC">JUC</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1273,21 +1273,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
-            
-            <a class="color4">juc</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-25 13:09:23'>2024-09-23 23:01</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-25 09:24:55'>2024-11-24 00:02</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:3.7k</span>
+        <span>字数:4.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1317,7 +1315,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A1%AC%E4%BB%B6%E5%AD%98%E5%82%A8%E4%BD%93%E7%B3%BB"><span class="toc-text">一、计算机硬件存储体系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B-JMM"><span class="toc-text">二、Java内存模型-JMM</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-JMM%E6%A6%82%E8%BF%B0"><span class="toc-text">1. JMM概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-JMM%E7%9A%84%E4%BD%9C%E7%94%A8"><span class="toc-text">2. JMM的作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E4%B8%89%E5%A4%A7%E7%89%B9%E6%80%A7"><span class="toc-text">3. JMM规范下，三大特性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%8F%AF%E8%A7%81%E6%80%A7"><span class="toc-text">3.1 可见性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%8E%9F%E5%AD%90%E6%80%A7"><span class="toc-text">3.2 原子性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="toc-text">3.3. 有序性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AF%B9%E5%8F%98%E9%87%8F%E7%9A%84%E8%AF%BB%E5%86%99%E8%BF%87%E7%A8%8B"><span class="toc-text">三、JMM规范下，多线程对变量的读写过程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81JMM%E8%A7%84%E8%8C%83%E4%B8%8B%EF%BC%8C%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%85%88%E8%A1%8C%E5%8F%91%E7%94%9F%E5%8E%9F%E5%88%99%E4%B9%8Bhappens-before"><span class="toc-text">四、JMM规范下，多线程先行发生原则之happens-before</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-x-%E3%80%81y%E6%A1%88%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-text">1. x 、y案例说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%85%88%E8%A1%8C%E5%B9%B6%E5%8F%91%E5%8E%9F%E5%88%99%E8%AF%B4%E6%98%8E"><span class="toc-text">2. 先行并发原则说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-happens-before%E6%80%BB%E5%8E%9F%E5%88%99"><span class="toc-text">3. happens-before总原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-happens-before%E4%B9%8B8%E6%9D%A1%E8%A7%84%E5%88%99"><span class="toc-text">4. happens-before之8条规则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-happens-before-%E6%80%BB%E7%BB%93"><span class="toc-text">5. happens-before 总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E6%A1%88%E4%BE%8B%E8%AF%B4%E6%98%8E"><span class="toc-text">6. 案例说明</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%81%9A%E9%9B%86%E5%92%8CJava%E8%81%9A%E9%9B%86"><span class="toc-text">一、聚集和Java聚集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">二、迭代器模式的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%99%BD%E7%AE%B1%E8%81%9A%E9%9B%86%E4%B8%8E%E5%A4%96%E7%A6%80%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-text">1. 白箱聚集与外禀迭代器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E7%90%86%E8%AE%BA%E6%A6%82%E8%BF%B0"><span class="toc-text">1.1 理论概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">1.2 代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%A4%96%E7%A6%80%E8%BF%AD%E4%BB%A3%E5%99%A8%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-text">1.3 外禀迭代器的意义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E9%BB%91%E7%AE%B1%E8%81%9A%E9%9B%86%E4%B8%8E%E5%86%85%E7%A6%80%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-text">2. 黑箱聚集与内禀迭代器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%90%86%E8%AE%BA%E6%A6%82%E8%BF%B0"><span class="toc-text">2.1 理论概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">2.2 代码实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%B8%BB%E5%8A%A8%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E8%A2%AB%E5%8A%A8%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-text">三、主动迭代器和被动迭代器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%9D%99%E6%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%92%8C%E5%8A%A8%E6%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="toc-text">四、静态迭代器和动态迭代器</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81Fail-Fast"><span class="toc-text">五、Fail Fast</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Fail-Fast%E5%9C%A8JAVA%E8%81%9A%E9%9B%86%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">1. Fail Fast在JAVA聚集中的使用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%BF%AD%E4%BB%A3%E5%99%A8%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">六、迭代器模式的优点</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1333,169 +1331,433 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、计算机硬件存储体系"><a href="#一、计算机硬件存储体系" class="headerlink" title="一、计算机硬件存储体系"></a>一、计算机硬件存储体系</h1><p> 计算机存储结构，从本地磁盘 到 主内存 到 CPU缓存，也就是从硬盘 -&gt; 内存 -&gt; CPU。</p>
-<p>一般对应的程序的操作就是从数据库查数据到内存然后到CPU进行计算</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-162409.png" alt="计算机硬件存储体系"></p>
-<p>由于CPU和物理主内存的速度不一致（CPU速度远快于主内存），因此CPU和主内存之间需要多级缓存。</p>
-<p>CPU的运行并不是直接操作内存而是先把内存里边的数据读到缓存，而内存的读和写操作的时候就会造成不一致的问题。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-162728.png" alt="CPU-缓存-内存"></p>
-<p>Java虚拟机规范中试图定义一种Java内存模型（java Memory Model，简称JMM) 来屏蔽掉各种硬件和操作系统的内存访问差异，以实现让Java程序在各种平台下都能达到一致的内存访问效果。</p>
-<h1 id="二、Java内存模型-JMM"><a href="#二、Java内存模型-JMM" class="headerlink" title="二、Java内存模型-JMM"></a>二、Java内存模型-JMM</h1><h2 id="1-JMM概述"><a href="#1-JMM概述" class="headerlink" title="1. JMM概述"></a>1. JMM概述</h2><p>JMM(Java内存模型Java Memory Model，简称JMM)本身是一种抽象的概念并不真实存在<strong>它仅仅描述的是一组约定或规范</strong>，通过这组规范定义了程序中(尤其是多线程)各个变量的读写访问方式并决定一个线程对共享变量的写入何时以及如何变成对另一个线程可见，<strong>关键技术点都是围绕多线程的原子性、可见性和有序性展开的</strong>。</p>
-<h2 id="2-JMM的作用"><a href="#2-JMM的作用" class="headerlink" title="2. JMM的作用"></a>2. JMM的作用</h2><ul>
-<li>通过JMM来实现线程和主内存之间的抽象关系</li>
-<li>屏蔽各个硬件平台和操作系统的内存访问差异以实现让Java程序在各种平台下都能达到一致的内存访问效果。</li>
-</ul>
-<h2 id="3-JMM规范下，三大特性"><a href="#3-JMM规范下，三大特性" class="headerlink" title="3. JMM规范下，三大特性"></a>3. JMM规范下，三大特性</h2><ul>
-<li><p>可见性</p>
-</li>
-<li><p>原子性</p>
-</li>
-<li><p>有序性</p>
-</li>
-</ul>
-<h3 id="3-1-可见性"><a href="#3-1-可见性" class="headerlink" title="3.1 可见性"></a>3.1 可见性</h3><p>是指当一个线程修改了某一个共享变量的值，其他线程是否能够立即知道该变更 ，JMM规定了所有的变量都存储在主内存中。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-165016.png" alt="CPU-缓存-主存"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-165023.png" alt="多线程修改同一个变量"></p>
-<p><strong>Java中普通的共享变量不保证可见性</strong>，因为数据修改被写入内存的时机是不确定的，多线程并发下很可能出现**”脏读”<strong>，所以每个线程都有自己的</strong>工作内存<strong>，线程自己的工作内存中保存了该线程使用到的变量的</strong>主内存副本拷贝**，线程对变量的所有操作（读取，赋值等 ）都必需在线程自己的工作内存中进行，而不能够直接读写主内存中的变量。不同线程之间也无法直接访问对方工作内存中的变量，线程间变量值的传递均需要通过主内存来完成</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-164824.png" alt="线程-主存-工作内存的关系"></p>
-<p> <strong>线程脏读：如果没有可见性保证</strong></p>
+        <p><strong>迭代器模式又叫游标(Cursor)模式，是对象的行为模式。迭代器模式可以顺序地访问一个聚集中的元素而不必暴露聚集的内部表象（<em>internal representation</em>）。</strong></p>
+<h1 id="一、聚集和Java聚集"><a href="#一、聚集和Java聚集" class="headerlink" title="一、聚集和Java聚集"></a>一、聚集和Java聚集</h1><p>多个对象聚在一起形成的总体称之为聚集(Aggregate)，聚集对象是能够包容一组对象的容器对象。聚集依赖于聚集结构的抽象化，具有复杂化和多样性。数组就是最基本的聚集，也是其他的JAVA聚集对象的设计基础。</p>
+<p>JAVA聚集对象是实现了共同的java.util.Collection接口的对象，是JAVA语言对聚集概念的直接支持。从1.2版开始，JAVA语言提供了很多种聚集，包括Vector、ArrayList、HashSet、HashMap、Hashtable等，这些都是JAVA聚集的例子。</p>
+<h1 id="二、迭代器模式的结构"><a href="#二、迭代器模式的结构" class="headerlink" title="二、迭代器模式的结构"></a>二、迭代器模式的结构</h1><p>迭代器模式有两种实现方式，分别是<strong>白箱聚集与外禀迭代器</strong>和<strong>黑箱聚集于内禀迭代器。</strong></p>
+<h2 id="1-白箱聚集与外禀迭代器"><a href="#1-白箱聚集与外禀迭代器" class="headerlink" title="1. 白箱聚集与外禀迭代器"></a>1. 白箱聚集与外禀迭代器</h2><h3 id="1-1-理论概述"><a href="#1-1-理论概述" class="headerlink" title="1.1 理论概述"></a>1.1 理论概述</h3><p>如果一个聚集的接口提供了可以用来修改聚集元素的方法，这个接口就是所谓的<strong>宽接口</strong>。</p>
+<p>如果聚集对象为所有对象提供同一个接口，也就是宽接口的话，当然会满足迭代器模式对迭代器对象的要求。但是，这样会破坏对聚集对象的封装。这种提供宽接口的聚集叫做<strong>白箱聚集</strong>。聚集对象向外界提供同样的宽接口，如下图所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/24/20241124-135235.png" alt="宽接口"></p>
+<p>由于聚集自己实现迭代逻辑，并向外部提供适当的接口，使得迭代器可以从外部控制聚集元素的迭代过程。这样一来迭代器所控制的仅仅是一个游标而已，这种迭代器叫做<strong>游标迭代器（Cursor Iterator）</strong>。由于迭代器是在聚集结构之外的，因此这样的迭代器又叫做<strong>外禀迭代器（Extrinsic Iterator）</strong>。</p>
+<p>现在看一看白箱聚集与外禀迭代器的实现。一个白箱聚集向外界提供访问自己内部元素的接口（称作遍历方法或者Traversing Method），从而使外禀迭代器可以通过聚集的遍历方法实现迭代功能。</p>
+<p>因为迭代的逻辑是由聚集对象本身提供的，所以这样的外禀迭代器角色往往仅仅保持迭代的游标位置。</p>
+<p>一个典型的由白箱聚集与外禀迭代器组成的系统如下图所示，在这个实现中具体迭代器角色是一个外部类，而具体聚集角色向外界提供遍历聚集元素的接口。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/24/20241124-135617.png" alt="外禀迭代器"></p>
+<p>迭代器模式涉及到以下几个角色：</p>
 <ul>
-<li>主内存中有变量 x，初始值为 0</li>
-<li>线程 A 要将 x 加 1，先将 x&#x3D;0 拷贝到自己的私有内存中，然后更新 x 的值</li>
-<li>线程 A 将更新后的 x 值回刷到主内存的时间是不固定的</li>
-<li>刚好在线程 A 没有回刷 x 到主内存时，线程 B 同样从主内存中读取 x，此时为 0，和线程 A 一样的操作，最后期盼的 x&#x3D;2 就会变成 x&#x3D;1</li>
+<li>抽象迭代器器(Iterator)角色：此抽象角色定义出遍历元素所需的接口。</li>
+<li>具体迭代器(ConcreteIterator)角色：此角色实现了Iterator接口，并保持迭代过程中的游标位置。</li>
+<li>聚集(Aggregate)角色：此抽象角色给出创建迭代器(Iterator)对象的接口。</li>
+<li>具体聚集(ConcreteAggregate)角色：实现了创建迭代器(Iterator)对象的接口，返回一个合适的具体迭代器实例。</li>
+<li>客户端(Client)角色：持有对聚集及其迭代器对象的引用，调用迭代器对象的迭代接口，也有可能通过迭代器操作聚集元素的增加和删除。</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-170757.png" alt="线程脏读"></p>
-<h3 id="3-2-原子性"><a href="#3-2-原子性" class="headerlink" title="3.2 原子性"></a>3.2 原子性</h3><p>指一个操作是不可被打断的，即多线程环境下，操作不能被其他线程干扰</p>
-<h3 id="3-3-有序性"><a href="#3-3-有序性" class="headerlink" title="3.3. 有序性"></a>3.3. 有序性</h3><p>对于一个线程的执行代码而言，我们总是习惯性地认为代码的执行总是从上到下，有序执行。但为了提升性能，编译器和处理器通常会对指令序列进行重新排序。Java规范规定JVM线程内部维持顺序化语义，即只要程序的最终结果与它顺序化执行的结果相等，那么指令的执行顺序可以与代码顺序不一致，此过程叫指令的重排序。</p>
-<p>  <strong>优缺点：</strong></p>
-<ul>
-<li>JVM能根据处理器特性（CPU多级缓存系统、多核处理器等）适当的对机器指令进行重排序，使机器指令更符合CPU的执行特性，最大限度的发挥机器性能</li>
-<li>​    但是指令重排可以保证串行语义一致，<strong>但没有义务保证多线程的语义也一致（即可能产生“脏读”）</strong>，简单而言就是两行以上不相干的代码在执行的时候有可能先执行的不是第一条，不见得是从上到下顺序执行，执行顺序会被优化。</li>
-</ul>
-<p>从源码到最终执行示例图</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-171944.png" alt="原码编译到执行"></p>
-<ul>
-<li><p>单线程环境里面确保程序最终执行结果和代码顺序执行的结果一致。处理器在进行重排序时必须要考虑指令之间的数据依赖性。</p>
-</li>
-<li><p>多线程环境中线程交替执行,由于编译器优化重排的存在，两个线程中使用的变量能否保证一致性是无法确定的,结果无法预测</p>
-</li>
-</ul>
-<h1 id="三、JMM规范下，多线程对变量的读写过程"><a href="#三、JMM规范下，多线程对变量的读写过程" class="headerlink" title="三、JMM规范下，多线程对变量的读写过程"></a>三、JMM规范下，多线程对变量的读写过程</h1><p><strong>读取过程</strong></p>
-<p>由于JVM运行程序的实体是线程，而每个线程创建时JVM都会为其创建一个工作内存(有些地方称为栈空间)，工作内存是每个线程的私有数据区域，而Java内存模型中规定所有变量都存储在<strong>主内存</strong>，主内存是共享内存区域，所有线程都可以访问，但<strong>线程对变量的操作(读取赋值等)必须在工作内存中进行，首先要将变量从主内存拷贝到的线程自己的工作内存空间，然后对变量进行操作，操作完成后再将变量写回主内存</strong>，不能直接操作主内存中的变量，各个线程中的工作内存中存储着主内存中的变量副本拷贝，因此不同的线程间无法访问对方的工作内存，线程间的通信(传值)必须通过主内存来完成，其简要访问过程如下图:</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/09/23/20240923-172630.png" alt="多线程操作主内存变量"></p>
-<p><strong>JMM定义了线程和主内存之间的抽象关系：</strong></p>
-<ul>
-<li>线程之间的共享变量存储在主内存中（从硬件角度讲就是内存条）</li>
-<li>每个线程都有一个自己的本地工作内存，本地工作内存中存储了该线程用来读写共享变量的副本（从硬件角度来说就是CPU的缓存）</li>
-</ul>
-<p><strong>总结</strong></p>
-<ul>
-<li>我们定义的所有共享变量都储存在<strong>物理主内存中</strong></li>
-<li>每个线程都有自己独立的工作内存，里面保证该线程使用到的共享变量的副本（主内存中该变量的一份拷贝）</li>
-<li>线程对共享变量所有的操作都必须先在线程自己的工作内存中进行后写回主内存，不能直接从主内存在读写（不能越级）</li>
-<li>不同线程之间也无法直接访问其他线程的工作内存中的变量，线程间变量值的传递需要通过主内存来进行（同级不能互相访问）。</li>
-</ul>
-<h1 id="四、JMM规范下，多线程先行发生原则之happens-before"><a href="#四、JMM规范下，多线程先行发生原则之happens-before" class="headerlink" title="四、JMM规范下，多线程先行发生原则之happens-before"></a>四、JMM规范下，多线程先行发生原则之happens-before</h1><p>在JVM中，如果一个操作执行的结果需要对另一个操作可见或者代码重排序，那么这两个操作之间必须存在 happens-before（先行发生）原则，逻辑上的先后关系。</p>
-<h2 id="1-x-、y案例说明"><a href="#1-x-、y案例说明" class="headerlink" title="1. x 、y案例说明"></a>1. x 、y案例说明</h2><ul>
-<li>x&#x3D;5;线程A执行</li>
-<li>y&#x3D;x;线程B执行</li>
-<li>问：y一定等于5吗？</li>
-</ul>
-<p><strong>答案：不一定</strong></p>
-<p>如果线程A的操作（x&#x3D; 5）happens-before(先行发生)线程B的操作（y &#x3D; x）,那么可以确定线程B执行后y &#x3D; 5 一定成立;</p>
-<p>如果他们不存在happens-before原则，那么y &#x3D; 5 不一定成立。</p>
-<p><strong>这就是happens-before原则的为例———–&gt;包含可见性和有序性的约束</strong></p>
-<h2 id="2-先行并发原则说明"><a href="#2-先行并发原则说明" class="headerlink" title="2. 先行并发原则说明"></a>2. 先行并发原则说明</h2><p>如果Java内存模型中所有的有序性都仅靠 <code>volatile</code> 和 <code>synchronized</code> 来完成，那么有很多操作都将变得非常罗嗦，但是我们在编写Java并发代码的时候并没有察觉到这一点。</p>
-<p>我们没有时时、处处、次次，添加volatile和synchronized来完成程序，这是因为Java语言中JMM原则下，有一个“先行发生”（happens-before）的原则限制和规矩，给你理好了规矩！</p>
-<p>这个原则非常重要：它是判断数据是否存在竞争，线程是否安全的非常有用的手段。依赖这个原则，我们可以通过几条简单规则解决并发环境下两个操作之间是否可能存在冲突的所有问题，而不需要陷入Java内存模型晦涩难懂的底层编译原理之中。</p>
-<h2 id="3-happens-before总原则"><a href="#3-happens-before总原则" class="headerlink" title="3. happens-before总原则"></a>3. happens-before总原则</h2><ul>
-<li>如果一个操作happens-before另一个操作，那么第一个操作的执行结果将对第二个操作可见，而且第一个操作的执行顺序排在第二个操作之前</li>
-<li>如果两个操作之间存在happens-before关系，并不意味着一定要按照happens-before原则制定的顺序来执行。如果重排之后的执行结果与按照happens-before关系来执行的结果一致，那么这种重排序并不非法。</li>
-</ul>
-<h2 id="4-happens-before之8条规则"><a href="#4-happens-before之8条规则" class="headerlink" title="4. happens-before之8条规则"></a>4. happens-before之8条规则</h2><p>从JDK 5开始，Java使用新的JSR-133内存模型，提供了 happens-before 原则来辅助保证程序执行的原子性、可见性以及有序性的问题，它是判断数据是否存在竞争、线程是否安全的依据，happens-before 原则内容如下：</p>
-<ol>
-<li><p>次序规则：一个线程内，按照代码的顺序，写在前面的操作先行发生于写在后面的操作，也就是说前一个操作的结果可以被后续的操作获取（保证语义串行性，按照代码顺序执行）。比如前一个操作把变量x赋值为1，那后面一个操作肯定能知道x已经变成了1</p>
-</li>
-<li><p>锁定规则：一个 <code>unLock</code> 操作先行发生于后面对同一个锁的<code>lock</code>操作（后面指时间上的先后）</p>
-<p>​	解释：A线程的 unlock 操作，先行发生于 B线程的 lock 操作。</p>
-</li>
-<li><p>volatile变量规则：对一个volatile变量的写操作先行发生于后面对这个变量的读操作，前面的写对后面的读是可见的，这里的后面同样指时间上的先后</p>
-</li>
-<li><p>传递规则：如果操作A先行发生于操作B，而操作B又先行发生于操作C，则可以得出操作A先行发生于操作C。</p>
-</li>
-<li><p>线程启动规则（Thread start Rule）：Thread对象的start()方法先行发生于此线程的每一个动作</p>
-</li>
-<li><p>线程中断规则（Thread Interruption Rule）：</p>
-<ol>
-<li>对线程interrupt()方法的调用先行发生于被中断线程的代码检测到中断事件的发生</li>
-<li>可以通过Thread.interrupted()检测到是否发生中断</li>
-<li>也就是说你要先调用interrupt()方法设置过中断标志位，我才能检测到中断发生</li>
-</ol>
-<p>解释：这里其实都是重排序问题，如果没有的此规则就变成了你写的前面设置终止状态，判断结果理应是true，但指令重排序有可能给你改成先判断结果就是false了</p>
-</li>
-<li><p>线程终止规则（Thread Termination Rule）：线程中的所有操作都优先发生于对此线程的终止检测，我们可以通过isAlive()等手段检测线程是否已经终止执行。</p>
-</li>
-<li><p>对象终结规则（Finalizer Rule）：一个对象的初始化完成（构造函数执行结束）先行发生于它的finalize(）方法的开始——-&gt;对象没有完成初始化之前，是不能调用finalized()方法的</p>
-</li>
-</ol>
-<h2 id="5-happens-before-总结"><a href="#5-happens-before-总结" class="headerlink" title="5. happens-before 总结"></a>5. happens-before 总结</h2><ul>
-<li>在Java语言里面，Happens-before 的语义本质上是一种可见性</li>
-<li>A happens-before B ,意味着A发生过的事情对B而言是可见的，无论A事件和B事件是否发生在同一线程里</li>
-<li>JVM的设计分为两部分：<ul>
-<li>一部分是面向我们程序员提供的，也就是happens-before规则，它通俗易懂的向我们程序员阐述了一个强内存模型，我们只要理解happens-before规则，就可以编写并发安全的程序了</li>
-<li>另一部分是针对JVM实现的，为了尽可能少的对编译器和处理器做约束从而提升性能，JMM在不影响程序执行结果的前提下对其不做要求，即允许优化重排序，我们只要关注前者就好了，也就是理解happens-before规则即可，其他繁杂的内容由JMM规范结合操作系统给我们搞定，我们只写好代码即可。</li>
-</ul>
-</li>
-</ul>
-<h2 id="6-案例说明"><a href="#6-案例说明" class="headerlink" title="6. 案例说明"></a>6. 案例说明</h2><pre><code class="highlight java"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
-<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> value;
-&#125;
-<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> ++value;
+<h3 id="1-2-代码实现"><a href="#1-2-代码实现" class="headerlink" title="1.2 代码实现"></a>1.2 代码实现</h3><blockquote>
+<p>抽象聚集角色类，这个角色规定出所有的具体聚集必须实现的接口。迭代器模式要求聚集对象必须有一个工厂方法，也就是createIterator()方法，以向外界提供迭代器对象的实例。</p>
+</blockquote>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象聚集类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Aggregate</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 工厂方法, 创建相应的迭代器对象接口</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> Iterator <span class="title function_">createIterator</span><span class="params">()</span>;
 &#125;</code></pre>
 
-<p>问题描述：假设存在线程A和B，线程A先（时间上的先后）调用了setValue()方法，然后线程B调用了同一个对象的getValue()方法，那么线程B收到的返回值是什么？</p>
-<p><strong>答案：不一定</strong></p>
-<p><strong>分析如下：</strong></p>
-<p>分析happens-before规则（规则5，6，7，8可以忽略，和代码无关）</p>
-<ul>
-<li>由于两个方法由不同线程调用，不满足一个线程的条件，不满足程序次序规则</li>
-<li>两个方法都没有用锁，不满足锁定规则</li>
-<li>变量没有使用volatile修饰，所以不满足volatile变量规则</li>
-<li>传递规则肯定不满足</li>
-</ul>
-<p>综上：无法通过happens-before原则推导出线程A happens-before 线程B，虽然可以确定时间上线程A优于线程B，但就是无法确定线程B获得的结果是什么，所以这段代码不是线程安全的</p>
-<p>注意：如果两个操作的执行次序无法从happens-before原则推导出来，那么就不能保证他们的有序性，虚拟机可以随意对他们进行重排序</p>
-<p><strong>解决方案：</strong></p>
-<ul>
-<li><p>方案一：</p>
-<ul>
-<li><p>把getter&#x2F;setter方法都定义为synchronized方法——-&gt;<strong>不好，重量锁，并发性下降</strong></p>
-<pre><code class="highlight java"><span class="keyword">private</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
-<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> value;
-&#125;
-<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> ++value;
-&#125;</code></pre>
-</li>
-<li><p>把 value 定义为 volatile 变量，由于setter方法对value的修改不依赖value的原值，满足volatile关键字使用场景</p>
+<blockquote>
+<p>具体聚集角色类，实现了抽象聚集角色类所要求的接口，也就是createIterator()方法。此外，还有方法getElement()向外界提供聚集元素，而方法size()向外界提供聚集的大小等。</p>
+</blockquote>
 <pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment">* 利用volatile保证读取操作的可见性，</span>
-<span class="comment">* 利用synchronized保证符合操作的原子性结合使用锁和volatile变量来减少同步的开销</span>
-<span class="comment">*/</span>
-<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="type">int</span> <span class="variable">value</span> <span class="operator">=</span><span class="number">0</span>;
-<span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> value;
+<span class="comment"> * 具体聚集类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteAggregate</span> <span class="keyword">extends</span> <span class="title class_">Aggregate</span> &#123;
+
+    <span class="keyword">private</span> Object[] objArray = <span class="literal">null</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 构造方法传入聚集数据</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> objArray</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="title function_">ConcreteAggregate</span><span class="params">(Object[] objArray)</span> &#123;
+        <span class="built_in">this</span>.objArray = objArray;
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> Iterator <span class="title function_">createIterator</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ConcreteIterator</span>(<span class="built_in">this</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 取值方法：向外界提供聚集元素</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> Object <span class="title function_">getElement</span><span class="params">(<span class="type">int</span> index)</span> &#123;
+        <span class="keyword">if</span> (index &lt; objArray.length) &#123;
+            <span class="keyword">return</span> objArray[index];
+        &#125; <span class="keyword">else</span> &#123;
+            <span class="keyword">return</span> <span class="literal">null</span>;
+        &#125;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 取值方法：向外界提供聚集的大小</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">size</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> objArray.length;
+    &#125;
+
+&#125;</code></pre>
+
+<blockquote>
+<p>抽象迭代器角色类</p>
+</blockquote>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象迭代器角色类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Iterator</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：移动到第一个元素</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">first</span><span class="params">()</span>;
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：移动到下一个元素</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">next</span><span class="params">()</span>;
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：是否为最后一个元素</span>
+<span class="comment">     */</span>
+    <span class="type">boolean</span> <span class="title function_">isDone</span><span class="params">()</span>;
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：返还当前元素</span>
+<span class="comment">     */</span>
+    Object <span class="title function_">currentItem</span><span class="params">()</span>;
+&#125;</code></pre>
+
+<blockquote>
+<p>具体迭代器角色类</p>
+</blockquote>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteIterator</span> <span class="keyword">implements</span> <span class="title class_">Iterator</span> &#123;
+
+    <span class="comment">// 持有迭代的具体的聚合对象</span>
+    <span class="keyword">private</span> <span class="type">ConcreteAggregate</span> <span class="variable">aggregate</span> <span class="operator">=</span> <span class="literal">null</span>;
+    <span class="comment">// 内部索引，记录当前迭代到的索引位置</span>
+    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;
+    <span class="comment">// 记录当前聚集对象的大小</span>
+    <span class="keyword">private</span> <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> <span class="number">0</span>;
+
+    <span class="keyword">public</span> <span class="title function_">ConcreteIterator</span><span class="params">(ConcreteAggregate aggregate)</span> &#123;
+        <span class="built_in">this</span>.aggregate = aggregate;
+        <span class="built_in">this</span>.size = aggregate.size();
+        <span class="built_in">this</span>.index = <span class="number">0</span>;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法,移动到第一个元素</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">first</span><span class="params">()</span> &#123;
+        index = <span class="number">0</span>;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法,移动到下一个元素</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">next</span><span class="params">()</span> &#123;
+        <span class="keyword">if</span> (index &lt; size) &#123;
+            index++;
+        &#125;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法:是否为最后一个元素</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isDone</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> index &gt;= size;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：返还当前元素</span>
+<span class="comment">     */</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> Object <span class="title function_">currentItem</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> aggregate.getElement(index);
+    &#125;
+&#125;</code></pre>
+
+
+
+<blockquote>
+<p>客户端</p>
+</blockquote>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        String[] strings = <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;Tom&quot;</span>, <span class="string">&quot;Jerry&quot;</span>, <span class="string">&quot;Jack&quot;</span>, <span class="string">&quot;Marray&quot;</span>, <span class="string">&quot;Green&quot;</span>&#125;;
+        <span class="comment">// 创建聚合角色</span>
+        <span class="type">Aggregate</span> <span class="variable">aggregate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteAggregate</span>(strings);
+
+        <span class="comment">// 创建迭代器</span>
+        <span class="type">Iterator</span> <span class="variable">iterator</span> <span class="operator">=</span> aggregate.createIterator();
+
+        <span class="keyword">while</span> (!iterator.isDone()) &#123;
+            <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> (String) iterator.currentItem();
+            System.out.println(name);
+
+            iterator.next();
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果</p>
+<pre><code class="highlight shell">Tom
+Jerry
+Jack
+Marray
+Green</code></pre>
+</blockquote>
+<p>这个例子首先创建了一个聚集类实例，然后调用聚集对象的工厂方法createIterator()以得到一个迭代器对象。在得到迭代器的实例后，客户端开始迭代过程，打印出所有的聚集元素。</p>
+<h3 id="1-3-外禀迭代器的意义"><a href="#1-3-外禀迭代器的意义" class="headerlink" title="1.3 外禀迭代器的意义"></a>1.3 外禀迭代器的意义</h3><p>​        一个常常会问的问题是：既然白箱聚集已经向外界提供了遍历方法，客户端已经可以自行进行迭代了，为什么还要应用迭代器模式，并创建一个迭代器对象进行迭代呢？</p>
+<p>　　客户端当然可以自行进行迭代，不一定非得需要一个迭代器对象。但是，迭代器对象和迭代模式会将迭代过程抽象化，将作为迭代消费者的客户端与迭代负责人的迭代器责任分隔开，使得两者可以独立的演化。在聚集对象的种类发生变化，或者迭代的方法发生改变时，迭代器作为一个中介层可以吸收变化的因素，而避免修改客户端或者聚集本身。</p>
+<p>　　此外，如果系统需要同时针对几个不同的聚集对象进行迭代，而这些聚集对象所提供的遍历方法有所不同时，使用迭代器模式和一个外界的迭代器对象是有意义的。具有同一迭代接口的不同迭代器对象处理具有不同遍历接口的聚集对象，使得系统可以使用一个统一的迭代接口进行所有的迭代。</p>
+<h2 id="2-黑箱聚集与内禀迭代器"><a href="#2-黑箱聚集与内禀迭代器" class="headerlink" title="2. 黑箱聚集与内禀迭代器"></a>2. 黑箱聚集与内禀迭代器</h2><h3 id="2-1-理论概述"><a href="#2-1-理论概述" class="headerlink" title="2.1 理论概述"></a>2.1 理论概述</h3><p>如果一个聚集的接口没有提供修改聚集元素的方法，这样的接口就是所谓的<strong>窄接口</strong>。</p>
+<p>聚集对象为迭代器对象提供一个宽接口，而为其他对象提供一个窄接口。换言之，聚集对象的内部结构应当对迭代器对象适当公开，以便迭代器对象能够对聚集对象有足够的了解，从而可以进行迭代操作。但是，聚集对象应当避免向其他的对象提供这些方法，因为其他对象应当经过迭代器对象进行这些工作，而不是直接操控聚集对象。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/24/20241124-143320.png" alt="内禀迭代器"></p>
+<p>在JAVA语言中，实现双重接口的办法就是将迭代器类设计成聚集类的内部成员类。这样迭代器对象将可以像聚集对象的内部成员一样访问聚集对象的内部结构。下面给出一个示意性的实现，说明这种双重接口的结构时怎么样产生的，以及使用了双重接口结构之后迭代器模式的实现方案。这种同时保证聚集对象的封装和迭代器功能的实现的方案叫做<strong>黑箱实现方案</strong>。</p>
+<p>由于迭代器是聚集的内部类，迭代器可以自由访问聚集的元素，所以迭代器可以自行实现迭代功能并控制对聚集元素的迭代逻辑。由于迭代器是在聚集的结构之内定义的，因此这样的迭代器又叫做<strong>内禀迭代器（Intrinsic Iterator）。</strong></p>
+<p>为了说明黑箱方案的细节，这里给出一个示意性的黑箱实现。在这个实现里，聚集类ConcreteAggregate含有一个内部成员类ConcreteIterator，也就是实现了抽象迭代器接口的具体迭代器类，同时聚集并不向外界提供访问自己内部元素的方法。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/24/20241124-143636.png" alt="内禀迭代器实现示例"></p>
+<h3 id="2-2-代码实现"><a href="#2-2-代码实现" class="headerlink" title="2.2 代码实现"></a>2.2 代码实现</h3><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象聚集类</span>
+<span class="comment"> 这个角色规定出所有的具体聚集必须实现的接口。迭代器模式要求聚集对象必须有一个工厂方法，也就是createIterator()方法，以向外界提供迭代器对象的实例。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Aggregate</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 工厂方法, 创建相应的迭代器对象接口</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">abstract</span> Iterator <span class="title function_">createIterator</span><span class="params">()</span>;
 &#125;
-<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">int</span> <span class="title function_">setValue</span><span class="params">()</span>&#123;
-    <span class="keyword">return</span> ++value;
-&#125;</code></pre></li>
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 抽象迭代器角色类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Iterator</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：移动到第一个元素</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">first</span><span class="params">()</span>;
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：移动到下一个元素</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">next</span><span class="params">()</span>;
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：是否为最后一个元素</span>
+<span class="comment">     */</span>
+    <span class="type">boolean</span> <span class="title function_">isDone</span><span class="params">()</span>;
+    <span class="comment">/**</span>
+<span class="comment">     * 迭代方法：返还当前元素</span>
+<span class="comment">     */</span>
+    Object <span class="title function_">currentItem</span><span class="params">()</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体聚集类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteAggregate</span> <span class="keyword">extends</span> <span class="title class_">Aggregate</span> &#123;
+
+    <span class="keyword">private</span> Object[] objArray = <span class="literal">null</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 构造方法传入聚集数据</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> objArray</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="title function_">ConcreteAggregate</span><span class="params">(Object[] objArray)</span> &#123;
+        <span class="built_in">this</span>.objArray = objArray;
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> Iterator <span class="title function_">createIterator</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ConcreteIterator</span>();
+    &#125;
+
+    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">ConcreteIterator</span> <span class="keyword">implements</span> <span class="title class_">Iterator</span> &#123;
+
+        <span class="comment">// 内部索引，记录当前迭代到的索引位置</span>
+        <span class="keyword">private</span> <span class="type">int</span> <span class="variable">index</span> <span class="operator">=</span> <span class="number">0</span>;
+        <span class="comment">// 记录当前聚集对象的大小</span>
+        <span class="keyword">private</span> <span class="type">int</span> <span class="variable">size</span> <span class="operator">=</span> <span class="number">0</span>;
+
+        <span class="keyword">public</span> <span class="title function_">ConcreteIterator</span><span class="params">()</span> &#123;
+            <span class="built_in">this</span>.size = objArray.length;
+            <span class="built_in">this</span>.index = <span class="number">0</span>;
+        &#125;
+
+        <span class="comment">/**</span>
+<span class="comment">         * 迭代方法,移动到第一个元素</span>
+<span class="comment">         */</span>
+        <span class="meta">@Override</span>
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">first</span><span class="params">()</span> &#123;
+            index = <span class="number">0</span>;
+        &#125;
+
+        <span class="comment">/**</span>
+<span class="comment">         * 迭代方法,移动到下一个元素</span>
+<span class="comment">         */</span>
+        <span class="meta">@Override</span>
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">next</span><span class="params">()</span> &#123;
+            <span class="keyword">if</span> (index &lt; size) &#123;
+                index++;
+            &#125;
+        &#125;
+
+        <span class="comment">/**</span>
+<span class="comment">         * 迭代方法:是否为最后一个元素</span>
+<span class="comment">         * <span class="doctag">@return</span></span>
+<span class="comment">         */</span>
+        <span class="meta">@Override</span>
+        <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">isDone</span><span class="params">()</span> &#123;
+            <span class="keyword">return</span> index &gt;= size;
+        &#125;
+
+        <span class="comment">/**</span>
+<span class="comment">         * 迭代方法：返还当前元素</span>
+<span class="comment">         */</span>
+        <span class="meta">@Override</span>
+        <span class="keyword">public</span> Object <span class="title function_">currentItem</span><span class="params">()</span> &#123;
+            <span class="keyword">return</span> objArray[index];
+        &#125;
+    &#125;
+&#125;
+
+
+<span class="comment">// 测试类</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        String[] strings = <span class="keyword">new</span> <span class="title class_">String</span>[]&#123;<span class="string">&quot;Tom&quot;</span>, <span class="string">&quot;Jerry&quot;</span>, <span class="string">&quot;Jack&quot;</span>, <span class="string">&quot;Marray&quot;</span>, <span class="string">&quot;Green&quot;</span>&#125;;
+
+        <span class="comment">// 创建集合对象,传入数据</span>
+        <span class="type">Aggregate</span> <span class="variable">aggregate</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteAggregate</span>(strings);
+
+        <span class="comment">// 创建迭代器</span>
+        <span class="type">Iterator</span> <span class="variable">iterator</span> <span class="operator">=</span> aggregate.createIterator();
+
+        <span class="comment">// 循环打印元素</span>
+        <span class="keyword">while</span> (!iterator.isDone()) &#123;
+            System.out.println(iterator.currentItem());
+            iterator.next();
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果:</p>
+<pre><code class="highlight shell">Tom
+Jerry
+Jack
+Marray
+Green</code></pre>
+</blockquote>
+<p>上面的例子首先创建了一个聚集类实例，然后调用聚集对象的工厂方法createIterator()以得到一个迭代器对象。在得到迭代器的实例后，客户端开始迭代过程，打印出所有的聚集元素。</p>
+<h1 id="三、主动迭代器和被动迭代器"><a href="#三、主动迭代器和被动迭代器" class="headerlink" title="三、主动迭代器和被动迭代器"></a>三、主动迭代器和被动迭代器</h1><ul>
+<li>主动迭代器和被动迭代器又称作外部迭代器和内部迭代器。</li>
+<li>所谓主动（外部）迭代器，指的是由客户端来控制迭代下一个元素的步骤，客户端会明显调用迭代器的next()等迭代方法，在遍历过程中向前进行。</li>
+<li>所谓被动（内部）迭代器，指的是由迭代器自己来控制迭代下一个元素的步骤。因此，如果想要在迭代的过程中完成工作的话，客户端就需要把操作传递给迭代器，迭代器在迭代的时候会在每个元素上执行这个操作，类似于JAVA的回调机制。</li>
+<li>总体来说外部迭代器比内部迭代器要灵活一些，因此我们常见的实现多属于主动迭代器。</li>
 </ul>
+<h1 id="四、静态迭代器和动态迭代器"><a href="#四、静态迭代器和动态迭代器" class="headerlink" title="四、静态迭代器和动态迭代器"></a>四、静态迭代器和动态迭代器</h1><ul>
+<li><p>静态迭代器由聚集对象创建，并持有聚集对象的一份快照(snapshot)，在产生后这个快照的内容就不再变化。客户端可以继续修改原聚集的内容，但是迭代器对象不会反映出聚集的新变化。</p>
+<p>静态迭代器的好处是它的安全性和简易性，换言之，静态迭代器易于实现，不容易出现错误。但是由于静态迭代器将原聚集复制了一份，因此它的短处是对时间和内存资源的消耗。</p>
+</li>
+<li><p>动态迭代器则与静态迭代器完全相反，在迭代器被产生之后，迭代器保持着对聚集元素的引用，因此，任何对原聚集内容的修改都会在迭代器对象上反映出来。</p>
+<p>完整的动态迭代器不容易实现，但是简化的动态迭代器并不难实现。大多数JAVA设计师遇到的迭代器都是这种简化的动态迭代器。为了说明什么是简化的动态迭代器，首先需要介绍一个新的概念：<strong>Fail Fast</strong>。</p>
 </li>
 </ul>
+<h1 id="五、Fail-Fast"><a href="#五、Fail-Fast" class="headerlink" title="五、Fail Fast"></a>五、Fail Fast</h1><p>如果一个算法开始之后，它的运算环境发生变化，使得算法无法进行必需的调整时，这个算法就应当立即发出故障信号。这就是Fail Fast的含义。</p>
+<p>如果聚集对象的元素在一个动态迭代器的迭代过程中发生变化时，迭代过程会受到影响而变得不能自恰。这时候，迭代器就应当立即抛出一个异常。这种迭代器就是实现了Fail Fast功能的迭代器。</p>
+<h2 id="1-Fail-Fast在JAVA聚集中的使用"><a href="#1-Fail-Fast在JAVA聚集中的使用" class="headerlink" title="1. Fail Fast在JAVA聚集中的使用"></a>1. Fail Fast在JAVA聚集中的使用</h2><p>JAVA语言以接口 <code>java.util.Iterator</code> 的方式支持迭代器模式，Collection接口要求提供<code>iterator()</code>方法，此方法在调用时返还一个Iterator类型的对象。而作为 Collection 接口的子类型，AbstractList 类的内部成员类Itr便是实现 Iterator 接口的类。</p>
+<blockquote>
+<p>Itr类的源代码如下所示</p>
+</blockquote>
+<pre><code class="highlight java"><span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">Itr</span> <span class="keyword">implements</span> <span class="title class_">Iterator</span>&lt;E&gt; &#123;
+        <span class="comment">/**</span>
+<span class="comment">         * Index of element to be returned by subsequent call to next.</span>
+<span class="comment">         */</span>
+        <span class="type">int</span> <span class="variable">cursor</span> <span class="operator">=</span> <span class="number">0</span>;
+
+        <span class="comment">/**</span>
+<span class="comment">         * Index of element returned by most recent call to next or</span>
+<span class="comment">         * previous.  Reset to -1 if this element is deleted by a call</span>
+<span class="comment">         * to remove.</span>
+<span class="comment">         */</span>
+        <span class="type">int</span> <span class="variable">lastRet</span> <span class="operator">=</span> -<span class="number">1</span>;
+
+        <span class="comment">/**</span>
+<span class="comment">         * The modCount value that the iterator believes that the backing</span>
+<span class="comment">         * List should have.  If this expectation is violated, the iterator</span>
+<span class="comment">         * has detected concurrent modification.</span>
+<span class="comment">         */</span>
+        <span class="type">int</span> <span class="variable">expectedModCount</span> <span class="operator">=</span> modCount;
+
+        <span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">hasNext</span><span class="params">()</span> &#123;
+                <span class="keyword">return</span> cursor != size();
+        &#125;
+
+        <span class="keyword">public</span> E <span class="title function_">next</span><span class="params">()</span> &#123;
+                checkForComodification();
+            <span class="keyword">try</span> &#123;
+            <span class="type">E</span> <span class="variable">next</span> <span class="operator">=</span> get(cursor);
+            lastRet = cursor++;
+            <span class="keyword">return</span> next;
+            &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;
+            checkForComodification();
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>();
+            &#125;
+        &#125;
+
+        <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">()</span> &#123;
+            <span class="keyword">if</span> (lastRet == -<span class="number">1</span>)
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalStateException</span>();
+                checkForComodification();
+
+            <span class="keyword">try</span> &#123;
+            AbstractList.<span class="built_in">this</span>.remove(lastRet);
+            <span class="keyword">if</span> (lastRet &lt; cursor)
+                cursor--;
+            lastRet = -<span class="number">1</span>;
+            expectedModCount = modCount;
+            &#125; <span class="keyword">catch</span> (IndexOutOfBoundsException e) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ConcurrentModificationException</span>();
+            &#125;
+        &#125;
+
+        <span class="keyword">final</span> <span class="keyword">void</span> <span class="title function_">checkForComodification</span><span class="params">()</span> &#123;
+            <span class="keyword">if</span> (modCount != expectedModCount)
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">ConcurrentModificationException</span>();
+        &#125;
+&#125;</code></pre>
+
+<p>从Itr类的源代码中可以看到，方法 <code>checkForComodification()</code> 会检查聚集的内容是否刚刚被外界直接修改过(不是通过迭代器提供的方法修改的)。如果在迭代开始后，聚集的内容被外界绕过迭代器对象而直接修改的话，这个方法会立即抛出<code>ConcurrentModificationException()</code> 异常。</p>
+<p>这就是说，<code>AbstractList.Itr</code> 迭代器是一个Fail Fast的迭代器。</p>
+<h1 id="六、迭代器模式的优点"><a href="#六、迭代器模式的优点" class="headerlink" title="六、迭代器模式的优点"></a>六、迭代器模式的优点</h1><ul>
+<li><p>迭代器模式简化了聚集的接口。迭代器具备了一个遍历接口，这样聚集的接口就不必具备遍历接口。</p>
+</li>
+<li><p>每一个聚集对象都可以有一个或多个迭代器对象，每一个迭代器的迭代状态可以是彼此独立的。因此，一个聚集对象可以同时有几个迭代在进行之中。</p>
+</li>
+<li><p>由于遍历算法被封装在迭代器角色里面，因此迭代的算法可以独立于聚集角色变化。</p>
+</li>
+</ul>
+<p>  　　</p>
+<p><strong>参考链接：</strong><a target="_blank" rel="noopener" href="https://www.cnblogs.com/java-my-life/archive/2012/05/22/2511506.html">https://www.cnblogs.com/java-my-life/archive/2012/05/22/2511506.html</a></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
