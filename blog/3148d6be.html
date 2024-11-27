@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>第二十五章-分析GC日志 | George&#39;s Blog</title>
+  <title>20-中介者模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , jvm ">
-  <meta name="description" content="第二十五章-分析GC日志 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="20-中介者模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#x5f;&#x39;&#53;&#64;&#49;&#50;&#x36;&#46;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1262,9 +1262,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-jvm/第二十五章-分析GC日志" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/20-中介者模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">第二十五章-分析GC日志</h1>
+        <h1 class="article-title">20-中介者模式</h1>
     
     <div class="article-meta">
         
@@ -1274,7 +1274,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JVM">JVM</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1282,21 +1282,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
-            
-            <a class="color4">jvm</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 16:47:45'>2024-08-28 21:36</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-27 13:21:14'>2024-11-26 20:35</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:3.3k</span>
+        <span>字数:2.6k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1326,7 +1324,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81GC%E6%97%A5%E5%BF%97%E5%8F%82%E6%95%B0"><span class="toc-text">一、GC日志参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81GC%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F"><span class="toc-text">二、GC日志格式</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-GC%E5%88%86%E7%B1%BB"><span class="toc-text">1. GC分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%83%A8%E5%88%86%E6%94%B6%E9%9B%86"><span class="toc-text">1.1 部分收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%95%B4%E5%A0%86%E6%94%B6%E9%9B%86%EF%BC%88Full-GC"><span class="toc-text">1.2 整堆收集（Full GC)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-GC%E6%97%A5%E5%BF%97%E5%88%86%E7%B1%BB"><span class="toc-text">2. GC日志分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-MinorGC"><span class="toc-text">2.1 MinorGC</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-FullGC"><span class="toc-text">2.2 FullGC</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-GC%E6%97%A5%E5%BF%97%E7%BB%93%E6%9E%84%E5%89%96%E6%9E%90"><span class="toc-text">3. GC日志结构剖析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">3.1  垃圾收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-GC%E5%89%8D%E5%90%8E%E6%83%85%E5%86%B5"><span class="toc-text">3.2 GC前后情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-GC%E6%97%B6%E9%97%B4"><span class="toc-text">3.3 GC时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Minor-GC-%E6%97%A5%E5%BF%97%E8%A7%A3%E6%9E%90"><span class="toc-text">4. Minor GC 日志解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Full-GC-%E6%97%A5%E5%BF%97%E8%A7%A3%E6%9E%90"><span class="toc-text">5. Full GC 日志解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%97%A5%E5%BF%97%E5%88%86%E8%A7%A3%E4%B8%8E%E8%A7%A3%E9%87%8A"><span class="toc-text">5.1 日志分解与解释</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81GC%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7"><span class="toc-text">三、GC日志分析工具</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-GCeasy"><span class="toc-text">1. GCeasy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-GCViewer"><span class="toc-text">2. GCViewer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E6%A6%82%E8%BF%B0"><span class="toc-text">2.1 基本概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AE%89%E8%A3%85"><span class="toc-text">2.2 安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%90%AF%E5%8A%A8GCViewer-gui"><span class="toc-text">2.3 启动GCViewer(gui)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%85%B6%E4%BB%96%E5%B7%A5%E5%85%B7"><span class="toc-text">3. 其他工具</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-GChisto"><span class="toc-text">3.1 GChisto</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-HPjmeter"><span class="toc-text">3.2 HPjmeter</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E4%B8%AD%E4%BB%8B%E8%80%85"><span class="toc-text">一、为什么需要中介者</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A1%88%E4%BE%8B"><span class="toc-text">二、中介者案例</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89%E4%B8%BB%E6%9D%BF"><span class="toc-text">1. 如果没有主板</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">2. 中介者模式的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%BD%BF%E7%94%A8%E7%94%B5%E8%84%91%E6%9D%A5%E7%9C%8B%E7%94%B5%E5%BD%B1"><span class="toc-text">3. 使用电脑来看电影</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98-%E7%BC%BA%E7%82%B9"><span class="toc-text">三、中介者模式的优&#x2F;缺点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BC%98%E7%82%B9"><span class="toc-text">1. 优点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BC%BA%E7%82%B9"><span class="toc-text">2. 缺点</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1342,272 +1340,401 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、GC日志参数"><a href="#一、GC日志参数" class="headerlink" title="一、GC日志参数"></a>一、GC日志参数</h1><ul>
-<li><p><code>-verbose:gc</code></p>
-<p>输出gc日志信息，默认输出到标准输出</p>
-</li>
-<li><p><code>-XX:+PrintGC</code></p>
-<p>输出GC日志。类似：-verbose:gc</p>
-</li>
-<li><p><code>-XX:+PrintGCDetails</code></p>
-<p>在发生垃圾回收时打印内存回收详细的日志，并在进程退出时输出当前内存各区域分配情况</p>
-</li>
-<li><p><code>-XX:+PrintGCTimeStamps</code></p>
-<p>输出GC发生时的时间截</p>
-</li>
-<li><p><code>-XX:+PrintGCDateStamps</code></p>
-<p>输出GC发生时的时间戳（以日期的形式，如 2013-05-04T21:53:59.234+0800)</p>
-</li>
-<li><p><code>-XX:+PrintHeapAtGC</code></p>
-<p>每一次GC前和GC后，都打印堆信息</p>
-</li>
-<li><p><code>-Xloggc:&lt;file&gt;</code></p>
-<p>表示把GC日志写入到一个文件中去，而不是打印到标准输出中</p>
-</li>
-</ul>
-<h1 id="二、GC日志格式"><a href="#二、GC日志格式" class="headerlink" title="二、GC日志格式"></a>二、GC日志格式</h1><h2 id="1-GC分类"><a href="#1-GC分类" class="headerlink" title="1. GC分类"></a>1. GC分类</h2><p>针对 HotSpot VM 的实现，它里面的GC按照回收区域又分为两大种类型：一种是部分收集（Partial GC), 一种是整堆收集（Full GC)</p>
-<h3 id="1-1-部分收集"><a href="#1-1-部分收集" class="headerlink" title="1.1 部分收集"></a>1.1 部分收集</h3><p>不是完整收集整个Java堆的垃圾收集。</p>
-<p>其中又分为：</p>
+        <p><strong>中介者模式是对象的行为模式。中介者模式包装了一系列对象相互作用的方式，使得这些对象不必相互明显引用。从而使它们可以较松散地耦合。当这些对象中的某些对象之间的相互作用发生改变时，不会立即影响到其他的一些对象之间的相互作用。从而保证这些相互作用可以彼此独立地变化。</strong></p>
+<h1 id="一、为什么需要中介者"><a href="#一、为什么需要中介者" class="headerlink" title="一、为什么需要中介者"></a>一、为什么需要中介者</h1><p>如下图所示，这个示意图中有大量的对象，这些对象既会影响别的对象，又会被别的对象所影响，因此常常叫做同事(Colleague)对象。这些同事对象通过彼此的相互作用形成系统的行为。从图中可以看出，几乎每一个对象都需要与其他的对象发生相互作用，而这种相互作用表现为一个对象与另一个对象的直接耦合。这就是过度耦合的系统。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/26/20241126-122831.png" alt="过度耦合系统"></p>
+<p>通过引入中介者对象(Mediator)，可以将系统的网状结构变成以中介者为中心的星形结构，如下图所示。在这个星形结构中，同事对象不再通过直接的联系与另一个对象发生相互作用；相反的，它通过中介者对象与另一个对象发生相互作用。中介者对象的存在保证了对象结构上的稳定，也就是说，系统的结构不会因为新对象的引入造成大量的修改工作。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/26/20241126-122939.png" alt="有中介者的系统"></p>
+<p>一个好的面向对象的设计可以使对象之间增加协作性(Collaboration)，减少耦合度(Couping)。一个深思熟虑的设计会把一个系统分解为一群相互协作的同事对象，然后给每一个同事对象以独特的责任，恰当的配置它们之间的协作关系，使它们可以在一起工作。</p>
+<h1 id="二、中介者案例"><a href="#二、中介者案例" class="headerlink" title="二、中介者案例"></a>二、中介者案例</h1><h2 id="1-如果没有主板"><a href="#1-如果没有主板" class="headerlink" title="1. 如果没有主板"></a>1. 如果没有主板</h2><p>大家都知道，电脑里面各个配件之间的交互，主要是通过主板来完成的。如果电脑里面没有了主板，那么各个配件之间就必须自行相互交互，以互相传送数据。而且由于各个配件的接口不同，相互之间交互时，还必须把数据接口进行转换才能匹配上。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/26/20241126-123241.png" alt="无主板的各组件之间的联系"></p>
+<p>所幸是有了主板，各个配件的交互完全通过主板来完成，每个配件都只需要和主板交互，而主板知道如何跟所有的配件打交道，这样就简单多了。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/26/20241126-123326.png" alt="通过主板连接各个组件"></p>
+<h2 id="2-中介者模式的结构"><a href="#2-中介者模式的结构" class="headerlink" title="2. 中介者模式的结构"></a>2. 中介者模式的结构</h2><p>中介者模式的示意性类图如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/26/20241126-123641.png" alt="中介者模式"></p>
+<p>中介者模式包括以下角色：</p>
 <ul>
-<li>新生代收集（Minor GC&#x2F;Young GC):只是新生代（Eden\S0,S1)的垃圾收集</li>
-<li>老年代收集（Major GC&#x2F;old GC):只是老年代的垃圾收集。<ul>
-<li>目前，只有CMSGC会有单独收集老年代的行为。</li>
-<li>注意，很多时候Major GC会和Full GC混淆使用，需要具体分辨是老年代回收还是整堆回收。</li>
+<li><strong>抽象中介者(Mediator)角色：</strong>定义出同事对象到中介者对象的接口，其中主要方法是一个（或多个）事件方法。</li>
+<li><strong>具体中介者(ConcreteMediator)角色：</strong>实现了抽象中介者所声明的事件方法。具体中介者知晓所有的具体同事类，并负责具体的协调各同事对象的交互关系。</li>
+<li><strong>抽象同事类(Colleague)角色：</strong>定义出中介者到同事对象的接口。同事对象只知道中介者而不知道其余的同事对象。</li>
+<li><strong>具体同事类(ConcreteColleague)角色：</strong>所有的具体同事类均从抽象同事类继承而来。实现自己的业务，在需要与其他同事通信的时候，就与持有的中介者通信，中介者会负责与其他的同事交互。</li>
 </ul>
-</li>
-<li>混合收集（Mixed GC):收集整个新生代以及部分老年代的垃圾收集。<ul>
-<li>目前，只有G1GC会有这种行为</li>
-</ul>
-</li>
-</ul>
-<h3 id="1-2-整堆收集（Full-GC"><a href="#1-2-整堆收集（Full-GC" class="headerlink" title="1.2 整堆收集（Full GC)"></a>1.2 整堆收集（Full GC)</h3><p>收集整个java堆和方法区的垃圾收集。</p>
-<p><strong>哪些情况会触发Full GC?</strong></p>
-<ul>
-<li>老年代空间不足</li>
-<li>方法区空间不足</li>
-<li>显式调用System.gc()</li>
-<li>Minor GC进入老年代的数据的平均大小大于老年代的可用内存</li>
-<li>大对象直接进入老年代，而老年代的可用空间不足</li>
-</ul>
-<h2 id="2-GC日志分类"><a href="#2-GC日志分类" class="headerlink" title="2. GC日志分类"></a>2. GC日志分类</h2><h3 id="2-1-MinorGC"><a href="#2-1-MinorGC" class="headerlink" title="2.1 MinorGC"></a>2.1 MinorGC</h3><p>MinorGC(或young GC或YGC)日志：</p>
-<p>[GC (Allocation Failure) [PSYoungGen: 131584K-&gt;7195K(153088K)] 131584K-&gt;7203K(502784K), 0.0334432 secs] [Times: user&#x3D;0.02 sys&#x3D;0.00, real&#x3D;0.04 secs]</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-140528.png" alt="minorGC日志解析"></p>
-<h3 id="2-2-FullGC"><a href="#2-2-FullGC" class="headerlink" title="2.2 FullGC"></a>2.2 FullGC</h3><p>[Full GC (Metadata GC Threshold) [PSYoungGen: 2848K-&gt;0K(158720K)] [ParOldGen: 32816K-&gt;19441K(349696K)] 35664K-&gt;19441K(508416K), [Metaspace: 34044K-&gt;34044K(1079296K)], 0.1156700 secs] [Times: user&#x3D;0.09 sys&#x3D;0.00, real&#x3D;0.12 secs]</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-140956.png" alt="fullGC日志解析"></p>
-<h2 id="3-GC日志结构剖析"><a href="#3-GC日志结构剖析" class="headerlink" title="3. GC日志结构剖析"></a>3. GC日志结构剖析</h2><h3 id="3-1-垃圾收集器"><a href="#3-1-垃圾收集器" class="headerlink" title="3.1  垃圾收集器"></a>3.1  垃圾收集器</h3><ul>
-<li>使用 <code>Serial</code> 收集器在新生代的名字是 <code>Default New Generation</code> , 因此显示的是”[DefNew”</li>
-<li>使用 <code>ParNew</code> 收集器在新生代的名字会变成”[ParNew” , 意思是”Parallel New Generation”</li>
-<li>使用 <code>Parallel Scavenge</code> 收集器在新生代的名字是”[PSYoungGen”,这里的JDK1.7使用的就是<code>PSYoungGen</code></li>
-<li>使用 <code>Parallel Old Generation</code> 收集器在老年代的名字是”[ParOldGen”</li>
-<li>使用G1收集器的话，会显示为”garbage-first heap”</li>
-</ul>
-<p><strong>Allocation Failure</strong></p>
-<p>表明本次引起GC的原因是因为在年轻代中没有足够的空间能够存储新的数据了。</p>
-<h3 id="3-2-GC前后情况"><a href="#3-2-GC前后情况" class="headerlink" title="3.2 GC前后情况"></a>3.2 GC前后情况</h3><p>通过图示，我们可以发现GC日志格式的规律一般都是：GC前内存占用 一&gt; GC后内存占用（该区域内存总大小）</p>
-<p>[PSYoungGen: 5986K -&gt; 696K(8704K)] 5986K -&gt; 704K(9216K)</p>
-<p>中括号内：GC回收前年轻代堆大小，回收后大小，(<strong>年轻代堆总大小</strong>）</p>
-<p>括号外：GC回收前年轻代和老年代大小，回收后大小，(<strong>年轻代和老年代总大小</strong>）</p>
-<h3 id="3-3-GC时间"><a href="#3-3-GC时间" class="headerlink" title="3.3 GC时间"></a>3.3 GC时间</h3><p>GC日志中有三个时间：user , sys 和 real</p>
-<ul>
-<li><strong>user</strong> - 进程执行用户态代码（核心之外）所使用的时间。这是执行此进程所使用的实际CPU时间，其他进程和此进程阻塞的时间并不包括在内。在垃圾收集的情况下，表示GC线程执行所使用的CPU总时间。</li>
-<li><strong>sys</strong> - 进程在内核态消耗的CPU时间，即在内核执行系统调用或等待系统事件所使用的CPU时间</li>
-<li><strong>real</strong> - 程序从开始到结束所用的时钟时间。这个时间包括其他进程使用的时间片和进程阻塞的时间（比如等待I&#x2F;0完成）。对于并行gc,这个数字应该接近（用户时间+系统时间）除以垃圾收集器使用的线程数。</li>
-</ul>
-<p>由于多核的原因，一般的GC事件中，real time是小于 <code>sys + user time</code> 的，因为一般是多个线程并发的去做 GC,所以real time是要小于 sys+user time 的。<br> 如果 <code>real &gt; sys+user</code> 的话，则你的应用可能存在下列问题：IO负载非常重 或者是CPU不够用。</p>
-<h2 id="4-Minor-GC-日志解析"><a href="#4-Minor-GC-日志解析" class="headerlink" title="4. Minor GC 日志解析"></a>4. Minor GC 日志解析</h2><p>2024-08-28T15:09:58.253+0800: 2.004: [GC (Allocation Failure) [PSYoungGen: 138937K-&gt;7465K(153088K)] 138945K-&gt;7473K(502784K), 0.0261046 secs] [Times: user&#x3D;0.01 sys&#x3D;0.00, real&#x3D;0.03 secs]</p>
-<ul>
-<li><p>2024-08-28T15:09:58.253+0800</p>
-<p><strong>日志打印时间日期格式</strong></p>
-</li>
-<li><p>2.004</p>
-<p><strong>gc发生时，Java虚拟机启动以来经过的秒数</strong></p>
-</li>
-<li><p>[GC (Allocation Failure) </p>
-<p><strong>发生了一次垃圾回收，这是一次MinorGC</strong></p>
-<p>它不区分新生代还是老年代GC，括号里的内容是gc发生的原因，这里的Allocation Failure的原因是新生代中没有足够区域能够存放需要分配的数据而失败</p>
-</li>
-<li><p>[PSYoungGen: 138937K-&gt;7465K(153088K)] </p>
-<ul>
-<li>PSYoungGen：表示GC发生的区域，区域名称与使用的GC收集器是密切相关的<ul>
-<li>Serial收集器：Default New Generation 显示Defnew</li>
-<li>ParNew收集器：ParNew</li>
-<li>Parallel Scanvenge收集器：PSYoung</li>
-<li>老年代和新生代同理，也是和收集器名称相关</li>
-</ul>
-</li>
-<li>138937K-&gt;7465K(153088K)：GC前该内存区域已使用容量-&gt;GC后该区域容量(该区域总容量)<ul>
-<li>如果是新生代，总容量则会显示整个新生代内存的9&#x2F;10，即eden+from&#x2F;to区</li>
-<li>如果是老年代，总容量则是全身内存大小，无变化</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>138945K-&gt;7473K(502784K)</p>
-<p>虽然本次是Minor GC，只会进行新生代的垃圾收集，但是也肯定会打印堆中总容量相关信息</p>
-<p>在显示完区域容量GC的情况之后，会接着显示整个堆内存区域的GC情况：GC前堆内存已使用容量-&gt;GC后堆内存容量（堆内存总容量），并且堆内存总容量 &#x3D; 9&#x2F;10 新生代 + 老年代，然后堆内存总容量肯定小于初始化的内存大小</p>
-</li>
-<li><p>0.0261046 secs</p>
-<p>整个GC所花费的时间，单位是秒</p>
-</li>
-<li><p>[Times: user&#x3D;0.01 sys&#x3D;0.00, real&#x3D;0.03 secs]</p>
-<ul>
-<li>user：指CPU工作在用户态所花费的时间</li>
-<li>sys：指CPU工作在内核态所花费的时间</li>
-<li>real：指在此次事件中所花费的总时间</li>
-</ul>
-</li>
-</ul>
-<h2 id="5-Full-GC-日志解析"><a href="#5-Full-GC-日志解析" class="headerlink" title="5. Full GC 日志解析"></a>5. Full GC 日志解析</h2><p>2024-08-28T15:10:01.578+0800: 5.329: [Full GC (Metadata GC Threshold) [PSYoungGen: 3264K-&gt;0K(163840K)] [ParOldGen: 6227K-&gt;7621K(349696K)] 9491K-&gt;7621K(513536K), [Metaspace: 20472K-&gt;20472K(1067008K)], 0.0627380 secs] [Times: user&#x3D;0.04 sys&#x3D;0.00, real&#x3D;0.06 secs]</p>
-<h3 id="5-1-日志分解与解释"><a href="#5-1-日志分解与解释" class="headerlink" title="5.1 日志分解与解释"></a>5.1 日志分解与解释</h3><pre><code class="highlight plaintext">2024-08-28T15:10:01.578+0800: 5.329: [Full GC (Metadata GC Threshold) 
-[PSYoungGen: 3264K-&gt;0K(163840K)] 
-[ParOldGen: 6227K-&gt;7621K(349696K)] 
-9491K-&gt;7621K(513536K), 
-[Metaspace: 20472K-&gt;20472K(1067008K)], 
-0.0627380 secs] 
-[Times: user=0.04 sys=0.00, real=0.06 secs]</code></pre>
-
-<ol>
-<li><strong>时间戳</strong>: <code>2024-08-28T15:10:01.578+0800</code><ul>
-<li>这表示日志条目的日期和时间。<code>+0800</code> 表示时区偏移量（例如，北京时间为 UTC+8）。</li>
-</ul>
-</li>
-<li><strong>GC 事件触发时间</strong>: <code>5.329</code><ul>
-<li>表示从 JVM 启动到 GC 事件发生的时间，单位是秒。这表明在 JVM 启动后的 5.329 秒，发生了一个 Full GC。</li>
-</ul>
-</li>
-<li><strong>GC 类型</strong>: <code>[Full GC (Metadata GC Threshold)]</code><ul>
-<li><code>Full GC</code> 表示一次 Full Garbage Collection，即对整个堆（包括年轻代和老年代）进行的垃圾回收。</li>
-<li><code>Metadata GC Threshold</code> 是此次 GC 的触发原因。它表明是因为元数据（如类的元信息）达到了特定的阈值，导致了 Full GC。<ul>
-<li>Full GC (Ergonomics) : JVM , 自适应调整导致的GC</li>
-<li>Full GC(System) : 调用了System.gc()方法</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>年轻代回收</strong>: <code>[PSYoungGen: 3264K-&gt;0K(163840K)]</code><ul>
-<li><strong>PSYoungGen</strong>: 使用 Parallel Scavenge（并行清除）垃圾回收器的年轻代（Young Generation）。</li>
-<li><code>3264K-&gt;0K</code>: 表示在回收前年轻代占用 3264 KB 内存，回收后占用 0 KB。</li>
-<li><code>(163840K)</code>: 年轻代的总容量是 163840 KB（160 MB）。</li>
-</ul>
-</li>
-<li><strong>老年代回收</strong>: <code>[ParOldGen: 6227K-&gt;7621K(349696K)]</code><ul>
-<li><strong>ParOldGen</strong>: 使用并行老年代垃圾回收器（Parallel Old Generation）。</li>
-<li><code>6227K-&gt;7621K</code>: 表示在回收前老年代占用 6227 KB 内存，回收后增加到 7621 KB。这通常表示有一些对象从年轻代晋升到老年代。</li>
-<li><code>(349696K)</code>: 老年代的总容量是 349696 KB（341.5 MB）。</li>
-</ul>
-</li>
-<li><strong>堆总内存使用情况</strong>: <code>9491K-&gt;7621K(513536K)</code><ul>
-<li><code>9491K-&gt;7621K</code>: 表示在 GC 前整个堆（年轻代 + 老年代）使用的总内存为 9491 KB，GC 后减少到 7621 KB。</li>
-<li><code>(513536K)</code>: 堆的总容量是 513536 KB（501.25 MB）。</li>
-</ul>
-</li>
-<li><strong>元空间（Metaspace）</strong>: <code>[Metaspace: 20472K-&gt;20472K(1067008K)]</code><ul>
-<li><code>20472K-&gt;20472K</code>: 表示元空间（用于存储类的元数据）的使用量在 GC 前后保持不变，为 20472 KB。</li>
-<li><code>(1067008K)</code>: 元空间的总容量是 1067008 KB（1042 MB）。</li>
-</ul>
-</li>
-<li><strong>GC 事件耗时</strong>: <code>0.0627380 secs</code><ul>
-<li>表示 GC 事件的总持续时间为 0.0627380 秒（约 62 毫秒）。</li>
-</ul>
-</li>
-<li><strong>GC 时间分解</strong>: <code>[Times: user=0.04 sys=0.00, real=0.06 secs]</code><ul>
-<li><code>user=0.04</code>: 用户态 CPU 时间（多个 CPU 线程的总和）是 0.04 秒。</li>
-<li><code>sys=0.00</code>: 内核态 CPU 时间是 0.00 秒。</li>
-<li><code>real=0.06</code>: 真实时间，即 GC 事件的墙钟时间是 0.06 秒。这个值通常比 <code>user</code> 和 <code>sys</code> 时间之和略大，反映了多线程并行执行的情况。</li>
-</ul>
-</li>
-</ol>
-<h1 id="三、GC日志分析工具"><a href="#三、GC日志分析工具" class="headerlink" title="三、GC日志分析工具"></a>三、GC日志分析工具</h1><p>上节介绍了GC日志的打印及含义，但是GC日志看起来比较麻烦，本节将会介绍一下GC日志可视化分析工具GCeasy和GCviewer等。通过GC日志可视化分析工具，我们可以很方便的看到JVM各个分代的内存使用情况、垃圾回收次数、垃圾回收的原因、垃圾回收占用的时间、吞吐量等，这些指标在我们进行JVM调优的时候是很有用的。</p>
-<p>如果想把GC日志存到文件的话，是下面这个参数：</p>
-<pre><code class="highlight shell">-Xloggc:/path/to/gc.log
-<span class="meta prompt_"># </span><span class="language-bash">示例</span>
-java -Xms512m -Xmx512m -XX:+PrintGCDetails -XX:+PrintGCDateStamps -Xloggc:/opt/module/ioms/ioms-ums/gc-%t.log -jar ioms-ums.jar --spring.profiles.active=dev</code></pre>
-
-<p>然后就可以用一些工具去分析这些gc日志。</p>
-<p><strong>示例代码1</strong></p>
+<p><strong>代码实现如下：</strong></p>
 <pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 测试生成详细的日志文件</span>
-<span class="comment"> *</span>
-<span class="comment"> * -Xms60m -Xmx60m -XX:SurvivorRatio=8 -XX:+PrintGCDetails -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -Xloggc:d:/gc-log-%t.log</span>
-<span class="comment"> *</span>
+<span class="comment"> * 抽象中介者类</span>
 <span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">GCLogTest</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        ArrayList&lt;<span class="type">byte</span>[]&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Mediator</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 同事对象在自身改变的时候来通知中介者方法</span>
+<span class="comment">     * 让中介者去负责相应的与其他同事对象的交互</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">changed</span><span class="params">(Colleague c)</span>;
+&#125;
 
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">5000</span>; i++) &#123;
-            <span class="type">byte</span>[] arr = <span class="keyword">new</span> <span class="title class_">byte</span>[<span class="number">1024</span> * <span class="number">50</span>];<span class="comment">//50KB</span>
-            list.add(arr);
-            <span class="keyword">try</span> &#123;
-                Thread.sleep(<span class="number">30</span>);
-            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;
-                e.printStackTrace();
-            &#125;
-        &#125;
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体中介者</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteMediator</span> <span class="keyword">implements</span> <span class="title class_">Mediator</span>&#123;
+
+    <span class="comment">// 持有并维护同事A</span>
+    <span class="keyword">private</span> ConcreteColleagueA colleagueA;
+    <span class="comment">// 持有并维护同事B</span>
+    <span class="keyword">private</span> ConcreteColleagueB colleagueB;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setColleagueA</span><span class="params">(ConcreteColleagueA colleagueA)</span> &#123;
+        <span class="built_in">this</span>.colleagueA = colleagueA;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setColleagueB</span><span class="params">(ConcreteColleagueB colleagueB)</span> &#123;
+        <span class="built_in">this</span>.colleagueB = colleagueB;
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">changed</span><span class="params">(Colleague c)</span> &#123;
 
     &#125;
-&#125;</code></pre>
+&#125;
 
-<p><strong>示例代码2</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * java.lang.OutOfMemoryError: Metaspace异常演示：</span>
-<span class="comment"> *</span>
-<span class="comment"> * -Xms60m -Xmx60m -XX:MetaspaceSize=10m -XX:MaxMetaspaceSize=10m -XX:SurvivorRatio=8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+PrintHeapAtGC -Xloggc:d:/meta-log-%t.log</span>
-<span class="comment"> *</span>
+
+<span class="comment">/**</span>
+<span class="comment"> * 抽象同事类</span>
 <span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MetaspaceOOM</span> <span class="keyword">extends</span> <span class="title class_">ClassLoader</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> <span class="number">0</span>;
-        <span class="keyword">try</span> &#123;
-            <span class="type">MetaspaceOOM</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MetaspaceOOM</span>();
-            <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;
-                <span class="comment">//创建ClassWriter对象，用于生成类的二进制字节码</span>
-                <span class="type">ClassWriter</span> <span class="variable">classWriter</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassWriter</span>(<span class="number">0</span>);
-                <span class="comment">//指明版本号，修饰符，类名，包名，父类，接口</span>
-                classWriter.visit(Opcodes.V1_8, Opcodes.ACC_PUBLIC, <span class="string">&quot;Class&quot;</span> + i, <span class="literal">null</span>, <span class="string">&quot;java/lang/Object&quot;</span>, <span class="literal">null</span>);
-                <span class="comment">//返回byte[]</span>
-                <span class="type">byte</span>[] code = classWriter.toByteArray();
-                <span class="comment">//类的加载</span>
-                test.defineClass(<span class="string">&quot;Class&quot;</span> + i, code, <span class="number">0</span>, code.length);<span class="comment">//Class对象</span>
-                j++;
-            &#125;
-        &#125; <span class="keyword">finally</span> &#123;
-            System.out.println(j);
-        &#125;
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Colleague</span> &#123;
+
+    <span class="comment">// 持有一个中介者对象</span>
+    <span class="keyword">private</span> Mediator mediator;
+
+    <span class="keyword">public</span> <span class="title function_">Colleague</span><span class="params">(Mediator mediator)</span> &#123;
+        <span class="built_in">this</span>.mediator = mediator;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 获取当前同事类对应的中介者对象</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> Mediator <span class="title function_">getMediator</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> mediator;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体同事对象A</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteColleagueA</span> <span class="keyword">extends</span> <span class="title class_">Colleague</span> &#123;
+
+    <span class="keyword">public</span> <span class="title function_">ConcreteColleagueA</span><span class="params">(Mediator mediator)</span> &#123;
+        <span class="built_in">super</span>(mediator);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 示意方法，执行某些操作</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">operation</span><span class="params">()</span> &#123;
+        <span class="comment">//在需要跟其他同事通信的时候，通知中介者对象</span>
+        getMediator().changed(<span class="built_in">this</span>);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体同事对象B</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteColleagueB</span> <span class="keyword">extends</span> <span class="title class_">Colleague</span> &#123;
+    <span class="keyword">public</span> <span class="title function_">ConcreteColleagueB</span><span class="params">(Mediator mediator)</span> &#123;
+        <span class="built_in">super</span>(mediator);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 示意方法，执行某些操作</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">operation</span><span class="params">()</span> &#123;
+        <span class="comment">//在需要跟其他同事通信的时候，通知中介者对象</span>
+        getMediator().changed(<span class="built_in">this</span>);
     &#125;
 &#125;</code></pre>
 
 
 
-<h2 id="1-GCeasy"><a href="#1-GCeasy" class="headerlink" title="1. GCeasy"></a>1. GCeasy</h2><p><strong>基本概述</strong></p>
-<p>GCeasy——一款超好用的在线分析GC日志的网站官网地址：<a target="_blank" rel="noopener" href="https://gceasy.io/gc-dashboard.jsp">https://gceasy.io/gc-dashboard.jsp</a></p>
-<p>GCeasy是一款在线的GC日志分析器，可以通过GC日志分析进行内存泄漏检测、GC暂停原因分析、JVM配置建议优化等功能，而且是可以免费使用的（有一些服务是收费的）。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160343.png" alt="GCeasy官网"></p>
-<p><strong>分析结果</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160459.png" alt="内存分析"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160520.png" alt="gc时间分析"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160833.png" alt="堆的使用"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-160741.png" alt="GC统计"></p>
-<p>等等……</p>
-<h2 id="2-GCViewer"><a href="#2-GCViewer" class="headerlink" title="2. GCViewer"></a>2. GCViewer</h2><h3 id="2-1-基本概述"><a href="#2-1-基本概述" class="headerlink" title="2.1 基本概述"></a>2.1 基本概述</h3><p><code>GCViewer</code> 是一个免费的、开源的分析小工具，用于可视化查看由SUN&#x2F;Oracle,IBM,HP和BEA Java虚拟机产生的垃圾收集器的日志。</p>
-<p>GCViewer用于可视化Java VM选项 <code>-verbose:gc</code> 和.NET生成的数据 <code>-Xloggc:&lt;file&gt;</code> 。它还计算与垃圾回收相关的性能指标（吞吐量，累积的暂停，最长的暂停等）。当通过更改世代大小或设置初始堆大小来调整特定应用程序的垃圾回收时，此功能非常有用。</p>
-<h3 id="2-2-安装"><a href="#2-2-安装" class="headerlink" title="2.2 安装"></a>2.2 安装</h3><p><strong>下载GCViewer工具</strong></p>
+<h2 id="3-使用电脑来看电影"><a href="#3-使用电脑来看电影" class="headerlink" title="3. 使用电脑来看电影"></a>3. 使用电脑来看电影</h2><p>在日常生活中，我们经常使用电脑来看电影，把这个过程描述出来，简化后假定会有如下的交互过程：</p>
 <ul>
-<li>源码下载: <a target="_blank" rel="noopener" href="https://github.com/chewiebug/GCViewer">https://github.com/chewiebug/GCViewer</a></li>
-<li>运行版本下载: <a target="_blank" rel="noopener" href="https://github.com/chewiebug/GCViewer/wiki/Changelog">https://github.com/chewiebug/GCViewer/wiki/Changelog</a></li>
+<li>首先是光驱要读取光盘上的数据，然后告诉主板，它的状态改变了。</li>
+<li>主板去得到光驱的数据，把这些数据交给CPU进行分析处理。</li>
+<li>CPU处理完后，把数据分成了视频数据和音频数据，通知主板，它处理完了。</li>
+<li>主板去得到CPU处理过后的数据，分别把数据交给显卡和声卡，去显示出视频和发出声音</li>
 </ul>
-<h3 id="2-3-启动GCViewer-gui"><a href="#2-3-启动GCViewer-gui" class="headerlink" title="2.3 启动GCViewer(gui)"></a>2.3 启动GCViewer(gui)</h3><p>需双击 <code>gcviewer-1.3x.jar</code></p>
-<p>或</p>
-<p>需要运行java1.8 vm</p>
-<pre><code class="highlight shell">java -jar gcviewer-1.3x.jar</code></pre>
+<p>要使用中介者模式来实现示例，那就要区分出同事对象和中介者对象。很明显，主板是中介者，而光驱、声卡、CPU、显卡等配件，都是作为同事对象。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/26/20241126-193234.png" alt="中介者模式应用"></p>
+<p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象的同事类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">Colleague</span> &#123;
+    <span class="comment">// 持有一个中介者对象</span>
+    <span class="keyword">private</span> Mediator mediator;
 
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/08/28/20240828-162437.png" alt="GCViewer"></p>
-<p>很难用！！！</p>
-<h2 id="3-其他工具"><a href="#3-其他工具" class="headerlink" title="3. 其他工具"></a>3. 其他工具</h2><h3 id="3-1-GChisto"><a href="#3-1-GChisto" class="headerlink" title="3.1 GChisto"></a>3.1 GChisto</h3><p><code>GChisto</code> 是一款专业分析gc日志的工具，可以通过gc日志来分析 : MinorGC、Full GC的次数、频率、持续时间等，通过列表、报表、图表等不同形式来反应gc的情况。</p>
-<p>虽然界面略显粗糙，但是功能还是不错的。</p>
-<p>官网上没有下载的地方，需要自己从SVN上拉下来编译，不过这个工具似乎没怎么维护了，存在不少bug</p>
-<h3 id="3-2-HPjmeter"><a href="#3-2-HPjmeter" class="headerlink" title="3.2 HPjmeter"></a>3.2 HPjmeter</h3><p>工具很强大，但只能打开由以下参数生成的 <code>GC log</code> , <code>-verbose:gc</code> <code>-Xloggc:gc.log</code> 。添加其他参数生成的 gc.log无法打开</p>
-<p>HPjmeter集成了以前的 <code>HPjtune</code> 功能，可以分析在HP机器上产生的垃圾回收日志文件</p>
+    <span class="keyword">public</span> <span class="title function_">Colleague</span><span class="params">(Mediator mediator)</span> &#123;
+        <span class="built_in">this</span>.mediator = mediator;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 返回当前同事类持有的中介者对象</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> Mediator <span class="title function_">getMediator</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> mediator;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 抽象中介者类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Mediator</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 同事对象在自身改变的时候来通知中介者方法</span>
+<span class="comment">     * 让中介者去负责相应的与其他同事对象的交互</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">changed</span><span class="params">(Colleague c)</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 同事类-光驱</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CDDriver</span> <span class="keyword">extends</span> <span class="title class_">Colleague</span> &#123;
+
+    <span class="comment">// 读取的数据</span>
+    <span class="keyword">private</span> String data;
+
+    <span class="keyword">public</span> <span class="title function_">CDDriver</span><span class="params">(Mediator mediator)</span> &#123;
+        <span class="built_in">super</span>(mediator);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 读取数据</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> String <span class="title function_">getData</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> data;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 读取光盘</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">readCD</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;~驱动器工作中&quot;</span>);
+        <span class="comment">// 逗号前是视频显示的数据，逗号后是声音</span>
+        <span class="built_in">this</span>.data = <span class="string">&quot;One Piece,海贼王我当定了&quot;</span>;
+
+        <span class="comment">// 通知主板（中介者），已经读取到数据了</span>
+        <span class="built_in">this</span>.getMediator().changed(<span class="built_in">this</span>);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 同事类-CPU</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CPU</span> <span class="keyword">extends</span> <span class="title class_">Colleague</span> &#123;
+
+    <span class="comment">//分解出来的视频数据</span>
+    <span class="keyword">private</span> <span class="type">String</span> <span class="variable">videoData</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;
+
+    <span class="comment">//分解出来的声音数据</span>
+    <span class="keyword">private</span> <span class="type">String</span> <span class="variable">soundData</span> <span class="operator">=</span> <span class="string">&quot;&quot;</span>;
+
+    <span class="keyword">public</span> <span class="title function_">CPU</span><span class="params">(Mediator mediator)</span> &#123;
+        <span class="built_in">super</span>(mediator);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 获取视频数据</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> String <span class="title function_">getVideoData</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> videoData;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 获取音频数据</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> String <span class="title function_">getSoundData</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> soundData;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 接收主板调用，将数据解析成视频数据和音频数据</span>
+<span class="comment">     * <span class="doctag">@param</span> data</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">executeData</span><span class="params">(String data)</span> &#123;
+        System.out.println(<span class="string">&quot;~CPU工作中&quot;</span>);
+        String[] dataArr = data.split(<span class="string">&quot;,&quot;</span>);
+        <span class="built_in">this</span>.soundData = dataArr[<span class="number">0</span>];
+        <span class="built_in">this</span>.videoData = dataArr[<span class="number">1</span>];
+
+        <span class="comment">// 解析完成后通知主板（中介者），进行下一步处理</span>
+        <span class="built_in">this</span>.getMediator().changed(<span class="built_in">this</span>);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 同事类-声卡</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SoundCard</span> <span class="keyword">extends</span> <span class="title class_">Colleague</span> &#123;
+    <span class="keyword">public</span> <span class="title function_">SoundCard</span><span class="params">(Mediator mediator)</span> &#123;
+        <span class="built_in">super</span>(mediator);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 播放音频</span>
+<span class="comment">     * <span class="doctag">@param</span> data</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">soundData</span><span class="params">(String data)</span> &#123;
+        System.out.println(<span class="string">&quot;~声卡工作中&quot;</span>);
+        System.out.println(<span class="string">&quot;您正在收听的是：&quot;</span> + data);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 同事类-显卡</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VideoCard</span> <span class="keyword">extends</span> <span class="title class_">Colleague</span> &#123;
+    <span class="keyword">public</span> <span class="title function_">VideoCard</span><span class="params">(Mediator mediator)</span> &#123;
+        <span class="built_in">super</span>(mediator);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 播放视频内容</span>
+<span class="comment">     * <span class="doctag">@param</span> data</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">showData</span><span class="params">(String data)</span> &#123;
+        System.out.println(<span class="string">&quot;~显卡工作中&quot;</span>);
+        System.out.println(<span class="string">&quot;您正在观看内容：&quot;</span> + data);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体中介者-主板</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MainBoard</span> <span class="keyword">implements</span> <span class="title class_">Mediator</span> &#123;
+
+    <span class="comment">// 驱动</span>
+    <span class="keyword">private</span> CDDriver cdDriver;
+    <span class="comment">// CPU</span>
+    <span class="keyword">private</span> CPU cpu;
+    <span class="comment">// 声卡</span>
+    <span class="keyword">private</span> SoundCard soundCard;
+    <span class="comment">// 显卡</span>
+    <span class="keyword">private</span> VideoCard videoCard;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">changed</span><span class="params">(Colleague c)</span> &#123;
+        <span class="keyword">if</span> (c <span class="keyword">instanceof</span> CDDriver) &#123;
+            <span class="comment">// 数据读取</span>
+            <span class="built_in">this</span>.cdDriverReadData((CDDriver) c);
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (c <span class="keyword">instanceof</span> CPU) &#123;
+            <span class="built_in">this</span>.openCPU((CPU) c);
+        &#125;
+    &#125;
+
+
+
+    <span class="comment">/**</span>
+<span class="comment">     * CDDriver读取数据，调用CPU处理数据</span>
+<span class="comment">     * <span class="doctag">@param</span> cdDriver</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">cdDriverReadData</span><span class="params">(CDDriver cdDriver)</span> &#123;
+        <span class="type">String</span> <span class="variable">data</span> <span class="operator">=</span> cdDriver.getData();
+        cpu.executeData(data);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * CPU解析数据，调用显卡、声卡处理数据</span>
+<span class="comment">     * <span class="doctag">@param</span> cpu</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">openCPU</span><span class="params">(CPU cpu)</span> &#123;
+        <span class="comment">// 解析数据</span>
+        <span class="type">String</span> <span class="variable">soundData</span> <span class="operator">=</span> cpu.getSoundData();
+        <span class="type">String</span> <span class="variable">videoData</span> <span class="operator">=</span> cpu.getVideoData();
+
+        <span class="comment">// 声卡播放数据</span>
+        <span class="built_in">this</span>.soundCard.soundData(soundData);
+        <span class="comment">// 显卡播放数据</span>
+        <span class="built_in">this</span>.videoCard.showData(videoData);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setCdDriver</span><span class="params">(CDDriver cdDriver)</span> &#123;
+        <span class="built_in">this</span>.cdDriver = cdDriver;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setCpu</span><span class="params">(CPU cpu)</span> &#123;
+        <span class="built_in">this</span>.cpu = cpu;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setSoundCard</span><span class="params">(SoundCard soundCard)</span> &#123;
+        <span class="built_in">this</span>.soundCard = soundCard;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setVideoCard</span><span class="params">(VideoCard videoCard)</span> &#123;
+        <span class="built_in">this</span>.videoCard = videoCard;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 创建中介者</span>
+        <span class="type">MainBoard</span> <span class="variable">mainBoard</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MainBoard</span>();
+        <span class="comment">// 具体同事类-驱动器</span>
+        <span class="type">CDDriver</span> <span class="variable">cdDriver</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CDDriver</span>(mainBoard);
+        <span class="comment">// 具体同事类-CPU</span>
+        <span class="type">CPU</span> <span class="variable">cpu</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CPU</span>(mainBoard);
+        <span class="comment">// 具体同事类-显卡</span>
+        <span class="type">VideoCard</span> <span class="variable">videoCard</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VideoCard</span>(mainBoard);
+        <span class="comment">// 具体同事类-声卡</span>
+        <span class="type">SoundCard</span> <span class="variable">soundCard</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SoundCard</span>(mainBoard);
+
+        <span class="comment">// 设置中介者管理的同事类</span>
+        mainBoard.setCdDriver(cdDriver);
+        mainBoard.setCpu(cpu);
+        mainBoard.setSoundCard(soundCard);
+        mainBoard.setVideoCard(videoCard);
+
+        <span class="comment">// 开始读取CD</span>
+        cdDriver.readCD();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果</p>
+<pre><code class="highlight shell">~驱动器工作中
+~CPU工作中
+~声卡工作中
+您正在收听的是：One Piece
+~显卡工作中
+您正在观看内容：海贼王我当定了</code></pre>
+</blockquote>
+<h1 id="三、中介者模式的优-缺点"><a href="#三、中介者模式的优-缺点" class="headerlink" title="三、中介者模式的优&#x2F;缺点"></a>三、中介者模式的优&#x2F;缺点</h1><h2 id="1-优点"><a href="#1-优点" class="headerlink" title="1. 优点"></a>1. 优点</h2><ul>
+<li><p><strong>松散耦合</strong></p>
+<p>中介者模式通过把多个同事对象之间的交互封装到中介者对象里面，从而使得同事对象之间松散耦合，基本上可以做到互不依赖。这样一来，同事对象就可以独立地变化和复用，而不再像以前那样“牵一处而动全身”了。</p>
+</li>
+<li><p><strong>集中控制交互</strong></p>
+<p>多个同事对象的交互，被封装在中介者对象里面集中管理，使得这些交互行为发生变化的时候，只需要修改中介者对象就可以了，当然如果是已经做好的系统，那么就扩展中介者对象，而各个同事类不需要做修改。</p>
+</li>
+<li><p><strong>多对多变成一对多</strong></p>
+<p>没有使用中介者模式的时候，同事对象之间的关系通常是多对多的，引入中介者对象以后，中介者对象和同事对象的关系通常变成双向的一对多，这会让对象的关系更容易理解和实现。</p>
+</li>
+</ul>
+<h2 id="2-缺点"><a href="#2-缺点" class="headerlink" title="2. 缺点"></a>2. 缺点</h2><p>中介者模式的一个潜在缺点是，过度集中化。如果同事对象的交互非常多，而且比较复杂，当这些复杂性全部集中到中介者的时候，会导致中介者对象变得十分复杂，而且难于管理和维护。</p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
