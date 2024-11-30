@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>合并两个有序链表 | George&#39;s Blog</title>
+  <title>21-备忘录模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 算法 , 合并有序链表 ">
-  <meta name="description" content="合并两个有序链表 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="21-备忘录模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="备忘录模式又叫做快照模式(Snapshot Pattern)或Token模式，是对象的行为模式。 备忘录对象是一个用来存储另外一个对象内部状态的快照的对象。备忘录模式的用意是在不破坏封装的条件下，将一个对象的状态捕捉(Capture)住，并外部化，存储起来，从而可以在将来合适的时候把这个对象还原到存储起来的状态。备忘录模式常常与命令模式和迭代器模式一同使用。 一、备忘录模式的结构备忘录模式的结构图">
 <meta property="og:type" content="article">
@@ -1282,9 +1282,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-algorithm/合并两个有序链表" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/21-备忘录模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">合并两个有序链表</h1>
+        <h1 class="article-title">21-备忘录模式</h1>
     
     <div class="article-meta">
         
@@ -1294,7 +1294,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="算法">算法</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1302,21 +1302,19 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color3">算法</a>
-            
-            <a class="color2">合并有序链表</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 12:17:33'>2024-07-06 09:11</time>
+            发布时间 : <time class="date" title='最后更新: 2024-11-30 12:06:04'>2024-11-27 21:40</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:833</span>
+        <span>字数:4k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1346,7 +1344,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E9%A2%98%E7%9B%AE%E6%8F%8F%E8%BF%B0"><span class="toc-text">1. 题目描述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%A7%A3%E5%86%B3%E6%80%9D%E8%B7%AF"><span class="toc-text">2. 解决思路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%85%B3%E9%94%AE%E4%BB%A3%E7%A0%81"><span class="toc-text">3. 关键代码</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="toc-text">4. 复杂度分析</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">一、备忘录模式的结构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%A4%87%E5%BF%98%E5%BD%95-Memento-%E8%A7%92%E8%89%B2"><span class="toc-text">1. 备忘录(Memento)角色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%8F%91%E8%B5%B7%E4%BA%BA%EF%BC%88Originator%EF%BC%89%E8%A7%92%E8%89%B2"><span class="toc-text">2. 发起人（Originator）角色</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E8%B4%9F%E8%B4%A3%E4%BA%BA%EF%BC%88Caretaker%EF%BC%89%E8%A7%92%E8%89%B2"><span class="toc-text">3. 负责人（Caretaker）角色</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E2%80%9C%E7%99%BD%E7%AE%B1%E2%80%9D%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text">二、“白箱”备忘录模式的实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E2%80%9C%E9%BB%91%E7%AE%B1%E2%80%9D%E5%A4%87%E5%BF%98%E5%BD%95%E6%A8%A1%E5%BC%8F%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-text">三、“黑箱”备忘录模式的实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%A4%9A%E9%87%8D%E6%A3%80%E6%9F%A5%E7%82%B9"><span class="toc-text">四、多重检查点</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E2%80%9C%E8%87%AA%E8%BF%B0%E5%8E%86%E5%8F%B2%E2%80%9D%E6%A8%A1%E5%BC%8F"><span class="toc-text">五、“自述历史”模式</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1362,79 +1360,591 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-题目描述"><a href="#1-题目描述" class="headerlink" title="1. 题目描述"></a>1. 题目描述</h1><p>将两个升序链表合并为一个新的 <strong>升序</strong> 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。 </p>
-<p><strong>示例 1：</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/07/06/20240706-125245.jpg" alt="img"></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [1,2,4], l2 &#x3D; [1,3,4]<br><strong>输出：</strong>[1,1,2,3,4,4]</p>
-</blockquote>
-<p><strong>示例 2：</strong></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [], l2 &#x3D; []<br><strong>输出：</strong>[]</p>
-</blockquote>
-<p><strong>示例 3：</strong></p>
-<blockquote>
-<p><strong>输入：</strong>l1 &#x3D; [], l2 &#x3D; [0]<br><strong>输出：</strong>[0]</p>
-</blockquote>
-<h1 id="2-解决思路"><a href="#2-解决思路" class="headerlink" title="2. 解决思路"></a>2. 解决思路</h1><p>可以使用迭代方法来实现有序链表的合并.</p>
-<p>假设有两个有序链表 list1和list2, 当这两个链表都不是空链表时,选择头节点中较小的一个作为合并链表的头节点,.</p>
-<p>移动有序链表的指针,比较list1和list2最新的头节点, 添加到合并链表中.</p>
-<h1 id="3-关键代码"><a href="#3-关键代码" class="headerlink" title="3. 关键代码"></a>3. 关键代码</h1><pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 合并两个有序列表</span>
-<span class="comment"> *</span>
-<span class="comment"> * <span class="doctag">@param</span> list1 有序链表1, 顺序: 由小到大</span>
-<span class="comment"> * <span class="doctag">@param</span> list2 有序链表2, 顺序: 由小到大</span>
-<span class="comment"> * <span class="doctag">@return</span> ListNode 合并后的有序链表</span>
+        <p><strong>备忘录模式又叫做快照模式(Snapshot Pattern)或Token模式，是对象的行为模式。</strong></p>
+<p><strong>备忘录对象是一个用来存储另外一个对象内部状态的快照的对象。备忘录模式的用意是在不破坏封装的条件下，将一个对象的状态捕捉(Capture)住，并外部化，存储起来，从而可以在将来合适的时候把这个对象还原到存储起来的状态。备忘录模式常常与命令模式和迭代器模式一同使用。</strong></p>
+<h1 id="一、备忘录模式的结构"><a href="#一、备忘录模式的结构" class="headerlink" title="一、备忘录模式的结构"></a>一、备忘录模式的结构</h1><p>备忘录模式的结构图如下所示</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-090723.png" alt="备忘录模式结构图"></p>
+<p>备忘录模式所涉及的角色有三个：<strong>备忘录(Memento)角色、发起人(Originator)角色、负责人(Caretaker)角色</strong>。</p>
+<h2 id="1-备忘录-Memento-角色"><a href="#1-备忘录-Memento-角色" class="headerlink" title="1. 备忘录(Memento)角色"></a>1. 备忘录(Memento)角色</h2><p>备忘录角色又如下责任：</p>
+<ul>
+<li>将发起人（Originator）对象的内存状态存储起来。备忘录可以根据发起人对象的判断来决定存储多少发起人（Originator）对象的内部状态。</li>
+<li>备忘录可以保护其内容不被发起人（Originator）对象之外的任何对象所读取。</li>
+</ul>
+<p>备忘录有两个等效的接口：</p>
+<ul>
+<li><strong>窄接口：</strong>负责人（Caretaker）对象（和其他除发起人对象之外的任何对象）看到的是备忘录的窄接口(narrow interface)，这个窄接口只允许它把备忘录对象传给其他的对象。</li>
+<li><strong>宽接口：</strong>与负责人对象看到的窄接口相反的是，发起人对象可以看到一个宽接口(wide interface)，这个宽接口允许它读取所有的数据，以便根据这些数据恢复这个发起人对象的内部状态。</li>
+</ul>
+<h2 id="2-发起人（Originator）角色"><a href="#2-发起人（Originator）角色" class="headerlink" title="2. 发起人（Originator）角色"></a>2. 发起人（Originator）角色</h2><p>发起人角色有如下责任：</p>
+<ul>
+<li>创建一个含有当前的内部状态的备忘录对象。</li>
+<li>使用备忘录对象存储其内部状态。</li>
+</ul>
+<h2 id="3-负责人（Caretaker）角色"><a href="#3-负责人（Caretaker）角色" class="headerlink" title="3. 负责人（Caretaker）角色"></a>3. 负责人（Caretaker）角色</h2><p>负责人角色有如下责任：</p>
+<ul>
+<li>负责保存备忘录对象。</li>
+<li>不检查备忘录对象的内容。</li>
+</ul>
+<h1 id="二、“白箱”备忘录模式的实现"><a href="#二、“白箱”备忘录模式的实现" class="headerlink" title="二、“白箱”备忘录模式的实现"></a>二、“白箱”备忘录模式的实现</h1><p>备忘录角色对任何对象都提供一个接口，即宽接口，备忘录角色的内部所存储的状态就对所有对象公开。因此这个实现又叫做“白箱实现”。</p>
+<p>“白箱”实现将发起人角色的状态存储在一个大家都看得到的地方，因此是破坏封装性的。但是通过程序员自律，同样可以在一定程度上实现模式的大部分用意。因此白箱实现仍然是有意义的。</p>
+<p>下面给出一个示意性的“白箱实现”。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-092423.png" alt="备忘录-白箱模式"></p>
+<p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 备忘录角色，备忘录对象将发起人对象传入的状态存储起来。</span>
 <span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> ListNode <span class="title function_">merge</span><span class="params">(ListNode list1, ListNode list2)</span> &#123;
-    <span class="comment">// 极值判断</span>
-    <span class="keyword">if</span> (list1 == <span class="literal">null</span> || list2 == <span class="literal">null</span>) &#123;
-        <span class="keyword">return</span> list1 == <span class="literal">null</span> ? list2 : list1;
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Memento</span> &#123;
+
+    <span class="keyword">private</span> String state;
+
+    <span class="keyword">public</span> <span class="title function_">Memento</span><span class="params">(String state)</span> &#123;
+        <span class="built_in">this</span>.state = state;
     &#125;
 
-    <span class="type">ListNode</span> <span class="variable">cur1</span> <span class="operator">=</span> list1; <span class="comment">// list1中当前正在比较的头节点</span>
-    <span class="type">ListNode</span> <span class="variable">cur2</span> <span class="operator">=</span> list2; <span class="comment">// list2中当前正在比较的头节点</span>
-    <span class="type">ListNode</span> <span class="variable">head</span> <span class="operator">=</span> <span class="literal">null</span>; <span class="comment">// 已完成合并操作的链表(默认头节点是两个有序链表头节点中较小的一个)</span>
-    <span class="keyword">if</span> (cur1.val &lt;= cur2.val) &#123;
-        head = cur1;
-        cur1 = cur1.next; <span class="comment">// 更新cur1的头节点</span>
-    &#125; <span class="keyword">else</span> &#123;
-        head = cur2;
-        cur2 = cur2.next; <span class="comment">// 更新cur2的头节点</span>
+    <span class="keyword">public</span> String <span class="title function_">getState</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> state;
     &#125;
 
-    <span class="type">ListNode</span> <span class="variable">pre</span> <span class="operator">=</span> head; <span class="comment">// 临时节点,开始指向head, 后面通过pre不断调整head节点的next属性的引用</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setState</span><span class="params">(String state)</span> &#123;
+        <span class="built_in">this</span>.state = state;
+    &#125;
+&#125;
 
-    <span class="keyword">while</span> (cur1 != <span class="literal">null</span> &amp;&amp; cur2 != <span class="literal">null</span>) &#123; <span class="comment">// 仅当两个队列当前操作的节点都不为空时,才需要进行比较与合并操作</span>
-        <span class="keyword">if</span> (cur1.val &lt;= cur2.val) &#123;
-            pre.next = cur1; <span class="comment">// 当cur1的值小于cur2时,next指向cur1</span>
-            cur1 = cur1.next; <span class="comment">// cur1节点后移,继续后面节点的比较</span>
-        &#125; <span class="keyword">else</span> &#123;
-            pre.next = cur2; <span class="comment">// 当cur2的值小于cur1时,将cur2作为待合并的节点</span>
-            cur2 = cur2.next; <span class="comment">// cur2节点后移,继续后面节点的比较</span>
-        &#125;
 
-        <span class="comment">// 这一行同时也不断调整了head节点的next属性,扩充了head链表</span>
-        pre = pre.next; <span class="comment">// 链表指针后移</span>
+<span class="comment">/**</span>
+<span class="comment"> * 发起人角色类，利用备忘录角色对象存储自身的状态</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Originator</span> &#123;
+
+    <span class="keyword">private</span> String state;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 工厂方法，创建一个新的备忘录对象</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> Memento <span class="title function_">createMemento</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Memento</span>(state);
     &#125;
 
-    <span class="comment">// 当其中一个链表(假设是cur1)的最后一个节点完成了合并操作,而另一个链表(假设是cur2)还有剩余节点未合并,</span>
-    <span class="comment">// 此时就需要将最后完成合并的节点(pre节点)的next指向还有节点未合并的链表(不为空的链表).</span>
-    <span class="comment">// 这一步是必须存在的,因为两个有序链表合并,必然会存在其中一个节点先完成合并.</span>
-    pre.next = cur1 != <span class="literal">null</span> ? cur1 : cur2;
+    <span class="comment">/**</span>
+<span class="comment">     * 通过备忘录对象，将发起人状态恢复到备忘录记载的状态</span>
+<span class="comment">     * <span class="doctag">@param</span> memento</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreMemento</span><span class="params">(Memento memento)</span> &#123;
+        <span class="built_in">this</span>.state = memento.getState();
+    &#125;
 
-    <span class="comment">// 返回合并后,完整的有序链表</span>
-    <span class="keyword">return</span> head;
+    <span class="keyword">public</span> String <span class="title function_">getState</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> state;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setState</span><span class="params">(String state)</span> &#123;
+        <span class="built_in">this</span>.state = state;
+        System.out.println(<span class="string">&quot;发起人当前状态：&quot;</span> + <span class="built_in">this</span>.state);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 负责人角色，负责保存备忘录对象，但是从不修改（甚至不查看）备忘录对象的内容。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Caretaker</span> &#123;
+    <span class="keyword">private</span> Memento memento;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 备忘录取值方法</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> Memento <span class="title function_">retrieveMemento</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> <span class="built_in">this</span>.memento;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 备忘录的赋值方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">saveMemento</span><span class="params">(Memento memento)</span> &#123;
+        <span class="built_in">this</span>.memento = memento;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 发起人角色</span>
+        <span class="type">Originator</span> <span class="variable">originator</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Originator</span>();
+
+        <span class="comment">// 负责人角色</span>
+        <span class="type">Caretaker</span> <span class="variable">caretaker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Caretaker</span>();
+        <span class="comment">// 设置状态</span>
+        originator.setState(<span class="string">&quot;ON&quot;</span>);
+
+        <span class="comment">// 创建一个备忘录对象，并使用负责人对象保存</span>
+        caretaker.saveMemento(originator.createMemento());
+
+        <span class="comment">// 修改发起人状态</span>
+        originator.setState(<span class="string">&quot;OFF&quot;</span>);
+
+        <span class="comment">// 恢复发起人对象的状态</span>
+        originator.restoreMemento(caretaker.retrieveMemento());
+
+        System.out.println(<span class="string">&quot;发起人状态恢复到：&quot;</span> + originator.getState());
+    &#125;
+
 &#125;</code></pre>
 
-<p>完整测试代码:</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/mergeTwoList/MergeTwoList.java">https://github.com/GeorgeChan95/algorithm/blob/master/src/main/java/com/george/mergeTwoList/MergeTwoList.java</a></p>
-<h1 id="4-复杂度分析"><a href="#4-复杂度分析" class="headerlink" title="4. 复杂度分析"></a>4. 复杂度分析</h1><ul>
-<li><p>时间复杂度：O(n+m)，其中 n 和 m 分别为两个链表的长度。因为每次循环迭代中，l1 和 l2 只有一个元素会被放进合并链表中， 因此 while 循环的次数不会超过两个链表的长度之和。所有其他操作的时间复杂度都是常数级别的，因此总的时间复杂度为 O(n+m)。</p>
-</li>
-<li><p>空间复杂度：O(1)。我们只需要常数的空间存放若干变量。</p>
-</li>
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">发起人当前状态：ON
+发起人当前状态：OFF
+发起人状态恢复到：ON</code></pre>
+</blockquote>
+<p>在上面的这个示意性的客户端角色里面，首先将发起人对象的状态设置成“On”，并创建一个备忘录对象将这个状态存储起来；然后将发起人对象的状态改成“Off”；最后又将发起人对象恢复到备忘录对象所存储起来的状态，即“On”状态。</p>
+<p>系统的时序图更能够反映出系统各个角色被调用的时间顺序。如下图是将发起人对象的状态存储到白箱备忘录对象中去的时序图。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-095455.png" alt="时序图1"></p>
+<p>可以看出系统运行的时序是这样的：</p>
+<ul>
+<li>将发起人对象的状态设置成“On”</li>
+<li>调用发起人角色的 <code>createMemento()</code> 方法，创建一个备忘录对象将这个状态存储起来。</li>
+<li>将备忘录对象存储到负责人对象中去。</li>
 </ul>
+<p><strong>将发起人对象恢复到备忘录对象所记录的状态的时序图如下所示：</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-095703.png" alt="时序图2"></p>
+<p>可以看出，将发起人对象恢复到备忘录对象所记录的状态时，系统的运行时序是这样的：</p>
+<ul>
+<li>将发起人状态设置成 “Off” 。</li>
+<li>将备忘录对象从负责人对象中取出。</li>
+<li>将发起人对象恢复到备忘录对象所存储起来的状态，即“On”状态。</li>
+</ul>
+<h1 id="三、“黑箱”备忘录模式的实现"><a href="#三、“黑箱”备忘录模式的实现" class="headerlink" title="三、“黑箱”备忘录模式的实现"></a>三、“黑箱”备忘录模式的实现</h1><p>备忘录角色对发起人（Originator）角色对象提供一个宽接口，而为其他对象提供一个窄接口。这样的实现叫做“黑箱实现”。</p>
+<p>在JAVA语言中，实现双重接口的办法就是将 <strong>备忘录角色类</strong> 设计成 <strong>发起人角色类</strong> 的内部成员类。</p>
+<p>将 <code>Memento</code> 设成 <code>Originator</code> 类的内部类，从而将 <code>Memento</code> 对象封装在 <code>Originator</code> 里面；在外部提供一个标识接口 <code>MementoIF</code> 给<code>Caretaker</code>以及其他对象。这样，<code>Originator</code> 类看到的是 <code>Menmento</code> 的所有接口，而 <code>Caretaker</code> 以及其他对象看到的仅仅是标识接口 <code>MementoIF</code> 所暴露出来的接口。</p>
+<p>使用内部类实现备忘录模式的类图如下所示。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-100422.png" alt="黑箱备忘录模式"></p>
+<p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 窄接口MementoIF，这是一个标识接口，没有定义出任何的方法。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MementoIF</span> &#123;
+
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 发起人角色， 定义了一个内部的Memento类。由于此Memento类的全部接口都是私有的，因此只有它自己和发起人类可以调用。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Originator</span> &#123;
+
+    <span class="keyword">private</span> String state;
+
+    <span class="keyword">public</span> String <span class="title function_">getState</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> state;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setState</span><span class="params">(String state)</span> &#123;
+        <span class="built_in">this</span>.state = state;
+        System.out.println(<span class="string">&quot;发起人当前状态：&quot;</span> + <span class="built_in">this</span>.state);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 工厂方法，创建一个新的备忘录对象</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> MementoIF <span class="title function_">createMemento</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Memento</span>(<span class="built_in">this</span>.state);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 发起人恢复到备忘录对象记录的状态</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreMemento</span><span class="params">(MementoIF mementoIF)</span> &#123;
+        <span class="type">Memento</span> <span class="variable">memento</span> <span class="operator">=</span> (Memento) mementoIF;
+        <span class="built_in">this</span>.setState(memento.getState());
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 备忘录角色，实现MementoIF接口，作为内部类发起人类可以全部使用其功能接口，其它类只能获得其接口引用</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">Memento</span> <span class="keyword">implements</span> <span class="title class_">MementoIF</span> &#123;
+        <span class="keyword">private</span> String state;
+
+        <span class="keyword">private</span> <span class="title function_">Memento</span><span class="params">(String state)</span> &#123;
+            <span class="built_in">this</span>.state = state;
+        &#125;
+
+        <span class="keyword">private</span> String <span class="title function_">getState</span><span class="params">()</span> &#123;
+            <span class="keyword">return</span> state;
+        &#125;
+
+        <span class="keyword">private</span> <span class="keyword">void</span> <span class="title function_">setState</span><span class="params">(String state)</span> &#123;
+            <span class="built_in">this</span>.state = state;
+        &#125;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 负责人对象，得到的备忘录对象是以MementoIF为接口的，由于这个接口仅仅是一个标识接口，因此负责人角色不可能改变这个备忘录对象的内容。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Caretaker</span> &#123;
+    <span class="keyword">private</span> MementoIF mementoIF;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 获取备忘录对象</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> MementoIF <span class="title function_">retrieveMemento</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> mementoIF;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 备忘录赋值方法</span>
+<span class="comment">     * <span class="doctag">@param</span> mementoIF</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">saveMemento</span><span class="params">(MementoIF mementoIF)</span> &#123;
+        <span class="built_in">this</span>.mementoIF = mementoIF;
+    &#125;
+
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 发起人对象</span>
+        <span class="type">Originator</span> <span class="variable">originator</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Originator</span>();
+
+        <span class="comment">// 负责人对象</span>
+        <span class="type">Caretaker</span> <span class="variable">caretaker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Caretaker</span>();
+
+        <span class="comment">// 设置状态</span>
+        originator.setState(<span class="string">&quot;ON&quot;</span>);
+
+        <span class="comment">// 创建备忘录</span>
+        <span class="type">MementoIF</span> <span class="variable">mementoIF</span> <span class="operator">=</span> originator.createMemento();
+        <span class="comment">// 负责人对象保存备忘录</span>
+        caretaker.saveMemento(mementoIF);
+
+        <span class="comment">// 改变发起人状态</span>
+        originator.setState(<span class="string">&quot;OFF&quot;</span>);
+
+        <span class="comment">// 通过备忘录，恢复发起人对象的状态</span>
+        originator.restoreMemento(caretaker.retrieveMemento());
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果如下：</p>
+<pre><code class="highlight shell">发起人当前状态：ON
+发起人当前状态：OFF
+发起人当前状态：ON</code></pre>
+</blockquote>
+<p>客户端首先</p>
+<ul>
+<li>将发起人对象的状态设置为“On”。</li>
+<li>调用 <code>createMemento()</code> 方法，创建一个备忘录对象将这个状态存储起来（此时 <code>createMemento()</code> 方法还回的类型是 <code>MementoIF</code> 接口，真实类型为<code>Originator</code>内部的 <code>Memento</code> 对象）。</li>
+<li>将备忘录对象存储到负责人对象中去。由于负责人对象拿到的仅是 <code>MementoIF</code> 接口，因此无法读出备忘录对象内部的状态。</li>
+<li>将发起人对象的状态设置为“Off”。</li>
+<li>调用负责人对象的 <code>retrieveMemento()</code> 方法将备忘录对象取出。注意此时仅能得到 <code>MementoIF</code> 接口，因此无法读出此对象的内部状态。</li>
+<li>调用发起人对象的 <code>restoreMemento()</code> 方法将发起人对象的状态恢复成备忘录对象所存储的起来的状态，即“On”状态。由于发起人对象的内部类<code>Memento</code>实现了<code>MementoIF</code>接口，这个内部类是传入的备忘录对象的真实类型，因此发起人对象可以利用内部类 <code>Memento</code> 的私有接口读出此对象的内部状态。</li>
+</ul>
+<h1 id="四、多重检查点"><a href="#四、多重检查点" class="headerlink" title="四、多重检查点"></a>四、多重检查点</h1><p>前面所给出的白箱和黑箱的示意性实现都是只存储一个状态的简单实现，也可以叫做只有一个检查点。常见的系统往往需要存储不止一个状态，而是需要存储多个状态，或者叫做有多个检查点。</p>
+<p>备忘录模式可以将发起人对象的状态存储到备忘录对象里面，备忘录模式可以将发起人对象恢复到备忘录对象所存储的某一个检查点上。下面给出一个示意性的、有多重检查点的备忘录模式的实现。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-112032.png" alt="多重检查点"></p>
+<p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 备忘录角色，这个实现可以存储任意多的状态，外界可以使用检查点索引index来取出检查点上的状态。　　</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Memento</span> &#123;
+    <span class="keyword">private</span> List&lt;String&gt; states;
+
+    <span class="keyword">private</span> <span class="type">int</span> index;
+
+    <span class="keyword">public</span> <span class="title function_">Memento</span><span class="params">(List&lt;String&gt; states, <span class="type">int</span> index)</span> &#123;
+        <span class="comment">// states是引用，重新创建新的对象</span>
+        <span class="built_in">this</span>.states = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(states);
+        <span class="built_in">this</span>.index = index;
+    &#125;
+
+    <span class="keyword">public</span> List&lt;String&gt; <span class="title function_">getStates</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> states;
+    &#125;
+
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">getIndex</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> index;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 发起人角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Originator</span> &#123;
+    <span class="keyword">private</span> List&lt;String&gt; states;
+
+    <span class="comment">//检查点指数</span>
+    <span class="keyword">private</span> <span class="type">int</span> index;
+
+
+    <span class="keyword">public</span> <span class="title function_">Originator</span><span class="params">()</span> &#123;
+        <span class="built_in">this</span>.states = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+        <span class="built_in">this</span>.index = <span class="number">0</span>;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 工厂方法，返还一个新的备忘录对象</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> Memento <span class="title function_">createMemento</span><span class="params">()</span>&#123;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Memento</span>(states , index);
+    &#125;
+    <span class="comment">/**</span>
+<span class="comment">     * 将发起人恢复到备忘录对象记录的状态上</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreMemento</span><span class="params">(Memento memento)</span>&#123;
+        states = memento.getStates();
+        index = memento.getIndex();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 状态赋值，更新states和索引</span>
+<span class="comment">     * <span class="doctag">@param</span> state</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setState</span><span class="params">(String state)</span> &#123;
+        <span class="built_in">this</span>.states.add(state);
+        <span class="built_in">this</span>.index++;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 打印当前检查点的状态</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">printStates</span><span class="params">()</span> &#123;
+        System.out.print(<span class="string">&quot;发起人检查点索引：&quot;</span> + <span class="built_in">this</span>.index + <span class="string">&quot;， 状态：&quot;</span>);
+        <span class="keyword">for</span> (String state : states) &#123;
+            System.out.print(state + <span class="string">&quot; &quot;</span>);
+        &#125;
+        System.out.println();
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 负责人角色</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Caretaker</span> &#123;
+    <span class="keyword">private</span> Originator originator;
+    <span class="keyword">private</span> List&lt;Memento&gt; mementos;
+    <span class="keyword">private</span> <span class="type">int</span> current;
+
+    <span class="keyword">public</span> <span class="title function_">Caretaker</span><span class="params">(Originator originator)</span> &#123;
+        <span class="built_in">this</span>.originator = originator;
+        mementos = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+        current = <span class="number">0</span>;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 创建一个新的检查点</span>
+<span class="comment">     * <span class="doctag">@return</span></span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">createMemento</span><span class="params">()</span> &#123;
+        <span class="type">Memento</span> <span class="variable">memento</span> <span class="operator">=</span> originator.createMemento();
+        mementos.add(memento);
+        <span class="keyword">return</span> current++;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 将发起人恢复到某个检查点</span>
+<span class="comment">     * <span class="doctag">@param</span> index</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreMemento</span><span class="params">(<span class="type">int</span> index)</span> &#123;
+        <span class="type">Memento</span> <span class="variable">memento</span> <span class="operator">=</span> mementos.get(index);
+        originator.restoreMemento(memento);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 删除某个检查点</span>
+<span class="comment">     * <span class="doctag">@param</span> index</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">removeMemento</span><span class="params">(<span class="type">int</span> index)</span> &#123;
+        mementos.remove(index);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 发起人</span>
+        <span class="type">Originator</span> <span class="variable">originator</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Originator</span>();
+
+        <span class="comment">// 负责人</span>
+        <span class="type">Caretaker</span> <span class="variable">caretaker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Caretaker</span>(originator);
+
+        <span class="comment">// 变更状态，并保存检查点</span>
+        originator.setState(<span class="string">&quot;State 0&quot;</span>);
+        caretaker.createMemento();
+
+        <span class="comment">// 变更状态，并保存检查点</span>
+        originator.setState(<span class="string">&quot;State 1&quot;</span>);
+        caretaker.createMemento();
+
+        <span class="comment">// 变更状态，并保存检查点</span>
+        originator.setState(<span class="string">&quot;State 2&quot;</span>);
+        caretaker.createMemento();
+
+        <span class="comment">// 打印当前检查点</span>
+        originator.printStates();
+
+        <span class="comment">// 恢复到检查点1</span>
+        caretaker.restoreMemento(<span class="number">1</span>);
+
+        <span class="comment">// 打印当前检查点</span>
+        originator.printStates();
+
+        <span class="comment">// 恢复到检查点2</span>
+        caretaker.restoreMemento(<span class="number">2</span>);
+
+        <span class="comment">// 打印当前检查点</span>
+        originator.printStates();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">发起人检查点索引：3， 状态：State 0 State 1 State 2 
+发起人检查点索引：2， 状态：State 0 State 1 
+发起人检查点索引：3， 状态：State 0 State 1 State 2</code></pre>
+</blockquote>
+<p>可以看出，客户端角色通过不断改变发起人角色的状态，并将之存储在备忘录里面。通过指明检查点指数可以将发起人角色恢复到相应的检查点所对应的状态上。</p>
+<p>将发起人的状态存储到备忘录对象中的活动序列图如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-114712.png" alt="多重检查点时序图1"></p>
+<p><strong>系统运行的时序是这样的：</strong></p>
+<ul>
+<li>将发起人对象的状态设置成某个有效状态；</li>
+<li>调用负责人角色的 <code>createMemento()</code> 方法，负责人角色会负责调用发起人角色和备忘录角色，将发起人对象的状态存储起来。</li>
+</ul>
+<p><strong>将发起人对象恢复到某一个备忘录对象的检查点的活动序列图如下：</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-114846.png" alt="多重检查点时序图2"></p>
+<p>由于负责人角色的功能被增强了，因此将发起人对象恢复到备忘录对象所记录的状态时，系统运行的时序被简化了：</p>
+<ul>
+<li>调用负责人角色的 <code>restoreMemento()</code> 方法，将发起人恢复到某个检查点。</li>
+</ul>
+<h1 id="五、“自述历史”模式"><a href="#五、“自述历史”模式" class="headerlink" title="五、“自述历史”模式"></a>五、“自述历史”模式</h1><p>所谓“自述历史”模式(<code>History-On-Self Pattern</code>)实际上就是备忘录模式的一个变种。在备忘录模式中，发起人(Originator)角色、负责人(Caretaker)角色和备忘录(Memento)角色都是独立的角色。虽然在实现上备忘录类可以成为发起人类的内部成员类，但是备忘录类仍然保持作为一个角色的独立意义。在“自述历史”模式里面，发起人角色自己兼任负责人角色。</p>
+<p>“自述历史”模式的类图如下所示：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-115121.png" alt="自述历史模式"></p>
+<p><strong>备忘录角色有如下责任：</strong></p>
+<ul>
+<li>将发起人（Originator）对象的内部状态存储起来。</li>
+<li>备忘录可以保护其内容不被发起人（Originator）对象之外的任何对象所读取。</li>
+</ul>
+<p><strong>发起人角色有如下责任：</strong></p>
+<ul>
+<li>创建一个含有它当前的内部状态的备忘录对象。</li>
+<li>使用备忘录对象存储其内部状态。</li>
+</ul>
+<p>客户端角色有负责保存备忘录对象的责任。</p>
+<p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 窄接口MementoIF，这是一个标识接口，因此它没有定义出任何的方法。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MementoIF</span> &#123;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 发起人角色同时还兼任负责人角色，也就是说它自己负责保持自己的备忘录对象。</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Originator</span> &#123;
+    <span class="keyword">public</span> String state;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 改变状态</span>
+<span class="comment">     * <span class="doctag">@param</span> state</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">changeState</span><span class="params">(String state)</span> &#123;
+        <span class="built_in">this</span>.state = state;
+        System.out.println(<span class="string">&quot;状态改变为：&quot;</span> + state);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 工厂方法，返还一个新的备忘录对象</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> MementoIF <span class="title function_">createMemento</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Memento</span>(<span class="built_in">this</span>);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 将发起人恢复到备忘录对象所记录的状态上</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">restoreMemento</span><span class="params">(MementoIF mementoIF)</span> &#123;
+        <span class="type">Memento</span> <span class="variable">memento</span> <span class="operator">=</span> (Memento) mementoIF;
+        changeState(memento.getState());
+    &#125;
+
+    <span class="keyword">public</span> String <span class="title function_">getState</span><span class="params">()</span> &#123;
+        <span class="keyword">return</span> state;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 备忘录角色，作为内部类</span>
+<span class="comment">     */</span>
+    <span class="keyword">private</span> <span class="keyword">class</span> <span class="title class_">Memento</span> <span class="keyword">implements</span> <span class="title class_">MementoIF</span> &#123;
+        <span class="keyword">private</span> String state;
+
+        <span class="comment">/**</span>
+<span class="comment">         * 构造方法</span>
+<span class="comment">         * <span class="doctag">@param</span> originator</span>
+<span class="comment">         */</span>
+        <span class="keyword">public</span> <span class="title function_">Memento</span><span class="params">(Originator originator)</span> &#123;
+            <span class="built_in">this</span>.state = originator.getState();
+        &#125;
+
+        <span class="keyword">public</span> String <span class="title function_">getState</span><span class="params">()</span> &#123;
+            <span class="keyword">return</span> state;
+        &#125;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 客户端</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">// 发起人</span>
+        <span class="type">Originator</span> <span class="variable">originator</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Originator</span>();
+        <span class="comment">// 改变状态</span>
+        originator.changeState(<span class="string">&quot;ON&quot;</span>);
+
+        <span class="comment">// 存储发起人状态</span>
+        <span class="type">MementoIF</span> <span class="variable">memento</span> <span class="operator">=</span> originator.createMemento();
+
+        <span class="comment">// 改变状态</span>
+        originator.changeState(<span class="string">&quot;OFF&quot;</span>);
+
+        <span class="comment">// 恢复发起人状态</span>
+        originator.restoreMemento(memento);
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">状态改变为：ON
+状态改变为：OFF
+状态改变为：ON</code></pre>
+</blockquote>
+<p>由于“自述历史”作为一个备忘录模式的特殊实现形式非常简单易懂，它可能是备忘录模式最为流行的实现形式。</p>
+<blockquote>
+<p>参考链接：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/java-my-life/archive/2012/06/06/2534942.html">https://www.cnblogs.com/java-my-life/archive/2012/06/06/2534942.html</a></p>
+</blockquote>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
