@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>04-集合的线程安全 | George&#39;s Blog</title>
+  <title>24-策略模式 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" java , juc ">
-  <meta name="description" content="04-集合的线程安全 | George&#39;s Blog">
+  <meta name="keywords" content=" 设计模式 ">
+  <meta name="description" content="24-策略模式 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介目前人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#103;&#101;&#x5f;&#57;&#x35;&#64;&#x31;&#50;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1298,9 +1298,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-juc/04-集合的线程安全" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-design-pattern/24-策略模式" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">04-集合的线程安全</h1>
+        <h1 class="article-title">24-策略模式</h1>
     
     <div class="article-meta">
         
@@ -1310,7 +1310,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="JUC">JUC</a>
+            <a  data-rel="设计模式">设计模式</a>
             
         </span>
         
@@ -1318,16 +1318,14 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">java</a>
-            
-            <a class="color4">juc</a>
+            <a class="color5">设计模式</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-09-06 09:07:26'>2024-09-04 21:09</time>
+            发布时间 : <time class="date" title='最后更新: 2024-12-03 13:08:19'>2024-12-02 18:16</time>
         
     </div>
     <div class="article-meta">
@@ -1362,7 +1360,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81ArrayList%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">一、ArrayList线程安全的操作</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%9B%86%E5%90%88%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84%E6%BC%94%E7%A4%BA"><span class="toc-text">1. 集合不安全的演示</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Vector"><span class="toc-text">2. Vector</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Collections"><span class="toc-text">3. Collections</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-CopyOnWriteArrayList-%E9%87%8D%E7%82%B9"><span class="toc-text">4. CopyOnWriteArrayList (重点)</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81HashSet-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">二、HashSet 线程安全的操作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81HashMap-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">三、HashMap 线程安全的操作</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">一、策略模式的结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">二、使用场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%A4%E8%AF%86%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F"><span class="toc-text">三、认识策略模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98-%E7%BC%BA%E7%82%B9"><span class="toc-text">四、策略模式的优&#x2F;缺点</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1378,205 +1376,218 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、ArrayList线程安全的操作"><a href="#一、ArrayList线程安全的操作" class="headerlink" title="一、ArrayList线程安全的操作"></a>一、ArrayList线程安全的操作</h1><h2 id="1-集合不安全的演示"><a href="#1-集合不安全的演示" class="headerlink" title="1. 集合不安全的演示"></a>1. 集合不安全的演示</h2><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NotSafeDemo</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">     * 多个线程同时对集合进行修改</span>
-<span class="comment">     * <span class="doctag">@param</span> args</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>();
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
-            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
-                list.add(UUID.randomUUID().toString());
-                System.out.println(list);
-            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
-        &#125;
-    &#125;
-&#125;</code></pre>
-
-<p><strong>运行结果：</strong></p>
-<pre><code class="highlight shell">Exception in thread &quot;线程93&quot; java.util.ConcurrentModificationException
-	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1013)
-	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:967)
-	at java.base/java.util.AbstractCollection.toString(AbstractCollection.java:456)
-	at java.base/java.lang.String.valueOf(String.java:4222)
-	at java.base/java.io.PrintStream.println(PrintStream.java:1047)</code></pre>
-
-<p><strong>ArrayList add() 方法原码</strong></p>
+        <p><strong>策略模式属于对象的行为模式。其用意是针对一组算法，将每一个算法封装到具有共同接口的独立的类中，从而使得它们可以相互替换。策略模式使得算法可以在不影响到客户端的情况下发生变化。</strong></p>
+<h1 id="一、策略模式的结构"><a href="#一、策略模式的结构" class="headerlink" title="一、策略模式的结构"></a>一、策略模式的结构</h1><p>策略模式是对算法的包装，是把使用算法的责任和算法本身分割开来，委派给不同的对象管理。策略模式通常把一个系列的算法包装到一系列的策略类里面，作为一个抽象策略类的子类。用一句话来说，就是：“准备一组算法，并将每一个算法封装起来，使得它们可以互换”。下面就以一个示意性的实现讲解策略模式实例的结构。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-123412.png" alt="策略模式结构"></p>
+<p>这个模式涉及到三个角色：</p>
+<ul>
+<li><strong>环境(Context)角色：</strong>持有一个Strategy的引用。</li>
+<li><strong>抽象策略(Strategy)角色：</strong>这是一个抽象角色，通常由一个接口或抽象类实现。此角色给出所有的具体策略类所需的接口。</li>
+<li><strong>具体策略(ConcreteStrategy)角色：</strong>包装了相关的算法或行为。</li>
+</ul>
+<p><strong>代码实现如下：</strong></p>
 <pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * Appends the specified element to the end of this list.</span>
-<span class="comment"> *</span>
-<span class="comment"> * <span class="doctag">@param</span> e element to be appended to this list</span>
-<span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; (as specified by &#123;<span class="doctag">@link</span> Collection#add&#125;)</span>
+<span class="comment"> * 环境角色类</span>
 <span class="comment"> */</span>
-<span class="keyword">public</span> <span class="type">boolean</span> <span class="title function_">add</span><span class="params">(E e)</span> &#123;
-    modCount++;
-    add(e, elementData, size);
-    <span class="keyword">return</span> <span class="literal">true</span>;
-&#125;</code></pre>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Context</span> &#123;
 
-<p>add() 方法没有加锁，是不安全的操作。</p>
-<p><strong>如何去解决 List 类型的线程安全问题?</strong></p>
-<h2 id="2-Vector"><a href="#2-Vector" class="headerlink" title="2. Vector"></a>2. Vector</h2><p>Vector 是<strong>矢量队列</strong>，它是 JDK1.0 版本添加的类。继承于 AbstractList，实现了 List, RandomAccess, Cloneable 这些接口。 Vector 继承了 AbstractList，实现了 List；所以，<strong>它是一个队列，支持相关的添加、删除、修改、遍历等功能</strong>。 Vector 实现了 RandmoAccess 接口，即<strong>提供了随机访问功能</strong>。RandmoAccess 是 java 中用来被 List 实现，为 List 提供快速访问功能的。在Vector 中，我们即可以通过元素的序号快速获取元素对象；这就是快速随机访问。 Vector 实现了 Cloneable 接口，即实现 clone()函数。它能被克隆。</p>
-<p><strong>和 ArrayList 不同，Vector 中的操作是线程安全的。</strong></p>
-<p>使用 <strong>Vector</strong> 对 Demo 进行修改</p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VectorDemo</span> &#123;
+    <span class="comment">// 持有一个具体的策略对象</span>
+    <span class="keyword">private</span> Strategy strategy;
+
+    <span class="keyword">public</span> <span class="title function_">Context</span><span class="params">(Strategy strategy)</span> &#123;
+        <span class="built_in">this</span>.strategy = strategy;
+    &#125;
 
     <span class="comment">/**</span>
-<span class="comment">     * 多个线程同时对集合进行修改</span>
-<span class="comment">     * <span class="doctag">@param</span> args</span>
+<span class="comment">     * 调用策略方法</span>
 <span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">List</span> <span class="variable">list</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Vector</span>();
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
-            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
-                list.add(UUID.randomUUID().toString());
-                System.out.println(list);
-            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
-        &#125;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">contextInterface</span><span class="params">()</span> &#123;
+        strategy.strategyInterface();
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 抽象策略类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Strategy</span> &#123;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 策略方法</span>
+<span class="comment">     */</span>
+    <span class="keyword">void</span> <span class="title function_">strategyInterface</span><span class="params">()</span>;
+&#125;
+
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体策略类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteStrategyA</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">strategyInterface</span><span class="params">()</span> &#123;
+
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体策略类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteStrategyB</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">strategyInterface</span><span class="params">()</span> &#123;
+
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 具体策略类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteStrategyC</span> <span class="keyword">implements</span> <span class="title class_">Strategy</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">strategyInterface</span><span class="params">()</span> &#123;
+
     &#125;
 &#125;</code></pre>
 
-<p><strong>运行结果：无异常</strong></p>
-<p>查看Vector add() 方法</p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * Appends the specified element to the end of this Vector.</span>
-<span class="comment"> *</span>
-<span class="comment"> * <span class="doctag">@param</span> e element to be appended to this Vector</span>
-<span class="comment"> * <span class="doctag">@return</span> &#123;<span class="doctag">@code</span> true&#125; (as specified by &#123;<span class="doctag">@link</span> Collection#add&#125;)</span>
-<span class="comment"> * <span class="doctag">@since</span> 1.2</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="type">boolean</span> <span class="title function_">add</span><span class="params">(E e)</span> &#123;
-    modCount++;
-    add(e, elementData, elementCount);
-    <span class="keyword">return</span> <span class="literal">true</span>;
-&#125;</code></pre>
-
-<p><code>add()</code> 方法添加了 <code>synchronized</code> 这是线程安全的操作。</p>
-<h2 id="3-Collections"><a href="#3-Collections" class="headerlink" title="3. Collections"></a>3. Collections</h2><p>Collections 提供了方法 synchronizedList 保证 list 是同步线程安全的。</p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CollectionsDemo</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        List&lt;Object&gt; list = Collections.synchronizedList(<span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;());
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
-            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
-                list.add(UUID.randomUUID().toString());
-                System.out.println(list);
-            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
-        &#125;
-    &#125;
-&#125;</code></pre>
-
-<p><strong>运行结果：没有异常</strong></p>
-<p><strong>查看原码：</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * Returns a synchronized (thread-safe) list backed by the specified</span>
-<span class="comment"> * list.  In order to guarantee serial access, it is critical that</span>
-<span class="comment"> * &lt;strong&gt;all&lt;/strong&gt; access to the backing list is accomplished</span>
-<span class="comment"> * through the returned list.&lt;p&gt;</span>
-<span class="comment"> *</span>
-<span class="comment"> * It is imperative that the user manually synchronize on the returned</span>
-<span class="comment"> * list when traversing it via &#123;<span class="doctag">@link</span> Iterator&#125;, &#123;<span class="doctag">@link</span> Spliterator&#125;</span>
-<span class="comment"> * or &#123;<span class="doctag">@link</span> Stream&#125;:</span>
-<span class="comment"> * &lt;pre&gt;</span>
-<span class="comment"> *  List list = Collections.synchronizedList(new ArrayList());</span>
-<span class="comment"> *      ...</span>
-<span class="comment"> *  synchronized (list) &#123;</span>
-<span class="comment"> *      Iterator i = list.iterator(); // Must be in synchronized block</span>
-<span class="comment"> *      while (i.hasNext())</span>
-<span class="comment"> *          foo(i.next());</span>
-<span class="comment"> *  &#125;</span>
-<span class="comment"> * &lt;/pre&gt;</span>
-<span class="comment"> * Failure to follow this advice may result in non-deterministic behavior.</span>
-<span class="comment"> *</span>
-<span class="comment"> * &lt;p&gt;The returned list will be serializable if the specified list is</span>
-<span class="comment"> * serializable.</span>
-<span class="comment"> *</span>
-<span class="comment"> * <span class="doctag">@param</span>  &lt;T&gt; the class of the objects in the list</span>
-<span class="comment"> * <span class="doctag">@param</span>  list the list to be &quot;wrapped&quot; in a synchronized list.</span>
-<span class="comment"> * <span class="doctag">@return</span> a synchronized view of the specified list.</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; List&lt;T&gt; <span class="title function_">synchronizedList</span><span class="params">(List&lt;T&gt; list)</span> &#123;
-    <span class="keyword">return</span> (list <span class="keyword">instanceof</span> RandomAccess ?
-            <span class="keyword">new</span> <span class="title class_">SynchronizedRandomAccessList</span>&lt;&gt;(list) :
-            <span class="keyword">new</span> <span class="title class_">SynchronizedList</span>&lt;&gt;(list));
-&#125;</code></pre>
 
 
 
-<h2 id="4-CopyOnWriteArrayList-重点"><a href="#4-CopyOnWriteArrayList-重点" class="headerlink" title="4. CopyOnWriteArrayList (重点)"></a>4. CopyOnWriteArrayList (重点)</h2><p>CopyOnWriteArrayList 是线程安全的 ArrayList，具有以下特性：</p>
+
+<h1 id="二、使用场景"><a href="#二、使用场景" class="headerlink" title="二、使用场景"></a>二、使用场景</h1><p>假设现在要设计一个贩卖各类书籍的电子商务网站的购物车系统。一个最简单的情况就是把所有货品的单价乘上数量，但是实际情况肯定比这要复杂。比如，本网站可能对所有的高级会员提供每本20%的促销折扣；对中级会员提供每本10%的促销折扣；对初级会员没有折扣。</p>
+<p>根据描述，折扣是根据以下的几个算法中的一个进行的：</p>
 <ul>
-<li>它最适合于具有以下特征的应用程序：List 大小通常保持很小，只读操作远多于可变操作，需要在遍历期间防止线程间的冲突。</li>
-<li>它是线程安全的。</li>
-<li>因为通常需要复制整个基础数组，所以可变操作（add()、set() 和 remove() 等等）的开销很大</li>
-<li>迭代器支持 hasNext(), next()等不可变操作，但不支持可变 remove()等操作。</li>
-<li>使用迭代器进行遍历的速度很快，并且不会与其他线程发生冲突。在构造迭代器时，迭代器依赖于不变的数组快照。</li>
+<li>算法一：对初级会员没有折扣。</li>
+<li>算法二：对中级会员提供10%的促销折扣。</li>
+<li>算法三：对高级会员提供20%的促销折扣。</li>
 </ul>
-<p>当我们往一个容器添加元素的时候，不直接往当前容器添加，而是先将当前容器进行 Copy，复制出一个新的容器，然后新的容器里添加元素，添加完元素之后，再将原容器的引用指向新的容器。</p>
-<p><strong>这时候会抛出来一个新的问题，也就是数据不一致的问题。如果写线程还没来得及写完并切换引用，其他的线程就会读到了脏数据</strong></p>
-<p><strong>代码示例</strong></p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CopyOnWriteArrayListDemo</span> &#123;
+<p>使用策略模式来实现的结构图如下：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-125237.png" alt="策略模式UML"></p>
+<p><strong>代码实现如下：</strong></p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 抽象折扣类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MemberStrategy</span> &#123;
+    <span class="comment">/**</span>
+<span class="comment">     * 计算图书的价格</span>
+<span class="comment">     * <span class="doctag">@param</span> booksPrice 图书的原价</span>
+<span class="comment">     * <span class="doctag">@return</span> 计算出打折后的价格</span>
+<span class="comment">     */</span>
+    <span class="type">double</span> <span class="title function_">calcPrice</span><span class="params">(<span class="type">double</span> booksPrice)</span>;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 初级会员折扣类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PrimaryMemberStrategy</span> <span class="keyword">implements</span> <span class="title class_">MemberStrategy</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calcPrice</span><span class="params">(<span class="type">double</span> booksPrice)</span> &#123;
+        System.out.println(<span class="string">&quot;对于初级会员的没有折扣&quot;</span>);
+        <span class="keyword">return</span> booksPrice;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 中级会员折扣类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IntermediateMemberStrategy</span> <span class="keyword">implements</span> <span class="title class_">MemberStrategy</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calcPrice</span><span class="params">(<span class="type">double</span> booksPrice)</span> &#123;
+        System.out.println(<span class="string">&quot;对于中级会员的折扣为10%&quot;</span>);
+        <span class="keyword">return</span> booksPrice * <span class="number">0.9</span>;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 高级会员折扣类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AdvancedMemberStrategy</span> <span class="keyword">implements</span> <span class="title class_">MemberStrategy</span> &#123;
+    <span class="meta">@Override</span>
+    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">calcPrice</span><span class="params">(<span class="type">double</span> booksPrice)</span> &#123;
+        System.out.println(<span class="string">&quot;对于高级会员的折扣为20%&quot;</span>);
+        <span class="keyword">return</span> booksPrice * <span class="number">0.8</span>;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 价格计算类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Price</span> &#123;
+
+    <span class="comment">// 持有一个具体的策略对象</span>
+    <span class="keyword">private</span> MemberStrategy memberStrategy;
+
+    <span class="keyword">public</span> <span class="title function_">Price</span><span class="params">(MemberStrategy memberStrategy)</span> &#123;
+        <span class="built_in">this</span>.memberStrategy = memberStrategy;
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 计算图书的价格</span>
+<span class="comment">     * <span class="doctag">@param</span> booksPrice 图书的原价</span>
+<span class="comment">     * <span class="doctag">@return</span> 计算出打折后的价格</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="type">double</span> <span class="title function_">quote</span><span class="params">(<span class="type">double</span> booksPrice)</span> &#123;
+        <span class="keyword">return</span> <span class="built_in">this</span>.memberStrategy.calcPrice(booksPrice);
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 测试类</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
     <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        CopyOnWriteArrayList&lt;String&gt; list = <span class="keyword">new</span> <span class="title class_">CopyOnWriteArrayList</span>&lt;&gt;();
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) &#123;
-            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
-                list.add(UUID.randomUUID().toString());
-                System.out.println(list);
-            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
-        &#125;
+        <span class="comment">//选择并创建需要使用的策略对象</span>
+        <span class="type">MemberStrategy</span> <span class="variable">strategy</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AdvancedMemberStrategy</span>();
+        <span class="comment">//创建环境</span>
+        <span class="type">Price</span> <span class="variable">price</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Price</span>(strategy);
+        <span class="comment">//计算价格</span>
+        <span class="type">double</span> <span class="variable">quote</span> <span class="operator">=</span> price.quote(<span class="number">300</span>);
+        System.out.println(<span class="string">&quot;图书的最终价格为：&quot;</span> + quote);
     &#125;
 &#125;</code></pre>
 
-<p>运行结果：没有线程安全问题</p>
-<p>下面从“动态数组”和“线程安全”两个方面进一步对CopyOnWriteArrayList 的原理进行说明。</p>
-<ul>
-<li><strong>“动态数组”机制</strong><ul>
-<li>它内部有个“volatile 数组”(array)来保持数据。在“添加&#x2F;修改&#x2F;删除”数据时，都会新建一个数组，并将更新后的数据拷贝到新建的数组中，最后再将该数组赋值给“volatile 数组”, 这就是它叫做 CopyOnWriteArrayList 的原因</li>
-<li><strong>由于它在“添加&#x2F;修改&#x2F;删除”数据时，都会新建数组，所以涉及到修改数据的操作，CopyOnWriteArrayList 效率很低；但是单单只是进行遍历查找的话，效率比较高。</strong></li>
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">对于高级会员的折扣为20%
+图书的最终价格为：240.0</code></pre>
+</blockquote>
+<p>从上面的示例可以看出，策略模式仅仅封装算法，提供新的算法插入到已有系统中，以及老算法从系统中“退休”的方法，策略模式并不决定在何时使用何种算法。在什么情况下使用什么算法是由客户端决定的。</p>
+<h1 id="三、认识策略模式"><a href="#三、认识策略模式" class="headerlink" title="三、认识策略模式"></a>三、认识策略模式</h1><ul>
+<li><p><strong>策略模式的重心</strong></p>
+<p>策略模式的重心不是如何实现算法，而是如何组织、调用这些算法，从而让程序结构更灵活，具有更好的维护性和扩展性。</p>
+</li>
+<li><p><strong>算法的平等性</strong></p>
+<p>策略模式一个很大的特点就是各个策略算法的平等性。对于一系列具体的策略算法，大家的地位是完全一样的，正因为这个平等性，才能实现算法之间可以相互替换。所有的策略算法在实现上也是相互独立的，相互之间是没有依赖的。</p>
+<p>所以可以这样描述这一系列策略算法：策略算法是相同行为的不同实现。</p>
+</li>
+<li><p><strong>运行时策略的唯一性</strong></p>
+<p>运行期间，策略模式在每一个时刻只能使用一个具体的策略实现对象，虽然可以动态地在不同的策略实现中切换，但是同时只能使用一个。</p>
+</li>
+<li><p><strong>公有的行为</strong></p>
+<p>经常见到的是，所有的具体策略类都有一些公有的行为。这时候，就应当把这些公有的行为放到共同的抽象策略角色Strategy类里面。当然这时候抽象策略角色必须要用Java抽象类实现，而不能使用接口。</p>
+<p>这其实也是典型的将代码向继承等级结构的上方集中的标准做法。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-130623.png" alt="使用抽象类实现共有行为"></p>
+</li>
+</ul>
+<h1 id="四、策略模式的优-缺点"><a href="#四、策略模式的优-缺点" class="headerlink" title="四、策略模式的优&#x2F;缺点"></a>四、策略模式的优&#x2F;缺点</h1><ul>
+<li>优点<ul>
+<li>策略模式提供了管理相关的算法族的办法。策略类的等级结构定义了一个算法或行为族。恰当使用继承可以把公共的代码移到父类里面，从而避免代码重复。</li>
+<li>使用策略模式可以避免使用多重条件(if-else)语句。多重条件语句不易维护，它把采取哪一种算法或采取哪一种行为的逻辑与算法或行为的逻辑混合在一起，统统列在一个多重条件语句里面，比使用继承的办法还要原始和落后</li>
 </ul>
 </li>
-<li><strong>“线程安全”机制</strong><ul>
-<li>通过 volatile 和互斥锁来实现的。</li>
-<li>通过“volatile 数组”来保存数据的。一个线程读取 volatile 数组时，总能看到其它线程对该 volatile 变量最后的写入；就这样，通过 volatile 提供了“读取到的数据总是最新的”这个机制的保证。</li>
-<li>通过互斥锁来保护数据。在“添加&#x2F;修改&#x2F;删除”数据时，会先“获取互斥锁”，再修改完毕之后，先将数据更新到 “volatile 数组” 中，然后再 “释放互斥锁”，就达到了保护数据的目的。</li>
+<li>缺点<ul>
+<li>客户端必须知道所有的策略类，并自行决定使用哪一个策略类。这就意味着客户端必须理解这些算法的区别，以便适时选择恰当的算法类。换言之，策略模式只适用于客户端知道算法或行为的情况。</li>
+<li>由于策略模式把每个具体的策略实现都单独封装成为类，如果备选的策略很多的话，那么对象的数目就会很可观。</li>
 </ul>
 </li>
 </ul>
-<h1 id="二、HashSet-线程安全的操作"><a href="#二、HashSet-线程安全的操作" class="headerlink" title="二、HashSet 线程安全的操作"></a>二、HashSet 线程安全的操作</h1><p>解决方案 CopyOnWriteArraySet</p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CopyOnWriteArraySetDemo</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 线程不安全的操作</span>
-<span class="comment">//        HashSet&lt;String&gt; set = new HashSet&lt;&gt;();</span>
-        <span class="comment">// 线程安全的操作</span>
-        CopyOnWriteArraySet&lt;String&gt; set = <span class="keyword">new</span> <span class="title class_">CopyOnWriteArraySet</span>&lt;&gt;();
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;
-            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
-                set.add(UUID.randomUUID().toString());
-                System.out.println(set);
-            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
-        &#125;
-    &#125;
-&#125;</code></pre>
-
-
-
-
-
-<h1 id="三、HashMap-线程安全的操作"><a href="#三、HashMap-线程安全的操作" class="headerlink" title="三、HashMap 线程安全的操作"></a>三、HashMap 线程安全的操作</h1><p>解决方案 ConcurrentHashMap</p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcurrentHashMapDemo</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 线程不安全的操作</span>
-<span class="comment">//        HashMap&lt;String, String&gt; map = new HashMap&lt;&gt;();</span>
-        <span class="comment">// 线程安全的操作</span>
-        ConcurrentHashMap&lt;String, String&gt; map = <span class="keyword">new</span> <span class="title class_">ConcurrentHashMap</span>&lt;&gt;();
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">1000</span>; i++) &#123;
-            <span class="keyword">new</span> <span class="title class_">Thread</span>(() -&gt;&#123;
-                map.put(UUID.randomUUID().toString(), <span class="string">&quot;1&quot;</span>);
-                System.out.println(map.values());
-            &#125;, <span class="string">&quot;线程&quot;</span> + i).start();
-        &#125;
-    &#125;
-&#125;</code></pre>
-
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
