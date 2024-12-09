@@ -9,27 +9,23 @@
   <meta name="keywords" content=" 设计模式 , UML ">
   <meta name="description" content="03-UML类图 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="责任链模式是一种对象的行为模式。在责任链模式里，很多对象由每一个对象对其下家的引用而连接起来形成一条链。请求在这个链上传递，直到链上的某一个对象决定处理此请求。发出这个请求的客户端并不知道链上的哪一个对象最终处理这个请求，这使得系统可以在不影响客户端的情况下动态地重新组织和分配责任。 一、从击鼓传花谈起 击鼓传花是一种热闹而又紧张的饮酒游戏。在酒宴上宾客依次坐定位置，由一人击鼓，击鼓的地方与传花的">
+<meta name="description" content="状态模式，又称状态对象模式（Pattern of Objects for States），状态模式是对象的行为模式。 状态模式允许一个对象在其内部状态改变的时候改变其行为。这个对象看上去就像是改变了它的类一样。 一、状态模式的结构用一句话来表述，状态模式把所研究的对象的行为包装在不同的状态对象里，每一个状态对象都属于一个抽象状态类的一个子类。状态模式的意图是让一个对象在其内部状态改变的时候，其行为">
 <meta property="og:type" content="article">
-<meta property="og:title" content="25-责任链模式">
-<meta property="og:url" content="https://georgechan95.github.io/blog/77d85f50.html">
+<meta property="og:title" content="23-状态模式">
+<meta property="og:url" content="https://georgechan95.github.io/blog/6109865a.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="责任链模式是一种对象的行为模式。在责任链模式里，很多对象由每一个对象对其下家的引用而连接起来形成一条链。请求在这个链上传递，直到链上的某一个对象决定处理此请求。发出这个请求的客户端并不知道链上的哪一个对象最终处理这个请求，这使得系统可以在不影响客户端的情况下动态地重新组织和分配责任。 一、从击鼓传花谈起 击鼓传花是一种热闹而又紧张的饮酒游戏。在酒宴上宾客依次坐定位置，由一人击鼓，击鼓的地方与传花的">
+<meta property="og:description" content="状态模式，又称状态对象模式（Pattern of Objects for States），状态模式是对象的行为模式。 状态模式允许一个对象在其内部状态改变的时候改变其行为。这个对象看上去就像是改变了它的类一样。 一、状态模式的结构用一句话来表述，状态模式把所研究的对象的行为包装在不同的状态对象里，每一个状态对象都属于一个抽象状态类的一个子类。状态模式的意图是让一个对象在其内部状态改变的时候，其行为">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-155845.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-155934.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-161859.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-162843.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-164526.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-165319.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-165514.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-165659.png">
-<meta property="article:published_time" content="2024-12-03T13:08:00.000Z">
-<meta property="article:modified_time" content="2024-12-03T08:57:39.735Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-164732.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-172729.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-174703.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-174758.png">
+<meta property="article:published_time" content="2024-11-29T11:30:00.000Z">
+<meta property="article:modified_time" content="2024-11-30T09:49:58.580Z">
 <meta property="article:author" content="George">
 <meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/03/20241203-155845.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-164732.png">
 
 
 <link rel="icon" href="/img/favicon.png">
