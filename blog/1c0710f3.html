@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Typora设置图片自动上传Github | George&#39;s Blog</title>
+  <title>001-JAVA基本功 | George&#39;s Blog</title><meta name="robots" content="noindex">
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" hexo , typora , github ">
-  <meta name="description" content="Typora设置图片自动上传Github | George&#39;s Blog">
+  <meta name="keywords" content=" 随笔 , Java ">
+  <meta name="description" content="001-JAVA基本功 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="责任链模式是一种对象的行为模式。在责任链模式里，很多对象由每一个对象对其下家的引用而连接起来形成一条链。请求在这个链上传递，直到链上的某一个对象决定处理此请求。发出这个请求的客户端并不知道链上的哪一个对象最终处理这个请求，这使得系统可以在不影响客户端的情况下动态地重新组织和分配责任。 一、从击鼓传花谈起 击鼓传花是一种热闹而又紧张的饮酒游戏。在酒宴上宾客依次坐定位置，由一人击鼓，击鼓的地方与传花的">
 <meta property="og:type" content="article">
@@ -1317,9 +1317,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-hexo/Typora设置图片自动上传Github" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-interview/001-JAVA基本功" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Typora设置图片自动上传Github</h1>
+        <h1 class="article-title">001-JAVA基本功</h1>
     
     <div class="article-meta">
         
@@ -1329,9 +1329,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="Hexo">Hexo</a> > 
-            
-            <a  data-rel="Hexo&lt;---&gt;Typora">Typora</a>
+            <a  data-rel="随笔">随笔</a>
             
         </span>
         
@@ -1339,23 +1337,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">hexo</a>
+            <a class="color3">随笔</a>
             
-            <a class="color2">typora</a>
-            
-            <a class="color2">github</a>
+            <a class="color5">Java</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-08-28 12:17:33'>2023-11-20 20:30</time>
+            发布时间 : <time class="date" title='最后更新: 2024-12-09 12:59:44'>2024-12-09 22:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1k</span>
+        <span>字数:305</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1385,7 +1381,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-text">环境</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%AE%89%E8%A3%85PicGo-Core"><span class="toc-text">一、安装PicGo-Core</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BF%AE%E6%94%B9Typora%E5%9B%BE%E5%83%8F%E4%B8%8A%E4%BC%A0%E8%AE%BE%E7%BD%AE"><span class="toc-text">1. 修改Typora图像上传设置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9PicGo-Core%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">2. 修改PicGo-Core配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Github%E5%9B%BE%E5%BA%8A%E9%85%8D%E7%BD%AE"><span class="toc-text">2.1 Github图床配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E6%96%B0%E5%BB%BA%E5%9B%BE%E5%BA%8A%E4%BB%93%E5%BA%93"><span class="toc-text">2.1.1 新建图床仓库</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E9%85%8D%E7%BD%AEToken"><span class="toc-text">2.1.2 配置Token</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-%E4%BF%AE%E6%94%B9PicGo%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">2.1.3 修改PicGo配置文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-4-%E9%AA%8C%E8%AF%81PicGo%E5%9B%BE%E7%89%87%E4%B8%8A%E4%BC%A0"><span class="toc-text">2.1.4 验证PicGo图片上传</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%B8%BAPicgo%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="toc-text">二、为Picgo安装插件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85super-prefix%E6%8F%92%E4%BB%B6"><span class="toc-text">1. 安装super-prefix插件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BF%AE%E6%94%B9Picgo%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">2. 修改Picgo配置文件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%85%8D%E7%BD%AE%E8%A7%A3%E6%9E%90"><span class="toc-text">2.1 配置解析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="toc-text">参考链接</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%85%B3%E4%BA%8E-i-%E5%92%8C-i"><span class="toc-text">1、关于 i++ 和 ++i</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81%E6%9C%8D%E5%8A%A1%E5%8F%AF%E7%94%A8%E6%80%A7%E5%87%A0%E4%B8%AA9%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%EF%BC%9F"><span class="toc-text">2、服务可用性几个9是什么意思？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3%E3%80%81Arrays-asList-%E6%95%B0%E7%BB%84%E8%BD%AC%E9%9B%86%E5%90%88"><span class="toc-text">3、Arrays.asList() 数组转集合</span></a></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1401,127 +1397,73 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><blockquote>
-<p>系统 : Windows 10</p>
-<p>NodeJS : 14.21.3</p>
-</blockquote>
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>在使用 <code>Typora</code> 编辑Markdown笔记时需要将复制的截图上传到图床，并能够自动将上传后的路径替换掉图片粘贴时自动生成的路径。这样操作方便笔记查看和迁移。</p>
-<p>这里使用Github做图床，优点：免费&amp;没有容量的限制，缺点：国内网络访问很慢。</p>
-<p>图片上传使用 PicGo-Core 插件，需要使用 <code>npm</code> 安装该插件。</p>
-<h1 id="一、安装PicGo-Core"><a href="#一、安装PicGo-Core" class="headerlink" title="一、安装PicGo-Core"></a>一、安装PicGo-Core</h1><h2 id="1-修改Typora图像上传设置"><a href="#1-修改Typora图像上传设置" class="headerlink" title="1. 修改Typora图像上传设置"></a>1. 修改Typora图像上传设置</h2><p>打开Typora，依次点击：文件 –&gt; 偏好设置 –&gt; 图像 </p>
-<p>勾选配置如下：</p>
-<p>选择 <code>上传图片</code> –&gt; <code>勾选上传图片配置(2、3、4)</code>  –&gt; 选择 <code>PicGo-Core(command line)</code> –&gt; 点击 <code>下载或更新</code> </p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-205500.png" alt="image-20231120205458979"></p>
-<p><strong>PicGo-Core 安装成功</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-210102.png" alt="image-20231120210101191"></p>
-<h2 id="2-修改PicGo-Core配置文件"><a href="#2-修改PicGo-Core配置文件" class="headerlink" title="2. 修改PicGo-Core配置文件"></a>2. 修改PicGo-Core配置文件</h2><p>PicGo-Core 插件安装成功后，点击 <code>打开配置文件</code> 修改 PicGo-Core 配置文件。</p>
-<p>默认路径：C:\Users\用户名\.picgo\config.json</p>
-<p>配置文件内容如下：</p>
-<pre><code class="highlight json"><span class="punctuation">&#123;</span>
-  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github仓库名&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github Token配置&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;img/&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;master&quot;</span>
-    <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span>
-  <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-  <span class="comment">// 插件设置</span>
-  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-  <span class="punctuation">&#125;</span>
-<span class="punctuation">&#125;</span></code></pre>
+        <h1 id="1、关于-i-和-i"><a href="#1、关于-i-和-i" class="headerlink" title="1、关于 i++ 和 ++i"></a>1、关于 <code>i++</code> 和 <code>++i</code></h1><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IPlusPlus</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>;
+
+        System.out.println(<span class="string">&quot;i: &quot;</span> + i); <span class="comment">// 1, 初始值</span>
+        System.out.println(<span class="string">&quot;++i: &quot;</span> + ++i); <span class="comment">// 2, ++i =&gt; 先++再赋值</span>
+        System.out.println(<span class="string">&quot;i++: &quot;</span> + i++); <span class="comment">// 2, i++ =&gt; 先赋值再++</span>
+        System.out.println(<span class="string">&quot;i: &quot;</span> + i); <span class="comment">// 3, 上一步++后的值</span>
+        System.out.println(<span class="string">&quot;--i: &quot;</span> + --i); <span class="comment">// 2, --i =&gt; 先--再赋值</span>
+        System.out.println(<span class="string">&quot;i--: &quot;</span> + i--); <span class="comment">// 2, i-- =&gt; 先赋值再--</span>
+        System.out.println(<span class="string">&quot;i: &quot;</span> + i); <span class="comment">// 1, 上一步--后的值</span>
+
+    &#125;
+&#125;</code></pre>
 
 
 
-<h3 id="2-1-Github图床配置"><a href="#2-1-Github图床配置" class="headerlink" title="2.1 Github图床配置"></a>2.1 Github图床配置</h3><p>在Github创建一个仓库作为 <code>PicGo</code> 上传图片的图床，并为 <code>PicGo</code> 创建 github <code>token</code>。</p>
-<h4 id="2-1-1-新建图床仓库"><a href="#2-1-1-新建图床仓库" class="headerlink" title="2.1.1 新建图床仓库"></a>2.1.1 新建图床仓库</h4><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-211154.png" alt="image-20231120211152544"></p>
-<p><strong>注意：</strong>图床仓库必须为 <strong>Public</strong> 权限。</p>
-<p>图床仓库创建成功后，PicGo 配置文件(config.json)中 <code>picBed.github.repo</code> 的值就确定了，应该改为：<code>GeorgeChan95/picgo-img</code></p>
-<h4 id="2-1-2-配置Token"><a href="#2-1-2-配置Token" class="headerlink" title="2.1.2 配置Token"></a>2.1.2 配置Token</h4><p>打开Github –&gt; 点击头像 –&gt; <code>Settings</code> –&gt; <code>Developer settings</code> –&gt; 点击 <code>Personal access tokens</code> –&gt; 点击 <code>Tokens(classic)</code>  –&gt; 选择 <code>Generate new token</code>  –&gt;  填写Note(token名称)\选择过期时间\选择token权限 –&gt; 点击 <code>Generate token</code> 保存token</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-212117.png" alt="image-20231120212115905"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-212235.png" alt="image-20231120212234100"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-212414.png" alt="image-20231120212413138"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-212948.png" alt="image-20231120212946870"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-213320.png" alt="image-20231120213319506"></p>
-<p><strong>复制token，填写到 PicGo 配置文件(config.json)的 <code>picBed.github.token</code> 中。</strong></p>
-<h4 id="2-1-3-修改PicGo配置文件"><a href="#2-1-3-修改PicGo配置文件" class="headerlink" title="2.1.3 修改PicGo配置文件"></a>2.1.3 修改PicGo配置文件</h4><p>配置文件(config.json)内容修改如下：</p>
-<pre><code class="highlight json"><span class="punctuation">&#123;</span>
-  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GeorgeChan95/picgo-img&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;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&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;img/&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;master&quot;</span>
-    <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span>
-  <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-  <span class="comment">// 插件设置</span>
-  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-  <span class="punctuation">&#125;</span>
-<span class="punctuation">&#125;</span></code></pre>
 
-<p>保存！！</p>
-<h4 id="2-1-4-验证PicGo图片上传"><a href="#2-1-4-验证PicGo图片上传" class="headerlink" title="2.1.4 验证PicGo图片上传"></a>2.1.4 验证PicGo图片上传</h4><p>在Typora偏好设置里，点击 <code>验证图片选项</code>，</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-213941.png" alt="image-20231120213939604"></p>
-<p>验证成功！</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-214114.png" alt="image-20231120214113620"></p>
-<h1 id="二、为Picgo安装插件"><a href="#二、为Picgo安装插件" class="headerlink" title="二、为Picgo安装插件"></a>二、为Picgo安装插件</h1><p>到上一步已实现了图片的自动上传和替换markdown图片url的功能，但默认的图片上传其实有一些问题。</p>
-<ul>
-<li><p>问题1：默认会把所有图片上传到配置文件指定的 <code>picBed.github.path</code> 路径下，不会创建子文件夹，图片不好管理。</p>
-</li>
-<li><p>问题2：默认不会给文件重命名，如果两个文件重名，粘贴上传就会出错。</p>
-</li>
+
+<h1 id="2、服务可用性几个9是什么意思？"><a href="#2、服务可用性几个9是什么意思？" class="headerlink" title="2、服务可用性几个9是什么意思？"></a>2、服务可用性几个9是什么意思？</h1><ul>
+<li>1年 &#x3D; 365天 &#x3D; 8760小时</li>
+<li>99.9 &#x3D; 8760 * 0.1% &#x3D; 8760 * 0.001 &#x3D; 8.76小时</li>
+<li>99.99 &#x3D; 8760 * 0.0001 &#x3D; 0.876小时 &#x3D; 0.876 * 60 &#x3D; 52.6分钟 </li>
+<li>99.999 &#x3D; 8760 * 0.00001 &#x3D; 0.0876小时 &#x3D; 0.0876 * 60 &#x3D; 5.26分钟</li>
 </ul>
-<p>所以需要为 Picgo 安装 <code>super-prefix</code> 插件，实现文件自动重命名和按日期创建文件夹存储文件。</p>
-<h2 id="1-安装super-prefix插件"><a href="#1-安装super-prefix插件" class="headerlink" title="1. 安装super-prefix插件"></a>1. 安装super-prefix插件</h2><p>建议使用npm进行安装</p>
-<pre><code class="highlight shell">npm install picgo-plugin-super-prefix</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2023/11/20/20231120-215637.png" alt="image-20231120215635966"></p>
-<h2 id="2-修改Picgo配置文件"><a href="#2-修改Picgo配置文件" class="headerlink" title="2. 修改Picgo配置文件"></a>2. 修改Picgo配置文件</h2><p>添加 <code>super-prefix</code> 插件相关配置</p>
-<p>默认路径：C:\Users\用户名\.picgo\config.json</p>
-<pre><code class="highlight json"><span class="punctuation">&#123;</span>
-  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GeorgeChan95/picgo-img&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;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&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;img/&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span><span class="punctuation">,</span>
-      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;master&quot;</span>
-    <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span>
-  <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-  <span class="comment">// 插件设置</span>
-  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;picgo-plugin-super-prefix&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span>
-  <span class="punctuation">&#125;</span><span class="punctuation">,</span>
-  <span class="attr">&quot;picgo-plugin-super-prefix&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span>
-    <span class="attr">&quot;prefixFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YYYY/MM/DD/&quot;</span><span class="punctuation">,</span>
-    <span class="attr">&quot;fileFormat&quot;</span><span class="punctuation">:</span> <span class="string">&quot;YYYYMMDD-HHmmss&quot;</span>
-  <span class="punctuation">&#125;</span>
-<span class="punctuation">&#125;</span></code></pre>
-
-<p>保存！！重启Typora！</p>
-<h3 id="2-1-配置解析"><a href="#2-1-配置解析" class="headerlink" title="2.1 配置解析"></a>2.1 配置解析</h3><ul>
-<li>“prefixFormat”: “YYYY&#x2F;MM&#x2F;DD&#x2F;“<ul>
-<li>图片上传到仓库中会自动在 <code>picBed.github.path</code> 路径下，根据当前时间创建  <code>年/月/日</code> 文件夹，并将文件上传到改路径下</li>
-</ul>
-</li>
-<li>“fileFormat”: “YYYYMMDD-HHmmss”<ul>
-<li>文件上传后按照上传时间重命名，格式为：YYYYMMDD-HHmmss</li>
-</ul>
-</li>
-</ul>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/yongdaimi/p/16300462.html">https://www.cnblogs.com/yongdaimi/p/16300462.html</a></p>
-
+<p><strong>业界高可用的标准是按照系统宕机时间来衡量的:</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>通俗叫法</th>
+<th>可用性级别</th>
+<th>年度宕机时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>基本可用</td>
+<td>2个9</td>
+<td>99%</td>
+<td>87.6小时</td>
+</tr>
+<tr>
+<td>较高可用</td>
+<td>3个9</td>
+<td>99.9%</td>
+<td>8.8小时</td>
+</tr>
+<tr>
+<td>具有故障自动恢复能力的可用性</td>
+<td>4个9</td>
+<td>99.99%</td>
+<td>53分钟</td>
+</tr>
+<tr>
+<td>极高可用性</td>
+<td>5个9</td>
+<td>99.999%</td>
+<td>5分钟</td>
+</tr>
+<tr>
+<td>容错可用性</td>
+<td>6个9</td>
+<td>99.9999%</td>
+<td>31秒</td>
+</tr>
+</tbody></table>
+<h1 id="3、Arrays-asList-数组转集合"><a href="#3、Arrays-asList-数组转集合" class="headerlink" title="3、Arrays.asList() 数组转集合"></a>3、Arrays.asList() 数组转集合</h1><!-- flag of hidden posts -->
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
     </div>
