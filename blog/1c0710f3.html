@@ -9,23 +9,17 @@
   <meta name="keywords" content=" 随笔 , Java ">
   <meta name="description" content="001-JAVA基本功 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="状态模式，又称状态对象模式（Pattern of Objects for States），状态模式是对象的行为模式。 状态模式允许一个对象在其内部状态改变的时候改变其行为。这个对象看上去就像是改变了它的类一样。 一、状态模式的结构用一句话来表述，状态模式把所研究的对象的行为包装在不同的状态对象里，每一个状态对象都属于一个抽象状态类的一个子类。状态模式的意图是让一个对象在其内部状态改变的时候，其行为">
-<meta property="og:type" content="article">
-<meta property="og:title" content="23-状态模式">
-<meta property="og:url" content="https://georgechan95.github.io/blog/6109865a.html">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#95;&#57;&#x35;&#64;&#x31;&#50;&#54;&#46;&#99;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="状态模式，又称状态对象模式（Pattern of Objects for States），状态模式是对象的行为模式。 状态模式允许一个对象在其内部状态改变的时候改变其行为。这个对象看上去就像是改变了它的类一样。 一、状态模式的结构用一句话来表述，状态模式把所研究的对象的行为包装在不同的状态对象里，每一个状态对象都属于一个抽象状态类的一个子类。状态模式的意图是让一个对象在其内部状态改变的时候，其行为">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#95;&#57;&#x35;&#64;&#x31;&#50;&#54;&#46;&#99;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-164732.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-172729.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-174703.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-174758.png">
-<meta property="article:published_time" content="2024-11-29T11:30:00.000Z">
-<meta property="article:modified_time" content="2024-11-30T09:49:58.580Z">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
 <meta property="article:author" content="George">
-<meta property="article:tag" content="设计模式">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-164732.png">
 
 
 <link rel="icon" href="/img/favicon.png">
@@ -1342,12 +1336,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-12-09 13:13:06'>2024-12-09 22:00</time>
+            发布时间 : <time class="date" title='最后更新: 2024-12-21 11:55:52'>2024-12-09 22:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:654</span>
+        <span>字数:6.9k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1377,7 +1371,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%85%B3%E4%BA%8E-i-%E5%92%8C-i"><span class="toc-text">1、关于 i++ 和 ++i</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81%E6%9C%8D%E5%8A%A1%E5%8F%AF%E7%94%A8%E6%80%A7%E5%87%A0%E4%B8%AA9%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%EF%BC%9F"><span class="toc-text">2、服务可用性几个9是什么意思？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3%E3%80%81Arrays-asList-%E6%95%B0%E7%BB%84%E8%BD%AC%E9%9B%86%E5%90%88"><span class="toc-text">3、Arrays.asList() 数组转集合</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%85%B3%E4%BA%8E-i-%E5%92%8C-i"><span class="toc-text">1、关于 i++ 和 ++i</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81%E6%9C%8D%E5%8A%A1%E5%8F%AF%E7%94%A8%E6%80%A7%E5%87%A0%E4%B8%AA9%E6%98%AF%E4%BB%80%E4%B9%88%E6%84%8F%E6%80%9D%EF%BC%9F"><span class="toc-text">2、服务可用性几个9是什么意思？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3%E3%80%81Arrays-asList-%E6%95%B0%E7%BB%84%E8%BD%AC%E9%9B%86%E5%90%88"><span class="toc-text">3、Arrays.asList() 数组转集合</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81%E9%81%8D%E5%8E%86%E9%9B%86%E5%90%88%E6%97%B6remove%E6%88%96add%E6%93%8D%E4%BD%9C%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">4、遍历集合时remove或add操作注意事项</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5%E3%80%81hashcode%E5%86%B2%E7%AA%81"><span class="toc-text">5、hashcode冲突</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6%E3%80%81%E6%95%B4%E5%9E%8B%E5%8C%85%E8%A3%85%E7%B1%BB%E5%AF%B9%E8%B1%A1Integer"><span class="toc-text">6、整型包装类对象Integer</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7%E3%80%81%E5%85%B3%E4%BA%8EBigDecimal"><span class="toc-text">7、关于BigDecimal</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#BigDecimal%E6%A6%82%E8%BF%B0"><span class="toc-text">BigDecimal概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%BF%E9%87%8C%E6%89%8B%E5%86%8C%E6%AD%A3%E7%A1%AE%E8%A7%84%E8%8C%83"><span class="toc-text">阿里手册正确规范</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">案例实操</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BigDecimal%E6%80%BB%E7%BB%93"><span class="toc-text">BigDecimal总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#BigDecimal%E5%B7%A5%E5%85%B7%E7%B1%BB"><span class="toc-text">BigDecimal工具类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8%E3%80%81%E5%A6%82%E4%BD%95%E5%8E%BB%E9%99%A4list%E4%B8%AD%E7%9A%84%E9%87%8D%E5%A4%8D%E5%85%83%E7%B4%A0%EF%BC%9F"><span class="toc-text">8、如何去除list中的重复元素？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9%E3%80%81-%E5%92%8Cequals%E5%AF%B9%E6%AF%94"><span class="toc-text">9、&#x3D;&#x3D;和equals对比</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10%E3%80%81%E4%BC%A0%E5%80%BC%E8%BF%98%E6%98%AF%E4%BC%A0%E5%BC%95%E7%94%A8"><span class="toc-text">10、传值还是传引用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11%E3%80%81%E6%B7%B1%E6%8B%B7%E8%B4%9D%E4%B8%8E%E6%B5%85%E6%8B%B7%E8%B4%9D"><span class="toc-text">11、深拷贝与浅拷贝</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E8%A7%A3%E6%9E%90"><span class="toc-text">概念解析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%B9%E8%B1%A1%E6%8B%B7%E8%B4%9D"><span class="toc-text">对象拷贝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B5%85%E6%8B%B7%E8%B4%9D-Shallow-Copy"><span class="toc-text">浅拷贝(Shallow Copy)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%B1%E6%8B%B7%E8%B4%9D-Deep-Copy"><span class="toc-text">深拷贝(Deep Copy)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%BD%BF%E7%94%A8%E6%B7%B1%E6%8B%B7%E8%B4%9D"><span class="toc-text">为什么要使用深拷贝</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cloneable%E6%8E%A5%E5%8F%A3"><span class="toc-text">Cloneable接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Cloneable%E7%B1%BB%E6%BA%90%E7%A0%81"><span class="toc-text">Cloneable类源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Object%E7%B1%BB%E6%BA%90%E7%A0%81"><span class="toc-text">Object类源码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8D%E4%BD%BF%E7%94%A8Cloneable%E6%8B%B7%E8%B4%9D%E5%AF%B9%E8%B1%A1%E5%BC%82%E5%B8%B8%E6%A1%88%E4%BE%8B"><span class="toc-text">不使用Cloneable拷贝对象异常案例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Cloneable%E5%AE%9E%E7%8E%B0%E6%B5%85%E6%8B%B7%E8%B4%9D%E6%A1%88%E4%BE%8B"><span class="toc-text">Cloneable实现浅拷贝案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E6%B7%B1%E6%8B%B7%E8%B4%9D%E6%A1%88%E4%BE%8B"><span class="toc-text">实现深拷贝案例</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1499,6 +1493,1048 @@
 3</code></pre>
 </blockquote>
 <p>使用 new ArrayList&lt;&gt;(）包装一下，将数组转成List集合。</p>
+<h1 id="4、遍历集合时remove或add操作注意事项"><a href="#4、遍历集合时remove或add操作注意事项" class="headerlink" title="4、遍历集合时remove或add操作注意事项"></a>4、遍历集合时remove或add操作注意事项</h1><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IteratorRemoveDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        List&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+        list.add(<span class="number">11</span>);
+        list.add(<span class="number">12</span>);
+        list.add(<span class="number">13</span>);
+        list.add(<span class="number">14</span>);
+        list.add(<span class="number">15</span>);
+
+        Iterator&lt;Integer&gt; iterator = list.iterator();
+
+        <span class="keyword">while</span> (iterator.hasNext()) &#123;
+            <span class="type">Integer</span> <span class="variable">value</span> <span class="operator">=</span> iterator.next();
+            <span class="keyword">if</span> (value == <span class="number">12</span>) &#123;
+                list.remove(value);<span class="comment">//Exception in thread &quot;main&quot; java.util.ConcurrentModificationException</span>
+<span class="comment">//                iterator.remove();</span>
+            &#125;
+        &#125;
+        list.forEach(v -&gt; System.out.println(v));
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">Exception in thread &quot;main&quot; java.util.ConcurrentModificationException
+	at java.base/java.util.ArrayList$Itr.checkForComodification(ArrayList.java:1013)
+	at java.base/java.util.ArrayList$Itr.next(ArrayList.java:967)
+	at com.atguigu.interview2.javase.IteratorRemoveDemo.main(IteratorRemoveDemo.java:24)</code></pre>
+</blockquote>
+<p>运行异常，报错：ConcurrentModificationException</p>
+<p><strong>阿里手册要求</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/19/20241219-193159.png" alt="阿里手册-foreach中元素操作要求"></p>
+<p><strong>最佳实践</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">IteratorRemoveDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        List&lt;Integer&gt; list = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+        list.add(<span class="number">11</span>);
+        list.add(<span class="number">12</span>);
+        list.add(<span class="number">13</span>);
+        list.add(<span class="number">14</span>);
+        list.add(<span class="number">15</span>);
+
+        Iterator&lt;Integer&gt; iterator = list.iterator();
+
+        <span class="keyword">while</span> (iterator.hasNext()) &#123;
+            <span class="type">Integer</span> <span class="variable">value</span> <span class="operator">=</span> iterator.next();
+            <span class="keyword">if</span> (value == <span class="number">12</span>) &#123;
+<span class="comment">//                list.remove(value);//Exception in thread &quot;main&quot; java.util.ConcurrentModificationException</span>
+                iterator.remove();
+            &#125;
+        &#125;
+        list.forEach(v -&gt; System.out.println(v));
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">11
+13
+14
+15</code></pre>
+</blockquote>
+<p>remove元素使用 iterator 方式。</p>
+<h1 id="5、hashcode冲突"><a href="#5、hashcode冲突" class="headerlink" title="5、hashcode冲突"></a>5、hashcode冲突</h1><ul>
+<li><p>什么是hashcode？它属于哪个类的方法?</p>
+<p><code>hashCode()</code> 是 Java 中所有对象的一个方法，它的作用是返回对象的哈希值。这个方法是 <code>java.lang.Object</code> 类的一部分，因此所有 Java 类都继承了这个方法。</p>
+</li>
+<li><p>哈希值的作用</p>
+<p>哈希值主要用于提高数据结构的性能，尤其是在哈希表（如 <code>HashMap</code>、<code>HashSet</code> 等）中：</p>
+<ul>
+<li>它用于快速确定对象存储或查找的桶位置。</li>
+<li>结合 <code>equals()</code> 方法，<code>hashCode()</code> 是对象相等性的一部分。</li>
+</ul>
+</li>
+<li><p>hashcode冲突示例代码1</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HashConflictDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">//请你写一个hashcode冲突的案例</span>
+        System.out.println(<span class="string">&quot;AA&quot;</span>.hashCode());
+        System.out.println(<span class="string">&quot;BB&quot;</span>.hashCode());
+        System.out.println();
+
+        System.out.println(<span class="string">&quot;Aa&quot;</span>.hashCode());
+        System.out.println(<span class="string">&quot;BB&quot;</span>.hashCode());
+        System.out.println();
+
+        System.out.println(<span class="string">&quot;柳柴&quot;</span>.hashCode());
+        System.out.println(<span class="string">&quot;柴柕&quot;</span>.hashCode());
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">2080
+2112
+
+2112
+2112
+
+851553
+851553</code></pre>
+</blockquote>
+</li>
+<li><p>hashcode冲突示例代码2</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">HashConflictDemo</span> &#123;
+    <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">Book</span> &#123;
+        <span class="type">int</span> id;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="comment">//请你写一个hashcode冲突的案例V2</span>
+        <span class="comment">// 当我们正常的new对象的时候，new多少次对象，会有可能出现hash冲突???</span>
+        HashSet&lt;Integer&gt; hashSet = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();
+
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>; i &lt;= <span class="number">15</span> * <span class="number">10000</span>; i++) &#123;
+            <span class="type">int</span> <span class="variable">bookHashCode</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Book</span>().hashCode();
+            <span class="keyword">if</span> (!hashSet.contains(bookHashCode)) &#123;
+                hashSet.add(bookHashCode);
+            &#125; <span class="keyword">else</span> &#123;
+                System.out.println(<span class="string">&quot;发生了hash冲突,在第:&quot;</span> + i + <span class="string">&quot;次，值是：&quot;</span> + bookHashCode);
+            &#125;
+        &#125;
+        System.out.println(hashSet.size());
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">发生了hash冲突,在第:105546次，值是：2134400190
+发生了hash冲突,在第:110976次，值是：651156501
+发生了hash冲突,在第:145160次，值是：2038112324
+发生了hash冲突,在第:146093次，值是：1164664992
+149996</code></pre></blockquote>
+</li>
+</ul>
+<h1 id="6、整型包装类对象Integer"><a href="#6、整型包装类对象Integer" class="headerlink" title="6、整型包装类对象Integer"></a>6、整型包装类对象Integer</h1><p><strong>Integer构造方法在Java8以后的改动</strong></p>
+<ul>
+<li><p><code>Integer i = new Integer(1200);</code> 以及 <code>Integer i = new Integer(&quot;1200&quot;);</code> 方法已被JDK官方移除</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/19/20241219-195533.png" alt="Integer构造方法"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/19/20241219-195557.png" alt="官方文档"></p>
+</li>
+<li><p>官方推荐的创建Integer值的方式</p>
+<p><code>Integer.valueOf(1200);</code></p>
+</li>
+</ul>
+<p><strong>Integer的数值比较</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Integer_BugDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+
+        <span class="comment">//构造方法可行？</span>
+        <span class="comment">//Integer i = new Integer(1200);</span>
+        <span class="comment">//Integer i2 = Integer.valueOf(1200);</span>
+
+
+        <span class="type">Integer</span> <span class="variable">a</span> <span class="operator">=</span> Integer.valueOf(<span class="number">600</span>);
+        <span class="type">Integer</span> <span class="variable">b</span> <span class="operator">=</span> Integer.valueOf(<span class="number">600</span>);
+        <span class="type">int</span> <span class="variable">c</span> <span class="operator">=</span> <span class="number">600</span>;
+        System.out.println(a == b); <span class="comment">// false ， == 比较引用类型，比较的是内存地址，a与b都不在 -128到127之间的数，所以内存地址不相同。</span>
+        System.out.println(a.equals(b)); <span class="comment">// true ， equals 比较的是值</span>
+        System.out.println(a == c); <span class="comment">// true, 当 == 比较基本类型和引用类型时， 引用类型会自动拆箱为基本类型，此时就是比较值大小，所以是true</span>
+
+        System.out.println(<span class="string">&quot;===================&quot;</span>);
+
+        <span class="type">Integer</span> <span class="variable">x</span> <span class="operator">=</span> Integer.valueOf(<span class="number">99</span>);
+        <span class="type">Integer</span> <span class="variable">y</span> <span class="operator">=</span> Integer.valueOf(<span class="number">99</span>);
+        System.out.println(x == y); <span class="comment">// true</span>
+        System.out.println(x.equals(y)); <span class="comment">// true</span>
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">false
+true
+true
+===================
+true
+true</code></pre>
+</blockquote>
+<p><strong>原理解析：</strong></p>
+<p>在 Java 中：</p>
+<ul>
+<li><code>==</code> 比较<strong>基本类型</strong>时，比较的是它们的值。</li>
+<li><code>==</code> 比较<strong>引用类型</strong>时，比较的是它们的内存地址（引用是否指向同一个对象）。</li>
+<li>当一个<strong>包装类型</strong>（如 <code>Integer</code>）与一个<strong>基本类型</strong>（如 <code>int</code>）进行比较时，包装类型会<strong>自动拆箱</strong>为基本类型，然后再进行值比较。</li>
+</ul>
+<p><strong>阿里手册要求：</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/19/20241219-200823.png" alt="整型对象的值比较"></p>
+<h1 id="7、关于BigDecimal"><a href="#7、关于BigDecimal" class="headerlink" title="7、关于BigDecimal"></a>7、关于BigDecimal</h1><h2 id="BigDecimal概述"><a href="#BigDecimal概述" class="headerlink" title="BigDecimal概述"></a>BigDecimal概述</h2><p>Java在java.math包中提供的API类BigDecimal，用来对超过16位有效位的数进行精确的运算。双精度浮点型变量double可以处理16位有效数，但在实际应用中，可能需要对更大或者更小的数进行运算和处理。一般情况下，对于那些<strong>不需要准确计算精度</strong>的数字，我们可以直接使用Float和Double处理，但是Double.valueOf(String) 和Float.valueOf(String)会丢失精度。所以开发中，如果我们<strong>需要精确计算的结果，则必须使用BigDecimal类来操作</strong>。</p>
+<p>BigDecimal所创建的是对象故我们不能使用传统的＋，-,×÷等算术运算符直接对其对象进行数学运算，而必须调用其相对应的方法。方法中的参数也必须是BigDecimal的对象。构造器是类的特殊方法，专门用来创建对象，特别是带有参数的对象。</p>
+<h2 id="阿里手册正确规范"><a href="#阿里手册正确规范" class="headerlink" title="阿里手册正确规范"></a>阿里手册正确规范</h2><ul>
+<li><p><strong>规范一</strong></p>
+<ul>
+<li><p>BigDecimal 的等值比较应使用 <code>compareTo()</code>  方法，而不是 <code>equals()</code> 方法。</p>
+</li>
+<li><p>说明: <code>equals()</code> 方法会比较值和精度(1.0与 1.00 返回结果为 false)，而 <code>compareTo()</code> 则会忽略精度。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>规范二</strong></p>
+<ul>
+<li><p>禁止使用构造方法 <code>BigDecimal(double)</code>  的方式把 double 值转化为 BigDecimal 对象,说明: <code>BigDecimal(double)</code> 存在精度损失风险，在精确计算或值比较的场景中可能会导致业务逻辑异常。如: <code>BigDecimal g= new BigDecimal(0.1f);</code> 实际的存储值为: 0.100000001490116119384765625</p>
+</li>
+<li><p>正例:优先推荐入参为 String 的构造方法，或使用 BigDecimal的 <code>valueOf</code> 方法，此方法内部其实执行了 Double 的 <code>toString</code>，而 Double 的 <code>toString</code> 按 double 的实际能表达的精度对尾数进行了截断。</p>
+<pre><code class="highlight java"><span class="type">BigDecimal</span> <span class="variable">recommend1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.1&quot;</span>);
+<span class="type">BigDecimal</span> <span class="variable">recommend2</span> <span class="operator">=</span> BigDecimal.valueOf(<span class="number">0.1</span>);</code></pre></li>
+</ul>
+</li>
+<li><p><strong>规范三</strong></p>
+<ul>
+<li><p>浮点数之间的等值判断，基本数据类型不能使用 &#x3D;&#x3D; 进行比较，包装数据类型不能使用 equals进行判断。</p>
+</li>
+<li><p>说明: 浮点数采用“尾数+阶码”的编码方式，类似于科学计数法的“有效数字+指数”的表示方式。二进制无法精确表示大部分的十进制小数，具体原理参考《码出高效》。</p>
+</li>
+<li><p>正例</p>
+<p>使用 BigDecimal 来定义值，再进行浮点数的运算操作。</p>
+<pre><code class="highlight java"><span class="type">BigDecimal</span> <span class="variable">a</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;1.0&quot;</span>);
+<span class="type">BigDecimal</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.9&quot;</span>);
+<span class="type">BigDecimal</span> <span class="variable">c</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.8&quot;</span>);
+<span class="type">BigDecimal</span> <span class="variable">x</span> <span class="operator">=</span> a.subtract(b)
+<span class="type">BigDecimal</span> <span class="variable">y</span> <span class="operator">=</span> b.subtract(c);
+<span class="keyword">if</span> (x.compareTo(y)==<span class="number">0</span>) &#123;
+    System.out.println(<span class="string">&quot;true&quot;</span>);
+&#125;</code></pre></li>
+</ul>
+</li>
+</ul>
+<h2 id="案例实操"><a href="#案例实操" class="headerlink" title="案例实操"></a>案例实操</h2><ul>
+<li><p>案例一：Double 转 BigDecimal</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 参考阿里手册</span>
+<span class="comment"> * 12.【强制】禁止使用构造方法BigDecimal(double) 的方式把double值转化为BigDecimal对象</span>
+<span class="comment"> * 优先推荐入参为String的构造方法，或使用BigDecimal的valueOf方法，此方法内部其实执行了Double的</span>
+<span class="comment"> * toString，而Double的toString按double的实际能表达的精度对尾数进行了截断。</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m1</span><span class="params">()</span> &#123;
+    <span class="comment">//看看构造方法源码第934行</span>
+    <span class="type">BigDecimal</span> <span class="variable">amount1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="number">0.03</span>);
+    <span class="type">BigDecimal</span> <span class="variable">amount2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="number">0.02</span>);
+    <span class="comment">//12.【强制】禁止使用构造方法BigDecimal(double) 的方式把double值转化为BigDecimal对象,非要转那？</span>
+    System.out.println(<span class="string">&quot;amount1: &quot;</span> + amount1); <span class="comment">// 0.0299999999999999988897769753748434595763683319091796875</span>
+    System.out.println(<span class="string">&quot;amount2: &quot;</span> + amount2); <span class="comment">// 0.0200000000000000004163336342344337026588618755340576171875</span>
+    <span class="comment">//应该等于0.01</span>
+    System.out.println(<span class="string">&quot;amount1 - amount2等于: &quot;</span> + amount1.subtract(amount2)); <span class="comment">// 0.0099999999999999984734433411404097569175064563751220703125</span>
+    System.out.println();
+    <span class="comment">//优先推荐入参为String的构造方法</span>
+    <span class="type">BigDecimal</span> <span class="variable">amount3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.03&quot;</span>);
+    <span class="type">BigDecimal</span> <span class="variable">amount4</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.02&quot;</span>);
+    <span class="comment">//应该等于0.01</span>
+    System.out.println(amount3.subtract(amount4)); <span class="comment">// 0.01</span>
+    System.out.println();
+
+    <span class="comment">//使用BigDecimal的valueOf方法,给同学们看一下valueOf源码</span>
+    <span class="type">BigDecimal</span> <span class="variable">amount5</span> <span class="operator">=</span> BigDecimal.valueOf(<span class="number">0.03</span>);
+    <span class="type">BigDecimal</span> <span class="variable">amount6</span> <span class="operator">=</span> BigDecimal.valueOf(<span class="number">0.02</span>);
+    <span class="comment">//应该等于0.01</span>
+    System.out.println(amount5.subtract(amount6)); <span class="comment">// 0.01</span>
+&#125;</code></pre></li>
+</ul>
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">amount1: 0.0299999999999999988897769753748434595763683319091796875
+amount2: 0.0200000000000000004163336342344337026588618755340576171875
+amount1 - amount2等于: 0.0099999999999999984734433411404097569175064563751220703125
+
+0.01
+
+0.01</code></pre>
+</blockquote>
+<ul>
+<li><p>案例二：BigDecimal 数值比较</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 参考阿里手册</span>
+<span class="comment"> * 10.【强制】BigDecimal的等值比较应使用compareTo() 方法，而不是equals() 方法。</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m2</span><span class="params">()</span> &#123;
+    <span class="type">BigDecimal</span> <span class="variable">amount1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.9&quot;</span>);
+    <span class="type">BigDecimal</span> <span class="variable">amount2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.90&quot;</span>);
+    <span class="comment">//给同学们看一下equals源码,它有个精度范围比较导致出错</span>
+    System.out.println(<span class="string">&quot;equals比较结果：&quot;</span> + amount1.equals(amount2)); <span class="comment">// false</span>
+    System.out.println(<span class="string">&quot;compareTo比较结构：&quot;</span> + amount1.compareTo(amount2)); <span class="comment">// 0</span>
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">equals比较结果：false
+compareTo比较结构：0</code></pre>
+</blockquote>
+</li>
+<li><p>案例三：BigDecimal做除法</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 除法商的结果,需要指定精度</span>
+<span class="comment"> * BigDecimal 的 8 种 RoundingMode（舍入模式）</span>
+<span class="comment"> * https://my.oschina.net/u/3644969/blog/4927776</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> * ROUND_HALF_UP  也就是我们常说的我们的 “四舍五入”。</span>
+<span class="comment"> * 向 “最接近” 的数字舍入，如果与两个相邻数字的距离相等，则为向上舍入的舍入模式。</span>
+<span class="comment"> * 如果舍弃部分 &gt;= 0.5，则舍入行为与 ROUND_UP 相同；否则舍入行为与 ROUND_DOWN 相同。</span>
+<span class="comment"> * 这种模式也就是我们常说的我们的 “四舍五入”。</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> * ROUND_HALF_DOWN</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> * 向 “最接近” 的数字舍入，如果与两个相邻数字的距离相等，则为向下舍入的舍入模式。</span>
+<span class="comment"> * 如果舍弃部分 &gt; 0.5，则舍入行为与 ROUND_UP 相同；否则舍入行为与 ROUND_DOWN 相同。</span>
+<span class="comment"> * 这种模式也就是我们常说的我们的 “五舍六入”。</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m3</span><span class="params">()</span> &#123;
+    <span class="type">BigDecimal</span> <span class="variable">amount1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.665&quot;</span>);
+    <span class="type">BigDecimal</span> <span class="variable">amount2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;1&quot;</span>);
+    <span class="comment">//System.out.println(amount1.divide(amount2)); //Non-terminating decimal expansion; no exact representable decimal result.</span>
+    <span class="comment">//我们该如何处理？</span>
+    System.out.println(amount1.divide(amount2, <span class="number">2</span>, RoundingMode.HALF_UP)); <span class="comment">//这种模式也就是我们常说的我们的 “四舍五入”。</span>
+    System.out.println(amount1.divide(amount2, <span class="number">2</span>, RoundingMode.HALF_DOWN)); <span class="comment">// 五舍六入</span>
+
+    System.out.println();
+    <span class="type">BigDecimal</span> <span class="variable">amount3</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;0.666&quot;</span>);
+    <span class="type">BigDecimal</span> <span class="variable">amount4</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;1&quot;</span>);
+    System.out.println(amount3.divide(amount4, <span class="number">2</span>, RoundingMode.HALF_UP)); <span class="comment">//这种模式也就是我们常说的我们的 “四舍五入”。</span>
+    System.out.println(amount3.divide(amount4, <span class="number">2</span>, RoundingMode.HALF_DOWN)); <span class="comment">// 五舍六入</span>
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">0.67
+0.66
+
+0.67
+0.67</code></pre>
+</blockquote>
+</li>
+<li><p>案例四：科学计数法</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 科学计数法相关</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m4</span><span class="params">()</span> &#123;
+    <span class="type">BigDecimal</span> <span class="variable">amount1</span> <span class="operator">=</span> BigDecimal.valueOf(<span class="number">1234567890123456789.3141592631415926</span>);
+    System.out.println(amount1);                    <span class="comment">//科学计数法:    1.23456789012345677E+18</span>
+    System.out.println(amount1.toString());         <span class="comment">//科学计数法:    1.23456789012345677E+18</span>
+    System.out.println(amount1.toPlainString());    <span class="comment">//不想使用科学计数法 1234567890123456770,</span>
+
+    System.out.println();
+    <span class="type">BigDecimal</span> <span class="variable">amount2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(<span class="string">&quot;1234567890123456789.3141592631415926&quot;</span>);
+    System.out.println(amount2); <span class="comment">// 1234567890123456789.3141592631415926</span>
+    System.out.println(amount2.toString()); <span class="comment">// 1234567890123456789.3141592631415926</span>
+    System.out.println(amount2.toPlainString()); <span class="comment">// 1234567890123456789.3141592631415926</span>
+
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">1.23456789012345677E+18
+1.23456789012345677E+18
+1234567890123456770
+
+1234567890123456789.3141592631415926
+1234567890123456789.3141592631415926
+1234567890123456789.3141592631415926</code></pre></blockquote>
+</li>
+</ul>
+<h2 id="BigDecimal总结"><a href="#BigDecimal总结" class="headerlink" title="BigDecimal总结"></a>BigDecimal总结</h2><ul>
+<li><p>当使用float&#x2F;double这些浮点数据时，会丢失精度String&#x2F;int则不会，<code>BigDecimal(double)</code>  存在精度损失风险</p>
+</li>
+<li><p>等值比较应使用 <code>compareTo()</code> 方法。equals() 方法会比较值和精度（1.0 与 1.00 返回结果为 false），而 <code>compareTo()</code> 则会忽略精度</p>
+</li>
+<li><p>除法商的结果需要指定精度</p>
+</li>
+<li><p>科学计数法的使用问题</p>
+</li>
+</ul>
+<h2 id="BigDecimal工具类"><a href="#BigDecimal工具类" class="headerlink" title="BigDecimal工具类"></a>BigDecimal工具类</h2><pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 用于高精确处理常用的数学运算</span>
+<span class="comment"> */</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ArithmeticUtils</span> &#123;
+    <span class="comment">//默认除法运算精度</span>
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="type">int</span> <span class="variable">DEF_DIV_SCALE</span> <span class="operator">=</span> <span class="number">10</span>;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的加法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1 被加数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2 加数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的和</span>
+<span class="comment">     */</span>
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">add</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));
+        <span class="keyword">return</span> b1.add(b2).doubleValue();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的加法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1 被加数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2 加数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的和</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> BigDecimal <span class="title function_">add</span><span class="params">(String v1, String v2)</span> &#123;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);
+        <span class="keyword">return</span> b1.add(b2);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的加法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1    被加数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2    加数</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 保留scale 位小数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的和</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">add</span><span class="params">(String v1, String v2, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(
+                    <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);
+        <span class="keyword">return</span> b1.add(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的减法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1 被减数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2 减数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的差</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">sub</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));
+        <span class="keyword">return</span> b1.subtract(b2).doubleValue();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的减法运算。</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1 被减数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2 减数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的差</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> BigDecimal <span class="title function_">sub</span><span class="params">(String v1, String v2)</span> &#123;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);
+        <span class="keyword">return</span> b1.subtract(b2);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的减法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1    被减数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2    减数</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 保留scale 位小数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的差</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">sub</span><span class="params">(String v1, String v2, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(
+                    <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);
+        <span class="keyword">return</span> b1.subtract(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的乘法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1 被乘数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2 乘数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的积</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">mul</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));
+        <span class="keyword">return</span> b1.multiply(b2).doubleValue();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的乘法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1 被乘数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2 乘数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的积</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> BigDecimal <span class="title function_">mul</span><span class="params">(String v1, String v2)</span> &#123;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);
+        <span class="keyword">return</span> b1.multiply(b2);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的乘法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1    被乘数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2    乘数</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 保留scale 位小数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的积</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">mul</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2, <span class="type">int</span> scale)</span> &#123;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));
+        <span class="keyword">return</span> round(b1.multiply(b2).doubleValue(), scale);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的乘法运算</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1    被乘数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2    乘数</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 保留scale 位小数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的积</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">mul</span><span class="params">(String v1, String v2, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(
+                    <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);
+        <span class="keyword">return</span> b1.multiply(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供（相对）精确的除法运算，当发生除不尽的情况时，精确到</span>
+<span class="comment">     * 小数点以后10位，以后的数字四舍五入</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1 被除数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2 除数</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的商</span>
+<span class="comment">     */</span>
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">div</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2)</span> &#123;
+        <span class="keyword">return</span> div(v1, v2, DEF_DIV_SCALE);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指</span>
+<span class="comment">     * 定精度，以后的数字四舍五入</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1    被除数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2    除数</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 表示表示需要精确到小数点以后几位。</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的商</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">div</span><span class="params">(<span class="type">double</span> v1, <span class="type">double</span> v2, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v1));
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v2));
+        <span class="keyword">return</span> b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指</span>
+<span class="comment">     * 定精度，以后的数字四舍五入</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1    被除数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2    除数</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 表示需要精确到小数点以后几位</span>
+<span class="comment">     * <span class="doctag">@return</span> 两个参数的商</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">div</span><span class="params">(String v1, String v2, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="keyword">return</span> b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).toString();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的小数位四舍五入处理</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v     需要四舍五入的数字</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 小数点后保留几位</span>
+<span class="comment">     * <span class="doctag">@return</span> 四舍五入后的结果</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">double</span> <span class="title function_">round</span><span class="params">(<span class="type">double</span> v, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="type">BigDecimal</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(Double.toString(v));
+        <span class="keyword">return</span> b.setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 提供精确的小数位四舍五入处理</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v     需要四舍五入的数字</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 小数点后保留几位</span>
+<span class="comment">     * <span class="doctag">@return</span> 四舍五入后的结果</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">round</span><span class="params">(String v, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="type">BigDecimal</span> <span class="variable">b</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v);
+        <span class="keyword">return</span> b.setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 取余数</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1    被除数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2    除数</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 小数点后保留几位</span>
+<span class="comment">     * <span class="doctag">@return</span> 余数</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> String <span class="title function_">remainder</span><span class="params">(String v1, String v2, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(
+                    <span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);
+        <span class="keyword">return</span> b1.remainder(b2).setScale(scale, BigDecimal.ROUND_HALF_UP).toString();
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 取余数  BigDecimal</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1    被除数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2    除数</span>
+<span class="comment">     * <span class="doctag">@param</span> scale 小数点后保留几位</span>
+<span class="comment">     * <span class="doctag">@return</span> 余数</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> BigDecimal <span class="title function_">remainder</span><span class="params">(BigDecimal v1, BigDecimal v2, <span class="type">int</span> scale)</span> &#123;
+        <span class="keyword">if</span> (scale &lt; <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;The scale must be a positive integer or zero&quot;</span>);
+        &#125;
+        <span class="keyword">return</span> v1.remainder(v2).setScale(scale, BigDecimal.ROUND_HALF_UP);
+    &#125;
+
+    <span class="comment">/**</span>
+<span class="comment">     * 比较大小</span>
+<span class="comment">     *</span>
+<span class="comment">     * <span class="doctag">@param</span> v1 被比较数</span>
+<span class="comment">     * <span class="doctag">@param</span> v2 比较数</span>
+<span class="comment">     * <span class="doctag">@return</span> 如果v1 大于v2 则 返回true 否则false</span>
+<span class="comment">     */</span>
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">boolean</span> <span class="title function_">compare</span><span class="params">(String v1, String v2)</span> &#123;
+        <span class="type">BigDecimal</span> <span class="variable">b1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v1);
+        <span class="type">BigDecimal</span> <span class="variable">b2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">BigDecimal</span>(v2);
+        <span class="type">int</span> <span class="variable">bj</span> <span class="operator">=</span> b1.compareTo(b2);
+        <span class="type">boolean</span> res;
+        <span class="keyword">if</span> (bj &gt; <span class="number">0</span>)
+            res = <span class="literal">true</span>;
+        <span class="keyword">else</span>
+            res = <span class="literal">false</span>;
+        <span class="keyword">return</span> res;
+    &#125;
+&#125;</code></pre>
+
+
+
+
+
+<h1 id="8、如何去除list中的重复元素？"><a href="#8、如何去除list中的重复元素？" class="headerlink" title="8、如何去除list中的重复元素？"></a>8、如何去除list中的重复元素？</h1><ul>
+<li><p>方式一：for循环遍历</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * for循环遍历判断是否含有，没有就新增到newList里</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m1</span><span class="params">()</span> &#123;
+    List&lt;Integer&gt; initList = Arrays.asList(<span class="number">70</span>, <span class="number">70</span>, -<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">99</span>);
+    List&lt;Integer&gt; srcList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(initList);
+    List&lt;Integer&gt; newList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; srcList.size(); i++) &#123;
+        <span class="type">Integer</span> <span class="variable">tmpValue</span> <span class="operator">=</span> srcList.get(i);
+        <span class="keyword">if</span> (!newList.contains(tmpValue)) &#123;
+            newList.add(tmpValue);
+        &#125;
+    &#125;
+    System.out.println(newList);
+&#125;</code></pre>
+</li>
+<li><p>方式二：<code>HashSet</code> 或者 <code>LinkedHashSet</code> 去重复</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * HashSet或者LinkedHashSet去重复</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m2</span><span class="params">()</span> &#123;
+    List&lt;Integer&gt; srcList = Arrays.asList(<span class="number">70</span>, <span class="number">70</span>, -<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">99</span>);
+    List&lt;Integer&gt; newList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;(srcList));
+    newList.forEach(s -&gt; System.out.print(s + <span class="string">&quot; &quot;</span>));
+
+    System.out.println();
+    System.out.println();
+
+    newList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(<span class="keyword">new</span> <span class="title class_">LinkedHashSet</span>&lt;&gt;(srcList));
+    newList.forEach(s -&gt; System.out.print(s + <span class="string">&quot; &quot;</span>));
+&#125;</code></pre>
+</li>
+<li><p>方式三：Stream流式计算</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * Stream流式计算</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m3</span><span class="params">()</span> &#123;
+    List&lt;Integer&gt; initList = Arrays.asList(<span class="number">70</span>, <span class="number">70</span>, -<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">99</span>);
+    List&lt;Integer&gt; srcList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(initList);
+    List&lt;Integer&gt; newList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
+
+    newList = srcList.stream().distinct().collect(Collectors.toList());
+
+    newList.forEach(s -&gt; System.out.print(s + <span class="string">&quot; &quot;</span>));
+&#125;</code></pre>
+</li>
+<li><p>方式四：循环坐标去除重复</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 循环坐标去除重复,类似双指针，按照值找到下标，</span>
+<span class="comment"> * 如果下标不同，表示有重复需要删除</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m4</span><span class="params">()</span> &#123;
+    List&lt;Integer&gt; initList = Arrays.asList(<span class="number">70</span>, <span class="number">70</span>, -<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">99</span>);
+    List&lt;Integer&gt; srcList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(initList);
+    List&lt;Integer&gt; newList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(initList);
+
+    <span class="keyword">for</span> (Integer element : srcList) &#123;
+        <span class="keyword">if</span> (newList.indexOf(element) != newList.lastIndexOf(element)) &#123;
+            newList.remove(newList.lastIndexOf(element));
+        &#125;
+    &#125;
+    newList.forEach(s -&gt; System.out.print(s + <span class="string">&quot; &quot;</span>));
+
+&#125;</code></pre>
+</li>
+<li><p>方式五：双for循环对比</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * 双for循环对比，通过下标获得值，外层循环和内层循环对比，值相同去重复</span>
+<span class="comment"> */</span>
+<span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m5</span><span class="params">()</span> &#123;
+    List&lt;Integer&gt; initList = Arrays.asList(<span class="number">70</span>, <span class="number">70</span>, -<span class="number">1</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">4</span>, <span class="number">99</span>);
+    List&lt;Integer&gt; newList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;(initList);
+
+    <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; newList.size() - <span class="number">1</span>; i++) &#123;
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">j</span> <span class="operator">=</span> newList.size() - <span class="number">1</span>; j &gt; i; j--) &#123;
+            <span class="keyword">if</span> (newList.get(j).equals(newList.get(i))) &#123;
+                newList.remove(j);
+            &#125;
+        &#125;
+    &#125;
+    newList.forEach(s -&gt; System.out.print(s + <span class="string">&quot; &quot;</span>));
+&#125;</code></pre></li>
+</ul>
+<h1 id="9、-和equals对比"><a href="#9、-和equals对比" class="headerlink" title="9、&#x3D;&#x3D;和equals对比"></a>9、&#x3D;&#x3D;和equals对比</h1><ul>
+<li>比较范围<ul>
+<li>&#x3D;&#x3D; 既可以比较基本类型也可以比较引用类型</li>
+<li>equals 只能比较引用类型，<code>equals(Object obj)</code></li>
+</ul>
+</li>
+<li>比较规则<ul>
+<li>&#x3D;&#x3D; 对于基本类型值是否相等，对于引用类型内存地址是否相等</li>
+<li>equals比较规则，看是否被重写过。<ul>
+<li>没有被重写，出厂默认就是&#x3D;&#x3D;</li>
+<li>如果被重写，具体看实现方法</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TestEquals</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">String</span> <span class="variable">s1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>);
+        <span class="type">String</span> <span class="variable">s2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">String</span>(<span class="string">&quot;abc&quot;</span>);
+        System.out.println(s1 == s2); <span class="comment">// false</span>
+        System.out.println(s1.equals(s2)); <span class="comment">// true</span>
+        Set&lt;String&gt; set01 = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();
+        set01.add(s1);
+        set01.add(s2);
+        System.out.println(set01.size()); <span class="comment">// 1</span>
+        System.out.println(s1.hashCode() + <span class="string">&quot;\t&quot;</span> + s2.hashCode()); <span class="comment">// 96354	96354</span>
+        System.out.println(<span class="string">&quot;================================&quot;</span>);
+
+        <span class="type">Person</span> <span class="variable">p1</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;abc&quot;</span>);
+        <span class="type">Person</span> <span class="variable">p2</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;abc&quot;</span>);
+        System.out.println(p1 == p2); <span class="comment">// false</span>
+        System.out.println(p1.equals(p2)); <span class="comment">// false</span>
+        Set&lt;Person&gt; set02 = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();
+        set02.add(p1);
+        set02.add(p2);
+        System.out.println(set02.size()); <span class="comment">// 2</span>
+        System.out.println(p1.hashCode() + <span class="string">&quot;\t&quot;</span> + p2.hashCode()); <span class="comment">// false</span>
+        System.out.println(<span class="string">&quot;================================&quot;</span>);
+        System.out.println();
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果</p>
+<pre><code class="highlight shell">false
+true
+1
+96354	96354
+================================
+false
+false
+2
+758705033	1604839423
+================================</code></pre>
+</blockquote>
+<h1 id="10、传值还是传引用"><a href="#10、传值还是传引用" class="headerlink" title="10、传值还是传引用"></a>10、传值还是传引用</h1><p>解析见代码注释：</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">TransmitValueOrRef</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">changeValue1</span><span class="params">(<span class="type">int</span> age)</span> &#123;
+        age = <span class="number">30</span>;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">changeValue2</span><span class="params">(Person person)</span> &#123;
+        person.setPersonName(<span class="string">&quot;xxx&quot;</span>);
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">changeValue3</span><span class="params">(String str)</span> &#123;
+        str = <span class="string">&quot;xxx&quot;</span>;
+    &#125;
+
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
+        <span class="type">TransmitValueOrRef</span> <span class="variable">test</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TransmitValueOrRef</span>();
+        <span class="type">int</span> <span class="variable">age</span> <span class="operator">=</span> <span class="number">20</span>;
+        test.changeValue1(age);
+        System.out.println(<span class="string">&quot;age----&quot;</span> + age);<span class="comment">// 20, 基本类型传递，属于值传递</span>
+
+        <span class="type">Person</span> <span class="variable">person</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Person</span>(<span class="string">&quot;abc&quot;</span>);
+        test.changeValue2(person);
+        System.out.println(<span class="string">&quot;personName-----&quot;</span> + person.getPersonName()); <span class="comment">// xxx, 引用类型传递属于引用传递，引用的真实对象被改变了。</span>
+
+        <span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">&quot;abc&quot;</span>;
+        test.changeValue3(str);
+        System.out.println(<span class="string">&quot;String-----&quot;</span> + str); <span class="comment">// abc, String属于不可改变的对象，任何对他的改变都会创建一个新的String对象</span>
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">age----20
+personName-----xxx
+String-----abc</code></pre>
+</blockquote>
+<h1 id="11、深拷贝与浅拷贝"><a href="#11、深拷贝与浅拷贝" class="headerlink" title="11、深拷贝与浅拷贝"></a>11、深拷贝与浅拷贝</h1><h2 id="概念解析"><a href="#概念解析" class="headerlink" title="概念解析"></a>概念解析</h2><h3 id="对象拷贝"><a href="#对象拷贝" class="headerlink" title="对象拷贝"></a>对象拷贝</h3><ul>
+<li><p>对象拷贝(Object Copy)就是将一个对象的属性拷贝到另一个有着<strong>相同类类型</strong>的对象中去。</p>
+</li>
+<li><p>在程序中拷贝对象是很常见的，主要是为了在新的上下文环境中复用对象的部分或全部数据。</p>
+</li>
+</ul>
+<h3 id="浅拷贝-Shallow-Copy"><a href="#浅拷贝-Shallow-Copy" class="headerlink" title="浅拷贝(Shallow Copy)"></a>浅拷贝(Shallow Copy)</h3><ul>
+<li><p>浅拷贝只复制指向某个对象的指针，而不复制对象本身，新旧对象还是共享同一块内存，类似一个分支</p>
+</li>
+<li><p>拷贝基本类型</p>
+<p>拷贝的就是基本类型的值</p>
+</li>
+<li><p>拷贝引用类型</p>
+<ul>
+<li>拷贝的就是内存地址 ，因此如果其中一个对象改变了这个地址，就会影响到另一个对象</li>
+<li>多个引用指向同一个对象，如果其中一个对象改变了这个地址，就会影响到另一个对象</li>
+</ul>
+</li>
+</ul>
+<h3 id="深拷贝-Deep-Copy"><a href="#深拷贝-Deep-Copy" class="headerlink" title="深拷贝(Deep Copy)"></a>深拷贝(Deep Copy)</h3><ul>
+<li>深拷贝会另外创造一个一模一样的对象，新对象跟原对象不共享内存，修改新对象不会改到原对象，分灶吃饭截然不同，深拷贝则是拷贝了源对象的所有值，所以即使源对象的值发生变化时，拷贝对象的值也不会改变</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/21/20241221-113121.png" alt="深拷贝与浅拷贝"></p>
+<h3 id="为什么要使用深拷贝"><a href="#为什么要使用深拷贝" class="headerlink" title="为什么要使用深拷贝"></a>为什么要使用深拷贝</h3><ul>
+<li><p><strong>避免共享引用</strong></p>
+<p>当你复制一个对象时，如果不使用深拷贝，那么复制的实际上是对原对象的引用，而不是真正的副本。这意味着对副本的任何修改都会影响到原对象。深拷贝则能确保复制的是对象的真正副本，与原对象没有引用关系。</p>
+</li>
+<li><p><strong>线程安全</strong></p>
+<p>在多线程环境中，如果多个线程同时访问和修改同一个对象，可能会导致数据不一致和竞态条件。通过深拷贝创建对象的副本，每个线程都可以在自己的副本上进行操作，从而避免了线程安全问题。</p>
+</li>
+</ul>
+<h2 id="Cloneable接口"><a href="#Cloneable接口" class="headerlink" title="Cloneable接口"></a>Cloneable接口</h2><h3 id="Cloneable类源码"><a href="#Cloneable类源码" class="headerlink" title="Cloneable类源码"></a>Cloneable类源码</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/21/20241221-113725.png" alt="Cloneable源码"></p>
+<h3 id="Object类源码"><a href="#Object类源码" class="headerlink" title="Object类源码"></a>Object类源码</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/21/20241221-113829.png" alt="bject类源码"></p>
+<h3 id="不使用Cloneable拷贝对象异常案例"><a href="#不使用Cloneable拷贝对象异常案例" class="headerlink" title="不使用Cloneable拷贝对象异常案例"></a>不使用Cloneable拷贝对象异常案例</h3><ul>
+<li>如果某个类没有实现 Cloneable 接口直接使用 clone() 方法，抛出异常</li>
+<li>先实现 Cloneable 接口后调用 clone 方法才OK</li>
+</ul>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShallowDeepCopyDemo</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        <span class="type">ShallowDeepCopyDemo</span> <span class="variable">shallowDeepCopyDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShallowDeepCopyDemo</span>();
+
+        <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> shallowDeepCopyDemo.clone();
+
+        System.out.println(o.hashCode());
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">Exception in thread &quot;main&quot; java.lang.CloneNotSupportedException: com.atguigu.interview2.javase.ShallowDeepCopyDemo
+	at java.base/java.lang.Object.clone(Native Method)
+	at com.atguigu.interview2.javase.ShallowDeepCopyDemo.main(ShallowDeepCopyDemo.java:17)</code></pre>
+</blockquote>
+<p>实现 Cloneable 后</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShallowDeepCopyDemo</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        <span class="type">ShallowDeepCopyDemo</span> <span class="variable">shallowDeepCopyDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ShallowDeepCopyDemo</span>();
+
+        <span class="type">Object</span> <span class="variable">o</span> <span class="operator">=</span> shallowDeepCopyDemo.clone();
+
+        System.out.println(o.hashCode());
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">1146743572</code></pre>
+</blockquote>
+<h2 id="Cloneable实现浅拷贝案例"><a href="#Cloneable实现浅拷贝案例" class="headerlink" title="Cloneable实现浅拷贝案例"></a>Cloneable实现浅拷贝案例</h2><p>代码证明 Object类里面的clone方法是浅拷贝</p>
+<pre><code class="highlight java"><span class="meta">@Data</span>
+<span class="meta">@AllArgsConstructor</span>
+<span class="meta">@NoArgsConstructor</span>
+<span class="keyword">class</span> <span class="title class_">Boss</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;
+    <span class="keyword">private</span> String bossName;
+    <span class="keyword">private</span> String title;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        <span class="keyword">return</span> <span class="built_in">super</span>.clone();
+    &#125;
+&#125;
+
+
+<span class="meta">@Data</span>
+<span class="meta">@AllArgsConstructor</span>
+<span class="meta">@NoArgsConstructor</span>
+<span class="keyword">class</span> <span class="title class_">Emp</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;
+    <span class="keyword">private</span> String empName;
+    <span class="keyword">private</span> Integer age;
+
+    <span class="keyword">private</span> Boss boss;
+
+    <span class="keyword">public</span> <span class="title function_">Emp</span><span class="params">(String empName, Integer age, String bossName, String title)</span> &#123;
+        <span class="built_in">this</span>.empName = empName;
+        <span class="built_in">this</span>.age = age;
+        <span class="built_in">this</span>.boss = <span class="keyword">new</span> <span class="title class_">Boss</span>(bossName, title);
+    &#125;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        <span class="keyword">return</span> <span class="built_in">super</span>.clone();
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShallowDeepCopyDemo</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        m1();
+    &#125;
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m1</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        <span class="type">Emp</span> <span class="variable">emp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Emp</span>(<span class="string">&quot;z3&quot;</span>, <span class="number">15</span>, <span class="string">&quot;雷军&quot;</span>, <span class="string">&quot;CEO&quot;</span>);
+        System.out.println(<span class="string">&quot;原始对象：&quot;</span> + emp.getBoss().getTitle());
+
+        <span class="type">Emp</span> <span class="variable">emp2</span> <span class="operator">=</span> (Emp) emp.clone();
+        System.out.println(<span class="string">&quot;拷贝对象：&quot;</span> + emp2.getBoss().getTitle());
+
+        System.out.println();
+        emp2.getBoss().setTitle(<span class="string">&quot;CTO&quot;</span>);
+        System.out.println(<span class="string">&quot;------emp2拷贝对象修改Title=CTO,是否会影响原始对象&quot;</span>);
+
+
+        System.out.println(<span class="string">&quot;原始对象：&quot;</span> + emp.getBoss().getTitle());
+        System.out.println(<span class="string">&quot;拷贝对象：&quot;</span> + emp2.getBoss().getTitle());
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">原始对象：CEO
+拷贝对象：CEO
+
+------emp2拷贝对象修改Title=CTO,是否会影响原始对象
+原始对象：CTO
+拷贝对象：CTO</code></pre>
+
+<p>结论：修改拷贝对象，原始对象也一并被修改了</p>
+</blockquote>
+<h2 id="实现深拷贝案例"><a href="#实现深拷贝案例" class="headerlink" title="实现深拷贝案例"></a>实现深拷贝案例</h2><pre><code class="highlight java"><span class="meta">@Data</span>
+<span class="meta">@AllArgsConstructor</span>
+<span class="meta">@NoArgsConstructor</span>
+<span class="keyword">class</span> <span class="title class_">Boss</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;
+    <span class="keyword">private</span> String bossName;
+    <span class="keyword">private</span> String title;
+
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        <span class="keyword">return</span> <span class="built_in">super</span>.clone();
+    &#125;
+&#125;
+
+<span class="meta">@Data</span>
+<span class="meta">@AllArgsConstructor</span>
+<span class="meta">@NoArgsConstructor</span>
+<span class="keyword">class</span> <span class="title class_">Emp</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;
+    <span class="keyword">private</span> String empName;
+    <span class="keyword">private</span> Integer age;
+
+    <span class="keyword">private</span> Boss boss;
+
+    <span class="keyword">public</span> <span class="title function_">Emp</span><span class="params">(String empName, Integer age, String bossName, String title)</span> &#123;
+        <span class="built_in">this</span>.empName = empName;
+        <span class="built_in">this</span>.age = age;
+        <span class="built_in">this</span>.boss = <span class="keyword">new</span> <span class="title class_">Boss</span>(bossName, title);
+    &#125;
+    
+    <span class="comment">// 修改了默认的clone方法</span>
+    <span class="meta">@Override</span>
+    <span class="keyword">protected</span> Object <span class="title function_">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">Emp</span>(empName, age, boss.getBossName(), boss.getTitle());
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ShallowDeepCopyDemo</span> <span class="keyword">implements</span> <span class="title class_">Cloneable</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        m1();
+    &#125;
+
+    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m1</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException &#123;
+        <span class="type">Emp</span> <span class="variable">emp</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Emp</span>(<span class="string">&quot;z3&quot;</span>, <span class="number">15</span>, <span class="string">&quot;雷军&quot;</span>, <span class="string">&quot;CEO&quot;</span>);
+        System.out.println(<span class="string">&quot;原始对象：&quot;</span> + emp.getBoss().getTitle());
+
+        <span class="type">Emp</span> <span class="variable">emp2</span> <span class="operator">=</span> (Emp) emp.clone();
+        System.out.println(<span class="string">&quot;拷贝对象：&quot;</span> + emp2.getBoss().getTitle());
+
+        System.out.println();
+        emp2.getBoss().setTitle(<span class="string">&quot;CTO&quot;</span>);
+        System.out.println(<span class="string">&quot;------emp2拷贝对象修改Title=CTO,是否会影响原始对象&quot;</span>);
+
+
+        System.out.println(<span class="string">&quot;原始对象：&quot;</span> + emp.getBoss().getTitle());
+        System.out.println(<span class="string">&quot;拷贝对象：&quot;</span> + emp2.getBoss().getTitle());
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<pre><code class="highlight shell">原始对象：CEO
+拷贝对象：CEO
+
+------emp2拷贝对象修改Title=CTO,是否会影响原始对象
+原始对象：CEO
+拷贝对象：CTO</code></pre>
+
+<p>结论：修改拷贝对象，原始对象没有被修改</p>
+</blockquote>
 <!-- flag of hidden posts -->
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
