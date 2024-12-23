@@ -9,12 +9,12 @@
   <meta name="keywords" content=" 随笔 , Java ">
   <meta name="description" content="003-JUnit单元测试 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#114;&#x67;&#x65;&#x5f;&#57;&#53;&#64;&#x31;&#x32;&#x36;&#x2e;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#103;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#54;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#114;&#x67;&#x65;&#x5f;&#57;&#53;&#64;&#x31;&#x32;&#x36;&#x2e;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#103;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#54;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
@@ -1336,7 +1336,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-12-23 13:51:58'>2024-12-21 17:50</time>
+            发布时间 : <time class="date" title='最后更新: 2024-12-23 14:02:52'>2024-12-21 17:50</time>
         
     </div>
     <div class="article-meta">
@@ -1371,7 +1371,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E9%98%BF%E9%87%8C%E6%89%8B%E5%86%8C%E5%AF%B9%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E7%9A%84%E8%A6%81%E6%B1%82"><span class="toc-text">1、阿里手册对单元测试的要求</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%EF%BC%9F"><span class="toc-text">2、为什么需要单元测试？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E5%85%A5%E9%97%A8%E6%A1%88%E4%BE%8B"><span class="toc-text">2.1 入门案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%BC%82%E5%B8%B8%E6%A1%88%E4%BE%8B"><span class="toc-text">2.2 异常案例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%A1%88%E4%BE%8B%E6%80%9D%E8%80%83"><span class="toc-text">2.3 案例思考</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E6%A1%88%E4%BE%8B%E6%80%BB%E7%BB%93"><span class="toc-text">2.4 案例总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3%E3%80%81%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95-Junit-Coverage"><span class="toc-text">3、单元测试 Junit Coverage</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E6%A1%88%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="toc-text">3.1 案例代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E6%B5%8B%E8%AF%95%E6%A1%88%E4%BE%8B-%E5%B8%A6%E7%9D%80%E8%A6%86%E7%9B%96%E7%8E%87%E6%8A%A5%E5%91%8A"><span class="toc-text">3.2 测试案例+带着覆盖率报告</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-1-%E6%B5%8B%E8%AF%95%E4%B8%80%E4%B8%AA%E6%96%B9%E6%B3%95"><span class="toc-text">3.2.1 测试一个方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-2-%E4%B8%80%E6%AC%A1%E6%80%A7%E8%B7%91%E5%A4%9A%E4%B8%AAcase%EF%BC%8C%E5%A2%9E%E5%8A%A0%E8%A6%86%E7%9B%96%E7%8E%87"><span class="toc-text">3.2.2 一次性跑多个case，增加覆盖率</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81%E6%B3%A8%E8%A7%A3%EF%BC%9A-BeforeAll-BeforeEach-Test-AfterEach-AfterAll"><span class="toc-text">4、注解：@BeforeAll - @BeforeEach - @Test - @AfterEach - @AfterAll</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-1-%E7%90%86%E8%AE%BA%E6%A6%82%E8%BF%B0"><span class="toc-text">4.1 理论概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E6%BC%94%E7%A4%BA%E6%A1%88%E4%BE%8B"><span class="toc-text">4.2 演示案例</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5%E3%80%81Junit-%E5%8F%8D%E5%B0%84-%E6%B3%A8%E8%A7%A3%E6%B5%85%E8%B0%88%E8%87%AA%E5%8A%A8%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6%E8%AE%BE%E8%AE%A1"><span class="toc-text">5、Junit+反射+注解浅谈自动测试框架设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#5-1-%E9%9C%80%E6%B1%82%E8%AF%B4%E6%98%8E"><span class="toc-text">5.1 需求说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E6%B3%A8%E8%A7%A3"><span class="toc-text">5.2 自定义注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-3-%E4%B8%9A%E5%8A%A1%E7%B1%BB"><span class="toc-text">5.3 业务类</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1387,8 +1387,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1、阿里手册对单元测试的要求</p>
-<ul>
+        <h1 id="1、阿里手册对单元测试的要求"><a href="#1、阿里手册对单元测试的要求" class="headerlink" title="1、阿里手册对单元测试的要求"></a>1、阿里手册对单元测试的要求</h1><ul>
 <li><p>【强制】好的单元测试必须遵守 AIR 原则。</p>
 <p>说明:单元测试在线上运行时，感觉像空气(AIR)一样感觉不到，但在测试质量的保障上，却是非常关键的。好的单元测试宏观上来说，具有自动化、独立性、可重复执行的特点。</p>
 <ul>
@@ -1410,9 +1409,7 @@
 <p>说明: 测试粒度小才能在出错时尽快定位到出错的位置。单元测试不负责检査跨类或者跨系统的交互逻辑，那是集成测试的领域。</p>
 </li>
 </ul>
-<p>2、为什么需要单元测试？</p>
-<p>2.1 入门案例</p>
-<pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">CalcDemoTest</span> &#123;
+<h1 id="2、为什么需要单元测试？"><a href="#2、为什么需要单元测试？" class="headerlink" title="2、为什么需要单元测试？"></a>2、为什么需要单元测试？</h1><h2 id="2-1-入门案例"><a href="#2-1-入门案例" class="headerlink" title="2.1 入门案例"></a>2.1 入门案例</h2><pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">CalcDemoTest</span> &#123;
 
     <span class="meta">@Test</span>
     <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;
@@ -1443,8 +1440,7 @@
 
 
 
-<p>2.2 异常案例</p>
-<pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">CalcDemoTest</span> &#123;
+<h2 id="2-2-异常案例"><a href="#2-2-异常案例" class="headerlink" title="2.2 异常案例"></a>2.2 异常案例</h2><pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">CalcDemoTest</span> &#123;
 
     <span class="meta">@Test</span>
     <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;
@@ -1479,8 +1475,7 @@
 
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-095228.jpg" alt="异常测试案例"></p>
 <p>将 <code>x + y</code> 修改成 <code>x * y</code> ， 断言依然成立。</p>
-<p>2.3 案例思考</p>
-<p>原因：这是因为测试案例覆盖率不够，覆盖场景不够，不全面而已。</p>
+<h2 id="2-3-案例思考"><a href="#2-3-案例思考" class="headerlink" title="2.3 案例思考"></a>2.3 案例思考</h2><p>原因：这是因为测试案例覆盖率不够，覆盖场景不够，不全面而已。</p>
 <p>解决方案：新增场景，两数不同</p>
 <pre><code class="highlight java"><span class="meta">@Test</span>
 <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;
@@ -1497,8 +1492,7 @@
 
 
 
-<p>2.4 案例总结</p>
-<ul>
+<h2 id="2-4-案例总结"><a href="#2-4-案例总结" class="headerlink" title="2.4 案例总结"></a>2.4 案例总结</h2><ul>
 <li>多写全功能覆盖各种情况的Case</li>
 <li>注意边界条件</li>
 <li>添加极值判断</li>
@@ -1507,9 +1501,7 @@
 <li>测试全部分支条件</li>
 <li>进行压力测试</li>
 </ul>
-<p>3.单元测试 <code>Junit Coverage</code></p>
-<p>3.1 案例代码</p>
-<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ScoreDemo</span> &#123;
+<h1 id="3、单元测试-Junit-Coverage"><a href="#3、单元测试-Junit-Coverage" class="headerlink" title="3、单元测试 Junit Coverage"></a>3、单元测试 <code>Junit Coverage</code></h1><h2 id="3-1-案例代码"><a href="#3-1-案例代码" class="headerlink" title="3.1 案例代码"></a>3.1 案例代码</h2><pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ScoreDemo</span> &#123;
     <span class="keyword">public</span> String <span class="title function_">scoreLevel</span><span class="params">(<span class="type">int</span> score)</span> &#123;
         <span class="keyword">if</span> (score &lt;= <span class="number">0</span>) &#123;
             <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;缺考&quot;</span>);
@@ -1529,8 +1521,7 @@
 
 
 
-<p>3.2 测试案例+带着覆盖率报告</p>
-<pre><code class="highlight java"><span class="comment">// 源代码</span>
+<h2 id="3-2-测试案例-带着覆盖率报告"><a href="#3-2-测试案例-带着覆盖率报告" class="headerlink" title="3.2 测试案例+带着覆盖率报告"></a>3.2 测试案例+带着覆盖率报告</h2><pre><code class="highlight java"><span class="comment">// 源代码</span>
 <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ScoreDemo</span> &#123;
     <span class="keyword">public</span> String <span class="title function_">scoreLevel</span><span class="params">(<span class="type">int</span> score)</span> &#123;
         <span class="keyword">if</span> (score &lt;= <span class="number">0</span>) &#123;
@@ -1576,15 +1567,11 @@
     &#125;
 &#125;</code></pre>
 
-<p>3.2.1 测试一个方法</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-101426.png" alt="测试案例带覆盖率报告"></p>
+<h3 id="3-2-1-测试一个方法"><a href="#3-2-1-测试一个方法" class="headerlink" title="3.2.1 测试一个方法"></a>3.2.1 测试一个方法</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-101426.png" alt="测试案例带覆盖率报告"></p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-102636.png" alt="运行结果"></p>
-<p>3.2.2 一次性跑多个case，增加覆盖率</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-102754.png" alt="一次性跑多个case"></p>
+<h3 id="3-2-2-一次性跑多个case，增加覆盖率"><a href="#3-2-2-一次性跑多个case，增加覆盖率" class="headerlink" title="3.2.2 一次性跑多个case，增加覆盖率"></a>3.2.2 一次性跑多个case，增加覆盖率</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-102754.png" alt="一次性跑多个case"></p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-102950.png" alt="结果查看"></p>
-<p>4.注解：<code>@BeforeAll</code> - <code>@BeforeEach</code> - <code>@Test</code> - <code>@AfterEach</code> - <code>@AfterAll</code></p>
-<p>4.1 理论概述</p>
-<p>从Spring Boot在2.x版本中已经使用了Junit5来作为单元测试的支持，本次是springboot3 + Java17</p>
+<h1 id="4、注解：-BeforeAll-BeforeEach-Test-AfterEach-AfterAll"><a href="#4、注解：-BeforeAll-BeforeEach-Test-AfterEach-AfterAll" class="headerlink" title="4、注解：@BeforeAll - @BeforeEach - @Test - @AfterEach - @AfterAll"></a>4、注解：<code>@BeforeAll</code> - <code>@BeforeEach</code> - <code>@Test</code> - <code>@AfterEach</code> - <code>@AfterAll</code></h1><h2 id="4-1-理论概述"><a href="#4-1-理论概述" class="headerlink" title="4.1 理论概述"></a>4.1 理论概述</h2><p>从Spring Boot在2.x版本中已经使用了Junit5来作为单元测试的支持，本次是springboot3 + Java17</p>
 <p><strong>在Junit5中</strong></p>
 <ul>
 <li><p>@BeforeAll 注解表示<strong>在所有测试方法执行之前执行一次，并且必须是静态方法</strong>。通常用于初始化测试环境，例如启动一个数据库连接池或者读取测试数据文件。</p>
@@ -1596,8 +1583,7 @@
 <li><p>@BeforeClass 和 @AfterClass 注解被 @BeforeAll 和 @AfterAll 所替代；</p>
 </li>
 </ul>
-<p>4.2 演示案例</p>
-<pre><code class="highlight java"><span class="comment">// 源代码</span>
+<h2 id="4-2-演示案例"><a href="#4-2-演示案例" class="headerlink" title="4.2 演示案例"></a>4.2 演示案例</h2><pre><code class="highlight java"><span class="comment">// 源代码</span>
 <span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ScoreDemo</span> &#123;
     <span class="keyword">public</span> String <span class="title function_">scoreLevel</span><span class="params">(<span class="type">int</span> score)</span> &#123;
         <span class="keyword">if</span> (score &lt;= <span class="number">0</span>) &#123;
@@ -1689,19 +1675,15 @@ AfterAll===============: abc ,end</code></pre>
 <li>@BeforeAll  所有测试方法调用前执行一次，在测试类没有实例化之前就已被加载，需用static修饰</li>
 <li>@AfterAll  所有测试方法调用后执行一次，在测试类没有实例化之前就已被加载，需用static修饰</li>
 </ul>
-<p>5.Junit+反射+注解浅谈自动测试框架设计</p>
-<p>5.1 需求说明</p>
-<p>添加自定义注解用于做自动化测试，当方法上添加此注解时，会自动运行测试方法。</p>
-<p>5.2 自定义注解</p>
-<pre><code class="highlight java"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span>
+<h1 id="5、Junit-反射-注解浅谈自动测试框架设计"><a href="#5、Junit-反射-注解浅谈自动测试框架设计" class="headerlink" title="5、Junit+反射+注解浅谈自动测试框架设计"></a>5、Junit+反射+注解浅谈自动测试框架设计</h1><h2 id="5-1-需求说明"><a href="#5-1-需求说明" class="headerlink" title="5.1 需求说明"></a>5.1 需求说明</h2><p>添加自定义注解用于做自动化测试，当方法上添加此注解时，会自动运行测试方法。</p>
+<h2 id="5-2-自定义注解"><a href="#5-2-自定义注解" class="headerlink" title="5.2 自定义注解"></a>5.2 自定义注解</h2><pre><code class="highlight java"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span>
 <span class="meta">@Target(ElementType.METHOD)</span>
 <span class="keyword">public</span> <span class="meta">@interface</span> AtguiguTest &#123;
 &#125;</code></pre>
 
 
 
-<p>5.3 业务类</p>
-<pre><code class="highlight java"><span class="comment">/**</span>
+<h2 id="5-3-业务类"><a href="#5-3-业务类" class="headerlink" title="5.3 业务类"></a>5.3 业务类</h2><pre><code class="highlight java"><span class="comment">/**</span>
 <span class="comment"> * &lt;p&gt;</span>
 <span class="comment"> * Junit+反射+注解浅谈自动测试框架设计</span>
 <span class="comment"> * &lt;p&gt;</span>
