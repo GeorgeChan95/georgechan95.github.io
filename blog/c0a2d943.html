@@ -9,12 +9,12 @@
   <meta name="keywords" content=" 随笔 , Java ">
   <meta name="description" content="003-JUnit单元测试 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#x67;&#x65;&#95;&#x39;&#53;&#64;&#x31;&#50;&#x36;&#x2e;&#x63;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#114;&#x67;&#x65;&#x5f;&#57;&#53;&#64;&#x31;&#x32;&#x36;&#x2e;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#x67;&#x65;&#95;&#x39;&#53;&#64;&#x31;&#50;&#x36;&#x2e;&#x63;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#114;&#x67;&#x65;&#x5f;&#57;&#53;&#64;&#x31;&#x32;&#x36;&#x2e;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
@@ -1336,12 +1336,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-12-21 16:26:03'>2024-12-21 17:50</time>
+            发布时间 : <time class="date" title='最后更新: 2024-12-23 13:51:58'>2024-12-21 17:50</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:0</span>
+        <span>字数:2.6k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1387,7 +1387,405 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <!-- flag of hidden posts -->
+        <p>1、阿里手册对单元测试的要求</p>
+<ul>
+<li><p>【强制】好的单元测试必须遵守 AIR 原则。</p>
+<p>说明:单元测试在线上运行时，感觉像空气(AIR)一样感觉不到，但在测试质量的保障上，却是非常关键的。好的单元测试宏观上来说，具有自动化、独立性、可重复执行的特点。</p>
+<ul>
+<li>A: Automatic(自动化)</li>
+<li>I: Independent(独立性)</li>
+<li>R: Repeatable(可重复)</li>
+</ul>
+</li>
+<li><p>【强制】单元测试应该是全自动执行的，并且非交互式的。测试用例通常是被定期执行的，执行过程必须完全自动化才有意义。输出结果需要人工检査的测试不是一个好的单元测试。不准使用 System.out 来进行人肉验证，<strong>单元测试必须使用 <code>assert</code> 来验证</strong>。</p>
+</li>
+<li><p>【强制】保持单元测试的独立性。为了保证单元测试稳定可靠且便于维护，单元测试用例之间决不能互相调用，也不能依赖执行的先后次序。</p>
+<p>反例:method2 需要依赖 method1 的执行，将执行结果作为 method2 的输入。</p>
+</li>
+<li><p>【强制】单元测试是可以重复执行的，不能受到外界环境的影响。</p>
+<p>说明:单元测试通常会被放到持续集成中，每次有代码 push 时单元测试都会被执行。如果单测对外部环境(网络、服务、中间件等)有依赖，容易导致持续集成机制的不可用。</p>
+<p>正例:为了不受外界环境影响，要求设计代码时就把SUT(System under test)的依赖改成注入，在测试时用 Spring这样的 D|框架注入一个本地(内存)实现或者 Mock 实现。</p>
+</li>
+<li><p>【强制】对于单元测试，要保证测试粒度足够小，有助于精确定位问题。单测粒度至多是类级别，一般是5方法级别。</p>
+<p>说明: 测试粒度小才能在出错时尽快定位到出错的位置。单元测试不负责检査跨类或者跨系统的交互逻辑，那是集成测试的领域。</p>
+</li>
+</ul>
+<p>2、为什么需要单元测试？</p>
+<p>2.1 入门案例</p>
+<pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">CalcDemoTest</span> &#123;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;
+        <span class="type">CalcDemo</span> <span class="variable">calcDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CalcDemo</span>();
+        <span class="comment">//System.out.println(calcDemo.add(2, 2));//error,看到绿条不一定正确，不可以用sysout</span>
+        <span class="type">int</span> <span class="variable">retValue</span> <span class="operator">=</span> calcDemo.add(<span class="number">2</span>, <span class="number">2</span>);
+        assertEquals(<span class="number">4</span>, retValue);
+    &#125;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">sub</span><span class="params">()</span> &#123;
+        <span class="type">CalcDemo</span> <span class="variable">calcDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CalcDemo</span>();
+        <span class="type">int</span> <span class="variable">retValue</span> <span class="operator">=</span> calcDemo.sub(<span class="number">2</span>, <span class="number">2</span>);
+        assertEquals(<span class="number">0</span>, retValue);
+    &#125;
+&#125;
+
+<span class="comment">// 待测试的类</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CalcDemo</span> &#123;
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;
+        <span class="keyword">return</span> x + y;
+    &#125;
+
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">sub</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;
+        <span class="keyword">return</span> x - y;
+    &#125;
+&#125;</code></pre>
+
+
+
+<p>2.2 异常案例</p>
+<pre><code class="highlight java"><span class="keyword">class</span> <span class="title class_">CalcDemoTest</span> &#123;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;
+        <span class="type">CalcDemo</span> <span class="variable">calcDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CalcDemo</span>();
+        <span class="comment">//System.out.println(calcDemo.add(2, 2));//error,看到绿条不一定正确，不可以用sysout</span>
+        <span class="type">int</span> <span class="variable">retValue</span> <span class="operator">=</span> calcDemo.add(<span class="number">2</span>, <span class="number">2</span>);
+        assertEquals(<span class="number">4</span>, retValue);
+
+        <span class="comment">//看到绿条+使用了assert断言也不一定正确，为什么单元测试的多样性和覆盖率如此重要</span>
+<span class="comment">//        retValue = calcDemo.add(2, 7);</span>
+<span class="comment">//        assertEquals(9, retValue);</span>
+
+    &#125;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">sub</span><span class="params">()</span> &#123;
+        <span class="type">CalcDemo</span> <span class="variable">calcDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CalcDemo</span>();
+        <span class="type">int</span> <span class="variable">retValue</span> <span class="operator">=</span> calcDemo.sub(<span class="number">2</span>, <span class="number">2</span>);
+        assertEquals(<span class="number">0</span>, retValue);
+    &#125;
+&#125;
+
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CalcDemo</span> &#123;
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">add</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;
+        <span class="keyword">return</span> x * y;
+    &#125;
+
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">sub</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;
+        <span class="keyword">return</span> x - y;
+    &#125;
+&#125;</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-095228.jpg" alt="异常测试案例"></p>
+<p>将 <code>x + y</code> 修改成 <code>x * y</code> ， 断言依然成立。</p>
+<p>2.3 案例思考</p>
+<p>原因：这是因为测试案例覆盖率不够，覆盖场景不够，不全面而已。</p>
+<p>解决方案：新增场景，两数不同</p>
+<pre><code class="highlight java"><span class="meta">@Test</span>
+<span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;
+    <span class="type">CalcDemo</span> <span class="variable">calcDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CalcDemo</span>();
+    <span class="comment">//System.out.println(calcDemo.add(2, 2));//error,看到绿条不一定正确，不可以用sysout</span>
+    <span class="type">int</span> <span class="variable">retValue</span> <span class="operator">=</span> calcDemo.add(<span class="number">2</span>, <span class="number">2</span>);
+    assertEquals(<span class="number">4</span>, retValue);
+
+    <span class="comment">//看到绿条+使用了assert断言也不一定正确，为什么单元测试的多样性和覆盖率如此重要</span>
+    retValue = calcDemo.add(<span class="number">2</span>, <span class="number">7</span>);
+    assertEquals(<span class="number">9</span>, retValue);
+
+&#125;</code></pre>
+
+
+
+<p>2.4 案例总结</p>
+<ul>
+<li>多写全功能覆盖各种情况的Case</li>
+<li>注意边界条件</li>
+<li>添加极值判断</li>
+<li>输入参数相同&#x2F;不同情况都要考虑</li>
+<li>抛出异常情况也需要测试</li>
+<li>测试全部分支条件</li>
+<li>进行压力测试</li>
+</ul>
+<p>3.单元测试 <code>Junit Coverage</code></p>
+<p>3.1 案例代码</p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ScoreDemo</span> &#123;
+    <span class="keyword">public</span> String <span class="title function_">scoreLevel</span><span class="params">(<span class="type">int</span> score)</span> &#123;
+        <span class="keyword">if</span> (score &lt;= <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;缺考&quot;</span>);
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">60</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;弱&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">70</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;差&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt;= <span class="number">80</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;中&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">90</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;良&quot;</span>;
+        &#125; <span class="keyword">else</span> &#123;
+            <span class="keyword">return</span> <span class="string">&quot;优&quot;</span>;
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+
+
+<p>3.2 测试案例+带着覆盖率报告</p>
+<pre><code class="highlight java"><span class="comment">// 源代码</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ScoreDemo</span> &#123;
+    <span class="keyword">public</span> String <span class="title function_">scoreLevel</span><span class="params">(<span class="type">int</span> score)</span> &#123;
+        <span class="keyword">if</span> (score &lt;= <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;缺考&quot;</span>);
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">60</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;弱&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">70</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;差&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt;= <span class="number">80</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;中&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">90</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;良&quot;</span>;
+        &#125; <span class="keyword">else</span> &#123;
+            <span class="keyword">return</span> <span class="string">&quot;优&quot;</span>;
+        &#125;
+    &#125;
+&#125;
+
+<span class="comment">// 测试代码</span>
+<span class="keyword">class</span> <span class="title class_">ScoreDemoTest</span> &#123;
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">scoreLevel</span><span class="params">()</span> &#123;
+        <span class="type">ScoreDemo</span> <span class="variable">scoreDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ScoreDemo</span>();
+        assertEquals(<span class="string">&quot;弱&quot;</span>, scoreDemo.scoreLevel(<span class="number">52</span>));
+    &#125;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">scoreLevelv2</span><span class="params">()</span> &#123;
+        <span class="type">ScoreDemo</span> <span class="variable">scoreDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ScoreDemo</span>();
+        assertEquals(<span class="string">&quot;差&quot;</span>, scoreDemo.scoreLevel(<span class="number">62</span>));
+    &#125;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">scoreLevelv3</span><span class="params">()</span> &#123;
+        <span class="type">ScoreDemo</span> <span class="variable">scoreDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ScoreDemo</span>();
+        assertEquals(<span class="string">&quot;中&quot;</span>, scoreDemo.scoreLevel(<span class="number">80</span>));
+    &#125;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">scoreLevelv4</span><span class="params">()</span> &#123;
+        <span class="type">ScoreDemo</span> <span class="variable">scoreDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ScoreDemo</span>();
+        assertThrows(IllegalArgumentException.class, () -&gt; scoreDemo.scoreLevel(-<span class="number">7</span>));
+    &#125;
+&#125;</code></pre>
+
+<p>3.2.1 测试一个方法</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-101426.png" alt="测试案例带覆盖率报告"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-102636.png" alt="运行结果"></p>
+<p>3.2.2 一次性跑多个case，增加覆盖率</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-102754.png" alt="一次性跑多个case"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-102950.png" alt="结果查看"></p>
+<p>4.注解：<code>@BeforeAll</code> - <code>@BeforeEach</code> - <code>@Test</code> - <code>@AfterEach</code> - <code>@AfterAll</code></p>
+<p>4.1 理论概述</p>
+<p>从Spring Boot在2.x版本中已经使用了Junit5来作为单元测试的支持，本次是springboot3 + Java17</p>
+<p><strong>在Junit5中</strong></p>
+<ul>
+<li><p>@BeforeAll 注解表示<strong>在所有测试方法执行之前执行一次，并且必须是静态方法</strong>。通常用于初始化测试环境，例如启动一个数据库连接池或者读取测试数据文件。</p>
+</li>
+<li><p>@BeforeEach 注解表示<strong>在每个测试方法执行之前执行一次。</strong>通常用于初始化测试数据或者创建被测试对象的实例。与 @BeforeAll 不同，@BeforeEach 方法不能是静态的。</p>
+</li>
+<li><p>@Before 和 @After 注解被 @BeforeEach 和 @AfterEach 所替代；</p>
+</li>
+<li><p>@BeforeClass 和 @AfterClass 注解被 @BeforeAll 和 @AfterAll 所替代；</p>
+</li>
+</ul>
+<p>4.2 演示案例</p>
+<pre><code class="highlight java"><span class="comment">// 源代码</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ScoreDemo</span> &#123;
+    <span class="keyword">public</span> String <span class="title function_">scoreLevel</span><span class="params">(<span class="type">int</span> score)</span> &#123;
+        <span class="keyword">if</span> (score &lt;= <span class="number">0</span>) &#123;
+            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">IllegalArgumentException</span>(<span class="string">&quot;缺考&quot;</span>);
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">60</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;弱&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">70</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;差&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt;= <span class="number">80</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;中&quot;</span>;
+        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (score &lt; <span class="number">90</span>) &#123;
+            <span class="keyword">return</span> <span class="string">&quot;良&quot;</span>;
+        &#125; <span class="keyword">else</span> &#123;
+            <span class="keyword">return</span> <span class="string">&quot;优&quot;</span>;
+        &#125;
+    &#125;
+&#125;</code></pre>
+
+<p><strong>生成测试类</strong></p>
+<ul>
+<li>鼠标右键 –&gt; 选择 <code>Generate</code></li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-112928.png" alt="generate insert"></p>
+<ul>
+<li><p>选择 <code>Test...</code></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-113041.png" alt="image-20241223113041258"></p>
+</li>
+<li><p>选择生成要测试的方法和生成 @BeforeEach、@AfterEach 方法</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/23/20241223-113129.png" alt="image-20241223113128769"></p>
+</li>
+</ul>
+<p><strong>测试代码</strong></p>
+<pre><code class="highlight java">
+<span class="comment">// 测试代码</span>
+<span class="keyword">class</span> <span class="title class_">CalcDemoTestV2</span> &#123;
+    <span class="type">CalcDemo</span> <span class="variable">calcDemo</span> <span class="operator">=</span> <span class="literal">null</span>;
+
+    <span class="keyword">static</span> <span class="type">StringBuffer</span> <span class="variable">stringBuffer</span> <span class="operator">=</span> <span class="literal">null</span>;
+
+    <span class="meta">@BeforeAll</span>
+    <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m1</span><span class="params">()</span> &#123;
+        stringBuffer = <span class="keyword">new</span> <span class="title class_">StringBuffer</span>(<span class="string">&quot;abc&quot;</span>);
+        System.out.println(<span class="string">&quot;BeforeAll===============: &quot;</span> + stringBuffer.length());
+    &#125;
+
+    <span class="meta">@AfterAll</span>
+    <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">m2</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;AfterAll===============: &quot;</span> + stringBuffer.append(<span class="string">&quot; ,end&quot;</span>).toString());
+    &#125;
+
+
+    <span class="meta">@BeforeEach</span>
+    <span class="keyword">void</span> <span class="title function_">setUp</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;----come in BeforeEach&quot;</span>);
+        calcDemo = <span class="keyword">new</span> <span class="title class_">CalcDemo</span>();
+    &#125;
+
+    <span class="meta">@AfterEach</span>
+    <span class="keyword">void</span> <span class="title function_">tearDown</span><span class="params">()</span> &#123;
+        System.out.println(<span class="string">&quot;----come in AfterEach&quot;</span>);
+        calcDemo = <span class="literal">null</span>;
+    &#125;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">add</span><span class="params">()</span> &#123;
+        Assertions.assertEquals(<span class="number">5</span>, calcDemo.add(<span class="number">1</span>, <span class="number">4</span>));
+        assertEquals(<span class="number">5</span>, calcDemo.add(<span class="number">2</span>, <span class="number">3</span>));
+    &#125;
+
+    <span class="meta">@Test</span>
+    <span class="keyword">void</span> <span class="title function_">sub</span><span class="params">()</span> &#123;
+        assertEquals(<span class="number">5</span>, calcDemo.sub(<span class="number">10</span>, <span class="number">5</span>));
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果:</p>
+<pre><code class="highlight shell">BeforeAll===============: 3
+----come in BeforeEach
+----come in AfterEach
+----come in BeforeEach
+----come in AfterEach
+AfterAll===============: abc ,end</code></pre>
+</blockquote>
+<p><strong>总结：</strong></p>
+<ul>
+<li>@BeforeEach void setUp()  每一个测试方法调用前必执行的方法</li>
+<li>@AfterEach void tearDown() 每一个测试方法调用后必执行的方法</li>
+<li>@BeforeAll  所有测试方法调用前执行一次，在测试类没有实例化之前就已被加载，需用static修饰</li>
+<li>@AfterAll  所有测试方法调用后执行一次，在测试类没有实例化之前就已被加载，需用static修饰</li>
+</ul>
+<p>5.Junit+反射+注解浅谈自动测试框架设计</p>
+<p>5.1 需求说明</p>
+<p>添加自定义注解用于做自动化测试，当方法上添加此注解时，会自动运行测试方法。</p>
+<p>5.2 自定义注解</p>
+<pre><code class="highlight java"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span>
+<span class="meta">@Target(ElementType.METHOD)</span>
+<span class="keyword">public</span> <span class="meta">@interface</span> AtguiguTest &#123;
+&#125;</code></pre>
+
+
+
+<p>5.3 业务类</p>
+<pre><code class="highlight java"><span class="comment">/**</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> * Junit+反射+注解浅谈自动测试框架设计</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> * 需求</span>
+<span class="comment"> * 1 我们自定义注解<span class="doctag">@AtguiguTest</span></span>
+<span class="comment"> * 2 将注解AtguiguTest加入需要测试的方法</span>
+<span class="comment"> * 3 类AutoTestClient通过反射检查，哪些方法头上标注了<span class="doctag">@AtguiguTest</span>注解会自动进行单元测试</span>
+<span class="comment"> */</span>
+<span class="meta">@Slf4j</span>
+<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AutoTestClient</span> &#123;
+    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException &#123;
+        <span class="comment">//家庭作业，抽取一个方法，（class，p....）</span>
+        <span class="type">CalcHelpDemo</span> <span class="variable">calcHelpDemo</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">CalcHelpDemo</span>();
+        <span class="type">int</span> <span class="variable">para1</span> <span class="operator">=</span> <span class="number">10</span>;
+        <span class="type">int</span> <span class="variable">para2</span> <span class="operator">=</span> <span class="number">0</span>;
+
+
+        Method[] methods = calcHelpDemo.getClass().getMethods();
+        <span class="type">AtomicInteger</span> <span class="variable">bugCount</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AtomicInteger</span>();
+        <span class="comment">// 要写入的文件路径（如果文件不存在，会创建该文件）</span>
+        <span class="type">String</span> <span class="variable">filePath</span> <span class="operator">=</span> <span class="string">&quot;BugReport&quot;</span> + (DateUtil.format(<span class="keyword">new</span> <span class="title class_">Date</span>(), <span class="string">&quot;yyyyMMddHHmmss&quot;</span>)) + <span class="string">&quot;.txt&quot;</span>;
+
+
+        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; methods.length; i++) &#123;
+            <span class="keyword">if</span> (methods[i].isAnnotationPresent(AtguiguTest.class)) &#123;
+                <span class="keyword">try</span> &#123;
+                    methods[i].invoke(calcHelpDemo, para1, para2);<span class="comment">//放行</span>
+                &#125; <span class="keyword">catch</span> (Exception e) &#123;
+                    bugCount.getAndIncrement();
+                    log.info(<span class="string">&quot;异常名称:&#123;&#125;,异常原因:&#123;&#125;&quot;</span>, e.getCause().getClass().getSimpleName(), e.getCause().getMessage());
+
+
+                    FileUtil.writeString(methods[i].getName() + <span class="string">&quot;\t&quot;</span> + <span class="string">&quot;出现了异常&quot;</span> + <span class="string">&quot;\n&quot;</span>, filePath, <span class="string">&quot;UTF-8&quot;</span>);
+                    FileUtil.appendString(<span class="string">&quot;异常名称:&quot;</span> + e.getCause().getClass().getSimpleName() + <span class="string">&quot;\n&quot;</span>, filePath, <span class="string">&quot;UTF-8&quot;</span>);
+                    FileUtil.appendString(<span class="string">&quot;异常原因:&quot;</span> + e.getCause().getMessage() + <span class="string">&quot;\n&quot;</span>, filePath, <span class="string">&quot;UTF-8&quot;</span>);
+                &#125; <span class="keyword">finally</span> &#123;
+                    FileUtil.appendString(<span class="string">&quot;异常数:&quot;</span> + bugCount.get() + <span class="string">&quot;\n&quot;</span>, filePath, <span class="string">&quot;UTF-8&quot;</span>);
+                &#125;
+            &#125;
+        &#125;
+    &#125;
+&#125;
+
+
+<span class="comment">/**</span>
+<span class="comment"> * 在Hutool工具包中，使用FileUtil类进行文件操作时，通常不需要显式地“关闭”文件。</span>
+<span class="comment"> * 这是因为Hutool在内部处理文件I/O时，已经考虑了资源的自动管理和释放。</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> * 具体来说，当你使用FileUtil的静态方法（如writeString、appendString、readUtf8String等）时，</span>
+<span class="comment"> * 这些方法会在执行完毕后自动关闭与文件相关的流和资源。因此，你不需要（也不能）</span>
+<span class="comment"> * 调用类似于close这样的方法来关闭文件。</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> * 这是因为这些静态方法通常使用Java的try-with-resources语句或其他类似的机制来确保资源在</span>
+<span class="comment"> * 不再需要时得到释放。try-with-resources是Java 7及更高版本中引入的一个特性，</span>
+<span class="comment"> * 它允许你在try语句块结束时自动关闭实现了AutoCloseable或Closeable接口的资源。</span>
+<span class="comment"> * &lt;p&gt;</span>
+<span class="comment"> * 所以，当你使用Hutool的FileUtil类进行文件操作时，你可以放心地编写代码，</span>
+<span class="comment"> * 而无需担心资源泄露或忘记关闭文件的问题。Hutool已经为你处理了这些细节。</span>
+<span class="comment"> */</span></code></pre>
+
+<p><strong>测试使用</strong></p>
+<pre><code class="highlight java"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">CalcHelpDemo</span> &#123;
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">mul</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;
+        <span class="keyword">return</span> x * y;
+    &#125;
+
+    <span class="meta">@AtguiguTest</span>
+    <span class="keyword">public</span> <span class="type">int</span> <span class="title function_">div</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;
+        <span class="keyword">return</span> x / y;
+    &#125;
+
+    <span class="meta">@AtguiguTest</span>
+    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">thank</span><span class="params">(<span class="type">int</span> x, <span class="type">int</span> y)</span> &#123;
+        System.out.println(<span class="string">&quot;3ks，help me test bug&quot;</span>);
+    &#125;
+&#125;</code></pre>
+
+<blockquote>
+<p>运行结果</p>
+<pre><code class="highlight shell">13:41:06.212 [main] INFO com.atguigu.interview2.junit.auto.AutoTestClient -- 异常名称:ArithmeticException,异常原因:/ by zero
+3ks，help me test bug</code></pre>
+</blockquote>
+<p>运行 <code>main()</code> 方法后，CalcHelpDemo 的 div方法和 thank 都执行了，并且异常信息写入到文件中。</p>
+<!-- flag of hidden posts -->
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
     </div>
