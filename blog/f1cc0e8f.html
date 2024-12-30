@@ -9,12 +9,12 @@
   <meta name="keywords" content=" 随笔 , Java ">
   <meta name="description" content="006-Mysql相关面试题 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#x67;&#x65;&#x5f;&#57;&#x35;&#x40;&#49;&#x32;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#x72;&#103;&#101;&#x5f;&#x39;&#53;&#x40;&#49;&#50;&#x36;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#x67;&#x65;&#x5f;&#57;&#x35;&#x40;&#49;&#x32;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#x72;&#103;&#101;&#x5f;&#x39;&#53;&#x40;&#49;&#50;&#x36;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
@@ -1336,7 +1336,7 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-12-30 16:42:02'>2024-12-29 22:00</time>
+            发布时间 : <time class="date" title='最后更新: 2024-12-30 18:53:52'>2024-12-29 22:00</time>
         
     </div>
     <div class="article-meta">
@@ -1371,7 +1371,7 @@
     
     <div class="toc-ref">
     
-        
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%A4%8D%E5%90%88%E7%B4%A2%E5%BC%95%EF%BC%8C%E4%B8%80%E8%88%AC%E4%BD%A0%E5%8A%A0%E5%9C%A8%E5%93%AA%E4%BA%9B%E5%AD%97%E6%AE%B5-%E5%BB%BA%E7%B4%A2%E5%BC%95%E7%9A%84%E7%90%86%E8%AE%BA%E4%BE%9D%E6%8D%AE%E6%88%96%E8%80%85%E7%BB%8F%E9%AA%8C%E4%BD%A0%E5%88%86%E4%BA%AB%E4%B8%8B"><span class="toc-text">1、如何建立复合索引，一般你加在哪些字段?建索引的理论依据或者经验你分享下</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81Innodb%E7%9A%84%E8%A1%8C%E9%94%81%E5%88%B0%E5%BA%95%E9%94%81%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">2、Innodb的行锁到底锁了什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%AA%E4%BA%9B%E5%BC%95%E6%93%8E%E6%94%AF%E6%8C%81%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%EF%BC%9F"><span class="toc-text">哪些引擎支持数据库事务？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E9%94%81%E7%BA%A7%E5%88%AB"><span class="toc-text">mysql锁级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B1"><span class="toc-text">案例1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B2"><span class="toc-text">案例2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B3"><span class="toc-text">案例3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-text">总结：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%9E%E8%A1%A8"><span class="toc-text">3、什么是回表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="toc-text">概念：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E8%A1%A8SQL"><span class="toc-text">建表SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A%E5%A6%82%E6%9E%9CSELECT-FROM-employee-WHERE-age-32%E6%9F%A5%E8%AF%A2SQL%EF%BC%8C%E9%9C%80%E8%A6%81%E6%89%A7%E8%A1%8C%E5%87%A0%E6%AC%A1%E6%A0%91%E6%90%9C%E7%B4%A2%E6%93%8D%E4%BD%9C%EF%BC%9F"><span class="toc-text">问题：如果SELECT * FROM employee WHERE age &#x3D; 32查询SQL，需要执行几次树搜索操作？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-%E6%A0%91%E6%A3%80%E7%B4%A2%E5%8E%9F%E7%90%86"><span class="toc-text">B+树检索原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A-1"><span class="toc-text">总结：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81%E5%A6%82%E6%9E%9C%E4%B8%80%E5%BC%A0%E8%A1%A8%E6%95%B0%E6%8D%AE%E9%87%8F%E7%BA%A7%E6%98%AF%E5%8D%83%E4%B8%87%E7%BA%A7%E5%88%AB%E4%BB%A5%E4%B8%8A%E7%9A%84%EF%BC%8C%E8%A6%81%E7%BB%99%E8%BF%99%E5%BC%A0%E8%A1%A8%E6%B7%BB%E5%8A%A0%E7%B4%A2%E5%BC%95%EF%BC%8C%E4%BD%A0%E9%9C%80%E8%A6%81%E6%80%8E%E4%B9%88%E5%81%9A%E5%91%A2%EF%BC%9F"><span class="toc-text">4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5%E3%80%81MySQL%E5%88%A0%E9%99%A4%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE-%E8%A7%A3%E5%86%B3%E7%BA%BF%E4%B8%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">5、MySQL删除重复数据-解决线上数据库存在重复数据的问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6%E3%80%81MySQL%E5%8D%83%E4%B8%87%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%88%86%E9%A1%B5%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-text">6、MySQL千万级数据分页的优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E7%9A%84limit%E6%9F%A5%E8%AF%A2%E8%AF%B4%E6%98%8E"><span class="toc-text">mysql的limit查询说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E5%89%8D"><span class="toc-text">优化前</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E5%90%8E"><span class="toc-text">优化后</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1387,8 +1387,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1、如何建立复合索引，一般你加在哪些字段?建索引的理论依据或者经验你分享下</p>
-<p><strong>建表SQL</strong></p>
+        <h1 id="1、如何建立复合索引，一般你加在哪些字段-建索引的理论依据或者经验你分享下"><a href="#1、如何建立复合索引，一般你加在哪些字段-建索引的理论依据或者经验你分享下" class="headerlink" title="1、如何建立复合索引，一般你加在哪些字段?建索引的理论依据或者经验你分享下"></a>1、如何建立复合索引，一般你加在哪些字段?建索引的理论依据或者经验你分享下</h1><p><strong>建表SQL</strong></p>
 <pre><code class="highlight sql"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `product_comment` (
 	`comment_id` <span class="type">INT</span> ( <span class="number">10</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;评论ID&#x27;</span>,
 	`product_id` <span class="type">INT</span> ( <span class="number">10</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;商品ID&#x27;</span>,
@@ -1464,12 +1463,9 @@
 <li><p>删索引</p>
 <pre><code class="highlight sql"><span class="keyword">DROP</span> INDEX idx_product_id_audit_status <span class="keyword">ON</span> product_comment;</code></pre></li>
 </ul>
-<p>2、Innodb的行锁到底锁了什么？</p>
-<p><strong>哪些引擎支持数据库事务？</strong></p>
-<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html">https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html</a></p>
+<h1 id="2、Innodb的行锁到底锁了什么？"><a href="#2、Innodb的行锁到底锁了什么？" class="headerlink" title="2、Innodb的行锁到底锁了什么？"></a>2、Innodb的行锁到底锁了什么？</h1><h2 id="哪些引擎支持数据库事务？"><a href="#哪些引擎支持数据库事务？" class="headerlink" title="哪些引擎支持数据库事务？"></a><strong>哪些引擎支持数据库事务？</strong></h2><p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html">https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html</a></p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-123813.jpg" alt="哪些引擎支持数据库事务？"></p>
-<p><strong>mysql锁级别</strong></p>
-<ul>
+<h2 id="mysql锁级别"><a href="#mysql锁级别" class="headerlink" title="mysql锁级别"></a><strong>mysql锁级别</strong></h2><ul>
 <li><p>表级锁</p>
 <p>开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</p>
 </li>
@@ -1480,8 +1476,7 @@
 <p>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般</p>
 </li>
 </ul>
-<p><strong>SQL</strong></p>
-<pre><code class="highlight sql"><span class="comment">-- 创建表</span>
+<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a><strong>SQL</strong></h2><pre><code class="highlight sql"><span class="comment">-- 创建表</span>
 <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_customer` (
 	`id` <span class="type">INT</span> ( <span class="number">20</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,
 	`cname` <span class="type">VARCHAR</span> ( <span class="number">50</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
@@ -1505,8 +1500,7 @@
 
 
 
-<p><strong>案例1</strong></p>
-<ul>
+<h2 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a><strong>案例1</strong></h2><ul>
 <li><p>步骤</p>
 <table>
 <thead>
@@ -1540,8 +1534,7 @@
 <li><p>总结：更新数据，没有使用索引或者索引没命中，则会锁住整个表（<strong>表锁</strong>）</p>
 </li>
 </ul>
-<p><strong>案例2</strong></p>
-<ul>
+<h2 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a><strong>案例2</strong></h2><ul>
 <li><p>步骤</p>
 <table>
 <thead>
@@ -1578,8 +1571,7 @@
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-130150.png" alt="聚簇索引和非聚簇索引"></p>
 </li>
 </ul>
-<p><strong>案例3</strong></p>
-<ul>
+<h2 id="案例3"><a href="#案例3" class="headerlink" title="案例3"></a><strong>案例3</strong></h2><ul>
 <li><p>步骤</p>
 <pre><code class="highlight sql"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> t_customer;</code></pre>
 
@@ -1617,16 +1609,12 @@
 <li><p>更新数据命中索引，发生了行锁</p>
 </li>
 </ul>
-<p><strong>总结：</strong></p>
-<ul>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h2><ul>
 <li>InnoDB的行锁，是通过锁住索引来实现的，如果加锁查询的时候没有使用到索引，会将整个聚簇索引都锁住，相当于锁表了。</li>
 <li>命中索引锁行，没有命中锁表，问题会扩大化。</li>
 </ul>
-<p>3、什么是回表</p>
-<p><strong>概念：</strong></p>
-<p>回表是指数据库根据索引（非主键）找到了指定的记录所在行后，还需要根据主键再次到数据块里获取数据的操作。</p>
-<p><strong>建表SQL</strong></p>
-<pre><code class="highlight sql"><span class="comment">-- 创建表</span>
+<h1 id="3、什么是回表"><a href="#3、什么是回表" class="headerlink" title="3、什么是回表"></a>3、什么是回表</h1><h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a><strong>概念：</strong></h2><p>回表是指数据库根据索引（非主键）找到了指定的记录所在行后，还需要根据主键再次到数据块里获取数据的操作。</p>
+<h2 id="建表SQL"><a href="#建表SQL" class="headerlink" title="建表SQL"></a><strong>建表SQL</strong></h2><pre><code class="highlight sql"><span class="comment">-- 创建表</span>
 <span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `employee` (
 	`id` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
 	`name` <span class="type">VARCHAR</span> ( <span class="number">255</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
@@ -1655,8 +1643,7 @@ EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <spa
 
 
 
-<p><strong>问题：如果SELECT * FROM employee WHERE age &#x3D; 32查询SQL，需要执行几次树搜索操作？</strong></p>
-<ul>
+<h2 id="问题：如果SELECT-FROM-employee-WHERE-age-32查询SQL，需要执行几次树搜索操作？"><a href="#问题：如果SELECT-FROM-employee-WHERE-age-32查询SQL，需要执行几次树搜索操作？" class="headerlink" title="问题：如果SELECT * FROM employee WHERE age &#x3D; 32查询SQL，需要执行几次树搜索操作？"></a><strong>问题：如果SELECT * FROM employee WHERE age &#x3D; 32查询SQL，需要执行几次树搜索操作？</strong></h2><ul>
 <li><p>explain分析</p>
 <pre><code class="highlight sql"><span class="comment">-- 查询语句分析</span>
 EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employee <span class="keyword">WHERE</span> age <span class="operator">=</span> <span class="number">32</span>;</code></pre>
@@ -1686,20 +1673,17 @@ EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <spa
 </ul>
 </li>
 </ul>
-<p><strong>B+树检索原理</strong></p>
-<p><strong>由于B+树的非叶子节点只存储键值信息，假设每个磁盘块能存储4个键值及指针信息，则变成B+树后其结构如下图所示：</strong></p>
+<h2 id="B-树检索原理"><a href="#B-树检索原理" class="headerlink" title="B+树检索原理"></a><strong>B+树检索原理</strong></h2><p><strong>由于B+树的非叶子节点只存储键值信息，假设每个磁盘块能存储4个键值及指针信息，则变成B+树后其结构如下图所示：</strong></p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-144139.png" alt="B+树检索原理"></p>
 <p>B+树中，所有数据记录节点都是按照键值大小顺序存放在同一层的叶子节点上，而非叶子节点上只存储key值信息，这样可以大大加大每个节点存储的key值数量，降低B+树的高度。</p>
 <p><strong>B+树算法：</strong> 通过继承了B树的特征，B+树相比B树，新增叶子节点与非叶子节点关系。叶子节点中包含了键值和数据，根节点和枝节点中，只是包含键值和子节点引用，不包含数据。通过非叶子节点查询叶子节点获取对应的数据，所有相邻的叶子节点包含非叶子节点使用链表进行结合，叶子节点是顺序排序并且相邻节点有顺序引用的关系 </p>
-<p><strong>总结：</strong></p>
-<ul>
+<h2 id="总结：-1"><a href="#总结：-1" class="headerlink" title="总结："></a><strong>总结：</strong></h2><ul>
 <li>回表是指数据库根据索引（非主键）找到了指定的记录所在行后，还需要根据主键再次到数据块里获取数据的操作。这个过程在MySQL中可能涉及两次查询：首先通过索引扫描找到满足条件的记录的主键值，然后再通过主键值去主键索引中查找完整的行记录。</li>
 <li>具体来说，在InnoDB存储引擎中，当通过非聚簇索引查询数据时，由于索引中不包含完整的行数据，因此需要根据索引中找到的主键值再去聚簇索引中查找完整的行数据，这个过程就是回表。</li>
 <li>然而，回表操作虽然提供了更全面的数据信息，但也带来了一些问题和局限性。首先，回表操作需要访问两次索引，增加了IO开销和CPU消耗，对查询性能有一定的影响。特别是在高并发、大数据量的情况下，回表可能成为性能瓶颈。其次，由于回表操作是基于物理地址来获取数据，如果在回表过程中发生了数据修改（如DELETE、UPDATE），则可能会读取到不一致或错误的数据。</li>
 <li>因此，在设计索引时，需要结合具体的业务场景和查询需求，选择合适的索引策略，以尽量减少回表的次数和影响，提高查询效率和性能。例如，可以通过使用覆盖索引来避免回表操作，覆盖索引是指索引包含了查询所需的所有字段的值，因此可以直接通过索引获取查询结果，而无需再去访问数据表。</li>
 </ul>
-<p>4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？</p>
-<p><strong>给表添加索引的时候，是会对表加锁的</strong>。如果不谨慎操作可能出现生产事故的，比如过程中发生了数据修改（如DELETE、UPDATE），则可能会读取到不一致或错误的数据。</p>
+<h1 id="4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？"><a href="#4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？" class="headerlink" title="4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？"></a>4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？</h1><p><strong>给表添加索引的时候，是会对表加锁的</strong>。如果不谨慎操作可能出现生产事故的，比如过程中发生了数据修改（如DELETE、UPDATE），则可能会读取到不一致或错误的数据。</p>
 <p>可以参考以下方法：</p>
 <ol>
 <li>先创建一张跟原表A数据结构相同的新表B。</li>
@@ -1708,8 +1692,7 @@ EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <spa
 <li>rename新表B为原表的表名A，原表A换别的表名；</li>
 </ol>
 <p>一句话：腾笼换鸟，建新表+建索引+导数据+废旧表</p>
-<p>5、MySQL删除重复数据-解决线上数据库存在重复数据的问题</p>
-<p><strong>目标</strong></p>
+<h1 id="5、MySQL删除重复数据-解决线上数据库存在重复数据的问题"><a href="#5、MySQL删除重复数据-解决线上数据库存在重复数据的问题" class="headerlink" title="5、MySQL删除重复数据-解决线上数据库存在重复数据的问题"></a>5、MySQL删除重复数据-解决线上数据库存在重复数据的问题</h1><p><strong>目标</strong></p>
 <p>去掉同一字段下的重复数据或者仅仅留下一条</p>
 <p><strong>SQL</strong></p>
 <pre><code class="highlight sql"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (
@@ -1746,11 +1729,8 @@ EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <spa
 
 
 
-<p>6、MySQL千万级数据分页的优化</p>
-<p><strong>mysql的limit查询说明</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-162729.png" alt="mysql的limit查询说明"></p>
-<p><strong>优化前</strong></p>
-<pre><code class="highlight sql"><span class="comment">/*偏移量为100，取30*/</span>
+<h1 id="6、MySQL千万级数据分页的优化"><a href="#6、MySQL千万级数据分页的优化" class="headerlink" title="6、MySQL千万级数据分页的优化"></a>6、MySQL千万级数据分页的优化</h1><h2 id="mysql的limit查询说明"><a href="#mysql的limit查询说明" class="headerlink" title="mysql的limit查询说明"></a><strong>mysql的limit查询说明</strong></h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-162729.png" alt="mysql的limit查询说明"></p>
+<h2 id="优化前"><a href="#优化前" class="headerlink" title="优化前"></a><strong>优化前</strong></h2><pre><code class="highlight sql"><span class="comment">/*偏移量为100，取30*/</span>
 <span class="keyword">SELECT</span> SQL_NO_CACHE
   a.empno,
   a.ename,
@@ -1798,8 +1778,7 @@ LIMIT <span class="number">4950000</span>, <span class="number">30</span>;</code
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-163234.jpg" alt="limit查询"></p>
 <p><strong>参考阿里巴巴手册</strong></p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-163329.png" alt="阿里巴巴手册"></p>
-<p><strong>优化后</strong></p>
-<ul>
+<h2 id="优化后"><a href="#优化后" class="headerlink" title="优化后"></a><strong>优化后</strong></h2><ul>
 <li><p>使用索引覆盖+子查询优化</p>
 <ul>
 <li><p>原理</p>
