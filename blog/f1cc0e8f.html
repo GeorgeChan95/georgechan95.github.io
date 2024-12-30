@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>23-状态模式 | George&#39;s Blog</title>
+  <title>006-Mysql相关面试题 | George&#39;s Blog</title><meta name="robots" content="noindex">
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 设计模式 ">
-  <meta name="description" content="23-状态模式 | George&#39;s Blog">
+  <meta name="keywords" content=" 随笔 , Java ">
+  <meta name="description" content="006-Mysql相关面试题 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#x72;&#x67;&#x65;&#x5f;&#57;&#x35;&#x40;&#49;&#x32;&#54;&#46;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1307,9 +1307,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-design-pattern/23-状态模式" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-interview/006-Mysql相关" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">23-状态模式</h1>
+        <h1 class="article-title">006-Mysql相关面试题</h1>
     
     <div class="article-meta">
         
@@ -1319,7 +1319,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="设计模式">设计模式</a>
+            <a  data-rel="随笔">随笔</a>
             
         </span>
         
@@ -1327,19 +1327,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">设计模式</a>
+            <a class="color3">随笔</a>
+            
+            <a class="color5">Java</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-11-30 17:49:58'>2024-11-29 19:30</time>
+            发布时间 : <time class="date" title='最后更新: 2024-12-30 16:42:02'>2024-12-29 22:00</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2.4k</span>
+        <span>字数:3.8k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1369,7 +1371,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">一、状态模式的结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">二、使用场景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%A4%E8%AF%86%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F"><span class="toc-text">三、认识状态模式</span></a></li></ol>
+        
     
 <style>
     .left-col .switch-btn,
@@ -1385,265 +1387,501 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>状态模式，又称状态对象模式（Pattern of Objects for States），状态模式是对象的行为模式。</strong></p>
-<p><strong>状态模式允许一个对象在其内部状态改变的时候改变其行为。这个对象看上去就像是改变了它的类一样。</strong></p>
-<h1 id="一、状态模式的结构"><a href="#一、状态模式的结构" class="headerlink" title="一、状态模式的结构"></a>一、状态模式的结构</h1><p>用一句话来表述，状态模式把所研究的对象的行为包装在不同的状态对象里，每一个状态对象都属于一个抽象状态类的一个子类。状态模式的意图是让一个对象在其内部状态改变的时候，其行为也随之改变。状态模式的示意性类图如下所示：</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-164732.png" alt="状态模式结构"></p>
-<p>状态模式所涉及到的角色有：</p>
+        <p>1、如何建立复合索引，一般你加在哪些字段?建索引的理论依据或者经验你分享下</p>
+<p><strong>建表SQL</strong></p>
+<pre><code class="highlight sql"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `product_comment` (
+	`comment_id` <span class="type">INT</span> ( <span class="number">10</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;评论ID&#x27;</span>,
+	`product_id` <span class="type">INT</span> ( <span class="number">10</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;商品ID&#x27;</span>,
+	`order_id` <span class="type">BIGINT</span> ( <span class="number">20</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;订单ID&#x27;</span>,
+	`customer_id` <span class="type">INT</span> ( <span class="number">10</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户ID&#x27;</span>,
+	`title` <span class="type">VARCHAR</span> ( <span class="number">50</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;评论标题&#x27;</span>,
+	`content` <span class="type">VARCHAR</span> ( <span class="number">300</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;评论内容&#x27;</span>,
+	`audit_status` TINYINT ( <span class="number">4</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;审核状态:0未审核1已审核&#x27;</span>,
+	`audit_time` <span class="type">TIMESTAMP</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;评论时间&#x27;</span>,
+	`modified_time` <span class="type">TIMESTAMP</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;最后修改时间&#x27;</span>,
+<span class="keyword">PRIMARY</span> KEY ( `comment_id` ) 
+) ENGINE <span class="operator">=</span> INNODB AUTO_INCREMENT <span class="operator">=</span> <span class="number">1</span> <span class="keyword">DEFAULT</span> CHARSET <span class="operator">=</span> utf8 COMMENT <span class="operator">=</span> <span class="string">&#x27;商品评论表&#x27;</span></code></pre>
+
+
+
+<p><strong>插入数据</strong></p>
+<pre><code class="highlight sql"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> product_comment ( product_id, order_id, customer_id, title, content, audit_status )
+<span class="keyword">VALUES</span> ( <span class="number">1</span>, <span class="number">108310</span>, <span class="number">1</span>, <span class="string">&#x27;鼠标&#x27;</span>, <span class="string">&#x27;罗技鼠标不错&#x27;</span>, <span class="number">0</span> );
+
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> product_comment ( product_id, order_id, customer_id, title, content, audit_status )
+<span class="keyword">VALUES</span> ( <span class="number">2</span>, <span class="number">108311</span>, <span class="number">2</span>, <span class="string">&#x27;键盘&#x27;</span>, <span class="string">&#x27;小米键盘good&#x27;</span>, <span class="number">0</span> );
+
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> product_comment ( product_id, order_id, customer_id, title, content, audit_status )
+<span class="keyword">VALUES</span> ( <span class="number">3</span>, <span class="number">108312</span>, <span class="number">3</span>, <span class="string">&#x27;U盘&#x27;</span>, <span class="string">&#x27;华为U盘不错&#x27;</span>, <span class="number">0</span> );
+
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> product_comment ( product_id, order_id, customer_id, title, content, audit_status )
+<span class="keyword">VALUES</span> ( <span class="number">3</span>, <span class="number">108313</span>, <span class="number">4</span>, <span class="string">&#x27;U盘&#x27;</span>, <span class="string">&#x27;华为U盘不错2&#x27;</span>, <span class="number">0</span> );</code></pre>
+
+
+
+<p><strong>查询SQL</strong></p>
+<pre><code class="highlight sql">EXPLAIN <span class="keyword">SELECT</span> customer_id,title,content <span class="keyword">FROM</span> `product_comment` <span class="keyword">WHERE</span> audit_status<span class="operator">=</span><span class="number">0</span> <span class="keyword">AND</span> product_id<span class="operator">=</span><span class="number">3</span> LIMIT <span class="number">0</span>,<span class="number">3</span>;</code></pre>
+
+<blockquote>
+<p>结果：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-105756.png" alt="image-20241230105755356"></p>
+</blockquote>
+<p><strong>建立索引要求</strong></p>
 <ul>
-<li>环境(Context)角色，也称上下文：定义客户端所感兴趣的接口，并且保留一个具体状态类的实例。这个具体状态类的实例给出此环境对象的现有状态。</li>
-<li>抽象状态(State)角色：定义一个接口，用以封装环境（Context）对象的一个特定的状态所对应的行为。</li>
-<li>具体状态(ConcreteState)角色：每一个具体状态类都实现了环境（Context）的一个状态所对应的行为。</li>
+<li><p>禁止在更新十分频繁、区分度不高的属性上建立索引</p>
+<p><strong>解读：</strong></p>
+<ul>
+<li><p>更新会变更B+树，更新频繁的字段建立索引会大大降低数据库性能</p>
+</li>
+<li><p>“性别”这种区分度不大的属性，建立索引是没有什么意义的，不能有效过滤数据，性能与全表扫描类似</p>
+</li>
 </ul>
-<p><strong>代码实现如下：</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 抽象状态接口, 定义具体状态类共用的处理方法</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">State</span> &#123;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 状态对应的处理</span>
-<span class="comment">     * <span class="doctag">@param</span> sampleParameter 相同的参数</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">handle</span><span class="params">(String sampleParameter)</span>;
-&#125;
-
-
-<span class="comment">/***</span>
-<span class="comment"> * 环境角色类， 当内部状态（state）改变的时候，行为（request）也发生了改变</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Context</span> &#123;
-
-    <span class="comment">// 持有一个State类型的对象实例</span>
-    <span class="keyword">private</span> State state;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setState</span><span class="params">(State state)</span> &#123;
-        <span class="built_in">this</span>.state = state;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 请求的方法</span>
-<span class="comment">     * <span class="doctag">@param</span> sampleParameter</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">request</span><span class="params">(String sampleParameter)</span> &#123;
-        state.handle(sampleParameter);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体状态类A</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteStateA</span> <span class="keyword">implements</span> <span class="title class_">State</span> &#123;
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handle</span><span class="params">(String sampleParameter)</span> &#123;
-        System.out.println(<span class="string">&quot;ConcreteStateA handle : &quot;</span> + sampleParameter);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体状态类B</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteStateB</span> <span class="keyword">implements</span> <span class="title class_">State</span> &#123;
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">handle</span><span class="params">(String sampleParameter)</span> &#123;
-        System.out.println(<span class="string">&quot;ConcreteStateB handle : &quot;</span> + sampleParameter);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 测试类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 创建一个State对象</span>
-        <span class="type">State</span> <span class="variable">state</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteStateA</span>();
-        <span class="comment">// 创建环境</span>
-        <span class="type">Context</span> <span class="variable">context</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Context</span>();
-        <span class="comment">// 将状态设置到环境中</span>
-        context.setState(state);
-        <span class="comment">// 调用请求</span>
-        context.request(<span class="string">&quot;param A&quot;</span>);
-
-    &#125;
-&#125;</code></pre>
+</li>
+<li><p>建立组合索引，必须把区分度高的字段放在前面</p>
+<ul>
+<li>解读:能够更加有效的过滤数据</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-110127.png" alt="Mysql建立索引要求"></p>
+<p><strong>区分度定最佳左前缀位置</strong></p>
+<p>查看区分度高的字段</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span>
+	<span class="built_in">COUNT</span>( <span class="keyword">DISTINCT</span> audit_status )<span class="operator">/</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> audit_statusRate,
+	<span class="built_in">COUNT</span>( <span class="keyword">DISTINCT</span> product_id )<span class="operator">/</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> product_itRate 
+<span class="keyword">FROM</span>
+	product_comment</code></pre>
 
 <blockquote>
 <p>运行结果：</p>
-<pre><code class="highlight shell">ConcreteStateA handle : param A</code></pre>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-123114.png" alt="字段的区分度"></p>
 </blockquote>
-<p>从上面可以看出，环境类 <code>Context</code> 的行为<code>request()</code>是委派给某一个具体状态类的。通过使用多态性原则，可以动态改变环境类<code>Context</code>的属性<code>State</code>的内容，使其从指向一个具体状态类变换到指向另一个具体状态类，从而使环境类的行为<code>request(</code>)由不同的具体状态类来执行。</p>
-<h1 id="二、使用场景"><a href="#二、使用场景" class="headerlink" title="二、使用场景"></a>二、使用场景</h1><p>考虑一个在线投票系统的应用，要实现控制同一个用户只能投一票，如果一个用户反复投票，而且投票次数超过5次，则判定为恶意刷票，要取消该用户投票的资格，当然同时也要取消他所投的票；如果一个用户的投票次数超过8次，将进入黑名单，禁止再登录和使用系统。</p>
-<p>要使用状态模式实现，首先需要把投票过程的各种状态定义出来，根据以上描述大致分为四种状态：正常投票、反复投票、恶意刷票、进入黑名单。然后创建一个投票管理对象（相当于Context）。</p>
-<p>系统的结构图如下所示：</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-172729.png" alt="状态模式UML"></p>
-<p><strong>代码实现如下：</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 抽象状态类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">VoteState</span> &#123;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 不同状态共有的投票方法</span>
-<span class="comment">     * <span class="doctag">@param</span> user 投票人</span>
-<span class="comment">     * <span class="doctag">@param</span> voteItem 投票项目</span>
-<span class="comment">     * <span class="doctag">@param</span> voteManager 投票上下文，用来在实现状态对应的功能处理的时候，可以回调上下文的数据</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">vote</span><span class="params">(String user, String voteItem, VoteManager voteManager)</span>;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体状态：正常投票</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">NormalVoteState</span> <span class="keyword">implements</span> <span class="title class_">VoteState</span> &#123;
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">vote</span><span class="params">(String user, String voteItem, VoteManager voteManager)</span> &#123;
-        <span class="comment">//正常投票，记录到投票记录中</span>
-        Map&lt;String, String&gt; mapVote = voteManager.getMapVote();
-        mapVote.put(user, voteItem);
-        System.out.println(<span class="string">&quot;投票成功&quot;</span>);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体状态：重复投票</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RepeatVoteState</span> <span class="keyword">implements</span> <span class="title class_">VoteState</span> &#123;
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">vote</span><span class="params">(String user, String voteItem, VoteManager voteManager)</span> &#123;
-        System.out.println(<span class="string">&quot;请不要重复投票&quot;</span>);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体状态：恶意刷票</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SpiteVoteState</span> <span class="keyword">implements</span> <span class="title class_">VoteState</span> &#123;
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">vote</span><span class="params">(String user, String voteItem, VoteManager voteManager)</span> &#123;
-        Map&lt;String, String&gt; mapVote = voteManager.getMapVote();
-        <span class="keyword">if</span> (mapVote.get(user) != <span class="literal">null</span>) &#123;
-            mapVote.remove(user);
-        &#125;
-        System.out.println(<span class="string">&quot;你有恶意刷屏行为，取消投票资格&quot;</span>);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体状态类：进入黑名单</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BlackVoteState</span> <span class="keyword">implements</span> <span class="title class_">VoteState</span> &#123;
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">vote</span><span class="params">(String user, String voteItem, VoteManager voteManager)</span> &#123;
-        <span class="comment">//记录黑名单中，禁止登录系统</span>
-        System.out.println(<span class="string">&quot;进入黑名单，将禁止登录和使用本系统&quot;</span>);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 环境类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">VoteManager</span> &#123;
-    <span class="comment">// 持有的状态处理对象</span>
-    <span class="keyword">private</span> <span class="type">VoteState</span> <span class="variable">state</span> <span class="operator">=</span> <span class="literal">null</span>;
-    <span class="comment">// 记录用户投票的结果，Map&lt;String,String&gt;对应Map&lt;用户名称，投票的选项&gt;</span>
-    <span class="keyword">private</span> Map&lt;String, String&gt; mapVote = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();
-    <span class="comment">// 记录用户投票次数，Map&lt;String,Integer&gt;对应Map&lt;用户名称，投票的次数&gt;</span>
-    <span class="keyword">private</span> Map&lt;String, Integer&gt; mapVoteCount = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();
-
-    <span class="comment">/**</span>
-<span class="comment">     * 获取用户投票结果的Map</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> Map&lt;String, String&gt; <span class="title function_">getMapVote</span><span class="params">()</span> &#123;
-        <span class="keyword">return</span> mapVote;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 投票方法</span>
-<span class="comment">     *</span>
-<span class="comment">     * <span class="doctag">@param</span> user     投票人</span>
-<span class="comment">     * <span class="doctag">@param</span> voteItem 投票项</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">vote</span><span class="params">(String user, String voteItem)</span> &#123;
-        <span class="comment">// 1.为该用户增加投票次数</span>
-        <span class="type">Integer</span> <span class="variable">voteCount</span> <span class="operator">=</span> mapVoteCount.get(user);
-        <span class="keyword">if</span> (voteCount == <span class="literal">null</span>) &#123;
-            voteCount = <span class="number">0</span>;
-        &#125;
-        voteCount++;
-        mapVoteCount.put(user, voteCount);
-
-        <span class="comment">// 2.判断该用户的投票类型，就相当于判断对应的状态</span>
-        <span class="keyword">if</span> (voteCount == <span class="number">1</span>) &#123; <span class="comment">// 正常投票</span>
-            state = <span class="keyword">new</span> <span class="title class_">NormalVoteState</span>();
-        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (voteCount &gt; <span class="number">1</span> &amp;&amp; voteCount &lt; <span class="number">5</span>) &#123; <span class="comment">// 重复投票</span>
-            state = <span class="keyword">new</span> <span class="title class_">RepeatVoteState</span>();
-        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (voteCount &gt;= <span class="number">5</span> &amp;&amp; voteCount &lt; <span class="number">8</span>) &#123; <span class="comment">// 恶意刷票</span>
-            state = <span class="keyword">new</span> <span class="title class_">SpiteVoteState</span>();
-        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (voteCount &gt; <span class="number">8</span>) &#123; <span class="comment">// 黑名单</span>
-            state = <span class="keyword">new</span> <span class="title class_">BlackVoteState</span>();
-        &#125;
-
-        <span class="comment">// 调用状态接口方法，进行投票</span>
-        state.vote(user, voteItem, <span class="built_in">this</span>);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 测试类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="type">VoteManager</span> <span class="variable">vm</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">VoteManager</span>();
-        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">9</span>; i++) &#123;
-            vm.vote(<span class="string">&quot;George&quot;</span>, <span class="string">&quot;A&quot;</span>);
-        &#125;
-    &#125;
-&#125;</code></pre>
-
-<blockquote>
-<p>运行结果：</p>
-<pre><code class="highlight shell">投票成功
-请不要重复投票
-请不要重复投票
-请不要重复投票
-你有恶意刷屏行为，取消投票资格
-你有恶意刷屏行为，取消投票资格
-你有恶意刷屏行为，取消投票资格
-你有恶意刷屏行为，取消投票资格
-进入黑名单，将禁止登录和使用本系统</code></pre>
-</blockquote>
-<p>从上面的示例可以看出，状态的转换基本上都是内部行为，主要在状态模式内部来维护。比如对于投票的人员，任何时候他的操作都是投票，但是投票管理对象的处理却不一定一样，会根据投票的次数来判断状态，然后根据状态去选择不同的处理。</p>
-<h1 id="三、认识状态模式"><a href="#三、认识状态模式" class="headerlink" title="三、认识状态模式"></a>三、认识状态模式</h1><ul>
-<li><p><strong>状态和行为</strong></p>
-<p>所谓对象的状态，通常指的就是对象实例的属性的值；而行为指的就是对象的功能，再具体点说，行为大多可以对应到方法上。</p>
-<p>状态模式的功能就是分离状态的行为，通过维护状态的变化，来调用不同状态对应的不同功能。也就是说，状态和行为是相关联的，它们的关系可以描述为：<strong>状态决定行为</strong>。</p>
-<p>由于状态是在运行期被改变的，因此行为也会在运行期根据状态的改变而改变。</p>
-</li>
-<li><p><strong>行为的平行性</strong></p>
-<p>注意平行线而不是平等性。所谓平行性指的是各个状态的行为所处的层次是一样的，相互独立的、没有关联的，是根据不同的状态来决定到底走平行线的哪一条。行为是不同的，当然对应的实现也是不同的，相互之间是不可替换的。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-174703.png" alt="状态的平行性示意图"></p>
-<p>而平等性强调的是可替换性，大家是同一行为的不同描述或实现，因此在同一个行为发生的时候，可以根据条件挑选任意一个实现来进行相应的处理。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/30/20241130-174758.png" alt="平等性"></p>
-<p>大家可能会发现状态模式的结构和策略模式的结构完全一样，但是，它们的目的、实现、本质却是完全不一样的。还有行为之间的特性也是状态模式和策略模式一个很重要的区别，状态模式的行为是平行性的，不可相互替换的；而策略模式的行为是平等性的，是可以相互替换的。</p>
-</li>
-<li><p><strong>环境和状态处理对象</strong></p>
+<p>哪个字段越接近于1，哪个就是区分度更好的，就放在最左边。</p>
 <ul>
-<li>在状态模式中，环境(Context)是持有状态的对象，但是环境(Context)自身并不处理跟状态相关的行为，而是把处理状态的功能委托给了状态对应的状态处理类来处理。</li>
-<li>在具体的状态处理类中经常需要获取环境(Context)自身的数据，甚至在必要的时候会回调环境(Context)的方法，因此，通常将环境(Context)自身当作一个参数传递给具体的状态处理类。</li>
-<li>客户端一般只和环境(Context)交互。客户端可以用状态对象来配置一个环境(Context)，一旦配置完毕，就不再需要和状态对象打交道了。客户端通常不负责运行期间状态的维护，也不负责决定后续到底使用哪一个具体的状态处理对象。</li>
+<li><p>建索引</p>
+<pre><code class="highlight sql"><span class="keyword">CREATE</span> INDEX idx_product_id_audit_status <span class="keyword">ON</span> product_comment(product_id,audit_status)</code></pre>
+</li>
+<li><p>删索引</p>
+<pre><code class="highlight sql"><span class="keyword">DROP</span> INDEX idx_product_id_audit_status <span class="keyword">ON</span> product_comment;</code></pre></li>
+</ul>
+<p>2、Innodb的行锁到底锁了什么？</p>
+<p><strong>哪些引擎支持数据库事务？</strong></p>
+<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html">https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-123813.jpg" alt="哪些引擎支持数据库事务？"></p>
+<p><strong>mysql锁级别</strong></p>
+<ul>
+<li><p>表级锁</p>
+<p>开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</p>
+</li>
+<li><p>行级锁</p>
+<p>开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</p>
+</li>
+<li><p>页面锁(不要求)</p>
+<p>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般</p>
+</li>
+</ul>
+<p><strong>SQL</strong></p>
+<pre><code class="highlight sql"><span class="comment">-- 创建表</span>
+<span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_customer` (
+	`id` <span class="type">INT</span> ( <span class="number">20</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,
+	`cname` <span class="type">VARCHAR</span> ( <span class="number">50</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`age` <span class="type">INT</span> ( <span class="number">10</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`phone` <span class="type">VARCHAR</span> ( <span class="number">20</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`sex` TINYINT ( <span class="number">4</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`birth` <span class="type">TIMESTAMP</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span>,
+	<span class="keyword">PRIMARY</span> KEY ( `id` ) 
+) ENGINE <span class="operator">=</span> INNODB AUTO_INCREMENT <span class="operator">=</span> <span class="number">4</span> <span class="keyword">DEFAULT</span> CHARSET <span class="operator">=</span> utf8mb4;
+
+<span class="comment">-- 插入数据</span>
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> t_customer(cname,age,phone,sex,birth) <span class="keyword">VALUES</span>(<span class="string">&#x27;z3&#x27;</span>,<span class="number">22</span>,<span class="string">&#x27;13811112222&#x27;</span>,<span class="number">1</span>,NOW());
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> t_customer(cname,age,phone,sex,birth) <span class="keyword">VALUES</span>(<span class="string">&#x27;z4&#x27;</span>,<span class="number">24</span>,<span class="string">&#x27;13811112223&#x27;</span>,<span class="number">0</span>,NOW());
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> t_customer(cname,age,phone,sex,birth) <span class="keyword">VALUES</span>(<span class="string">&#x27;z5&#x27;</span>,<span class="number">25</span>,<span class="string">&#x27;13811112224&#x27;</span>,<span class="number">1</span>,NOW());
+
+<span class="comment">-- 查询数据</span>
+<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t_customer; 
+
+<span class="comment">-- 创建索引</span>
+<span class="keyword">create</span> index idx_cname <span class="keyword">on</span>  t_customer(cname);</code></pre>
+
+
+
+<p><strong>案例1</strong></p>
+<ul>
+<li><p>步骤</p>
+<table>
+<thead>
+<tr>
+<th>session01</th>
+<th>session02—新启动一个客户端连接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BEGIN;<br />UPDATE t_customer SET age&#x3D;55 WHERE phone&#x3D;’13811112222’</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>UPDATE t_customer SET age&#x3D;55 WHERE id&#x3D;5; #转圈等锁。或者<br />UPDATE t_customer SET age&#x3D;44 WHERE id&#x3D;6; #转圈等锁。</td>
+</tr>
+<tr>
+<td>commit&#x2F;rollback;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>ok</td>
+</tr>
+<tr>
+<td>phone字段我们没有建索引，不会命中</td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>总结：更新数据，没有使用索引或者索引没命中，则会锁住整个表（<strong>表锁</strong>）</p>
+</li>
+</ul>
+<p><strong>案例2</strong></p>
+<ul>
+<li><p>步骤</p>
+<table>
+<thead>
+<tr>
+<th>session01</th>
+<th>session02</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BEGIN;<br />UPDATE t_customer SET age&#x3D;55 WHERE id&#x3D;4</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>UPDATE t_customer SET age&#x3D;55 WHERE id&#x3D;5; # OK   或者<br />UPDATE t_customer SET age&#x3D;33 WHERE id&#x3D;6; # OK   或者<br />UPDATE t_customer SET age&#x3D;11 WHERE id&#x3D;4; # 转圈圈</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>按照主键索引id</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>解释：更新数据命中索引，发生<strong>行锁</strong></p>
+</li>
+<li><p>名词解释：聚簇索引和非聚簇索引</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-130150.png" alt="聚簇索引和非聚簇索引"></p>
+</li>
+</ul>
+<p><strong>案例3</strong></p>
+<ul>
+<li><p>步骤</p>
+<pre><code class="highlight sql"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> t_customer;</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-130403.png" alt="查看索引"></p>
+<p>t_customer 表中有 索引 <code>cname</code></p>
+<table>
+<thead>
+<tr>
+<th>session01</th>
+<th>session02</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BEGIN;<br />UPDATE t_customer SET age&#x3D;1 WHERE cname&#x3D;’z3’</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>UPDATE t_customer SET age&#x3D;44 WHERE cNAME&#x3D;’z4’; #ok <br />UPDATE t_customer SET age&#x3D;55 WHERE cNAME&#x3D;’z5’; #ok <br />UPDATE t_customer SET age&#x3D;11 WHERE cNAME&#x3D;’z3’ # 转圈圈<br />UPDATE t_customer SET age&#x3D;11 WHERE id&#x3D;4 # 转圈圈</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>按照辅助索引cname</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>更新数据命中索引，发生了行锁</p>
+</li>
+</ul>
+<p><strong>总结：</strong></p>
+<ul>
+<li>InnoDB的行锁，是通过锁住索引来实现的，如果加锁查询的时候没有使用到索引，会将整个聚簇索引都锁住，相当于锁表了。</li>
+<li>命中索引锁行，没有命中锁表，问题会扩大化。</li>
+</ul>
+<p>3、什么是回表</p>
+<p><strong>概念：</strong></p>
+<p>回表是指数据库根据索引（非主键）找到了指定的记录所在行后，还需要根据主键再次到数据块里获取数据的操作。</p>
+<p><strong>建表SQL</strong></p>
+<pre><code class="highlight sql"><span class="comment">-- 创建表</span>
+<span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `employee` (
+	`id` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`name` <span class="type">VARCHAR</span> ( <span class="number">255</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	`age` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	`<span class="type">date</span>` DATETIME <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	`sex` <span class="type">INT</span> ( <span class="number">1</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	<span class="keyword">PRIMARY</span> KEY ( `id` ),
+	KEY `idx_age` ( `age` ) <span class="keyword">USING</span> BTREE 
+) ENGINE <span class="operator">=</span> INNODB <span class="keyword">DEFAULT</span> CHARSET <span class="operator">=</span> utf8;
+
+ 
+<span class="comment">-- 插入数据</span>
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">100</span>,<span class="string">&#x27;小伦&#x27;</span>,<span class="number">43</span>,<span class="string">&#x27;2021-01-20&#x27;</span>,<span class="string">&#x27;0&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">200</span>,<span class="string">&#x27;俊杰&#x27;</span>,<span class="number">48</span>,<span class="string">&#x27;2021-01-21&#x27;</span>,<span class="string">&#x27;0&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">300</span>,<span class="string">&#x27;紫琪&#x27;</span>,<span class="number">36</span>,<span class="string">&#x27;2020-01-21&#x27;</span>,<span class="string">&#x27;1&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">400</span>,<span class="string">&#x27;立红&#x27;</span>,<span class="number">32</span>,<span class="string">&#x27;2020-01-21&#x27;</span>,<span class="string">&#x27;0&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">500</span>,<span class="string">&#x27;易迅&#x27;</span>,<span class="number">37</span>,<span class="string">&#x27;2020-01-21&#x27;</span>,<span class="string">&#x27;1&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">600</span>,<span class="string">&#x27;小军&#x27;</span>,<span class="number">49</span>,<span class="string">&#x27;2021-01-21&#x27;</span>,<span class="string">&#x27;0&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">700</span>,<span class="string">&#x27;小燕&#x27;</span>,<span class="number">28</span>,<span class="string">&#x27;2021-01-21&#x27;</span>,<span class="string">&#x27;1&#x27;</span>);
+
+<span class="comment">-- 查询索引</span>
+<span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> employee;
+ 
+<span class="comment">-- 查询语句分析</span>
+EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employee <span class="keyword">WHERE</span> age <span class="operator">=</span> <span class="number">32</span>;</code></pre>
+
+
+
+<p><strong>问题：如果SELECT * FROM employee WHERE age &#x3D; 32查询SQL，需要执行几次树搜索操作？</strong></p>
+<ul>
+<li><p>explain分析</p>
+<pre><code class="highlight sql"><span class="comment">-- 查询语句分析</span>
+EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employee <span class="keyword">WHERE</span> age <span class="operator">=</span> <span class="number">32</span>;</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-141557.png" alt="查询语句分析"></p>
+</li>
+<li><p>回表分析</p>
+<ul>
+<li><p>第一步：通过age索引查找</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-141856.png" alt="第一步：通过age索引查找"></p>
+<ul>
+<li>搜索idx_age索引树，将磁盘块1加载到内存，由于32&lt;37,搜索左路分支，加载到磁盘寻址磁盘块2。</li>
+<li>将磁盘块2加载到内存中，在内存继续遍历，找到age&#x3D;32的记录，取得id &#x3D; 400，拿到id&#x3D;400后，回到id主键索引树。</li>
+</ul>
+</li>
+<li><p>第二步：通过主键索引查找</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-142012.png" alt="第二步：通过主键索引查找"></p>
+</li>
+<li><p>过程分析</p>
+<ul>
+<li>搜索 <code>idx_age</code> 索引树，将磁盘块1加载到内存，由于32&lt;37,搜索左路分支，加载到磁盘寻址磁盘块2。</li>
+<li>将磁盘块2加载到内存中，在内存继续遍历，找到age&#x3D;32的记录，取得id &#x3D; 400，拿到id&#x3D;400后，回到id主键索引树。</li>
+<li>搜索id主键索引树，将磁盘块1加载内存，在内存遍历找到了400，但是B+树索引非叶子节点是不保存数据的。索引会继续搜索400的右分支，到磁盘寻址磁盘块3.</li>
+<li>将磁盘块3加载内存再内存遍历，找到id&#x3D;400的记录，拿到第4行(Row4)这一行的数据，查询成功。</li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+<p><strong>B+树检索原理</strong></p>
+<p><strong>由于B+树的非叶子节点只存储键值信息，假设每个磁盘块能存储4个键值及指针信息，则变成B+树后其结构如下图所示：</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-144139.png" alt="B+树检索原理"></p>
+<p>B+树中，所有数据记录节点都是按照键值大小顺序存放在同一层的叶子节点上，而非叶子节点上只存储key值信息，这样可以大大加大每个节点存储的key值数量，降低B+树的高度。</p>
+<p><strong>B+树算法：</strong> 通过继承了B树的特征，B+树相比B树，新增叶子节点与非叶子节点关系。叶子节点中包含了键值和数据，根节点和枝节点中，只是包含键值和子节点引用，不包含数据。通过非叶子节点查询叶子节点获取对应的数据，所有相邻的叶子节点包含非叶子节点使用链表进行结合，叶子节点是顺序排序并且相邻节点有顺序引用的关系 </p>
+<p><strong>总结：</strong></p>
+<ul>
+<li>回表是指数据库根据索引（非主键）找到了指定的记录所在行后，还需要根据主键再次到数据块里获取数据的操作。这个过程在MySQL中可能涉及两次查询：首先通过索引扫描找到满足条件的记录的主键值，然后再通过主键值去主键索引中查找完整的行记录。</li>
+<li>具体来说，在InnoDB存储引擎中，当通过非聚簇索引查询数据时，由于索引中不包含完整的行数据，因此需要根据索引中找到的主键值再去聚簇索引中查找完整的行数据，这个过程就是回表。</li>
+<li>然而，回表操作虽然提供了更全面的数据信息，但也带来了一些问题和局限性。首先，回表操作需要访问两次索引，增加了IO开销和CPU消耗，对查询性能有一定的影响。特别是在高并发、大数据量的情况下，回表可能成为性能瓶颈。其次，由于回表操作是基于物理地址来获取数据，如果在回表过程中发生了数据修改（如DELETE、UPDATE），则可能会读取到不一致或错误的数据。</li>
+<li>因此，在设计索引时，需要结合具体的业务场景和查询需求，选择合适的索引策略，以尽量减少回表的次数和影响，提高查询效率和性能。例如，可以通过使用覆盖索引来避免回表操作，覆盖索引是指索引包含了查询所需的所有字段的值，因此可以直接通过索引获取查询结果，而无需再去访问数据表。</li>
+</ul>
+<p>4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？</p>
+<p><strong>给表添加索引的时候，是会对表加锁的</strong>。如果不谨慎操作可能出现生产事故的，比如过程中发生了数据修改（如DELETE、UPDATE），则可能会读取到不一致或错误的数据。</p>
+<p>可以参考以下方法：</p>
+<ol>
+<li>先创建一张跟原表A数据结构相同的新表B。</li>
+<li>在新表B添加需要加上的新索引。</li>
+<li>把原表A数据导到新表B</li>
+<li>rename新表B为原表的表名A，原表A换别的表名；</li>
+</ol>
+<p>一句话：腾笼换鸟，建新表+建索引+导数据+废旧表</p>
+<p>5、MySQL删除重复数据-解决线上数据库存在重复数据的问题</p>
+<p><strong>目标</strong></p>
+<p>去掉同一字段下的重复数据或者仅仅留下一条</p>
+<p><strong>SQL</strong></p>
+<pre><code class="highlight sql"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (
+	`id` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,
+	`name` <span class="type">VARCHAR</span> ( <span class="number">20</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	`age` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	<span class="keyword">PRIMARY</span> KEY ( `id` ) 
+) ENGINE <span class="operator">=</span> INNODB AUTO_INCREMENT <span class="operator">=</span> <span class="number">1</span> <span class="keyword">DEFAULT</span> CHARSET <span class="operator">=</span> utf8 <span class="keyword">COLLATE</span> <span class="operator">=</span> utf8_bin;
 
+ 
+
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="number">22</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;dog&#x27;</span>, <span class="number">33</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;fish&#x27;</span>, <span class="number">44</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;4&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="number">55</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;5&#x27;</span>, <span class="string">&#x27;dog&#x27;</span>, <span class="number">11</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;6&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="number">45</span>);
+
+
+<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> student;</code></pre>
+
+
+
+<p><strong>编写查看有重复记录的SQL？</strong></p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> name, <span class="built_in">COUNT</span>(name) <span class="keyword">FROM</span> student <span class="keyword">GROUP</span> <span class="keyword">BY</span> name <span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(name) <span class="operator">&gt;</span> <span class="number">1</span>;</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-160050.png" alt="查看重复记录"></p>
+<p><strong>如何编写删除重复记录的SQL</strong></p>
+<pre><code class="highlight sql"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> student <span class="keyword">WHERE</span> id <span class="keyword">NOT</span> <span class="keyword">IN</span> (
+	<span class="keyword">SELECT</span> t.id <span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="built_in">MIN</span>(id) <span class="keyword">as</span> id <span class="keyword">FROM</span> student <span class="keyword">GROUP</span> <span class="keyword">BY</span> name <span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(name) <span class="operator">&gt;</span> <span class="number">0</span>) t
+)</code></pre>
+
+
+
+
+
+<p>6、MySQL千万级数据分页的优化</p>
+<p><strong>mysql的limit查询说明</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-162729.png" alt="mysql的limit查询说明"></p>
+<p><strong>优化前</strong></p>
+<pre><code class="highlight sql"><span class="comment">/*偏移量为100，取30*/</span>
+<span class="keyword">SELECT</span> SQL_NO_CACHE
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id <span class="keyword">DESC</span> 
+LIMIT <span class="number">100</span>, <span class="number">30</span>;
+
+
+
+<span class="comment">/*偏移量为4950000，取30*/</span>
+<span class="keyword">SELECT</span> SQL_NO_CACHE
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id <span class="keyword">DESC</span> 
+LIMIT <span class="number">4950000</span>, <span class="number">30</span>;</code></pre>
+
+<p><strong>600W的emp表数据为例</strong></p>
+<p><strong>原因：</strong></p>
+<p>其实是因为limit后面的偏移量太大导致的。比如 limit 4950000,30。</p>
+<p>这个等同于数据库要扫描出 4950030条数据，然后再丢弃前面的 49500000条数据返回剩下30条数据给用户，这种取法明显不合理。</p>
+<p>分页操作通常会使用limit加上偏移量的办法实现，同时再加上合适的order by子句。生产危险隐患：当偏移量非常大的时候，它会导致MySQL扫描大量不需要的行然后再抛弃掉。</p>
+<p>比如：</p>
+<ul>
+<li><p>limit 10000,20的意思扫描满足条件的10020行，扔掉前面的10000行，返回最后的20行，问题就在这里。 </p>
+</li>
+<li><p>假如 LIMIT 2000000, 30 </p>
+<p>扫描了200万+ 30行，慢的都堵死甚至会导致磁盘io 100%消耗。  但是: limit 30 这样的语句仅仅扫描30行。</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-163234.jpg" alt="limit查询"></p>
+<p><strong>参考阿里巴巴手册</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-163329.png" alt="阿里巴巴手册"></p>
+<p><strong>优化后</strong></p>
+<ul>
+<li><p>使用索引覆盖+子查询优化</p>
+<ul>
+<li><p>原理</p>
+<p>因为我们有主键id，并且在上面建了索引，所以可以先在索引树中找到开始位置的 id值，再根据找到的id值查询行数据。</p>
+</li>
+<li><p>SQL</p>
+<pre><code class="highlight sql"><span class="comment">/*子查询获取偏移100条的位置的id，在这个位置上往后取30*/</span>
+<span class="keyword">SELECT</span> 
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">WHERE</span> a.id <span class="operator">&gt;=</span> (<span class="keyword">SELECT</span> id <span class="keyword">FROM</span> emp <span class="keyword">ORDER</span> <span class="keyword">BY</span> id LIMIT <span class="number">100</span>,<span class="number">1</span>)
+<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id LIMIT <span class="number">30</span>;
+
+
+
+<span class="comment">/*子查询获取偏移4950000条的位置的id，在这个位置上往后取30*/</span>
+<span class="keyword">SELECT</span> 
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">WHERE</span> a.id <span class="operator">&gt;=</span> (<span class="keyword">SELECT</span> id <span class="keyword">FROM</span> emp <span class="keyword">ORDER</span> <span class="keyword">BY</span> id LIMIT <span class="number">4950000</span>,<span class="number">1</span>)
+<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id LIMIT <span class="number">30</span>;</code></pre></li>
+</ul>
+</li>
+<li><p>起始位置重定义</p>
+<ul>
+<li><p>原理</p>
+<p>记住上次查找结果的主键位置，避免使用偏移量 offset</p>
+</li>
+<li><p>SQL</p>
+<pre><code class="highlight sql"><span class="comment">/*记住了上次的分页的最后一条数据的id是100，这边就直接跳过100，从101开始扫描表*/</span>
+<span class="keyword">SELECT</span> 
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">WHERE</span> a.id <span class="operator">&gt;</span> <span class="number">100</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id LIMIT <span class="number">30</span>;    
+
+
+<span class="comment">/*记住了上次的分页的最后一条数据的id是4950000，这边就直接跳过4950000，从4950001开始扫描表*/</span>
+<span class="keyword">SELECT</span> 
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">WHERE</span> a.id <span class="operator">&gt;</span> <span class="number">4950000</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id LIMIT <span class="number">30</span>;</code></pre></li>
+</ul>
+</li>
+<li><p>服务降级不让使用</p>
+<p><strong>阿里的方案：</strong>配置limit的偏移量和获取数一个最大值，超过这个最大值，就返回空数据。因为按照业务来说，超过这个值你已经不是在分页了，而是在刷数据了，如果确认要找数据，应该输入合适条件来缩小范围，而不是一页一页分页。</p>
+<p>客户请求request的时候 如果offset大于某个数值就先返回一个4xx的错误，避免黑客攻击or刷单行为呢，正常人，很少翻查10页以后的内容。</p>
+<p>另外，该有的限流、降级也应该考虑进去。比如工具多线程调用，在短时间频率内5000次调用，可以使用计数服务判断并反馈用户调用过于频繁，直接给予断掉</p>
+</li>
+</ul>
+<!-- flag of hidden posts -->
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
     </div>
