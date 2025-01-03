@@ -9,12 +9,12 @@
   <meta name="keywords" content=" linux , Rocky , Docker ">
   <meta name="description" content="002-Rocky9.3系统初始化设置和Docker安装 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#x72;&#x67;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#x67;&#101;&#95;&#57;&#53;&#x40;&#49;&#50;&#x36;&#x2e;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#x72;&#x67;&#x65;&#95;&#57;&#x35;&#x40;&#x31;&#50;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#x67;&#101;&#95;&#57;&#53;&#x40;&#49;&#50;&#x36;&#x2e;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
@@ -324,7 +324,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="94">
-<input type="hidden" id="yelog_site_word_count" value="389.5k">
+<input type="hidden" id="yelog_site_word_count" value="389.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1379,12 +1379,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2025-01-02 18:53:57'>2025-01-02 13:25</time>
+            发布时间 : <time class="date" title='最后更新: 2025-01-03 16:11:23'>2025-01-02 13:25</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2.2k</span>
+        <span>字数:2.6k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1534,7 +1534,8 @@ systemctl disable firewalld
 yum -y install iptables-services
 systemctl start iptables
 iptables -F
-systemctl enable iptables</code></pre>
+systemctl enable iptables
+service iptables save</code></pre>
 
 <ul>
 <li><p>命令解析</p>
@@ -1554,7 +1555,10 @@ systemctl start iptables
 iptables -F
 <span class="meta prompt_"></span>
 <span class="meta prompt_"># </span><span class="language-bash">设置 iptables 服务开机自启动，确保服务器重启后，iptables 服务会自动加载防火墙规则。</span>
-systemctl enable iptables</code></pre></li>
+systemctl enable iptables
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">将当前 iptables 的规则配置保存到文件中（通常是 /etc/sysconfig/iptables），以便在系统重启或 iptables 服务重新启动后，能够自动加载保存的规则。</span>
+service iptables save</code></pre></li>
 </ul>
 <h2 id="1-5-禁用-Selinux"><a href="#1-5-禁用-Selinux" class="headerlink" title="1.5 禁用 Selinux"></a>1.5 禁用 Selinux</h2><pre><code class="highlight shell">setenforce 0
 sed -i &quot;s/SELINUX=enforcing/SELINUX=disabled/g&quot; /etc/selinux/config
@@ -1592,9 +1596,18 @@ grubby --update-kernel ALL --remove-args selinux</code></pre>
 yum install -y bridge-utils
 modprobe br_netfilter
 echo &#x27;br_netfilter&#x27; &gt;&gt; /etc/modules-load.d/bridge.conf
-echo &#x27;net.bridge.bridge-nf-call-iptables=1&#x27; &gt;&gt; /etc/sysctl.conf
-echo &#x27;net.bridge.bridge-nf-call-ip6tables=1&#x27; &gt;&gt; /etc/sysctl.conf
-echo &#x27;net.ipv4.ip_forward=1&#x27; &gt;&gt; /etc/sysctl.conf
+
+cat &gt;&gt; /etc/sysctl.conf &lt;&lt;EOF
+net.bridge.bridge-nf-call-iptables=1
+net.bridge.bridge-nf-call-ip6tables=1
+net.ipv4.ip_forward=1
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_max_tw_buckets = 20480
+net.ipv4.tcp_max_syn_backlog = 20480
+net.core.netdev_max_backlog = 262144
+net.ipv4.tcp_fin_timeout = 20
+EOF
+
 sysctl -p</code></pre>
 
 <ul>
@@ -1619,14 +1632,38 @@ echo &#x27;br_netfilter&#x27; &gt;&gt; /etc/modules-load.d/bridge.conf
 <span class="meta prompt_"></span>
 <span class="meta prompt_"># </span><span class="language-bash">向 /etc/sysctl.conf 文件添加配置，使桥接流量可以通过 iptables 规则管理。</span>
 <span class="meta prompt_"># </span><span class="language-bash">启用桥接网络上的 IPv4 流量通过 iptables 的规则处理。</span>
-echo &#x27;net.bridge.bridge-nf-call-iptables=1&#x27; &gt;&gt; /etc/sysctl.conf
+net.bridge.bridge-nf-call-iptables=1
 <span class="meta prompt_"></span>
 <span class="meta prompt_"># </span><span class="language-bash">向 /etc/sysctl.conf 文件添加配置，使桥接流量中的 IPv6 流量可以通过 ip6tables 规则管理。</span>
-echo &#x27;net.bridge.bridge-nf-call-ip6tables=1&#x27; &gt;&gt; /etc/sysctl.conf
+net.bridge.bridge-nf-call-ip6tables=1
 <span class="meta prompt_"></span>
 <span class="meta prompt_"># </span><span class="language-bash">向 /etc/sysctl.conf 文件添加配置，启用 IP 转发功能。</span>
 <span class="meta prompt_"># </span><span class="language-bash">用途：在容器网络或 Kubernetes 集群中，允许跨子网通信。</span>
-echo &#x27;net.ipv4.ip_forward=1&#x27; &gt;&gt; /etc/sysctl.conf
+net.ipv4.ip_forward=1
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">启用 TCP SYN Cookie 技术，用于防范 SYN Flood 攻击。</span>
+<span class="meta prompt_"># </span><span class="language-bash">在服务器收到大量的 TCP SYN 请求但无法分配足够资源时，启用 SYN Cookie 可通过一种临时编码方式验证连接合法性，避免资源耗尽。</span>
+net.ipv4.tcp_syncookies = 1
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">设置系统同时保持的 TCP TIME_WAIT 状态的连接数上限。达到上限后，系统会直接丢弃多余的连接（而不是继续占用资源）。</span>
+<span class="meta prompt_"># </span><span class="language-bash">默认值180000,对于高并发的 Web 服务器或反向代理，适当调低该值（如 20480）以避免 TIME_WAIT 数量过多。</span>
+net.ipv4.tcp_max_tw_buckets = 20480
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">设置 TCP 三次握手中 SYN 请求的队列长度上限。</span>
+<span class="meta prompt_"># </span><span class="language-bash">当服务器接收的 SYN 请求超过该值时，新的连接请求会被丢弃。</span>
+<span class="meta prompt_"># </span><span class="language-bash">如果服务器负载较高且连接数较多，可以调高到 20480 或更高。</span>
+net.ipv4.tcp_max_syn_backlog = 20480
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">设置网络设备接收队列的最大长度。</span>
+<span class="meta prompt_"># </span><span class="language-bash">如果接收队列中的数据包数量超过该值，内核将直接丢弃后续数据包。</span>
+<span class="meta prompt_"># </span><span class="language-bash">在高流量环境中，设置为较高值（如 262144）以避免丢包，提高吞吐量。</span>
+net.core.netdev_max_backlog = 262144
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">设置 TCP 连接处于 FIN_WAIT2 状态的超时时间（单位：秒）。</span>
+<span class="meta prompt_"># </span><span class="language-bash">FIN_WAIT2 状态表示服务端已发送 FIN 包等待客户端确认，此状态会持续占用资源。</span>
+<span class="meta prompt_"># </span><span class="language-bash">默认值：通常为 60 秒。</span>
+<span class="meta prompt_"># </span><span class="language-bash">在高并发服务器上，将该值调低（如 20）以减少 FIN_WAIT2 状态的资源占用。</span>
+net.ipv4.tcp_fin_timeout = 20
 <span class="meta prompt_"></span>
 <span class="meta prompt_"># </span><span class="language-bash">重新加载 /etc/sysctl.conf 中的所有内核参数配置，并使其立即生效。</span>
 sysctl -p</code></pre></li>
