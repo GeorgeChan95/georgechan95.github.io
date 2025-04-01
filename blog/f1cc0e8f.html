@@ -1,0 +1,2227 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>006-Mysql相关面试题 | George&#39;s Blog</title><meta name="robots" content="noindex">
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" 随笔 , Java ">
+  <meta name="description" content="006-Mysql相关面试题 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#x67;&#x65;&#x5f;&#57;&#53;&#64;&#x31;&#x32;&#54;&#x2e;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#x67;&#x65;&#x5f;&#57;&#53;&#64;&#x31;&#x32;&#54;&#x2e;&#x63;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-12-21T14:19:49.532Z">
+<meta property="article:author" content="George">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(107)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="设计模式">
+            
+            设计模式
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Docker">
+            
+            Docker
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="k8s">
+            
+            k8s
+            <small>(4)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(4)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="neo4j">
+            
+            neo4j
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="UML">
+            
+            UML
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="107">
+<input type="hidden" id="yelog_site_word_count" value="405.4k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>科学上网</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>设计模式</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>neo4j</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Rocky</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>SpringBoot</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu18</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>UML</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-23 11:00:05">2025/03/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-23 10:46:07">2025/03/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-23 10:30:01">2025/03/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-23 10:15:37">2025/03/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-23 09:54:55">2025/03/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-23 09:29:24">2025/03/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-23 08:55:08">2025/03/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-22 21:04:12">2025/03/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 "
+           href="/blog/undefined.html"
+           data-tag=""
+           data-author="" >
+            <span class="post-title" title=""></span>
+            <span class="post-date" title="2025-03-22 09:52:17">2025/03/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/79e06aab.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="004-Pod的生命周期">004-Pod的生命周期</span>
+            <span class="post-date" title="2025-03-22 09:05:00">2025/03/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 Docker "
+           href="/blog/b01d5c62.html"
+           data-tag="linux,Docker,科学上网"
+           data-author="" >
+            <span class="post-title" title="Docker配置网络代理实现外网镜像下载">Docker配置网络代理实现外网镜像下载</span>
+            <span class="post-date" title="2025-01-08 23:00:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/7f174b3e.html"
+           data-tag="linux,科学上网,Rocky"
+           data-author="" >
+            <span class="post-title" title="Rocky9安装Shadowsocks实现科学上网">Rocky9安装Shadowsocks实现科学上网</span>
+            <span class="post-date" title="2025-01-08 21:09:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/b00f53e9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群">003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群</span>
+            <span class="post-date" title="2025-01-03 22:05:00">2025/01/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/3c79d8d9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="002-Rocky9.3系统初始化设置和Docker安装">002-Rocky9.3系统初始化设置和Docker安装</span>
+            <span class="post-date" title="2025-01-02 13:25:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/7e3a5200.html"
+           data-tag="linux,Rocky"
+           data-author="" >
+            <span class="post-title" title="001-ESXi8安装Rocky9.3虚拟机">001-ESXi8安装Rocky9.3虚拟机</span>
+            <span class="post-date" title="2025-01-02 09:34:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/77d85f50.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="25-责任链模式">25-责任链模式</span>
+            <span class="post-date" title="2024-12-03 21:08:00">2024/12/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/fcec839d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="24-策略模式">24-策略模式</span>
+            <span class="post-date" title="2024-12-02 18:16:00">2024/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/6109865a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="23-状态模式">23-状态模式</span>
+            <span class="post-date" title="2024-11-29 19:30:00">2024/11/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/58d4db7.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="22-解释器模式">22-解释器模式</span>
+            <span class="post-date" title="2024-11-28 22:00:00">2024/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/a5cf7eb4.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="21-备忘录模式">21-备忘录模式</span>
+            <span class="post-date" title="2024-11-27 21:40:00">2024/11/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3148d6be.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="20-中介者模式">20-中介者模式</span>
+            <span class="post-date" title="2024-11-26 20:35:00">2024/11/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f06aea0b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="19-观察者模式">19-观察者模式</span>
+            <span class="post-date" title="2024-11-25 21:07:00">2024/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/7dbd9149.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="18-迭代器模式">18-迭代器模式</span>
+            <span class="post-date" title="2024-11-24 00:02:00">2024/11/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4fdf6e52.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="17-访问者模式">17-访问者模式</span>
+            <span class="post-date" title="2024-11-23 21:55:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/60fd53f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="16-命令模式">16-命令模式</span>
+            <span class="post-date" title="2024-11-23 20:30:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4930323d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="15-模板方法模式">15-模板方法模式</span>
+            <span class="post-date" title="2024-11-23 19:40:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/e4235185.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="14-代理模式">14-代理模式</span>
+            <span class="post-date" title="2024-11-21 23:16:00">2024/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/1b225c1f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="13-享元模式">13-享元模式</span>
+            <span class="post-date" title="2024-11-20 23:10:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/906e9e8b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="12-外观模式">12-外观模式</span>
+            <span class="post-date" title="2024-11-20 22:09:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c456a66a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="11-组合模式">11-组合模式</span>
+            <span class="post-date" title="2024-11-16 17:00:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90213fc6.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="10-装饰器模式">10-装饰器模式</span>
+            <span class="post-date" title="2024-11-16 14:06:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c7419cfa.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="09-桥接模式">09-桥接模式</span>
+            <span class="post-date" title="2024-11-14 20:51:00">2024/11/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f77fc055.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="08-适配器模式">08-适配器模式</span>
+            <span class="post-date" title="2024-11-12 22:55:00">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/a3b0b090.html"
+           data-tag="neo4j,SpringBoot"
+           data-author="" >
+            <span class="post-title" title="Spring Boot对Neo4j节点关系的增删改查">Spring Boot对Neo4j节点关系的增删改查</span>
+            <span class="post-date" title="2024-11-12 21:00:30">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3ab9aa56.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="07-建造者模式">07-建造者模式</span>
+            <span class="post-date" title="2024-11-11 21:55:00">2024/11/11</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/7dc0fcde.html"
+           data-tag="neo4j,SpringBoot"
+           data-author="" >
+            <span class="post-title" title="Spring Boot整合Neo4j实现增删改查">Spring Boot整合Neo4j实现增删改查</span>
+            <span class="post-date" title="2024-11-07 19:04:30">2024/11/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/564adc33.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="06-原型模式">06-原型模式</span>
+            <span class="post-date" title="2024-11-06 19:00:00">2024/11/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/effeea78.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="05-工厂模式">05-工厂模式</span>
+            <span class="post-date" title="2024-11-04 21:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/d7e99843.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="04-单例模式">04-单例模式</span>
+            <span class="post-date" title="2024-11-04 19:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90f1850a.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="03-UML类图">03-UML类图</span>
+            <span class="post-date" title="2024-11-02 14:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 UML "
+           href="/blog/c13304c1.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="02-UML图绘制工具">02-UML图绘制工具</span>
+            <span class="post-date" title="2024-11-02 09:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2e826df1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Docker环境下RTSP流转RTMP和HLS">Docker环境下RTSP流转RTMP和HLS</span>
+            <span class="post-date" title="2024-11-01 15:17:33">2024/11/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/cd625bba.html"
+           data-tag="设计模式,java"
+           data-author="" >
+            <span class="post-title" title="01-设计模式六大原则">01-设计模式六大原则</span>
+            <span class="post-date" title="2024-10-31 17:00:00">2024/10/31</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1a649f4c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="13-JUC进阶-ReentrantReadWriteLock与StampedLock">13-JUC进阶-ReentrantReadWriteLock与StampedLock</span>
+            <span class="post-date" title="2024-10-19 09:26:00">2024/10/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/5c93903a.html"
+           data-tag="linux,neo4j"
+           data-author="" >
+            <span class="post-title" title="Docker部署Neo4j并导入CSV数据">Docker部署Neo4j并导入CSV数据</span>
+            <span class="post-date" title="2024-10-17 15:00:30">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/ad38e6b1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Ubuntu18.04离线源环境搭建">Ubuntu18.04离线源环境搭建</span>
+            <span class="post-date" title="2024-10-17 09:47:33">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3fdbf0f6.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
+            <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3e0d7592.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
+            <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4502cffa.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
+            <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4de6a39b.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
+            <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/72329cf5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
+            <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/5e3757c1.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
+            <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-interview/006-Mysql相关" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">006-Mysql相关面试题</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="随笔">随笔</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color3">随笔</a>
+            
+            <a class="color5">Java</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2025-03-22 09:46:00'>2024-12-29 22:00</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:3.8k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1%E3%80%81%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8B%E5%A4%8D%E5%90%88%E7%B4%A2%E5%BC%95%EF%BC%8C%E4%B8%80%E8%88%AC%E4%BD%A0%E5%8A%A0%E5%9C%A8%E5%93%AA%E4%BA%9B%E5%AD%97%E6%AE%B5-%E5%BB%BA%E7%B4%A2%E5%BC%95%E7%9A%84%E7%90%86%E8%AE%BA%E4%BE%9D%E6%8D%AE%E6%88%96%E8%80%85%E7%BB%8F%E9%AA%8C%E4%BD%A0%E5%88%86%E4%BA%AB%E4%B8%8B"><span class="toc-text">1、如何建立复合索引，一般你加在哪些字段?建索引的理论依据或者经验你分享下</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2%E3%80%81Innodb%E7%9A%84%E8%A1%8C%E9%94%81%E5%88%B0%E5%BA%95%E9%94%81%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-text">2、Innodb的行锁到底锁了什么？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%AA%E4%BA%9B%E5%BC%95%E6%93%8E%E6%94%AF%E6%8C%81%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%EF%BC%9F"><span class="toc-text">哪些引擎支持数据库事务？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E9%94%81%E7%BA%A7%E5%88%AB"><span class="toc-text">mysql锁级别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#SQL"><span class="toc-text">SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B1"><span class="toc-text">案例1</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B2"><span class="toc-text">案例2</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B3"><span class="toc-text">案例3</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-text">总结：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%9E%E8%A1%A8"><span class="toc-text">3、什么是回表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%EF%BC%9A"><span class="toc-text">概念：</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E8%A1%A8SQL"><span class="toc-text">建表SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%EF%BC%9A%E5%A6%82%E6%9E%9CSELECT-FROM-employee-WHERE-age-32%E6%9F%A5%E8%AF%A2SQL%EF%BC%8C%E9%9C%80%E8%A6%81%E6%89%A7%E8%A1%8C%E5%87%A0%E6%AC%A1%E6%A0%91%E6%90%9C%E7%B4%A2%E6%93%8D%E4%BD%9C%EF%BC%9F"><span class="toc-text">问题：如果SELECT * FROM employee WHERE age &#x3D; 32查询SQL，需要执行几次树搜索操作？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#B-%E6%A0%91%E6%A3%80%E7%B4%A2%E5%8E%9F%E7%90%86"><span class="toc-text">B+树检索原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%EF%BC%9A-1"><span class="toc-text">总结：</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4%E3%80%81%E5%A6%82%E6%9E%9C%E4%B8%80%E5%BC%A0%E8%A1%A8%E6%95%B0%E6%8D%AE%E9%87%8F%E7%BA%A7%E6%98%AF%E5%8D%83%E4%B8%87%E7%BA%A7%E5%88%AB%E4%BB%A5%E4%B8%8A%E7%9A%84%EF%BC%8C%E8%A6%81%E7%BB%99%E8%BF%99%E5%BC%A0%E8%A1%A8%E6%B7%BB%E5%8A%A0%E7%B4%A2%E5%BC%95%EF%BC%8C%E4%BD%A0%E9%9C%80%E8%A6%81%E6%80%8E%E4%B9%88%E5%81%9A%E5%91%A2%EF%BC%9F"><span class="toc-text">4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5%E3%80%81MySQL%E5%88%A0%E9%99%A4%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE-%E8%A7%A3%E5%86%B3%E7%BA%BF%E4%B8%8A%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AD%98%E5%9C%A8%E9%87%8D%E5%A4%8D%E6%95%B0%E6%8D%AE%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">5、MySQL删除重复数据-解决线上数据库存在重复数据的问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6%E3%80%81MySQL%E5%8D%83%E4%B8%87%E7%BA%A7%E6%95%B0%E6%8D%AE%E5%88%86%E9%A1%B5%E7%9A%84%E4%BC%98%E5%8C%96"><span class="toc-text">6、MySQL千万级数据分页的优化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql%E7%9A%84limit%E6%9F%A5%E8%AF%A2%E8%AF%B4%E6%98%8E"><span class="toc-text">mysql的limit查询说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E5%89%8D"><span class="toc-text">优化前</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%98%E5%8C%96%E5%90%8E"><span class="toc-text">优化后</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1、如何建立复合索引，一般你加在哪些字段-建索引的理论依据或者经验你分享下"><a href="#1、如何建立复合索引，一般你加在哪些字段-建索引的理论依据或者经验你分享下" class="headerlink" title="1、如何建立复合索引，一般你加在哪些字段?建索引的理论依据或者经验你分享下"></a>1、如何建立复合索引，一般你加在哪些字段?建索引的理论依据或者经验你分享下</h1><p><strong>建表SQL</strong></p>
+<pre><code class="highlight sql"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `product_comment` (
+	`comment_id` <span class="type">INT</span> ( <span class="number">10</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">&#x27;评论ID&#x27;</span>,
+	`product_id` <span class="type">INT</span> ( <span class="number">10</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;商品ID&#x27;</span>,
+	`order_id` <span class="type">BIGINT</span> ( <span class="number">20</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;订单ID&#x27;</span>,
+	`customer_id` <span class="type">INT</span> ( <span class="number">10</span> ) UNSIGNED <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;用户ID&#x27;</span>,
+	`title` <span class="type">VARCHAR</span> ( <span class="number">50</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;评论标题&#x27;</span>,
+	`content` <span class="type">VARCHAR</span> ( <span class="number">300</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;评论内容&#x27;</span>,
+	`audit_status` TINYINT ( <span class="number">4</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> COMMENT <span class="string">&#x27;审核状态:0未审核1已审核&#x27;</span>,
+	`audit_time` <span class="type">TIMESTAMP</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;评论时间&#x27;</span>,
+	`modified_time` <span class="type">TIMESTAMP</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">&#x27;最后修改时间&#x27;</span>,
+<span class="keyword">PRIMARY</span> KEY ( `comment_id` ) 
+) ENGINE <span class="operator">=</span> INNODB AUTO_INCREMENT <span class="operator">=</span> <span class="number">1</span> <span class="keyword">DEFAULT</span> CHARSET <span class="operator">=</span> utf8 COMMENT <span class="operator">=</span> <span class="string">&#x27;商品评论表&#x27;</span></code></pre>
+
+
+
+<p><strong>插入数据</strong></p>
+<pre><code class="highlight sql"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> product_comment ( product_id, order_id, customer_id, title, content, audit_status )
+<span class="keyword">VALUES</span> ( <span class="number">1</span>, <span class="number">108310</span>, <span class="number">1</span>, <span class="string">&#x27;鼠标&#x27;</span>, <span class="string">&#x27;罗技鼠标不错&#x27;</span>, <span class="number">0</span> );
+
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> product_comment ( product_id, order_id, customer_id, title, content, audit_status )
+<span class="keyword">VALUES</span> ( <span class="number">2</span>, <span class="number">108311</span>, <span class="number">2</span>, <span class="string">&#x27;键盘&#x27;</span>, <span class="string">&#x27;小米键盘good&#x27;</span>, <span class="number">0</span> );
+
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> product_comment ( product_id, order_id, customer_id, title, content, audit_status )
+<span class="keyword">VALUES</span> ( <span class="number">3</span>, <span class="number">108312</span>, <span class="number">3</span>, <span class="string">&#x27;U盘&#x27;</span>, <span class="string">&#x27;华为U盘不错&#x27;</span>, <span class="number">0</span> );
+
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> product_comment ( product_id, order_id, customer_id, title, content, audit_status )
+<span class="keyword">VALUES</span> ( <span class="number">3</span>, <span class="number">108313</span>, <span class="number">4</span>, <span class="string">&#x27;U盘&#x27;</span>, <span class="string">&#x27;华为U盘不错2&#x27;</span>, <span class="number">0</span> );</code></pre>
+
+
+
+<p><strong>查询SQL</strong></p>
+<pre><code class="highlight sql">EXPLAIN <span class="keyword">SELECT</span> customer_id,title,content <span class="keyword">FROM</span> `product_comment` <span class="keyword">WHERE</span> audit_status<span class="operator">=</span><span class="number">0</span> <span class="keyword">AND</span> product_id<span class="operator">=</span><span class="number">3</span> LIMIT <span class="number">0</span>,<span class="number">3</span>;</code></pre>
+
+<blockquote>
+<p>结果：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-105756.png" alt="image-20241230105755356"></p>
+</blockquote>
+<p><strong>建立索引要求</strong></p>
+<ul>
+<li><p>禁止在更新十分频繁、区分度不高的属性上建立索引</p>
+<p><strong>解读：</strong></p>
+<ul>
+<li><p>更新会变更B+树，更新频繁的字段建立索引会大大降低数据库性能</p>
+</li>
+<li><p>“性别”这种区分度不大的属性，建立索引是没有什么意义的，不能有效过滤数据，性能与全表扫描类似</p>
+</li>
+</ul>
+</li>
+<li><p>建立组合索引，必须把区分度高的字段放在前面</p>
+<ul>
+<li>解读:能够更加有效的过滤数据</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-110127.png" alt="Mysql建立索引要求"></p>
+<p><strong>区分度定最佳左前缀位置</strong></p>
+<p>查看区分度高的字段</p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span>
+	<span class="built_in">COUNT</span>( <span class="keyword">DISTINCT</span> audit_status )<span class="operator">/</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> audit_statusRate,
+	<span class="built_in">COUNT</span>( <span class="keyword">DISTINCT</span> product_id )<span class="operator">/</span> <span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> product_itRate 
+<span class="keyword">FROM</span>
+	product_comment</code></pre>
+
+<blockquote>
+<p>运行结果：</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-123114.png" alt="字段的区分度"></p>
+</blockquote>
+<p>哪个字段越接近于1，哪个就是区分度更好的，就放在最左边。</p>
+<ul>
+<li><p>建索引</p>
+<pre><code class="highlight sql"><span class="keyword">CREATE</span> INDEX idx_product_id_audit_status <span class="keyword">ON</span> product_comment(product_id,audit_status)</code></pre>
+</li>
+<li><p>删索引</p>
+<pre><code class="highlight sql"><span class="keyword">DROP</span> INDEX idx_product_id_audit_status <span class="keyword">ON</span> product_comment;</code></pre></li>
+</ul>
+<h1 id="2、Innodb的行锁到底锁了什么？"><a href="#2、Innodb的行锁到底锁了什么？" class="headerlink" title="2、Innodb的行锁到底锁了什么？"></a>2、Innodb的行锁到底锁了什么？</h1><h2 id="哪些引擎支持数据库事务？"><a href="#哪些引擎支持数据库事务？" class="headerlink" title="哪些引擎支持数据库事务？"></a><strong>哪些引擎支持数据库事务？</strong></h2><p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html">https://dev.mysql.com/doc/refman/8.0/en/storage-engines.html</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-123813.jpg" alt="哪些引擎支持数据库事务？"></p>
+<h2 id="mysql锁级别"><a href="#mysql锁级别" class="headerlink" title="mysql锁级别"></a><strong>mysql锁级别</strong></h2><ul>
+<li><p>表级锁</p>
+<p>开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。</p>
+</li>
+<li><p>行级锁</p>
+<p>开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。</p>
+</li>
+<li><p>页面锁(不要求)</p>
+<p>开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般</p>
+</li>
+</ul>
+<h2 id="SQL"><a href="#SQL" class="headerlink" title="SQL"></a><strong>SQL</strong></h2><pre><code class="highlight sql"><span class="comment">-- 创建表</span>
+<span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `t_customer` (
+	`id` <span class="type">INT</span> ( <span class="number">20</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,
+	`cname` <span class="type">VARCHAR</span> ( <span class="number">50</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`age` <span class="type">INT</span> ( <span class="number">10</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`phone` <span class="type">VARCHAR</span> ( <span class="number">20</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`sex` TINYINT ( <span class="number">4</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`birth` <span class="type">TIMESTAMP</span> <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> <span class="keyword">UPDATE</span> <span class="built_in">CURRENT_TIMESTAMP</span>,
+	<span class="keyword">PRIMARY</span> KEY ( `id` ) 
+) ENGINE <span class="operator">=</span> INNODB AUTO_INCREMENT <span class="operator">=</span> <span class="number">4</span> <span class="keyword">DEFAULT</span> CHARSET <span class="operator">=</span> utf8mb4;
+
+<span class="comment">-- 插入数据</span>
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> t_customer(cname,age,phone,sex,birth) <span class="keyword">VALUES</span>(<span class="string">&#x27;z3&#x27;</span>,<span class="number">22</span>,<span class="string">&#x27;13811112222&#x27;</span>,<span class="number">1</span>,NOW());
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> t_customer(cname,age,phone,sex,birth) <span class="keyword">VALUES</span>(<span class="string">&#x27;z4&#x27;</span>,<span class="number">24</span>,<span class="string">&#x27;13811112223&#x27;</span>,<span class="number">0</span>,NOW());
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> t_customer(cname,age,phone,sex,birth) <span class="keyword">VALUES</span>(<span class="string">&#x27;z5&#x27;</span>,<span class="number">25</span>,<span class="string">&#x27;13811112224&#x27;</span>,<span class="number">1</span>,NOW());
+
+<span class="comment">-- 查询数据</span>
+<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> t_customer; 
+
+<span class="comment">-- 创建索引</span>
+<span class="keyword">create</span> index idx_cname <span class="keyword">on</span>  t_customer(cname);</code></pre>
+
+
+
+<h2 id="案例1"><a href="#案例1" class="headerlink" title="案例1"></a><strong>案例1</strong></h2><ul>
+<li><p>步骤</p>
+<table>
+<thead>
+<tr>
+<th>session01</th>
+<th>session02—新启动一个客户端连接</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BEGIN;<br />UPDATE t_customer SET age&#x3D;55 WHERE phone&#x3D;’13811112222’</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>UPDATE t_customer SET age&#x3D;55 WHERE id&#x3D;5; #转圈等锁。或者<br />UPDATE t_customer SET age&#x3D;44 WHERE id&#x3D;6; #转圈等锁。</td>
+</tr>
+<tr>
+<td>commit&#x2F;rollback;</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>ok</td>
+</tr>
+<tr>
+<td>phone字段我们没有建索引，不会命中</td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>总结：更新数据，没有使用索引或者索引没命中，则会锁住整个表（<strong>表锁</strong>）</p>
+</li>
+</ul>
+<h2 id="案例2"><a href="#案例2" class="headerlink" title="案例2"></a><strong>案例2</strong></h2><ul>
+<li><p>步骤</p>
+<table>
+<thead>
+<tr>
+<th>session01</th>
+<th>session02</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BEGIN;<br />UPDATE t_customer SET age&#x3D;55 WHERE id&#x3D;4</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>UPDATE t_customer SET age&#x3D;55 WHERE id&#x3D;5; # OK   或者<br />UPDATE t_customer SET age&#x3D;33 WHERE id&#x3D;6; # OK   或者<br />UPDATE t_customer SET age&#x3D;11 WHERE id&#x3D;4; # 转圈圈</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>按照主键索引id</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>解释：更新数据命中索引，发生<strong>行锁</strong></p>
+</li>
+<li><p>名词解释：聚簇索引和非聚簇索引</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-130150.png" alt="聚簇索引和非聚簇索引"></p>
+</li>
+</ul>
+<h2 id="案例3"><a href="#案例3" class="headerlink" title="案例3"></a><strong>案例3</strong></h2><ul>
+<li><p>步骤</p>
+<pre><code class="highlight sql"><span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> t_customer;</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-130403.png" alt="查看索引"></p>
+<p>t_customer 表中有 索引 <code>cname</code></p>
+<table>
+<thead>
+<tr>
+<th>session01</th>
+<th>session02</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BEGIN;<br />UPDATE t_customer SET age&#x3D;1 WHERE cname&#x3D;’z3’</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td>UPDATE t_customer SET age&#x3D;44 WHERE cNAME&#x3D;’z4’; #ok <br />UPDATE t_customer SET age&#x3D;55 WHERE cNAME&#x3D;’z5’; #ok <br />UPDATE t_customer SET age&#x3D;11 WHERE cNAME&#x3D;’z3’ # 转圈圈<br />UPDATE t_customer SET age&#x3D;11 WHERE id&#x3D;4 # 转圈圈</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><strong>按照辅助索引cname</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+</li>
+<li><p>更新数据命中索引，发生了行锁</p>
+</li>
+</ul>
+<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a><strong>总结：</strong></h2><ul>
+<li>InnoDB的行锁，是通过锁住索引来实现的，如果加锁查询的时候没有使用到索引，会将整个聚簇索引都锁住，相当于锁表了。</li>
+<li>命中索引锁行，没有命中锁表，问题会扩大化。</li>
+</ul>
+<h1 id="3、什么是回表"><a href="#3、什么是回表" class="headerlink" title="3、什么是回表"></a>3、什么是回表</h1><h2 id="概念："><a href="#概念：" class="headerlink" title="概念："></a><strong>概念：</strong></h2><p>回表是指数据库根据索引（非主键）找到了指定的记录所在行后，还需要根据主键再次到数据块里获取数据的操作。</p>
+<h2 id="建表SQL"><a href="#建表SQL" class="headerlink" title="建表SQL"></a><strong>建表SQL</strong></h2><pre><code class="highlight sql"><span class="comment">-- 创建表</span>
+<span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `employee` (
+	`id` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span>,
+	`name` <span class="type">VARCHAR</span> ( <span class="number">255</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	`age` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	`<span class="type">date</span>` DATETIME <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	`sex` <span class="type">INT</span> ( <span class="number">1</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	<span class="keyword">PRIMARY</span> KEY ( `id` ),
+	KEY `idx_age` ( `age` ) <span class="keyword">USING</span> BTREE 
+) ENGINE <span class="operator">=</span> INNODB <span class="keyword">DEFAULT</span> CHARSET <span class="operator">=</span> utf8;
+
+ 
+<span class="comment">-- 插入数据</span>
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">100</span>,<span class="string">&#x27;小伦&#x27;</span>,<span class="number">43</span>,<span class="string">&#x27;2021-01-20&#x27;</span>,<span class="string">&#x27;0&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">200</span>,<span class="string">&#x27;俊杰&#x27;</span>,<span class="number">48</span>,<span class="string">&#x27;2021-01-21&#x27;</span>,<span class="string">&#x27;0&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">300</span>,<span class="string">&#x27;紫琪&#x27;</span>,<span class="number">36</span>,<span class="string">&#x27;2020-01-21&#x27;</span>,<span class="string">&#x27;1&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">400</span>,<span class="string">&#x27;立红&#x27;</span>,<span class="number">32</span>,<span class="string">&#x27;2020-01-21&#x27;</span>,<span class="string">&#x27;0&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">500</span>,<span class="string">&#x27;易迅&#x27;</span>,<span class="number">37</span>,<span class="string">&#x27;2020-01-21&#x27;</span>,<span class="string">&#x27;1&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">600</span>,<span class="string">&#x27;小军&#x27;</span>,<span class="number">49</span>,<span class="string">&#x27;2021-01-21&#x27;</span>,<span class="string">&#x27;0&#x27;</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> employee <span class="keyword">VALUES</span>(<span class="number">700</span>,<span class="string">&#x27;小燕&#x27;</span>,<span class="number">28</span>,<span class="string">&#x27;2021-01-21&#x27;</span>,<span class="string">&#x27;1&#x27;</span>);
+
+<span class="comment">-- 查询索引</span>
+<span class="keyword">SHOW</span> INDEX <span class="keyword">FROM</span> employee;
+ 
+<span class="comment">-- 查询语句分析</span>
+EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employee <span class="keyword">WHERE</span> age <span class="operator">=</span> <span class="number">32</span>;</code></pre>
+
+
+
+<h2 id="问题：如果SELECT-FROM-employee-WHERE-age-32查询SQL，需要执行几次树搜索操作？"><a href="#问题：如果SELECT-FROM-employee-WHERE-age-32查询SQL，需要执行几次树搜索操作？" class="headerlink" title="问题：如果SELECT * FROM employee WHERE age &#x3D; 32查询SQL，需要执行几次树搜索操作？"></a><strong>问题：如果SELECT * FROM employee WHERE age &#x3D; 32查询SQL，需要执行几次树搜索操作？</strong></h2><ul>
+<li><p>explain分析</p>
+<pre><code class="highlight sql"><span class="comment">-- 查询语句分析</span>
+EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> employee <span class="keyword">WHERE</span> age <span class="operator">=</span> <span class="number">32</span>;</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-141557.png" alt="查询语句分析"></p>
+</li>
+<li><p>回表分析</p>
+<ul>
+<li><p>第一步：通过age索引查找</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-141856.png" alt="第一步：通过age索引查找"></p>
+<ul>
+<li>搜索idx_age索引树，将磁盘块1加载到内存，由于32&lt;37,搜索左路分支，加载到磁盘寻址磁盘块2。</li>
+<li>将磁盘块2加载到内存中，在内存继续遍历，找到age&#x3D;32的记录，取得id &#x3D; 400，拿到id&#x3D;400后，回到id主键索引树。</li>
+</ul>
+</li>
+<li><p>第二步：通过主键索引查找</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-142012.png" alt="第二步：通过主键索引查找"></p>
+</li>
+<li><p>过程分析</p>
+<ul>
+<li>搜索 <code>idx_age</code> 索引树，将磁盘块1加载到内存，由于32&lt;37,搜索左路分支，加载到磁盘寻址磁盘块2。</li>
+<li>将磁盘块2加载到内存中，在内存继续遍历，找到age&#x3D;32的记录，取得id &#x3D; 400，拿到id&#x3D;400后，回到id主键索引树。</li>
+<li>搜索id主键索引树，将磁盘块1加载内存，在内存遍历找到了400，但是B+树索引非叶子节点是不保存数据的。索引会继续搜索400的右分支，到磁盘寻址磁盘块3.</li>
+<li>将磁盘块3加载内存再内存遍历，找到id&#x3D;400的记录，拿到第4行(Row4)这一行的数据，查询成功。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="B-树检索原理"><a href="#B-树检索原理" class="headerlink" title="B+树检索原理"></a><strong>B+树检索原理</strong></h2><p><strong>由于B+树的非叶子节点只存储键值信息，假设每个磁盘块能存储4个键值及指针信息，则变成B+树后其结构如下图所示：</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-144139.png" alt="B+树检索原理"></p>
+<p>B+树中，所有数据记录节点都是按照键值大小顺序存放在同一层的叶子节点上，而非叶子节点上只存储key值信息，这样可以大大加大每个节点存储的key值数量，降低B+树的高度。</p>
+<p><strong>B+树算法：</strong> 通过继承了B树的特征，B+树相比B树，新增叶子节点与非叶子节点关系。叶子节点中包含了键值和数据，根节点和枝节点中，只是包含键值和子节点引用，不包含数据。通过非叶子节点查询叶子节点获取对应的数据，所有相邻的叶子节点包含非叶子节点使用链表进行结合，叶子节点是顺序排序并且相邻节点有顺序引用的关系 </p>
+<h2 id="总结：-1"><a href="#总结：-1" class="headerlink" title="总结："></a><strong>总结：</strong></h2><ul>
+<li>回表是指数据库根据索引（非主键）找到了指定的记录所在行后，还需要根据主键再次到数据块里获取数据的操作。这个过程在MySQL中可能涉及两次查询：首先通过索引扫描找到满足条件的记录的主键值，然后再通过主键值去主键索引中查找完整的行记录。</li>
+<li>具体来说，在InnoDB存储引擎中，当通过非聚簇索引查询数据时，由于索引中不包含完整的行数据，因此需要根据索引中找到的主键值再去聚簇索引中查找完整的行数据，这个过程就是回表。</li>
+<li>然而，回表操作虽然提供了更全面的数据信息，但也带来了一些问题和局限性。首先，回表操作需要访问两次索引，增加了IO开销和CPU消耗，对查询性能有一定的影响。特别是在高并发、大数据量的情况下，回表可能成为性能瓶颈。其次，由于回表操作是基于物理地址来获取数据，如果在回表过程中发生了数据修改（如DELETE、UPDATE），则可能会读取到不一致或错误的数据。</li>
+<li>因此，在设计索引时，需要结合具体的业务场景和查询需求，选择合适的索引策略，以尽量减少回表的次数和影响，提高查询效率和性能。例如，可以通过使用覆盖索引来避免回表操作，覆盖索引是指索引包含了查询所需的所有字段的值，因此可以直接通过索引获取查询结果，而无需再去访问数据表。</li>
+</ul>
+<h1 id="4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？"><a href="#4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？" class="headerlink" title="4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？"></a>4、如果一张表数据量级是千万级别以上的，要给这张表添加索引，你需要怎么做呢？</h1><p><strong>给表添加索引的时候，是会对表加锁的</strong>。如果不谨慎操作可能出现生产事故的，比如过程中发生了数据修改（如DELETE、UPDATE），则可能会读取到不一致或错误的数据。</p>
+<p>可以参考以下方法：</p>
+<ol>
+<li>先创建一张跟原表A数据结构相同的新表B。</li>
+<li>在新表B添加需要加上的新索引。</li>
+<li>把原表A数据导到新表B</li>
+<li>rename新表B为原表的表名A，原表A换别的表名；</li>
+</ol>
+<p>一句话：腾笼换鸟，建新表+建索引+导数据+废旧表</p>
+<h1 id="5、MySQL删除重复数据-解决线上数据库存在重复数据的问题"><a href="#5、MySQL删除重复数据-解决线上数据库存在重复数据的问题" class="headerlink" title="5、MySQL删除重复数据-解决线上数据库存在重复数据的问题"></a>5、MySQL删除重复数据-解决线上数据库存在重复数据的问题</h1><p><strong>目标</strong></p>
+<p>去掉同一字段下的重复数据或者仅仅留下一条</p>
+<p><strong>SQL</strong></p>
+<pre><code class="highlight sql"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `student` (
+	`id` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT,
+	`name` <span class="type">VARCHAR</span> ( <span class="number">20</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	`age` <span class="type">INT</span> ( <span class="number">11</span> ) <span class="keyword">DEFAULT</span> <span class="keyword">NULL</span>,
+	<span class="keyword">PRIMARY</span> KEY ( `id` ) 
+) ENGINE <span class="operator">=</span> INNODB AUTO_INCREMENT <span class="operator">=</span> <span class="number">1</span> <span class="keyword">DEFAULT</span> CHARSET <span class="operator">=</span> utf8 <span class="keyword">COLLATE</span> <span class="operator">=</span> utf8_bin;
+
+ 
+
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;1&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="number">22</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;2&#x27;</span>, <span class="string">&#x27;dog&#x27;</span>, <span class="number">33</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;3&#x27;</span>, <span class="string">&#x27;fish&#x27;</span>, <span class="number">44</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;4&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="number">55</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;5&#x27;</span>, <span class="string">&#x27;dog&#x27;</span>, <span class="number">11</span>);
+<span class="keyword">INSERT</span> <span class="keyword">INTO</span> `student` (`id`, `name`, `age`) <span class="keyword">VALUES</span> (<span class="string">&#x27;6&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="number">45</span>);
+
+
+<span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> student;</code></pre>
+
+
+
+<p><strong>编写查看有重复记录的SQL？</strong></p>
+<pre><code class="highlight sql"><span class="keyword">SELECT</span> name, <span class="built_in">COUNT</span>(name) <span class="keyword">FROM</span> student <span class="keyword">GROUP</span> <span class="keyword">BY</span> name <span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(name) <span class="operator">&gt;</span> <span class="number">1</span>;</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-160050.png" alt="查看重复记录"></p>
+<p><strong>如何编写删除重复记录的SQL</strong></p>
+<pre><code class="highlight sql"><span class="keyword">DELETE</span> <span class="keyword">FROM</span> student <span class="keyword">WHERE</span> id <span class="keyword">NOT</span> <span class="keyword">IN</span> (
+	<span class="keyword">SELECT</span> t.id <span class="keyword">FROM</span> (<span class="keyword">SELECT</span> <span class="built_in">MIN</span>(id) <span class="keyword">as</span> id <span class="keyword">FROM</span> student <span class="keyword">GROUP</span> <span class="keyword">BY</span> name <span class="keyword">HAVING</span> <span class="built_in">COUNT</span>(name) <span class="operator">&gt;</span> <span class="number">0</span>) t
+)</code></pre>
+
+
+
+
+
+<h1 id="6、MySQL千万级数据分页的优化"><a href="#6、MySQL千万级数据分页的优化" class="headerlink" title="6、MySQL千万级数据分页的优化"></a>6、MySQL千万级数据分页的优化</h1><h2 id="mysql的limit查询说明"><a href="#mysql的limit查询说明" class="headerlink" title="mysql的limit查询说明"></a><strong>mysql的limit查询说明</strong></h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-162729.png" alt="mysql的limit查询说明"></p>
+<h2 id="优化前"><a href="#优化前" class="headerlink" title="优化前"></a><strong>优化前</strong></h2><pre><code class="highlight sql"><span class="comment">/*偏移量为100，取30*/</span>
+<span class="keyword">SELECT</span> SQL_NO_CACHE
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id <span class="keyword">DESC</span> 
+LIMIT <span class="number">100</span>, <span class="number">30</span>;
+
+
+
+<span class="comment">/*偏移量为4950000，取30*/</span>
+<span class="keyword">SELECT</span> SQL_NO_CACHE
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id <span class="keyword">DESC</span> 
+LIMIT <span class="number">4950000</span>, <span class="number">30</span>;</code></pre>
+
+<p><strong>600W的emp表数据为例</strong></p>
+<p><strong>原因：</strong></p>
+<p>其实是因为limit后面的偏移量太大导致的。比如 limit 4950000,30。</p>
+<p>这个等同于数据库要扫描出 4950030条数据，然后再丢弃前面的 49500000条数据返回剩下30条数据给用户，这种取法明显不合理。</p>
+<p>分页操作通常会使用limit加上偏移量的办法实现，同时再加上合适的order by子句。生产危险隐患：当偏移量非常大的时候，它会导致MySQL扫描大量不需要的行然后再抛弃掉。</p>
+<p>比如：</p>
+<ul>
+<li><p>limit 10000,20的意思扫描满足条件的10020行，扔掉前面的10000行，返回最后的20行，问题就在这里。 </p>
+</li>
+<li><p>假如 LIMIT 2000000, 30 </p>
+<p>扫描了200万+ 30行，慢的都堵死甚至会导致磁盘io 100%消耗。  但是: limit 30 这样的语句仅仅扫描30行。</p>
+</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-163234.jpg" alt="limit查询"></p>
+<p><strong>参考阿里巴巴手册</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/12/30/20241230-163329.png" alt="阿里巴巴手册"></p>
+<h2 id="优化后"><a href="#优化后" class="headerlink" title="优化后"></a><strong>优化后</strong></h2><ul>
+<li><p>使用索引覆盖+子查询优化</p>
+<ul>
+<li><p>原理</p>
+<p>因为我们有主键id，并且在上面建了索引，所以可以先在索引树中找到开始位置的 id值，再根据找到的id值查询行数据。</p>
+</li>
+<li><p>SQL</p>
+<pre><code class="highlight sql"><span class="comment">/*子查询获取偏移100条的位置的id，在这个位置上往后取30*/</span>
+<span class="keyword">SELECT</span> 
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">WHERE</span> a.id <span class="operator">&gt;=</span> (<span class="keyword">SELECT</span> id <span class="keyword">FROM</span> emp <span class="keyword">ORDER</span> <span class="keyword">BY</span> id LIMIT <span class="number">100</span>,<span class="number">1</span>)
+<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id LIMIT <span class="number">30</span>;
+
+
+
+<span class="comment">/*子查询获取偏移4950000条的位置的id，在这个位置上往后取30*/</span>
+<span class="keyword">SELECT</span> 
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">WHERE</span> a.id <span class="operator">&gt;=</span> (<span class="keyword">SELECT</span> id <span class="keyword">FROM</span> emp <span class="keyword">ORDER</span> <span class="keyword">BY</span> id LIMIT <span class="number">4950000</span>,<span class="number">1</span>)
+<span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id LIMIT <span class="number">30</span>;</code></pre></li>
+</ul>
+</li>
+<li><p>起始位置重定义</p>
+<ul>
+<li><p>原理</p>
+<p>记住上次查找结果的主键位置，避免使用偏移量 offset</p>
+</li>
+<li><p>SQL</p>
+<pre><code class="highlight sql"><span class="comment">/*记住了上次的分页的最后一条数据的id是100，这边就直接跳过100，从101开始扫描表*/</span>
+<span class="keyword">SELECT</span> 
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">WHERE</span> a.id <span class="operator">&gt;</span> <span class="number">100</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id LIMIT <span class="number">30</span>;    
+
+
+<span class="comment">/*记住了上次的分页的最后一条数据的id是4950000，这边就直接跳过4950000，从4950001开始扫描表*/</span>
+<span class="keyword">SELECT</span> 
+  a.empno,
+  a.ename,
+  a.job,
+  a.sal,
+  b.deptno,
+  b.dname 
+<span class="keyword">FROM</span>
+  emp a 
+  <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> dept b 
+    <span class="keyword">ON</span> a.deptno <span class="operator">=</span> b.deptno 
+<span class="keyword">WHERE</span> a.id <span class="operator">&gt;</span> <span class="number">4950000</span> <span class="keyword">ORDER</span> <span class="keyword">BY</span> a.id LIMIT <span class="number">30</span>;</code></pre></li>
+</ul>
+</li>
+<li><p>服务降级不让使用</p>
+<p><strong>阿里的方案：</strong>配置limit的偏移量和获取数一个最大值，超过这个最大值，就返回空数据。因为按照业务来说，超过这个值你已经不是在分页了，而是在刷数据了，如果确认要找数据，应该输入合适条件来缩小范围，而不是一页一页分页。</p>
+<p>客户请求request的时候 如果offset大于某个数值就先返回一个4xx的错误，避免黑客攻击or刷单行为呢，正常人，很少翻查10页以后的内容。</p>
+<p>另外，该有的限流、降级也应该考虑进去。比如工具多线程调用，在短时间频率内5000次调用，可以使用计数服务判断并反馈用户调用过于频繁，直接给予断掉</p>
+</li>
+</ul>
+<!-- flag of hidden posts -->
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
