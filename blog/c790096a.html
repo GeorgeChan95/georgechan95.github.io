@@ -1,0 +1,2757 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>005-Kubernetes控制器 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" linux , Docker , Rocky ">
+  <meta name="description" content="005-Kubernetes控制器 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="一、控制器概述1. 概述在 Kubernetes 中运行了一系列控制器来确保集群的当前状态与期望状态保持一致，它们就是 Kubernetes 集群内部的管理控制中心或者说是”中心大脑”。例如，ReplicaSet 控制器负责维护集群中运行的 Pod 数量；Node 控制器负责监控节点的状态，并在节点出现故障时，执行自动化修复流程，确保集群始终处于预期的工作状态。 控制器-控制循环  2. 控制器分">
+<meta property="og:type" content="article">
+<meta property="og:title" content="005-Kubernetes控制器">
+<meta property="og:url" content="https://georgechan95.github.io/blog/c790096a.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="一、控制器概述1. 概述在 Kubernetes 中运行了一系列控制器来确保集群的当前状态与期望状态保持一致，它们就是 Kubernetes 集群内部的管理控制中心或者说是”中心大脑”。例如，ReplicaSet 控制器负责维护集群中运行的 Pod 数量；Node 控制器负责监控节点的状态，并在节点出现故障时，执行自动化修复流程，确保集群始终处于预期的工作状态。 控制器-控制循环  2. 控制器分">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/02/20250402-201433.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/07/20250407-083305.png">
+<meta property="article:published_time" content="2025-04-02T12:12:00.000Z">
+<meta property="article:modified_time" content="2025-04-11T07:40:03.358Z">
+<meta property="article:author" content="George">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Rocky">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/02/20250402-201433.png">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(99)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="设计模式">
+            
+            设计模式
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Docker">
+            
+            Docker
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="k8s">
+            
+            k8s
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(4)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="neo4j">
+            
+            neo4j
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="UML">
+            
+            UML
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="99">
+<input type="hidden" id="yelog_site_word_count" value="415.4k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>科学上网</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>设计模式</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>neo4j</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Rocky</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>SpringBoot</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu18</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>UML</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/c790096a.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="005-Kubernetes控制器">005-Kubernetes控制器</span>
+            <span class="post-date" title="2025-04-02 20:12:00">2025/04/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/79e06aab.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="004-Pod的生命周期">004-Pod的生命周期</span>
+            <span class="post-date" title="2025-03-22 09:05:00">2025/03/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 Docker "
+           href="/blog/b01d5c62.html"
+           data-tag="linux,Docker,科学上网"
+           data-author="" >
+            <span class="post-title" title="Docker配置网络代理实现外网镜像下载">Docker配置网络代理实现外网镜像下载</span>
+            <span class="post-date" title="2025-01-08 23:00:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/7f174b3e.html"
+           data-tag="linux,科学上网,Rocky"
+           data-author="" >
+            <span class="post-title" title="Rocky9安装Shadowsocks实现科学上网">Rocky9安装Shadowsocks实现科学上网</span>
+            <span class="post-date" title="2025-01-08 21:09:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/b00f53e9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群">003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群</span>
+            <span class="post-date" title="2025-01-03 22:05:00">2025/01/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/3c79d8d9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="002-Rocky9.3系统初始化设置和Docker安装">002-Rocky9.3系统初始化设置和Docker安装</span>
+            <span class="post-date" title="2025-01-02 13:25:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/7e3a5200.html"
+           data-tag="linux,Rocky"
+           data-author="" >
+            <span class="post-title" title="001-ESXi8安装Rocky9.3虚拟机">001-ESXi8安装Rocky9.3虚拟机</span>
+            <span class="post-date" title="2025-01-02 09:34:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/77d85f50.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="25-责任链模式">25-责任链模式</span>
+            <span class="post-date" title="2024-12-03 21:08:00">2024/12/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/fcec839d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="24-策略模式">24-策略模式</span>
+            <span class="post-date" title="2024-12-02 18:16:00">2024/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/6109865a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="23-状态模式">23-状态模式</span>
+            <span class="post-date" title="2024-11-29 19:30:00">2024/11/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/58d4db7.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="22-解释器模式">22-解释器模式</span>
+            <span class="post-date" title="2024-11-28 22:00:00">2024/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/a5cf7eb4.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="21-备忘录模式">21-备忘录模式</span>
+            <span class="post-date" title="2024-11-27 21:40:00">2024/11/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3148d6be.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="20-中介者模式">20-中介者模式</span>
+            <span class="post-date" title="2024-11-26 20:35:00">2024/11/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f06aea0b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="19-观察者模式">19-观察者模式</span>
+            <span class="post-date" title="2024-11-25 21:07:00">2024/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/7dbd9149.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="18-迭代器模式">18-迭代器模式</span>
+            <span class="post-date" title="2024-11-24 00:02:00">2024/11/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4fdf6e52.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="17-访问者模式">17-访问者模式</span>
+            <span class="post-date" title="2024-11-23 21:55:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/60fd53f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="16-命令模式">16-命令模式</span>
+            <span class="post-date" title="2024-11-23 20:30:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4930323d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="15-模板方法模式">15-模板方法模式</span>
+            <span class="post-date" title="2024-11-23 19:40:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/e4235185.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="14-代理模式">14-代理模式</span>
+            <span class="post-date" title="2024-11-21 23:16:00">2024/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/1b225c1f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="13-享元模式">13-享元模式</span>
+            <span class="post-date" title="2024-11-20 23:10:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/906e9e8b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="12-外观模式">12-外观模式</span>
+            <span class="post-date" title="2024-11-20 22:09:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c456a66a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="11-组合模式">11-组合模式</span>
+            <span class="post-date" title="2024-11-16 17:00:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90213fc6.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="10-装饰器模式">10-装饰器模式</span>
+            <span class="post-date" title="2024-11-16 14:06:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c7419cfa.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="09-桥接模式">09-桥接模式</span>
+            <span class="post-date" title="2024-11-14 20:51:00">2024/11/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f77fc055.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="08-适配器模式">08-适配器模式</span>
+            <span class="post-date" title="2024-11-12 22:55:00">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/a3b0b090.html"
+           data-tag="neo4j,SpringBoot"
+           data-author="" >
+            <span class="post-title" title="Spring Boot对Neo4j节点关系的增删改查">Spring Boot对Neo4j节点关系的增删改查</span>
+            <span class="post-date" title="2024-11-12 21:00:30">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3ab9aa56.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="07-建造者模式">07-建造者模式</span>
+            <span class="post-date" title="2024-11-11 21:55:00">2024/11/11</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/7dc0fcde.html"
+           data-tag="neo4j,SpringBoot"
+           data-author="" >
+            <span class="post-title" title="Spring Boot整合Neo4j实现增删改查">Spring Boot整合Neo4j实现增删改查</span>
+            <span class="post-date" title="2024-11-07 19:04:30">2024/11/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/564adc33.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="06-原型模式">06-原型模式</span>
+            <span class="post-date" title="2024-11-06 19:00:00">2024/11/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/effeea78.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="05-工厂模式">05-工厂模式</span>
+            <span class="post-date" title="2024-11-04 21:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/d7e99843.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="04-单例模式">04-单例模式</span>
+            <span class="post-date" title="2024-11-04 19:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90f1850a.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="03-UML类图">03-UML类图</span>
+            <span class="post-date" title="2024-11-02 14:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 UML "
+           href="/blog/c13304c1.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="02-UML图绘制工具">02-UML图绘制工具</span>
+            <span class="post-date" title="2024-11-02 09:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2e826df1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Docker环境下RTSP流转RTMP和HLS">Docker环境下RTSP流转RTMP和HLS</span>
+            <span class="post-date" title="2024-11-01 15:17:33">2024/11/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/cd625bba.html"
+           data-tag="设计模式,java"
+           data-author="" >
+            <span class="post-title" title="01-设计模式六大原则">01-设计模式六大原则</span>
+            <span class="post-date" title="2024-10-31 17:00:00">2024/10/31</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1a649f4c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="13-JUC进阶-ReentrantReadWriteLock与StampedLock">13-JUC进阶-ReentrantReadWriteLock与StampedLock</span>
+            <span class="post-date" title="2024-10-19 09:26:00">2024/10/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/5c93903a.html"
+           data-tag="linux,neo4j"
+           data-author="" >
+            <span class="post-title" title="Docker部署Neo4j并导入CSV数据">Docker部署Neo4j并导入CSV数据</span>
+            <span class="post-date" title="2024-10-17 15:00:30">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/ad38e6b1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Ubuntu18.04离线源环境搭建">Ubuntu18.04离线源环境搭建</span>
+            <span class="post-date" title="2024-10-17 09:47:33">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3fdbf0f6.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
+            <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3e0d7592.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
+            <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4502cffa.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
+            <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4de6a39b.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
+            <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/72329cf5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
+            <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/5e3757c1.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
+            <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-k8s/005-K8S控制器" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">005-Kubernetes控制器</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="k8s">k8s</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">linux</a>
+            
+            <a class="color2">Docker</a>
+            
+            <a class="color1">Rocky</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2025-04-11 15:40:03'>2025-04-02 20:12</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:8.7k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%8E%A7%E5%88%B6%E5%99%A8%E6%A6%82%E8%BF%B0"><span class="toc-text">一、控制器概述</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-text">1. 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%8E%A7%E5%88%B6%E5%99%A8%E5%88%86%E7%B1%BB"><span class="toc-text">2. 控制器分类</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81ReplicationController-%E5%92%8C-ReplicaSet"><span class="toc-text">二、ReplicationController 和 ReplicaSet</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A1%88%E4%BE%8B%EF%BC%9AReplicationController"><span class="toc-text">1. 案例：ReplicationController</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B%EF%BC%9AReplicaSet"><span class="toc-text">2. 案例：ReplicaSet</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-RS-yaml-%E6%96%87%E4%BB%B6"><span class="toc-text">2.1 RS yaml 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%90%AF%E5%8A%A8RS"><span class="toc-text">2.2 启动RS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%9F%A5%E7%9C%8BRS%E5%90%AF%E5%8A%A8%E8%AF%A6%E6%83%85"><span class="toc-text">2.3 查看RS启动详情</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E6%9F%A5%E7%9C%8B-RS-%E5%90%AF%E5%8A%A8%E7%9A%84-Pod"><span class="toc-text">2.4  查看 RS 启动的 Pod</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E6%9F%A5%E7%9C%8BPod%E7%9A%84%E6%97%A5%E5%BF%97"><span class="toc-text">2.5 查看Pod的日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E9%AA%8C%E8%AF%81Pod%E8%AE%BE%E7%BD%AE%E7%9A%84%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%98%AF%E5%90%A6%E6%9C%89%E6%95%88"><span class="toc-text">2.6 验证Pod设置的环境变量是否有效</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-7-%E9%AA%8C%E8%AF%81RS%E5%AF%B9%E4%BA%8EPod%E5%89%AF%E6%9C%AC%E6%95%B0%E9%87%8F%E7%9A%84%E8%87%AA%E5%8A%A8%E6%81%A2%E5%A4%8D"><span class="toc-text">2.7 验证RS对于Pod副本数量的自动恢复</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-8-%E9%AA%8C%E8%AF%81-yaml-%E6%96%87%E4%BB%B6%E4%B8%AD%E5%AE%9A%E4%B9%89%E7%9A%84Pod%E7%9A%84%E6%A0%87%E7%AD%BE%E4%B8%8ERS%E6%A0%87%E7%AD%BE%E9%80%89%E6%8B%A9%E5%99%A8%E4%B8%8D%E4%B8%80%E8%87%B4%E6%97%B6%EF%BC%8C%E6%98%AF%E5%90%A6%E5%8F%AF%E4%BB%A5%E5%90%AF%E5%8A%A8"><span class="toc-text">2.8 验证 yaml 文件中定义的Pod的标签与RS标签选择器不一致时，是否可以启动</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A0%87%E7%AD%BE%E9%80%89%E6%8B%A9%E5%99%A8"><span class="toc-text">3. 标签选择器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-matchLabels-%E7%9A%84%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%BC%8F"><span class="toc-text">3.1 matchLabels 的匹配模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-matchExpressions-%E7%9A%84%E5%8C%B9%E9%85%8D%E6%A8%A1%E5%BC%8F"><span class="toc-text">3.2 matchExpressions 的匹配模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-matchLabels-%E5%92%8C-matchExpressions-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">3.3 matchLabels 和 matchExpressions 的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">3.4 注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%AE%9E%E9%99%85%E6%A1%88%E4%BE%8B"><span class="toc-text">3.5 实际案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%80%BB%E7%BB%93"><span class="toc-text">3.6 总结</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Deployment-%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">三、Deployment 控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Deployment-%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-text">1. Deployment - 基本概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Deployment-%E4%B8%8E-RS-%E7%9A%84%E5%85%B3%E8%81%94"><span class="toc-text">2. Deployment - 与 RS 的关联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Deployment-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">3. Deployment - 常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-apply-%E3%80%81create%E3%80%81replace-%E5%8C%BA%E5%88%AB"><span class="toc-text">4. apply 、create、replace 区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%91%BD%E4%BB%A4%E5%BC%8F%E5%91%BD%E4%BB%A4"><span class="toc-text">4.1  命令式命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%A3%B0%E6%98%8E%E5%BC%8F%E5%91%BD%E4%BB%A4"><span class="toc-text">4.2 声明式命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%85%B3%E9%94%AE%E5%8C%BA%E5%88%AB%E6%80%BB%E7%BB%93"><span class="toc-text">4.3 关键区别总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-kubectl-replace-f"><span class="toc-text">4.4 kubectl replace -f</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Deployment-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">5. Deployment - 案例实操</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E7%BC%96%E5%86%99%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">5.1 编写资源清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E5%88%9B%E5%BB%BA-Deployment"><span class="toc-text">5.2 创建 Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E6%9F%A5%E7%9C%8B-Deployment-%E5%92%8C-Pod"><span class="toc-text">5.3 查看 Deployment  和 Pod</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-Pod-%E5%89%AF%E6%9C%AC%E6%89%A9%E7%BC%A9%E5%AE%B9"><span class="toc-text">5.4 Pod 副本扩缩容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-%E5%8A%A8%E6%80%81%E6%9B%B4%E6%96%B0-Deployment-%E7%9A%84-Pod-%E5%AE%B9%E5%99%A8%E9%95%9C%E5%83%8F"><span class="toc-text">5.5 动态更新 Deployment 的 Pod 容器镜像</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Deployment-%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7"><span class="toc-text">6. Deployment 滚动升级</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E7%9A%84%E6%A0%B8%E5%BF%83%E6%9C%BA%E5%88%B6"><span class="toc-text">6.1 滚动升级的核心机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%9B%B4%E6%96%B0%E6%B5%81%E7%A8%8B"><span class="toc-text">（1）更新流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%85%B3%E9%94%AE%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="toc-text">（2）关键配置参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E8%A7%A6%E5%8F%91%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="toc-text">6.2 触发滚动升级的方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E7%9B%B4%E6%8E%A5%E4%BF%AE%E6%94%B9-YAML-%E5%B9%B6%E5%BA%94%E7%94%A8"><span class="toc-text">（1）直接修改 YAML 并应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%91%BD%E4%BB%A4%E5%BC%8F%E6%9B%B4%E6%96%B0%E9%95%9C%E5%83%8F%E7%89%88%E6%9C%AC"><span class="toc-text">（2）命令式更新镜像版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E5%85%B6%E4%BB%96%E5%8F%AF%E8%A7%A6%E5%8F%91%E5%8D%87%E7%BA%A7%E7%9A%84%E6%93%8D%E4%BD%9C"><span class="toc-text">（3）其他可触发升级的操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E6%9F%A5%E7%9C%8B%E5%8D%87%E7%BA%A7%E7%8A%B6%E6%80%81"><span class="toc-text">6.3 查看升级状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%A3%80%E6%9F%A5%E5%8D%87%E7%BA%A7%E8%BF%9B%E5%BA%A6"><span class="toc-text">（1）检查升级进度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E6%9F%A5%E7%9C%8B%E5%8E%86%E5%8F%B2%E7%89%88%E6%9C%AC"><span class="toc-text">（2）查看历史版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%883%EF%BC%89%E6%9F%A5%E7%9C%8B%E5%85%B7%E4%BD%93%E7%89%88%E6%9C%AC%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="toc-text">（3）查看具体版本的配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-%E5%9B%9E%E6%BB%9A%E5%8D%87%E7%BA%A7"><span class="toc-text">6.4 回滚升级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%9B%9E%E6%BB%9A%E5%88%B0%E4%B8%8A%E4%B8%80%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="toc-text">（1）回滚到上一个版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%9B%9E%E6%BB%9A%E5%88%B0%E6%8C%87%E5%AE%9A%E7%89%88%E6%9C%AC"><span class="toc-text">（2）回滚到指定版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5-%E9%AB%98%E7%BA%A7%E6%8E%A7%E5%88%B6%E6%8A%80%E5%B7%A7"><span class="toc-text">6.5 高级控制技巧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E6%9A%82%E5%81%9C-%E6%81%A2%E5%A4%8D%E5%8D%87%E7%BA%A7"><span class="toc-text">（1）暂停&#x2F;恢复升级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%BC%BA%E5%88%B6%E9%87%8D%E5%BB%BA-Pod%EF%BC%88%E9%9D%9E%E6%BB%9A%E5%8A%A8%E6%9B%B4%E6%96%B0%EF%BC%89"><span class="toc-text">（2）强制重建 Pod（非滚动更新）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-6-%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5"><span class="toc-text">6.6 故障排查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%881%EF%BC%89%E5%8D%87%E7%BA%A7%E5%8D%A1%E4%BD%8F%E6%80%8E%E4%B9%88%E5%8A%9E%EF%BC%9F"><span class="toc-text">（1）升级卡住怎么办？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%EF%BC%882%EF%BC%89%E5%B8%B8%E8%A7%81%E5%8E%9F%E5%9B%A0"><span class="toc-text">（2）常见原因</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%BB%9A%E5%8A%A8%E5%8D%87%E7%BA%A7%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">7. 滚动升级案例实操</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">7.1 资源清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E5%88%9B%E5%BB%BA-Service"><span class="toc-text">7.2 创建 Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%E5%88%9B%E5%BB%BADeloyment"><span class="toc-text">7.3 创建Deloyment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4-Pod%E5%89%AF%E6%9C%AC%E6%89%A9%E5%AE%B9"><span class="toc-text">7.4 Pod副本扩容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-5-%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8DPod%E7%9A%84%E9%95%9C%E5%83%8F%E7%89%88%E6%9C%AC"><span class="toc-text">7.5 查看当前Pod的镜像版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-6-%E5%8D%87%E7%BA%A7-Pod-%E9%95%9C%E5%83%8F%E7%89%88%E6%9C%AC"><span class="toc-text">7.6 升级 Pod 镜像版本</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Deloyment-%E5%9B%9E%E6%BB%9A%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">8. Deloyment 回滚案例实操</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">8.1 资源清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E5%88%9B%E5%BB%BADeployment"><span class="toc-text">8.2 创建Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-%E5%8D%87%E7%BA%A7%E9%95%9C%E5%83%8F"><span class="toc-text">8.3 升级镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-%E5%9B%9E%E6%BB%9A%E9%95%9C%E5%83%8F%E7%89%88%E6%9C%AC"><span class="toc-text">8.4 回滚镜像版本</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-4-1-%E5%9B%9E%E6%BB%9A%E5%88%B0%E4%B8%8A%E4%B8%80%E4%B8%AA%E7%89%88%E6%9C%AC"><span class="toc-text">6.4.1 回滚到上一个版本</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-4-2-%E5%9B%9E%E6%BB%9A%E5%88%B0%E6%8C%87%E5%AE%9A%E7%89%88%E6%9C%AC"><span class="toc-text">8.4.2 回滚到指定版本</span></a></li></ol></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、控制器概述"><a href="#一、控制器概述" class="headerlink" title="一、控制器概述"></a>一、控制器概述</h1><h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>在 Kubernetes 中运行了一系列控制器来确保集群的当前状态与期望状态保持一致，它们就是 Kubernetes 集群内部的管理控制中心或者说是”中心大脑”。例如，ReplicaSet 控制器负责维护集群中运行的 Pod 数量；Node 控制器负责监控节点的状态，并在节点出现故障时，执行自动化修复流程，确保集群始终处于预期的工作状态。</p>
+<p><strong>控制器-控制循环</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/02/20250402-201433.png" alt="image-20250402201347162"></p>
+<h2 id="2-控制器分类"><a href="#2-控制器分类" class="headerlink" title="2. 控制器分类"></a>2. 控制器分类</h2><p>Pod控制器有如下几类：</p>
+<ul>
+<li>ReplicationController 和 ReplicaSet<ul>
+<li><strong>功能</strong>：确保指定数量的 Pod 副本始终运行。<ul>
+<li><strong>ReplicationController</strong>（旧版）：通过标签选择器管理 Pod 副本数，但功能较基础。</li>
+<li><strong>ReplicaSet</strong>（推荐）：新一代控制器，支持更灵活的<strong>集合型标签选择器</strong>（如 <code>matchLabels</code> 和 <code>matchExpressions</code>），通常被 Deployment 间接使用。</li>
+</ul>
+</li>
+<li><strong>典型场景</strong>：无状态应用的副本维护（如 Web 服务）。</li>
+</ul>
+</li>
+<li>Deployment<ul>
+<li><strong>功能</strong>：管理 ReplicaSet 并提供声明式更新（如滚动升级、回滚）。<ul>
+<li>通过控制 ReplicaSet 实现 Pod 的副本管理。</li>
+<li>支持版本控制和更新策略（如 <code>RollingUpdate</code> 或 <code>Recreate</code>）。</li>
+</ul>
+</li>
+<li><strong>典型场景</strong>：需要滚动更新或回滚的无状态应用（如微服务）。</li>
+</ul>
+</li>
+<li>DaemonSet<ul>
+<li><strong>功能</strong>：确保每个节点（或指定节点）运行一个指定的 Pod。<ul>
+<li>Pod 通常与节点绑定（如日志收集、网络插件）。</li>
+<li>节点加入集群时自动创建 Pod，节点移除时删除。</li>
+</ul>
+</li>
+<li><strong>典型场景</strong>：集群级守护进程（如 <code>kube-proxy</code>、<code>fluentd</code>）。</li>
+</ul>
+</li>
+<li>StateFulSet<ul>
+<li><strong>功能</strong>：管理有状态应用的 Pod，提供稳定的标识和持久化存储。<ul>
+<li>每个 Pod 有唯一名称（如 <code>web-0</code>、<code>web-1</code>）和持久化存储（PVC）。</li>
+<li>支持有序部署&#x2F;扩展（按序号顺序操作）。</li>
+</ul>
+</li>
+<li><strong>典型场景</strong>：数据库、分布式存储（如 MySQL、ZooKeeper）。</li>
+</ul>
+</li>
+<li>Job&#x2F;CronJob<ul>
+<li><strong>Job</strong>：<ul>
+<li>创建一次性 Pod 并确保其成功完成。</li>
+<li>支持并行执行和重试机制。</li>
+<li><strong>场景</strong>：批处理任务（如数据处理）。</li>
+</ul>
+</li>
+<li><strong>CronJob</strong>：<ul>
+<li>基于时间表（Cron 表达式）周期性运行 Job。</li>
+<li><strong>场景</strong>：定时任务（如每日备份）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Horizontal Pod Autoscaling<ul>
+<li><strong>功能</strong>：根据 CPU 使用率或其他自定义指标自动调整 Pod 副本数。<ul>
+<li>与 ReplicaSet&#x2F;Deployment 配合使用。</li>
+<li>支持动态扩缩容（如流量高峰时扩容）。</li>
+</ul>
+</li>
+<li><strong>典型场景</strong>：应对负载波动的服务（如电商大促）。</li>
+</ul>
+</li>
+</ul>
+<h1 id="二、ReplicationController-和-ReplicaSet"><a href="#二、ReplicationController-和-ReplicaSet" class="headerlink" title="二、ReplicationController 和 ReplicaSet"></a>二、ReplicationController 和 ReplicaSet</h1><p>ReplicationController（RC）用来确保容器应用的副本数始终保持在用户定义的副本数，即如果有容器异常退出，会自动创建新的 Pod 来替代；而如果异常多出来的容器也会自动回收；</p>
+<p>在新版本的 Kubernetes 中建议使用 ReplicaSet 来取代 ReplicationController 。ReplicaSet 跟 ReplicationController 没有本质的不同，只是名字不一样，并且 ReplicaSet 支持集合式的 selector；</p>
+<h2 id="1-案例：ReplicationController"><a href="#1-案例：ReplicationController" class="headerlink" title="1. 案例：ReplicationController"></a>1. 案例：ReplicationController</h2><p><code>001-replication-controller.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ReplicationController</span> <span class="comment"># 资源类型为 ReplicationController（旧版副本控制器）</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">rc-demo</span> <span class="comment"># RC 的名称，在命名空间中唯一</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">3</span> <span class="comment"># 确保始终有 3 个 Pod 副本在运行</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">rc-demo</span>  <span class="comment"># 选择标签为 `app: rc-demo` 的 Pod 进行管理</span>
+  <span class="attr">template:</span> <span class="comment"># Pod 模板</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">rc-demo</span> <span class="comment"># 给 Pod 打上标签，与 selector 对应</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rc-demo-container</span> <span class="comment"># 容器名称</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">env:</span> <span class="comment"># 定义环境变量</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GET_HOSTS_FROM</span> <span class="comment"># 环境变量1 key</span>
+              <span class="attr">value:</span> <span class="string">dns</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">zhangsan</span> <span class="comment"># 环境变量2 key</span>
+              <span class="attr">value:</span> <span class="string">&quot;123&quot;</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span> <span class="comment"># 容器暴露的端口</span></code></pre>
+
+
+
+<p><strong>运行 ReplicationController</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl apply -f 001-replication-controller.yaml</span></code></pre>
+
+
+
+<p><strong>查看Pod的运行情况</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl get pod -o wide -w</span>
+NAME            READY   STATUS    RESTARTS         AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+rc-demo-47nqt   1/1     Running   0                36s   172.16.85.199   k8s-node01   &lt;none&gt;           &lt;none&gt;
+rc-demo-74hbx   1/1     Running   0                36s   172.16.58.198   k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-zp8ck   1/1     Running   0                36s   172.16.85.200   k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>在两个node子节点上，运行了三个 Pod</p>
+<p><strong>测试Pod自动恢复</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">新起一个shell终端，杀死一个pod</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl delete pod rc-demo-74hbx</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">观察Pod运行情况</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get pod -o wide -w</span>
+NAME            READY   STATUS    RESTARTS         AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+rc-demo-47nqt   1/1     Running   0                36s   172.16.85.199   k8s-node01   &lt;none&gt;           &lt;none&gt;
+rc-demo-74hbx   1/1     Running   0                36s   172.16.58.198   k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-zp8ck   1/1     Running   0                36s   172.16.85.200   k8s-node01   &lt;none&gt;           &lt;none&gt;
+rc-demo-74hbx   1/1     Terminating   0                63s   172.16.58.198   k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-fgfmr   0/1     Pending       0                1s    &lt;none&gt;          &lt;none&gt;       &lt;none&gt;           &lt;none&gt;
+rc-demo-fgfmr   0/1     Pending       0                1s    &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-fgfmr   0/1     ContainerCreating   0                2s    &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-74hbx   1/1     Terminating         0                65s   172.16.58.198   k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-74hbx   0/1     Terminating         0                71s   172.16.58.198   k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-74hbx   0/1     Terminating         0                75s   &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-74hbx   0/1     Terminating         0                75s   &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-74hbx   0/1     Terminating         0                75s   &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-fgfmr   0/1     ContainerCreating   0                13s   &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+rc-demo-fgfmr   1/1     Running             0                20s   172.16.58.199   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>杀死了 Pod <code>rc-demo-74hbx</code>， k8s又自动创建了Pod <code>rc-demo-fgfmr</code>。</p>
+<h2 id="2-案例：ReplicaSet"><a href="#2-案例：ReplicaSet" class="headerlink" title="2. 案例：ReplicaSet"></a>2. 案例：ReplicaSet</h2><h3 id="2-1-RS-yaml-文件"><a href="#2-1-RS-yaml-文件" class="headerlink" title="2.1 RS yaml 文件"></a>2.1 RS yaml 文件</h3><p><code>002-ReplicaSet.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">ReplicaSet</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">replica-set-demo</span> <span class="comment"># rs的名字，全局唯一，生成的Pod的名字：replica-set-demo-xxxx</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">3</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span> <span class="comment"># 基于标签匹配</span>
+      <span class="attr">app:</span> <span class="string">rs-ml-demo</span> <span class="comment"># ReplicaSet 将管理带有标签 app=rs-ml-demo 的 Pod</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">namespace:</span> <span class="string">default</span>
+      <span class="attr">labels:</span> <span class="comment"># 为 Pod 设置标签</span>
+        <span class="attr">app:</span> <span class="string">rs-ml-demo</span> <span class="comment"># 给 Pod 打上标签 app=rs-ml-demo，与 selector 中的 matchLabels 对应</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rs-ml-container</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">env:</span> <span class="comment"># 定义容器的环境变量</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GET_HOSTS_FROM</span>
+              <span class="attr">value:</span> <span class="string">dns</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">George</span>
+              <span class="attr">value:</span> <span class="string">&quot;30&quot;</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></code></pre>
+
+
+
+<h3 id="2-2-启动RS"><a href="#2-2-启动RS" class="headerlink" title="2.2 启动RS"></a>2.2 启动RS</h3><pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl apply -f 002-ReplicaSet.yaml</span></code></pre>
+
+
+
+<h3 id="2-3-查看RS启动详情"><a href="#2-3-查看RS启动详情" class="headerlink" title="2.3 查看RS启动详情"></a>2.3 查看RS启动详情</h3><pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl describe replicaset replica-set-demo</span>
+Name:         replica-set-demo
+Namespace:    default
+Selector:     app=rs-ml-demo
+Labels:       &lt;none&gt;
+Annotations:  &lt;none&gt;
+Replicas:     3 current / 3 desired
+Pods Status:  3 Running / 0 Waiting / 0 Succeeded / 0 Failed
+Pod Template:
+  Labels:  app=rs-ml-demo
+  Containers:
+   rs-ml-container:
+    Image:      wangyanglinux/myapp:v1.0
+    Port:       80/TCP
+    Host Port:  0/TCP
+    Environment:
+      GET_HOSTS_FROM:  dns
+      George:          30
+    Mounts:            &lt;none&gt;
+  Volumes:             &lt;none&gt;
+Events:
+  Type    Reason            Age   From                   Message
+  ----    ------            ----  ----                   -------
+  Normal  SuccessfulCreate  67s   replicaset-controller  Created pod: replica-set-demo-p4tpb
+  Normal  SuccessfulCreate  67s   replicaset-controller  Created pod: replica-set-demo-hnddq
+  Normal  SuccessfulCreate  67s   replicaset-controller  Created pod: replica-set-demo-89pz7</code></pre>
+
+<p>RS 创建了3个 Pod 副本，均已启动成功。</p>
+<h3 id="2-4-查看-RS-启动的-Pod"><a href="#2-4-查看-RS-启动的-Pod" class="headerlink" title="2.4  查看 RS 启动的 Pod"></a>2.4  查看 RS 启动的 Pod</h3><p>根据 Pod 的标签过滤</p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl get pods -l app=rs-ml-demo -o wide</span>
+NAME                     READY   STATUS    RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES
+replica-set-demo-89pz7   1/1     Running   0          2m58s   172.16.58.203   k8s-node02   &lt;none&gt;           &lt;none&gt;
+replica-set-demo-hnddq   1/1     Running   0          2m58s   172.16.85.202   k8s-node01   &lt;none&gt;           &lt;none&gt;
+replica-set-demo-p4tpb   1/1     Running   0          2m58s   172.16.58.202   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+
+
+<h3 id="2-5-查看Pod的日志"><a href="#2-5-查看Pod的日志" class="headerlink" title="2.5 查看Pod的日志"></a>2.5 查看Pod的日志</h3><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">查看最近1000行日志</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl logs -f --<span class="built_in">tail</span>=1000 replica-set-demo-89pz7</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">查看最近1小时的日志</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl logs -f --<span class="built_in">tail</span>=1000 replica-set-demo-89pz7 --since=1h</span></code></pre>
+
+
+
+<h3 id="2-6-验证Pod设置的环境变量是否有效"><a href="#2-6-验证Pod设置的环境变量是否有效" class="headerlink" title="2.6 验证Pod设置的环境变量是否有效"></a>2.6 验证Pod设置的环境变量是否有效</h3><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">进入Pod容器</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl <span class="built_in">exec</span> -it replica-set-demo-89pz7 /bin/bash</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">打印环境变量</span>
+replica-set-demo-89pz7:/# echo $GET_HOSTS_FROM
+dns
+replica-set-demo-89pz7:/# echo $George
+30</code></pre>
+
+
+
+<h3 id="2-7-验证RS对于Pod副本数量的自动恢复"><a href="#2-7-验证RS对于Pod副本数量的自动恢复" class="headerlink" title="2.7 验证RS对于Pod副本数量的自动恢复"></a>2.7 验证RS对于Pod副本数量的自动恢复</h3><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">在一个shell中监控RS</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get replicaset replica-set-demo -o wide -w</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">在另一个shell中，杀死这个RS管理的其中一个Pod</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl delete pod replica-set-demo-89pz7</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">可以看到RS管理的Pod从最开始3个，变成2个，又迅速恢复成3个</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get replicaset replica-set-demo -o wide -w</span>
+NAME               DESIRED   CURRENT   READY   AGE   CONTAINERS        IMAGES                     SELECTOR
+replica-set-demo   3         3         3       10m   rs-ml-container   wangyanglinux/myapp:v1.0   app=rs-ml-demo
+replica-set-demo   3         2         2       11m   rs-ml-container   wangyanglinux/myapp:v1.0   app=rs-ml-demo
+replica-set-demo   3         3         2       11m   rs-ml-container   wangyanglinux/myapp:v1.0   app=rs-ml-demo
+replica-set-demo   3         3         3       11m   rs-ml-container   wangyanglinux/myapp:v1.0   app=rs-ml-demo</code></pre>
+
+
+
+<h3 id="2-8-验证-yaml-文件中定义的Pod的标签与RS标签选择器不一致时，是否可以启动"><a href="#2-8-验证-yaml-文件中定义的Pod的标签与RS标签选择器不一致时，是否可以启动" class="headerlink" title="2.8 验证 yaml 文件中定义的Pod的标签与RS标签选择器不一致时，是否可以启动"></a>2.8 验证 yaml 文件中定义的Pod的标签与RS标签选择器不一致时，是否可以启动</h3><p><strong>yaml文件如下：</strong></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">ReplicaSet</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">replica-set-demo</span> <span class="comment"># rs命名，全局唯一</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">3</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span> <span class="comment"># 基于标签匹配</span>
+      <span class="attr">app:</span> <span class="string">rs-ml-demo</span> <span class="comment"># ReplicaSet 将管理带有标签 app=rs-ml-demo 的 Pod</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">namespace:</span> <span class="string">default</span>
+      <span class="attr">labels:</span> <span class="comment"># 为 Pod 设置标签</span>
+        <span class="attr">app:</span> <span class="string">rs-ml-demo-123</span> <span class="comment"># 给 Pod 打上标签 app=rs-ml-demo，与 selector 中的 matchLabels 对应</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rs-ml-container</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">env:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GET_HOSTS_FROM</span>
+              <span class="attr">value:</span> <span class="string">dns</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">George</span>
+              <span class="attr">value:</span> <span class="string">&quot;30&quot;</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></code></pre>
+
+<p>RS 标签选择器管理的标签是 rs-ml-demo ， 而 Pod模板定义的标签是 rs-ml-demo-123 ，这样 RS 将无法管理此 Pod。</p>
+<p><strong>启动RS</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl apply -f 002-ReplicaSet.yaml</span> 
+The ReplicaSet &quot;replica-set-demo&quot; is invalid: spec.template.metadata.labels: Invalid value: map[string]string&#123;&quot;app&quot;:&quot;rs-ml-demo-123&quot;&#125;: `selector` does not match template `labels`</code></pre>
+
+<p>启动报错，K8S不允许定义定Pod标签与RS标签选择器无法匹配的情况。</p>
+<h2 id="3-标签选择器"><a href="#3-标签选择器" class="headerlink" title="3. 标签选择器"></a>3. 标签选择器</h2><p>在 Kubernetes 的 ReplicaSet（或其他资源如 Deployment、Service 等）中，matchLabels 是 selector 的一部分，用于指定如何选择要管理的 Pod。它基于<strong>标签（labels）</strong>进行匹配。matchLabels 本身只支持一种匹配模式：<strong>精确匹配（exact match）</strong>，即键值对必须完全相等。但 Kubernetes 提供了更灵活的标签选择器机制，比如 matchExpressions，可以实现更复杂的匹配模式。</p>
+<h3 id="3-1-matchLabels-的匹配模式"><a href="#3-1-matchLabels-的匹配模式" class="headerlink" title="3.1 matchLabels 的匹配模式"></a>3.1 matchLabels 的匹配模式</h3><ul>
+<li><p><strong>定义</strong>：matchLabels 是一个键值对映射，要求被选中的 Pod 的标签与 matchLabels 中定义的键值对完全一致。</p>
+</li>
+<li><p><strong>模式</strong>：仅支持<strong>精确匹配</strong>。</p>
+</li>
+<li><p><strong>语法</strong>：</p>
+<pre><code class="highlight yaml"><span class="attr">selector:</span>
+  <span class="attr">matchLabels:</span>
+    <span class="attr">key1:</span> <span class="string">value1</span>
+    <span class="attr">key2:</span> <span class="string">value2</span></code></pre>
+</li>
+<li><p><strong>行为</strong>：Pod 必须同时具备所有指定的标签键值对才能被选中。（Pod定的标签可以比 matchLabels 定义的标签多，但是不能比 matchLabels 定义的标签少，否则无法被 RS 管理）</p>
+</li>
+<li><p><strong>示例</strong>： 在你的 ReplicaSet 配置中：</p>
+<pre><code class="highlight yaml"><span class="attr">selector:</span>
+  <span class="attr">matchLabels:</span>
+    <span class="attr">app:</span> <span class="string">rs-ml-demo</span>
+    <span class="attr">key2:</span> <span class="string">value2</span></code></pre>
+
+<ul>
+<li>这表示 ReplicaSet 只管理带有标签 <code>app=rs-ml-demo</code> 和 <code>key2=value2</code> 的 Pod。</li>
+<li>Pod 的标签必须完全匹配 <code>app: rs-ml-demo</code> 和 <code>key2: value2</code> ，多余的标签不会影响匹配，但缺少这个标签的 Pod 不会被选中。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-2-matchExpressions-的匹配模式"><a href="#3-2-matchExpressions-的匹配模式" class="headerlink" title="3.2 matchExpressions 的匹配模式"></a>3.2 matchExpressions 的匹配模式</h3><p> Kubernetes 的 selector 还支持 matchExpressions，它提供了更丰富的匹配模式。matchExpressions 是一个可选字段，与 matchLabels 可以一起使用，允许基于逻辑运算进行标签选择。</p>
+<p>它提供了更丰富的匹配模式。matchExpressions 是一个可选字段，与 matchLabels 可以一起使用，允许基于逻辑运算进行标签选择。</p>
+<ul>
+<li><p><strong>语法</strong>：</p>
+<pre><code class="highlight yaml"><span class="attr">selector:</span>
+  <span class="attr">matchLabels:</span>
+    <span class="attr">app:</span> <span class="string">rs-ml-demo</span>
+  <span class="attr">matchExpressions:</span>
+    <span class="bullet">-</span> &#123;<span class="attr">key:</span> <span class="string">environment</span>, <span class="attr">operator:</span> <span class="string">In</span>, <span class="attr">values:</span> [<span class="string">prod</span>, <span class="string">staging</span>]&#125;</code></pre>
+</li>
+<li><p><strong>支持的运算符（Operator）</strong>：</p>
+<ol>
+<li><strong>In</strong>：<ul>
+<li>标签的值必须在指定值列表中。</li>
+<li>示例：environment 的值必须是 prod 或 staging。</li>
+</ul>
+</li>
+<li><strong>NotIn</strong>：<ul>
+<li>标签的值不能在指定值列表中。</li>
+<li>示例：environment 的值不能是 dev 或 test。</li>
+</ul>
+</li>
+<li><strong>Exists</strong>：<ul>
+<li>标签键必须存在，值无要求。</li>
+<li>示例：Pod 必须有 environment 标签，具体值不限。</li>
+</ul>
+</li>
+<li><strong>DoesNotExist</strong>：<ul>
+<li>标签键不能存在。</li>
+<li>示例：Pod 不能有 environment 标签。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><strong>示例</strong>：</p>
+<pre><code class="highlight yaml"><span class="attr">selector:</span>
+  <span class="attr">matchExpressions:</span>
+    <span class="bullet">-</span> &#123;<span class="attr">key:</span> <span class="string">tier</span>, <span class="attr">operator:</span> <span class="string">In</span>, <span class="attr">values:</span> [<span class="string">frontend</span>, <span class="string">backend</span>]&#125;
+    <span class="bullet">-</span> &#123;<span class="attr">key:</span> <span class="string">deprecated</span>, <span class="attr">operator:</span> <span class="string">DoesNotExist</span>&#125;</code></pre>
+
+<ul>
+<li>匹配条件：Pod 必须有 tier&#x3D;frontend 或 tier&#x3D;backend，且不能有 deprecated 标签。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-3-matchLabels-和-matchExpressions-的关系"><a href="#3-3-matchLabels-和-matchExpressions-的关系" class="headerlink" title="3.3 matchLabels 和 matchExpressions 的关系"></a>3.3 matchLabels 和 matchExpressions 的关系</h3><ul>
+<li><p>matchLabels 是简化的写法：它会被 Kubernetes 内部转换为等价的 matchExpressions，每个键值对对应一个 In 运算符。</p>
+<ul>
+<li><p>例如：</p>
+<pre><code class="highlight yaml"><span class="attr">matchLabels:</span>
+  <span class="attr">app:</span> <span class="string">rs-ml-demo</span></code></pre>
+
+<p>等价于：</p>
+<pre><code class="highlight yaml"><span class="attr">matchExpressions:</span>
+  <span class="bullet">-</span> &#123;<span class="attr">key:</span> <span class="string">app</span>, <span class="attr">operator:</span> <span class="string">In</span>, <span class="attr">values:</span> [<span class="string">rs-ml-demo</span>]&#125;</code></pre></li>
+</ul>
+</li>
+<li><p><strong>组合使用</strong>：如果同时指定 matchLabels 和 matchExpressions，Pod 必须满足两者的条件（逻辑“与”关系）。</p>
+</li>
+</ul>
+<h3 id="3-4-注意事项"><a href="#3-4-注意事项" class="headerlink" title="3.4 注意事项"></a>3.4 注意事项</h3><ul>
+<li><strong>一致性</strong>：selector.matchLabels（或 matchExpressions）必须与 template.metadata.labels 中的标签匹配，否则 ReplicaSet 无法正确管理 Pod。</li>
+<li><strong>大小写敏感</strong>：标签键和值是大小写敏感的，例如 app: Rs-ml-demo 和 app: rs-ml-demo 不匹配。</li>
+<li><strong>Service 的选择器</strong>：虽然问题聚焦于 ReplicaSet，但值得一提的是 Service 的 selector 只支持 matchLabels 风格的精确匹配，不支持 matchExpressions。</li>
+</ul>
+<h3 id="3-5-实际案例"><a href="#3-5-实际案例" class="headerlink" title="3.5 实际案例"></a>3.5 实际案例</h3><p><code>003-matchExpressions.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">ReplicaSet</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">rs-me-exists-demo</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">3</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchExpressions:</span>
+      <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">app</span> <span class="comment"># Pod 必须有 app 标签</span>
+        <span class="attr">operator:</span> <span class="string">Exists</span>
+      <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">version</span> <span class="comment"># Pod 必须有 version=v1 或 version=v2</span>
+        <span class="attr">operator:</span> <span class="string">In</span>
+        <span class="attr">values:</span>
+          <span class="bullet">-</span> <span class="string">v1</span>
+          <span class="bullet">-</span> <span class="string">v2</span>
+      <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">souce</span> <span class="comment"># Pod不能有 souce 标签</span>
+        <span class="attr">operator:</span> <span class="string">DoesNotExist</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">namespace:</span> <span class="string">default</span>
+      <span class="attr">labels:</span> <span class="comment"># 为 Pod 设置标签</span>
+        <span class="attr">app:</span> <span class="string">rs-ml-demo</span> <span class="comment"># 给 Pod 打上标签 app=rs-ml-demo，与 selector 中的 matchLabels 对应</span>
+        <span class="attr">version:</span> <span class="string">v1</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">rs-ml-container</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">env:</span> <span class="comment"># 定义容器的环境变量</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">GET_HOSTS_FROM</span>
+              <span class="attr">value:</span> <span class="string">dns</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">George</span>
+              <span class="attr">value:</span> <span class="string">&quot;30&quot;</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></code></pre>
+
+
+
+<h3 id="3-6-总结"><a href="#3-6-总结" class="headerlink" title="3.6 总结"></a>3.6 总结</h3><ul>
+<li><strong>matchLabels</strong>：只支持<strong>精确匹配</strong>，键值对必须完全相等。</li>
+<li><strong>matchExpressions</strong>（扩展功能）：支持 In、NotIn、Exists、DoesNotExist 四种模式，提供更灵活的匹配。</li>
+</ul>
+<h1 id="三、Deployment-控制器"><a href="#三、Deployment-控制器" class="headerlink" title="三、Deployment 控制器"></a>三、Deployment 控制器</h1><h2 id="1-Deployment-基本概念"><a href="#1-Deployment-基本概念" class="headerlink" title="1. Deployment - 基本概念"></a>1. Deployment - 基本概念</h2><p>Deployment 为 Pod 和 ReplicaSet 提供了一个声明式定义 ( declarative ) 方法，用来替代以前的 ReplicationController 来方便的管理应用。典型的应用场景包括：</p>
+<ul>
+<li>定义 Deployment 来创建 Pod 和 ReplicaSet</li>
+<li>滚动升级和回滚应用</li>
+<li>扩容和缩容</li>
+<li>暂停和继续 Deployment</li>
+</ul>
+<h2 id="2-Deployment-与-RS-的关联"><a href="#2-Deployment-与-RS-的关联" class="headerlink" title="2. Deployment - 与 RS 的关联"></a>2. Deployment - 与 RS 的关联</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/07/20250407-083305.png" alt="Deployment - 与 RS 的关联"></p>
+<p>Deployment 是通过创建 ReplicaSet 来间接的管理 Pod。</p>
+<h2 id="3-Deployment-常用命令"><a href="#3-Deployment-常用命令" class="headerlink" title="3. Deployment - 常用命令"></a>3. Deployment - 常用命令</h2><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">根据资源清单创建 deployment</span> 
+<span class="meta prompt_"># </span><span class="language-bash">--record 参数可以记录命令，我们可以很方便的查看每次 revision 的变化</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl create -f deployment.yaml --record</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">修改 Deployment 类型的 Pod 的数量</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl scale deployment nginx-deployment --replicas 10</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">设置 Pod 自动扩缩容，最大15个，最小 10个，扩缩依据：CPU利用率是否超过 80%</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl autoscale deployment nginx-deployment --min=10 --max=15 --cpu-percent=80</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">更新 deployment 类型的Pod nginx-deployment 下的容器 nginx-deployment-container 的镜像为：wangyanglinux/myapp:v2.0</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl <span class="built_in">set</span> image deployment/nginx-deployment nginx-deployment-container=wangyanglinux/myapp:v2.0</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">回滚Pod变更 (只能回滚到前一次变更操作，如：1 -&gt; 2 -&gt; 3, 第一次回滚回到2，第二次回滚则回到3，无法回滚到)</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl rollout undo deployment/nginx-deployment</span>
+</code></pre>
+
+
+
+<h2 id="4-apply-、create、replace-区别"><a href="#4-apply-、create、replace-区别" class="headerlink" title="4. apply 、create、replace 区别"></a>4. apply 、create、replace 区别</h2><p><code>kubectl create -f deployment.yaml</code> 和 <code>kubectl apply -f deployment.yaml</code> 都是用于创建或更新 Kubernetes 资源的命令，但它们在行为上有<strong>关键区别</strong>，主要涉及 <strong>声明式管理</strong> 和 <strong>命令式管理</strong> 的不同逻辑。</p>
+<h3 id="4-1-命令式命令"><a href="#4-1-命令式命令" class="headerlink" title="4.1  命令式命令"></a>4.1  命令式命令</h3><pre><code class="highlight shell">kubectl create -f deployment.yaml</code></pre>
+
+<ul>
+<li><strong>作用</strong>：<strong>严格创建新资源</strong>。</li>
+<li><strong>行为</strong>：<ul>
+<li>如果资源（如 Deployment）<strong>已存在</strong>，会报错并拒绝执行（报 <code>AlreadyExists</code> 错误）。</li>
+<li>仅适用于<strong>首次创建</strong>，不能用于更新。</li>
+</ul>
+</li>
+<li><strong>适用场景</strong>：<ul>
+<li>你明确知道资源不存在，且只需要一次性创建。</li>
+<li>脚本中需要严格避免覆盖现有配置时。</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例输出（资源已存在时）：</strong></p>
+<pre><code class="highlight sh">Error from server (AlreadyExists): deployments.apps <span class="string">&quot;deployment-demo-1&quot;</span> already exists</code></pre>
+
+
+
+<h3 id="4-2-声明式命令"><a href="#4-2-声明式命令" class="headerlink" title="4.2 声明式命令"></a>4.2 声明式命令</h3><ul>
+<li><strong>作用</strong>：<strong>创建或更新资源</strong>，智能合并变更。</li>
+<li><strong>行为</strong>：<ul>
+<li>如果资源<strong>不存在</strong>，则创建它（等同于 <code>create</code>）。</li>
+<li>如果资源<strong>已存在</strong>，则对比当前配置和 YAML 文件的差异，<strong>增量更新</strong>（保留未修改的字段）。</li>
+<li>依赖 <code>metadata.annotations</code> 中的 <code>kubectl.kubernetes.io/last-applied-configuration</code> 记录上次配置，用于计算变更。</li>
+</ul>
+</li>
+<li><strong>适用场景</strong>：<ul>
+<li>日常维护（例如更新镜像版本、调整副本数）。</li>
+<li>GitOps 或 CI&#x2F;CD 流程中（推荐使用 <code>apply</code> 而非 <code>create</code>）。</li>
+</ul>
+</li>
+</ul>
+<p><strong>示例输出（更新时）</strong>：</p>
+<pre><code class="highlight shell">deployment.apps/deployment-demo-1 configured</code></pre>
+
+<h3 id="4-3-关键区别总结"><a href="#4-3-关键区别总结" class="headerlink" title="4.3 关键区别总结"></a>4.3 关键区别总结</h3><table>
+<thead>
+<tr>
+<th align="left">特性</th>
+<th align="left"><code>kubectl create</code></th>
+<th align="left"><code>kubectl apply</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>资源已存在</strong></td>
+<td align="left">报错，拒绝执行</td>
+<td align="left">合并更新</td>
+</tr>
+<tr>
+<td align="left"><strong>资源不存在</strong></td>
+<td align="left">创建资源</td>
+<td align="left">创建资源</td>
+</tr>
+<tr>
+<td align="left"><strong>管理方式</strong></td>
+<td align="left">命令式（直接执行）</td>
+<td align="left">声明式（对比差异后更新）</td>
+</tr>
+<tr>
+<td align="left"><strong>记录变更</strong></td>
+<td align="left">无</td>
+<td align="left">记录到 <code>last-applied-configuration</code></td>
+</tr>
+<tr>
+<td align="left"><strong>适用场景</strong></td>
+<td align="left">一次性创建</td>
+<td align="left">持续维护（创建 + 更新）</td>
+</tr>
+</tbody></table>
+<h3 id="4-4-kubectl-replace-f"><a href="#4-4-kubectl-replace-f" class="headerlink" title="4.4 kubectl replace -f"></a>4.4 kubectl replace -f</h3><ul>
+<li>类似 <code>create</code>，但会<strong>强制替换</strong>现有资源（需资源已存在）。</li>
+<li>与 <code>apply</code> 不同：<strong>不合并字段</strong>，直接覆盖整个配置（可能丢失未指定的字段）。</li>
+<li>慎用，通常仅在需要完全重置配置时使用。</li>
+</ul>
+<p><strong>建议</strong>：</p>
+<ul>
+<li>**优先使用 <code>apply</code>**（声明式操作更符合 Kubernetes 设计理念）。</li>
+<li>仅在需要严格控制创建时使用 <code>create</code>。</li>
+<li><strong>自动化流程</strong>：推荐始终使用 <code>apply</code>（避免因资源存在导致失败）。</li>
+</ul>
+<h2 id="5-Deployment-案例实操"><a href="#5-Deployment-案例实操" class="headerlink" title="5. Deployment - 案例实操"></a>5. Deployment - 案例实操</h2><h3 id="5-1-编写资源清单"><a href="#5-1-编写资源清单" class="headerlink" title="5.1 编写资源清单"></a>5.1 编写资源清单</h3><p><code>004-deployment-demo.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span> <span class="comment"># 版本号</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span> <span class="comment"># 控制器类型为：Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># 控制器标签</span>
+  <span class="attr">name:</span> <span class="string">deployment-demo-1</span> <span class="comment"># 控制器名称</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span> <span class="comment"># 初始Pod副本数</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># Pod标签选择器，管理 标签为 app: deployment-demo 的Pod</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># Pod的标签，与 selector 标签选择器对应</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span> <span class="comment"># 容器使用的镜像</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span> <span class="comment"># 镜像拉取策略</span>
+          <span class="attr">name:</span> <span class="string">deployment-demo-container</span> <span class="comment"># 镜像</span></code></pre>
+
+
+
+<h3 id="5-2-创建-Deployment"><a href="#5-2-创建-Deployment" class="headerlink" title="5.2 创建 Deployment"></a>5.2 创建 Deployment</h3><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">根据资源清单创建 Deployment 和对应的 Pod</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl apply -f 004-deployment-demo.yaml</span></code></pre>
+
+
+
+<h3 id="5-3-查看-Deployment-和-Pod"><a href="#5-3-查看-Deployment-和-Pod" class="headerlink" title="5.3 查看 Deployment  和 Pod"></a>5.3 查看 Deployment  和 Pod</h3><p><strong>查看 Deployment 信息</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl get deployment -o wide</span> 
+NAME                READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS                  IMAGES                     SELECTOR
+deployment-demo-1   1/1     1            1           2m21s   deployment-demo-container   wangyanglinux/myapp:v1.0   app=deployment-demo</code></pre>
+
+<p>可以看到创建一个 Deployment 类型的控制器，名称为：deployment-demo-1， 标签为：app&#x3D;deployment-demo，控制器内 Pod的副本数为 1。</p>
+<p><strong>查看 Deployment 详细信息</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl get deployment deployment-demo-1 -o yaml</span></code></pre>
+
+<p><em>内容如下：</em></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">annotations:</span>
+    <span class="attr">deployment.kubernetes.io/revision:</span> <span class="string">&quot;1&quot;</span> <span class="comment"># 当前修订版本号（用于回滚）</span>
+    <span class="attr">kubectl.kubernetes.io/last-applied-configuration:</span> <span class="string">|</span> <span class="comment"># 上次 kubectl apply 使用的完整配置（用于对比变更）</span>
+      &#123;<span class="string">&quot;apiVersion&quot;</span><span class="string">:&quot;apps/v1&quot;</span>,<span class="string">&quot;kind&quot;</span><span class="string">:&quot;Deployment&quot;</span>,<span class="string">&quot;metadata&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;annotations&quot;</span><span class="string">:</span>&#123;&#125;,<span class="string">&quot;labels&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;app&quot;</span><span class="string">:&quot;deployment-demo&quot;</span>&#125;,<span class="string">&quot;name&quot;</span><span class="string">:&quot;deployment-demo-1&quot;</span>,<span class="string">&quot;namespace&quot;</span><span class="string">:&quot;default&quot;</span>&#125;,<span class="string">&quot;spec&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;replicas&quot;</span><span class="string">:1</span>,<span class="string">&quot;selector&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;matchLabels&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;app&quot;</span><span class="string">:&quot;deployment-demo&quot;</span>&#125;&#125;,<span class="string">&quot;template&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;metadata&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;labels&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;app&quot;</span><span class="string">:&quot;deployment-demo&quot;</span>&#125;&#125;,<span class="string">&quot;spec&quot;</span><span class="string">:</span>&#123;<span class="string">&quot;containers&quot;</span><span class="string">:</span>[&#123;<span class="string">&quot;image&quot;</span><span class="string">:&quot;wangyanglinux/myapp:v1.0&quot;</span>,<span class="string">&quot;imagePullPolicy&quot;</span><span class="string">:&quot;IfNotPresent&quot;</span>,<span class="string">&quot;name&quot;</span><span class="string">:&quot;deployment-demo-container&quot;</span>&#125;]&#125;&#125;&#125;&#125;
+  <span class="attr">creationTimestamp:</span> <span class="string">&quot;2025-04-09T01:59:05Z&quot;</span>
+  <span class="attr">generation:</span> <span class="number">1</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">deployment-demo</span>
+  <span class="attr">name:</span> <span class="string">deployment-demo-1</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+  <span class="attr">resourceVersion:</span> <span class="string">&quot;1484447&quot;</span>
+  <span class="attr">uid:</span> <span class="string">8cec6671-c1e9-4292-921c-dbe8bae8c357</span>
+<span class="attr">spec:</span>
+  <span class="attr">progressDeadlineSeconds:</span> <span class="number">600</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">revisionHistoryLimit:</span> <span class="number">10</span> <span class="comment"># 保留最近 10 个历史版本（用于回滚），超出部分会被自动清理</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">deployment-demo</span>
+  <span class="attr">strategy:</span>
+    <span class="attr">rollingUpdate:</span> <span class="comment"># 滚动更新策略 (strategy)</span>
+      <span class="attr">maxSurge:</span> <span class="number">25</span><span class="string">%</span> <span class="comment"># 允许临时超出期望副本数的比例（例如 1.25 个 Pod）</span>
+      <span class="attr">maxUnavailable:</span> <span class="number">25</span><span class="string">%</span> <span class="comment"># 更新时允许不可用的 Pod 比例（例如最多 0.75 个 Pod 不可用）</span>
+    <span class="attr">type:</span> <span class="string">RollingUpdate</span> <span class="comment"># 更新策略类型: 滚动更新,逐步替换旧 Pod，确保服务不中断。</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">creationTimestamp:</span> <span class="literal">null</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">deployment-demo</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+        <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+        <span class="attr">name:</span> <span class="string">deployment-demo-container</span>
+        <span class="attr">resources:</span> &#123;&#125;
+        <span class="attr">terminationMessagePath:</span> <span class="string">/dev/termination-log</span>
+        <span class="attr">terminationMessagePolicy:</span> <span class="string">File</span>
+      <span class="attr">dnsPolicy:</span> <span class="string">ClusterFirst</span>
+      <span class="attr">restartPolicy:</span> <span class="string">Always</span>
+      <span class="attr">schedulerName:</span> <span class="string">default-scheduler</span>
+      <span class="attr">securityContext:</span> &#123;&#125;
+      <span class="attr">terminationGracePeriodSeconds:</span> <span class="number">30</span> <span class="comment"># 终止前等待 30 秒（优雅退出）</span>
+<span class="attr">status:</span>
+  <span class="attr">availableReplicas:</span> <span class="number">1</span> <span class="comment"># 当前可用的 Pod 数量</span>
+  <span class="attr">conditions:</span>
+  <span class="bullet">-</span> <span class="attr">lastTransitionTime:</span> <span class="string">&quot;2025-04-09T01:59:07Z&quot;</span>
+    <span class="attr">lastUpdateTime:</span> <span class="string">&quot;2025-04-09T01:59:07Z&quot;</span>
+    <span class="attr">message:</span> <span class="string">Deployment</span> <span class="string">has</span> <span class="string">minimum</span> <span class="string">availability.</span>
+    <span class="attr">reason:</span> <span class="string">MinimumReplicasAvailable</span>
+    <span class="attr">status:</span> <span class="string">&quot;True&quot;</span>
+    <span class="attr">type:</span> <span class="string">Available</span>
+  <span class="bullet">-</span> <span class="attr">lastTransitionTime:</span> <span class="string">&quot;2025-04-09T01:59:05Z&quot;</span>
+    <span class="attr">lastUpdateTime:</span> <span class="string">&quot;2025-04-09T01:59:07Z&quot;</span>
+    <span class="attr">message:</span> <span class="string">ReplicaSet</span> <span class="string">&quot;deployment-demo-1-6995c75668&quot;</span> <span class="string">has</span> <span class="string">successfully</span> <span class="string">progressed.</span>
+    <span class="attr">reason:</span> <span class="string">NewReplicaSetAvailable</span>
+    <span class="attr">status:</span> <span class="string">&quot;True&quot;</span>
+    <span class="attr">type:</span> <span class="string">Progressing</span>
+  <span class="attr">observedGeneration:</span> <span class="number">1</span>
+  <span class="attr">readyReplicas:</span> <span class="number">1</span> <span class="comment"># 已就绪的 Pod 数量</span>
+  <span class="attr">replicas:</span> <span class="number">1</span> <span class="comment"># 实际运行的 Pod 数量</span>
+  <span class="attr">updatedReplicas:</span> <span class="number">1</span> <span class="comment"># 已更新到最新版本的 Pod 数量</span></code></pre>
+
+
+
+<p><strong>查看Pod</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl get pod -o wide</span>
+NAME                                 READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+deployment-demo-1-6995c75668-klh7h   1/1     Running   0          33m   172.16.58.208   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>注意看 Pod 的名字是 <code>deployment-demo-1-6995c75668-klh7h</code> ，这是由 Deployment 创建时，自动创建了 对应的 ReplicaSet 的名字(<code>deployment-demo-1-6995c75668</code>) 再拼接上 随机字符串：<code>klh7h</code> 生成的，可以查看是否有 ReplicaSet 验证：</p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl get rs</span>
+NAME                           DESIRED   CURRENT   READY   AGE
+deployment-demo-1-6995c75668   1         1         1       33m</code></pre>
+
+
+
+<h3 id="5-4-Pod-副本扩缩容"><a href="#5-4-Pod-副本扩缩容" class="headerlink" title="5.4 Pod 副本扩缩容"></a>5.4 Pod 副本扩缩容</h3><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">查看当前Pod副本数</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get pods</span>
+NAME                                 READY   STATUS    RESTARTS   AGE
+deployment-demo-1-6995c75668-klh7h   1/1     Running   0          29h
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">扩展 Pod 数量</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl scale deployment deployment-demo-1 --replicas 10</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">再次查看 Pod 数量</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get pod</span> 
+NAME                                 READY   STATUS    RESTARTS   AGE
+deployment-demo-1-6995c75668-44fnz   1/1     Running   0          10s
+deployment-demo-1-6995c75668-64zdm   1/1     Running   0          10s
+deployment-demo-1-6995c75668-9xxbc   1/1     Running   0          10s
+deployment-demo-1-6995c75668-klh7h   1/1     Running   0          29h
+deployment-demo-1-6995c75668-kqqhj   1/1     Running   0          10s
+deployment-demo-1-6995c75668-mmdrx   1/1     Running   0          10s
+deployment-demo-1-6995c75668-twr24   1/1     Running   0          10s
+deployment-demo-1-6995c75668-vq67h   1/1     Running   0          10s
+deployment-demo-1-6995c75668-wpq6x   1/1     Running   0          10s
+deployment-demo-1-6995c75668-zxvwc   1/1     Running   0          10s
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">缩小 Pod 副本数</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl scale deployment deployment-demo-1 --replicas 1</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">再次查看Pod</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get pod</span> 
+NAME                                 READY   STATUS    RESTARTS   AGE
+deployment-demo-1-6995c75668-klh7h   1/1     Running   0          29h</code></pre>
+
+
+
+<h3 id="5-5-动态更新-Deployment-的-Pod-容器镜像"><a href="#5-5-动态更新-Deployment-的-Pod-容器镜像" class="headerlink" title="5.5 动态更新 Deployment 的 Pod 容器镜像"></a>5.5 动态更新 Deployment 的 Pod 容器镜像</h3><p>当前资源清单中使用的镜像是：<code>wangyanglinux/myapp:v1.0</code> ，现在测试在不停止Pod运行的情况下，将镜像升级到  <code>wangyanglinux/myapp:v2.0</code></p>
+<p><strong>查看当前运行中的Pod</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建 Pod</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl create -f 004-deployment-demo.yaml --record</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">查看Pod</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get pods -o wide</span>
+NAME                                 READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+deployment-demo-1-6995c75668-4rljk   1/1     Running   0          28m   172.16.58.213   k8s-node02   &lt;none&gt;           &lt;none&gt;
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">访问Pod，确认当前版本是 1.0</span>
+<span class="meta prompt_">$ </span><span class="language-bash">curl 172.16.58.213</span>
+www.xinxianghf.com | hello MyAPP | version v1.0</code></pre>
+
+<p><em>命令后面添加  <code>--record</code> 目的是为了让 kubectl 记住Pod操作历史，以便于后期回滚操作。</em></p>
+<p><strong>升级容器镜像版本</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl <span class="built_in">set</span> image deployment/deployment-demo-1 deployment-demo-container=wangyanglinux/myapp:v2.0 --record</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">查看Pod</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get pods -o wide</span>
+NAME                                 READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+deployment-demo-1-6465d4c5c9-b5dsn   1/1     Running   0          89s   172.16.58.214   k8s-node02   &lt;none&gt;           &lt;none&gt;
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">访问Pod，镜像版本已更新到 2.0</span>
+<span class="meta prompt_">$ </span><span class="language-bash">curl 172.16.58.214</span>
+www.xinxianghf.com | hello MyAPP | version v2.0</code></pre>
+
+
+
+<p><strong>查看Pod更新的历史记录</strong></p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl rollout <span class="built_in">history</span> deployment/deployment-demo-1</span>
+deployment.apps/deployment-demo-1 
+REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=004-deployment-demo.yaml --record=true
+2         kubectl set image deployment/deployment-demo-1 deployment-demo-container=wangyanglinux/myapp:v2.0 --record=true</code></pre>
+
+
+
+
+
+<h2 id="6-Deployment-滚动升级"><a href="#6-Deployment-滚动升级" class="headerlink" title="6. Deployment 滚动升级"></a>6. Deployment 滚动升级</h2><p>在 Kubernetes 中，<strong>Deployment</strong> 是管理 Pod 副本和实现无缝升级的核心资源。<strong>滚动升级（Rolling Update）</strong> 是默认的更新策略，它允许逐步替换旧版本的 Pod，确保应用在升级过程中<strong>不中断服务</strong>。</p>
+<h3 id="6-1-滚动升级的核心机制"><a href="#6-1-滚动升级的核心机制" class="headerlink" title="6.1 滚动升级的核心机制"></a>6.1 滚动升级的核心机制</h3><h3 id="（1）更新流程"><a href="#（1）更新流程" class="headerlink" title="（1）更新流程"></a>（1）更新流程</h3><ol>
+<li><strong>创建新版本的 ReplicaSet</strong><ul>
+<li>当修改 Deployment 的 Pod 模板（如镜像版本）时，Kubernetes 会创建一个新的 ReplicaSet。</li>
+<li>新 ReplicaSet 逐步启动新 Pod，旧 ReplicaSet 逐步缩减旧 Pod。</li>
+</ul>
+</li>
+<li><strong>逐步替换 Pod</strong><ul>
+<li>通过 <code>maxSurge</code> 和 <code>maxUnavailable</code> 控制替换速度：<ul>
+<li>**<code>maxSurge</code>**：允许临时超出 <code>replicas</code> 的 Pod 数量（默认 25%）。</li>
+<li>**<code>maxUnavailable</code>**：升级过程中允许不可用的 Pod 比例（默认 25%）。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>完成升级</strong><ul>
+<li>所有旧 Pod 被替换后，旧 ReplicaSet 保留（便于回滚），但 Pod 数为 0。</li>
+</ul>
+</li>
+</ol>
+<h3 id="（2）关键配置参数"><a href="#（2）关键配置参数" class="headerlink" title="（2）关键配置参数"></a>（2）关键配置参数</h3><p>在 Deployment 的 <code>spec.strategy</code> 中定义：</p>
+<pre><code class="highlight yaml"><span class="attr">spec:</span>
+  <span class="attr">strategy:</span>
+    <span class="attr">type:</span> <span class="string">RollingUpdate</span>
+    <span class="attr">rollingUpdate:</span>
+      <span class="attr">maxSurge:</span> <span class="number">25</span><span class="string">%</span>     <span class="comment"># 允许临时多启动 25% 的 Pod（例如 replicas=4 时，最多 5 个 Pod）</span>
+      <span class="attr">maxUnavailable:</span> <span class="number">25</span><span class="string">%</span>  <span class="comment"># 允许最多 25% 的 Pod 不可用（例如 replicas=4 时，至少 3 个 Pod 可用）</span></code></pre>
+
+
+
+<h3 id="6-2-触发滚动升级的方式"><a href="#6-2-触发滚动升级的方式" class="headerlink" title="6.2 触发滚动升级的方式"></a>6.2 触发滚动升级的方式</h3><h3 id="（1）直接修改-YAML-并应用"><a href="#（1）直接修改-YAML-并应用" class="headerlink" title="（1）直接修改 YAML 并应用"></a>（1）直接修改 YAML 并应用</h3><pre><code class="highlight shell">kubectl apply -f deployment.yaml</code></pre>
+
+<p>适用于通过版本控制的 YAML 文件管理部署。</p>
+<h3 id="（2）命令式更新镜像版本"><a href="#（2）命令式更新镜像版本" class="headerlink" title="（2）命令式更新镜像版本"></a>（2）命令式更新镜像版本</h3><pre><code class="highlight shell">kubectl set image deployment/&lt;deployment-name&gt; &lt;container-name&gt;=&lt;new-image&gt;:&lt;tag&gt;</code></pre>
+
+<p>例如：</p>
+<pre><code class="highlight shell">kubectl set image deployment/deployment-demo-1 deployment-demo-container=wangyanglinux/myapp:v2.0</code></pre>
+
+<h3 id="（3）其他可触发升级的操作"><a href="#（3）其他可触发升级的操作" class="headerlink" title="（3）其他可触发升级的操作"></a>（3）其他可触发升级的操作</h3><ul>
+<li>修改环境变量、资源限制（CPU&#x2F;内存）、标签等 Pod 模板内容。</li>
+<li><strong>调整副本数（<code>kubectl scale</code>）不会触发滚动升级。</strong></li>
+</ul>
+<h3 id="6-3-查看升级状态"><a href="#6-3-查看升级状态" class="headerlink" title="6.3 查看升级状态"></a>6.3 查看升级状态</h3><h3 id="（1）检查升级进度"><a href="#（1）检查升级进度" class="headerlink" title="（1）检查升级进度"></a>（1）检查升级进度</h3><pre><code class="highlight bash">kubectl rollout status deployment/&lt;deployment-name&gt;</code></pre>
+
+<p>输出示例：</p>
+<pre><code class="highlight bash">Waiting <span class="keyword">for</span> rollout to finish: 2 out of 3 new replicas have been updated...</code></pre>
+
+<h3 id="（2）查看历史版本"><a href="#（2）查看历史版本" class="headerlink" title="（2）查看历史版本"></a>（2）查看历史版本</h3><pre><code class="highlight bash">kubectl rollout <span class="built_in">history</span> deployment/&lt;deployment-name&gt;</code></pre>
+
+<p>输出示例：</p>
+<pre><code class="highlight bash">REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=deployment.yaml
+2         kubectl <span class="built_in">set</span> image deployment/deployment-demo-1 deployment-demo-container=myapp:v2.0</code></pre>
+
+<h3 id="（3）查看具体版本的配置"><a href="#（3）查看具体版本的配置" class="headerlink" title="（3）查看具体版本的配置"></a>（3）查看具体版本的配置</h3><pre><code class="highlight bash">kubectl rollout <span class="built_in">history</span> deployment/&lt;deployment-name&gt; --revision=&lt;revision-number&gt;</code></pre>
+
+<p>例如：</p>
+<pre><code class="highlight plaintext">kubectl rollout history deployment/deployment-demo-1 --revision=2</code></pre>
+
+
+
+<h3 id="6-4-回滚升级"><a href="#6-4-回滚升级" class="headerlink" title="6.4 回滚升级"></a>6.4 回滚升级</h3><p>如果新版本出现问题，可快速回滚到之前的版本：</p>
+<h3 id="（1）回滚到上一个版本"><a href="#（1）回滚到上一个版本" class="headerlink" title="（1）回滚到上一个版本"></a>（1）回滚到上一个版本</h3><pre><code class="highlight bash">kubectl rollout undo deployment/&lt;deployment-name&gt;</code></pre>
+
+<h3 id="（2）回滚到指定版本"><a href="#（2）回滚到指定版本" class="headerlink" title="（2）回滚到指定版本"></a>（2）回滚到指定版本</h3><pre><code class="highlight bash">kubectl rollout undo deployment/&lt;deployment-name&gt; --to-revision=&lt;revision-number&gt;</code></pre>
+
+<p>例如：</p>
+<pre><code class="highlight bash">kubectl rollout undo deployment/deployment-demo-1 --to-revision=1</code></pre>
+
+
+
+<h3 id="6-5-高级控制技巧"><a href="#6-5-高级控制技巧" class="headerlink" title="6.5 高级控制技巧"></a>6.5 高级控制技巧</h3><h3 id="（1）暂停-恢复升级"><a href="#（1）暂停-恢复升级" class="headerlink" title="（1）暂停&#x2F;恢复升级"></a>（1）暂停&#x2F;恢复升级</h3><ul>
+<li><p><strong>暂停升级</strong>（手动分阶段发布）：</p>
+<pre><code class="highlight bash">kubectl rollout pause deployment/&lt;deployment-name&gt;</code></pre>
+</li>
+<li><p><strong>恢复升级</strong>：</p>
+<pre><code class="highlight bash">kubectl rollout resume deployment/&lt;deployment-name&gt;</code></pre></li>
+</ul>
+<h3 id="（2）强制重建-Pod（非滚动更新）"><a href="#（2）强制重建-Pod（非滚动更新）" class="headerlink" title="（2）强制重建 Pod（非滚动更新）"></a>（2）强制重建 Pod（非滚动更新）</h3><p>删除所有 Pod 触发重建（慎用）：</p>
+<pre><code class="highlight bash">kubectl delete pods -l app=&lt;deployment-label&gt;</code></pre>
+
+
+
+<h3 id="6-6-故障排查"><a href="#6-6-故障排查" class="headerlink" title="6.6 故障排查"></a>6.6 故障排查</h3><h3 id="（1）升级卡住怎么办？"><a href="#（1）升级卡住怎么办？" class="headerlink" title="（1）升级卡住怎么办？"></a>（1）升级卡住怎么办？</h3><ul>
+<li><p>检查事件：</p>
+<pre><code class="highlight bash">kubectl describe deployment/&lt;deployment-name&gt;</code></pre>
+</li>
+<li><p>查看 Pod 状态：</p>
+<pre><code class="highlight bash">kubectl get pods</code></pre></li>
+</ul>
+<h3 id="（2）常见原因"><a href="#（2）常见原因" class="headerlink" title="（2）常见原因"></a>（2）常见原因</h3><ul>
+<li><strong>镜像拉取失败</strong>：检查镜像名称或权限。</li>
+<li><strong>资源不足</strong>：节点 CPU&#x2F;内存不足。</li>
+<li><strong>就绪探针失败</strong>：新版本 Pod 未通过健康检查。</li>
+</ul>
+<h2 id="7-滚动升级案例实操"><a href="#7-滚动升级案例实操" class="headerlink" title="7. 滚动升级案例实操"></a>7. 滚动升级案例实操</h2><p>演示一个 Deployment 下有多个 Pod 副本（10个），升级镜像版本，以及回退版本相关操作。</p>
+<h3 id="7-1-资源清单"><a href="#7-1-资源清单" class="headerlink" title="7.1 资源清单"></a>7.1 资源清单</h3><p> <code>005-deployment-demo.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span> <span class="comment"># 版本号</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span> <span class="comment"># 控制器类型为：Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># 控制器标签</span>
+  <span class="attr">name:</span> <span class="string">my-deployment-demo</span> <span class="comment"># 控制器名称</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span> <span class="comment"># 初始Pod副本数</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># Pod标签选择器，管理 标签为 app: deployment-demo 的Pod</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># Pod的标签，与 selector 标签选择器对应</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">deployment-demo-container</span> <span class="comment"># 容器名称</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span> <span class="comment"># 容器使用的镜像</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span> <span class="comment"># 镜像拉取策略</span></code></pre>
+
+
+
+<h3 id="7-2-创建-Service"><a href="#7-2-创建-Service" class="headerlink" title="7.2 创建 Service"></a>7.2 创建 Service</h3><p>创建Service的目的是为了通过访问 service，查看 Pod 滚动升级的过程。</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建 Service</span>
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl create svc clusterip deployment-demo --tcp=80:80</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">查看 Service</span> 
+<span class="meta prompt_">$ </span><span class="language-bash">kubectl get svc</span>
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+deployment-demo   ClusterIP   10.103.97.136   &lt;none&gt;        80/TCP    5m53s
+kubernetes        ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP   13d
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash"><span class="keyword">while</span> 命令循环访问 service</span>
+<span class="meta prompt_">$ </span><span class="language-bash"><span class="keyword">while</span> <span class="literal">true</span>; <span class="keyword">do</span> curl 10.103.97.136; <span class="keyword">done</span></span></code></pre>
+
+
+
+<h3 id="7-3-创建Deloyment"><a href="#7-3-创建Deloyment" class="headerlink" title="7.3 创建Deloyment"></a>7.3 创建Deloyment</h3><pre><code class="highlight bash"><span class="comment"># 创建 Deployment ，添加了 --record 会记录操作的命令详情</span>
+$ kubectl create -f 005-deployment-demo.yaml --record
+Flag --record has been deprecated, --record will be removed <span class="keyword">in</span> the future
+deployment.apps/my-deployment-demo created
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deployment -o wide 
+NAME                 READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS                  IMAGES                     SELECTOR
+my-deployment-demo   1/1     1            1           3s    deployment-demo-container   wangyanglinux/myapp:v1.0   app=deployment-demo</code></pre>
+
+
+
+<h3 id="7-4-Pod副本扩容"><a href="#7-4-Pod副本扩容" class="headerlink" title="7.4 Pod副本扩容"></a>7.4 Pod副本扩容</h3><pre><code class="highlight bash"><span class="comment"># 将当前Pod数量从1个，扩容到10个</span>
+$ kubectl scale deployment my-deployment-demo --replicas 10
+deployment.apps/my-deployment-demo scaled
+
+<span class="comment"># 查看Deployment</span>
+$ kubectl get deployment -o wide 
+NAME                 READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS                  IMAGES                     SELECTOR
+my-deployment-demo   10/10   10           10          2m49s   deployment-demo-container   wangyanglinux/myapp:v1.0   app=deployment-demo
+
+<span class="comment"># 查看Pod</span>
+$ kubectl get pod -l app=deployment-demo -o wide
+NAME                                  READY   STATUS    RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES
+my-deployment-demo-6995c75668-5fxrj   1/1     Running   0          2m31s   172.16.85.211   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-977kq   1/1     Running   0          2m31s   172.16.58.223   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-lq4kj   1/1     Running   0          2m31s   172.16.58.221   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-mvdsm   1/1     Running   0          2m31s   172.16.58.220   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-rt2wp   1/1     Running   0          2m31s   172.16.85.208   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-ssx86   1/1     Running   0          2m31s   172.16.58.222   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-v69wv   1/1     Running   0          2m31s   172.16.85.210   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-vvjg2   1/1     Running   0          2m31s   172.16.85.212   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-whc7z   1/1     Running   0          5m3s    172.16.58.219   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-zsgg9   1/1     Running   0          2m31s   172.16.85.209   k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+
+
+<h3 id="7-5-查看当前Pod的镜像版本"><a href="#7-5-查看当前Pod的镜像版本" class="headerlink" title="7.5 查看当前Pod的镜像版本"></a>7.5 查看当前Pod的镜像版本</h3><pre><code class="highlight bash">$ <span class="keyword">while</span> <span class="literal">true</span>; <span class="keyword">do</span> curl 10.103.97.136; <span class="keyword">done</span>
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0</code></pre>
+
+<p>当前访问的所有Pod 镜像版本都是 1.0</p>
+<h3 id="7-6-升级-Pod-镜像版本"><a href="#7-6-升级-Pod-镜像版本" class="headerlink" title="7.6 升级 Pod 镜像版本"></a>7.6 升级 Pod 镜像版本</h3><p>新开一个shell终端，执行命令升级镜像版本，前一个shell终端循环访问pod，打印Pod镜像版本信息</p>
+<pre><code class="highlight bash"><span class="comment"># 升级镜像版本，并打印当前pod详细信息</span>
+$ kubectl <span class="built_in">set</span> image deployment/my-deployment-demo deployment-demo-container=wangyanglinux/myapp:v2.0 --record &amp;&amp; kubectl get pod -l app=deployment-demo -o wide
+deployment.apps/my-deployment-demo image updated
+NAME                                  READY   STATUS              RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+my-deployment-demo-6465d4c5c9-crrcz   0/1     Pending             0          0s    &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6465d4c5c9-fckht   0/1     ContainerCreating   0          0s    &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6465d4c5c9-tkjst   0/1     ContainerCreating   0          0s    &lt;none&gt;          k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-2fg6c   1/1     Running             0          12m   172.16.58.229   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-bhs4q   1/1     Running             0          11m   172.16.85.221   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-fj7hf   1/1     Running             0          11m   172.16.85.220   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-p7bhr   1/1     Running             0          11m   172.16.85.218   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-qbdmg   1/1     Running             0          11m   172.16.58.230   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-qprl6   1/1     Running             0          11m   172.16.85.222   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-qtdbb   1/1     Terminating         0          11m   172.16.58.232   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-r2xvv   1/1     Running             0          11m   172.16.85.219   k8s-node01   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-sg7vt   1/1     Terminating         0          11m   172.16.58.233   k8s-node02   &lt;none&gt;           &lt;none&gt;
+my-deployment-demo-6995c75668-wbqn2   1/1     Running             0          11m   172.16.58.231   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>此时Pod正在升级滚动升级中，当前看到共有13个Pod，这是因为Pod在滚动升级的过程中，默认允许新增不超过原设定副本数 25% 副本数量（<code>maxSurge: 25%</code>）。（上面的打印结果有2个Pod的状态是 Terminating，运行中和加载中的Pod数没有超过原设备Pod数的 125%）</p>
+<p>查看前一个shell终端的打印结果如下：</p>
+<pre><code class="highlight bash">w.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v2.0
+www.xinxianghf.com | hello MyAPP | version v2.0
+www.xinxianghf.com | hello MyAPP | version v2.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+curl: (7) Failed to connect to 10.103.97.136 port 80: Connection refused
+www.xinxianghf.com | hello MyAPP | version v1.0
+curl: (7) Failed to connect to 10.103.97.136 port 80: Connection refused
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v2.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v2.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0
+curl: (7) Failed to connect to 10.103.97.136 port 80: Connection refused
+curl: (7) Failed to connect to 10.103.97.136 port 80: Connection refused
+www.xinxianghf.com | hello MyAPP | version v2.0
+curl: (7) Failed to connect to 10.103.97.136 port 80: Connection refused
+www.xinxianghf.com | hello MyAPP | version v1.0
+curl: (7) Failed to connect to 10.103.97.136 port 80: Connection refused
+www.xinxianghf.com | hello MyAPP | version v1.0
+www.xinxianghf.com | hello MyAPP | version v1.0</code></pre>
+
+<p><strong>可以得出如下结论：</strong></p>
+<ul>
+<li>通过访问 Service 会轮询访问 lable 名称与 Service 名称一样的 Pod</li>
+<li>Pod 正处于滚动升级的过程中，打印的镜像版本有的是 1.0，有的是 2.0，有的处于 Terminating 状态，不可访问</li>
+</ul>
+<h2 id="8-Deloyment-回滚案例实操"><a href="#8-Deloyment-回滚案例实操" class="headerlink" title="8. Deloyment 回滚案例实操"></a>8. Deloyment 回滚案例实操</h2><h3 id="8-1-资源清单"><a href="#8-1-资源清单" class="headerlink" title="8.1 资源清单"></a>8.1 资源清单</h3><p><code>006-deployment-demo.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span> <span class="comment"># 版本号</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span> <span class="comment"># 控制器类型为：Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># 控制器标签</span>
+  <span class="attr">name:</span> <span class="string">my-deployment-demo</span> <span class="comment"># 控制器名称</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span> <span class="comment"># 初始Pod副本数</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># Pod标签选择器，管理 标签为 app: deployment-demo 的Pod</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">deployment-demo</span> <span class="comment"># Pod的标签，与 selector 标签选择器对应</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">deployment-demo-container</span> <span class="comment"># 容器名称</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span> <span class="comment"># 容器使用的镜像</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span> <span class="comment"># 镜像拉取策略</span></code></pre>
+
+
+
+<h3 id="8-2-创建Deployment"><a href="#8-2-创建Deployment" class="headerlink" title="8.2 创建Deployment"></a>8.2 创建Deployment</h3><pre><code class="highlight bash"><span class="comment"># 1.创建 Service</span>
+$ kubectl create svc clusterip deployment-demo --tcp=80:80
+<span class="comment"># 查看 Service </span>
+$ kubectl get svc
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+deployment-demo   ClusterIP   10.103.97.136   &lt;none&gt;        80/TCP    5m53s
+kubernetes        ClusterIP   10.96.0.1       &lt;none&gt;        443/TCP   13d
+
+
+<span class="comment"># 2.创建 Deployment ，添加了 --record 会记录操作的命令详情</span>
+$ kubectl create -f 006-deployment-demo.yaml --record
+
+
+<span class="comment"># 3. 将当前Pod数量从1个，扩容到10个</span>
+$ kubectl scale deployment my-deployment-demo --replicas 10
+
+<span class="comment"># 查看Deployment</span>
+$ kubectl get deployment -o wide 
+NAME                 READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS                  IMAGES                     SELECTOR
+my-deployment-demo   10/10   10           10          2m49s   deployment-demo-container   wangyanglinux/myapp:v1.0   app=deployment-demo
+
+<span class="comment"># 查看当前 Pod 镜像版本</span>
+$ curl 10.103.97.136
+www.xinxianghf.com | hello MyAPP | version v1.0</code></pre>
+
+
+
+<h3 id="8-3-升级镜像"><a href="#8-3-升级镜像" class="headerlink" title="8.3 升级镜像"></a>8.3 升级镜像</h3><pre><code class="highlight bash"><span class="comment"># 1. 将镜像版本升级到 2.0</span>
+$ kubectl <span class="built_in">set</span> image deployment/my-deployment-demo deployment-demo-container=wangyanglinux/myapp:v2.0 --record
+<span class="comment"># 测试访问镜像</span>
+$ curl 10.103.97.136
+www.xinxianghf.com | hello MyAPP | version v2.0
+
+
+<span class="comment"># 2. 将镜像版本升级到 3.0</span>
+$ kubectl <span class="built_in">set</span> image deployment/my-deployment-demo deployment-demo-container=wangyanglinux/myapp:v3.0 --record
+<span class="comment"># 测试访问镜像</span>
+$ curl 10.103.97.136
+www.xinxianghf.com | hello MyAPP | version v3.0
+
+
+<span class="comment"># 3. 查看 Deployment 历史版本（创建Deployment、升级镜像命令都添加了 --record 参数，所以CHANGE-CAUSE才有操作记录）</span>
+$ kubectl rollout <span class="built_in">history</span> deployment/my-deployment-demo
+deployment.apps/my-deployment-demo 
+REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=006-deployment-demo.yaml --record=<span class="literal">true</span>
+2         kubectl <span class="built_in">set</span> image deployment/my-deployment-demo deployment-demo-container=wangyanglinux/myapp:v2.0 --record=<span class="literal">true</span>
+3         kubectl <span class="built_in">set</span> image deployment/my-deployment-demo deployment-demo-container=wangyanglinux/myapp:v3.0 --record=<span class="literal">true</span></code></pre>
+
+
+
+<h3 id="8-4-回滚镜像版本"><a href="#8-4-回滚镜像版本" class="headerlink" title="8.4 回滚镜像版本"></a>8.4 回滚镜像版本</h3><h4 id="6-4-1-回滚到上一个版本"><a href="#6-4-1-回滚到上一个版本" class="headerlink" title="6.4.1 回滚到上一个版本"></a>6.4.1 回滚到上一个版本</h4><pre><code class="highlight bash"><span class="comment"># 1.回滚到上一个版本（从3.0 -&gt; 2.0）</span>
+$ kubectl rollout undo deployment/my-deployment-demo
+
+<span class="comment"># 测试访问镜像（此时已回滚到 2.0版本）</span>
+$ curl 10.103.97.136
+www.xinxianghf.com | hello MyAPP | version v2.0
+
+
+<span class="comment"># 2.再次执行版本回滚</span>
+$ kubectl rollout undo deployment/my-deployment-demo
+
+<span class="comment"># 测试访问镜像（此时又回滚到 3.0版本）</span>
+$ curl 10.103.97.136
+www.xinxianghf.com | hello MyAPP | version v3.0</code></pre>
+
+<p><code>kubectl rollout undo deployment/&lt;deployment-demo&gt;</code> 命令只能回滚到前一次操作，但无法回滚到前前上操作，例如升级操作如下：<br>v1 -&gt; v2 -&gt; v3<br>升级到v3版本后开始回滚：v1 -&gt; v2 -&gt; v3 -&gt; v2 -&gt; v3 -&gt; v2 -&gt; v3 ，<br>这样无法从 v3 -&gt; v1</p>
+<h4 id="8-4-2-回滚到指定版本"><a href="#8-4-2-回滚到指定版本" class="headerlink" title="8.4.2 回滚到指定版本"></a>8.4.2 回滚到指定版本</h4><p>前面的每次升级操作命令，都携带了参数 <code>--record</code> ，此参数会让 kubectl 记录操作命令，通过查看 deployment 历史版本，方便版本回滚。</p>
+<pre><code class="highlight bash"><span class="comment"># 1.查看 Deployment 历史版本（REVISION 就是每次操作后的版本号）</span>
+$ kubectl rollout <span class="built_in">history</span> deployment/my-deployment-demo
+deployment.apps/my-deployment-demo 
+REVISION  CHANGE-CAUSE
+1         kubectl apply --filename=006-deployment-demo.yaml --record=<span class="literal">true</span>
+4         kubectl <span class="built_in">set</span> image deployment/my-deployment-demo deployment-demo-container=wangyanglinux/myapp:v2.0 --record=<span class="literal">true</span>
+5         kubectl <span class="built_in">set</span> image deployment/my-deployment-demo deployment-demo-container=wangyanglinux/myapp:v3.0 --record=<span class="literal">true</span>
+
+<span class="comment"># 2.回滚到 v1.0 版本（通过指定版本号）</span>
+$ kubectl rollout undo deployment my-deployment-demo --to-revision=1
+
+<span class="comment"># 测试访问镜像（此时回滚到 1.0版本）</span>
+$ curl 10.103.97.136
+www.xinxianghf.com | hello MyAPP | version v1.0</code></pre>
+
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
