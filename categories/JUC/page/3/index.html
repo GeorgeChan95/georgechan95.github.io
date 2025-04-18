@@ -9,23 +9,17 @@
   <meta name="keywords" content="">
   <meta name="description" content="George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、控制器概述1. 概述在 Kubernetes 中运行了一系列控制器来确保集群的当前状态与期望状态保持一致，它们就是 Kubernetes 集群内部的管理控制中心或者说是”中心大脑”。例如，ReplicaSet 控制器负责维护集群中运行的 Pod 数量；Node 控制器负责监控节点的状态，并在节点出现故障时，执行自动化修复流程，确保集群始终处于预期的工作状态。 控制器-控制循环  2. 控制器分">
-<meta property="og:type" content="article">
-<meta property="og:title" content="005-Kubernetes控制器">
-<meta property="og:url" content="https://georgechan95.github.io/blog/c790096a.html">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#x72;&#x67;&#101;&#95;&#57;&#x35;&#64;&#x31;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="一、控制器概述1. 概述在 Kubernetes 中运行了一系列控制器来确保集群的当前状态与期望状态保持一致，它们就是 Kubernetes 集群内部的管理控制中心或者说是”中心大脑”。例如，ReplicaSet 控制器负责维护集群中运行的 Pod 数量；Node 控制器负责监控节点的状态，并在节点出现故障时，执行自动化修复流程，确保集群始终处于预期的工作状态。 控制器-控制循环  2. 控制器分">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#111;&#x72;&#x67;&#101;&#95;&#57;&#x35;&#64;&#x31;&#x32;&#x36;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/02/20250402-201433.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/07/20250407-083305.png">
-<meta property="article:published_time" content="2025-04-02T12:12:00.000Z">
-<meta property="article:modified_time" content="2025-04-11T07:40:03.358Z">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
 <meta property="article:author" content="George">
-<meta property="article:tag" content="linux">
-<meta property="article:tag" content="Docker">
-<meta property="article:tag" content="Rocky">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/02/20250402-201433.png">
 
 
 <link rel="icon" href="/img/favicon.png">
@@ -345,7 +339,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="99">
-<input type="hidden" id="yelog_site_word_count" value="415.4k">
+<input type="hidden" id="yelog_site_word_count" value="420.7k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -737,7 +731,7 @@
         
         <a  class="全部文章 neo4j "
            href="/blog/a3b0b090.html"
-           data-tag="neo4j,SpringBoot"
+           data-tag="SpringBoot,neo4j"
            data-author="" >
             <span class="post-title" title="Spring Boot对Neo4j节点关系的增删改查">Spring Boot对Neo4j节点关系的增删改查</span>
             <span class="post-date" title="2024-11-12 21:00:30">2024/11/12</span>
@@ -755,7 +749,7 @@
         
         <a  class="全部文章 neo4j "
            href="/blog/7dc0fcde.html"
-           data-tag="neo4j,SpringBoot"
+           data-tag="SpringBoot,neo4j"
            data-author="" >
             <span class="post-title" title="Spring Boot整合Neo4j实现增删改查">Spring Boot整合Neo4j实现增删改查</span>
             <span class="post-date" title="2024-11-07 19:04:30">2024/11/07</span>
@@ -1375,19 +1369,19 @@
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/3069199997.html"
+           href="/blog/2016918085.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/2016918085.html"
+           href="/blog/3069199997.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
