@@ -9,31 +9,17 @@
   <meta name="keywords" content=" linux , Docker , Rocky ">
   <meta name="description" content="006-Kubernetes Service | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、Service 工作原理1. Service 简介在kubernetes中，pod 是应用程序的载体，我们可以通过 pod 的 ip 来访问应用程序，但是 pod 的 ip 地址不是固定的，这也就意味着不方便直接采用 pod 的 ip 对服务进行访问。 为了解决这个问题，kubernetes 提供了 Service 资源，Service 会对提供同一个服务的多个 pod 进行聚合，并且提供一个">
-<meta property="og:type" content="article">
-<meta property="og:title" content="006-Kubernetes Service">
-<meta property="og:url" content="https://georgechan95.github.io/blog/970719d6.html">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#x5f;&#57;&#x35;&#64;&#x31;&#50;&#54;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="一、Service 工作原理1. Service 简介在kubernetes中，pod 是应用程序的载体，我们可以通过 pod 的 ip 来访问应用程序，但是 pod 的 ip 地址不是固定的，这也就意味着不方便直接采用 pod 的 ip 对服务进行访问。 为了解决这个问题，kubernetes 提供了 Service 资源，Service 会对提供同一个服务的多个 pod 进行聚合，并且提供一个">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#x5f;&#57;&#x35;&#64;&#x31;&#50;&#54;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/28/20250428-135851.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/28/20250428-140138.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/28/20250428-161817.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/28/20250428-170312.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/28/20250428-170403.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/28/20250428-192512.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/28/20250428-211712.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/29/20250429-143020.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/29/20250429-171928.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/29/20250429-181021.png">
-<meta property="article:published_time" content="2025-04-28T14:10:00.000Z">
-<meta property="article:modified_time" content="2025-04-29T12:22:14.549Z">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
 <meta property="article:author" content="George">
-<meta property="article:tag" content="linux">
-<meta property="article:tag" content="Docker">
-<meta property="article:tag" content="Rocky">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/04/28/20250428-135851.png">
 
 
 <link rel="icon" href="/img/favicon.png">
@@ -353,7 +339,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="100">
-<input type="hidden" id="yelog_site_word_count" value="432.6k">
+<input type="hidden" id="yelog_site_word_count" value="433.4k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1466,12 +1452,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2025-04-29 20:22:14'>2025-04-28 22:10</time>
+            发布时间 : <time class="date" title='最后更新: 2025-04-29 20:49:36'>2025-04-28 22:10</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:11.8k</span>
+        <span>字数:12.7k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1501,7 +1487,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Service-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">一、Service 工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Service-%E7%AE%80%E4%BB%8B"><span class="toc-text">1. Service 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B%E4%B8%80%EF%BC%9A%E9%80%9A%E8%BF%87%E9%80%89%E6%8B%A9%E5%99%A8%E8%87%AA%E5%8A%A8%E5%B0%86Sevice%E4%B8%8EPod%E7%BB%91%E5%AE%9A"><span class="toc-text">2. 案例一：通过选择器自动将Sevice与Pod绑定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%83%A8%E7%BD%B2Deployment"><span class="toc-text">2.1 部署Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E9%83%A8%E7%BD%B2-Service"><span class="toc-text">2.2 部署 Service</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A1%88%E4%BE%8B%E4%BA%8C%EF%BC%9A%E6%89%8B%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoints-%E5%B0%86Service%E4%B8%8EPod%E5%85%B3%E8%81%94"><span class="toc-text">3. 案例二：手动创建 Endpoints, 将Service与Pod关联</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%83%A8%E7%BD%B2-Deployment"><span class="toc-text">3.1 部署 Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E9%83%A8%E7%BD%B2-Service"><span class="toc-text">3.2 部署 Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E9%83%A8%E7%BD%B2-Endpoints"><span class="toc-text">3.3 部署 Endpoints</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Service-%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">二、Service 的负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-userspace-%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%8D%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="toc-text">1. userspace 模式（不常用）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-iptables-%E6%A8%A1%E5%BC%8F%EF%BC%88%E9%BB%98%E8%AE%A4%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="toc-text">2. iptables 模式（默认方式）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-ipvs-%E6%A8%A1%E5%BC%8F%EF%BC%88%E9%80%82%E7%94%A8%E4%BA%8E%E5%A4%A7%E8%A7%84%E6%A8%A1%E9%9B%86%E7%BE%A4%EF%BC%89"><span class="toc-text">3. ipvs 模式（适用于大规模集群）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BF%AE%E6%94%B9-kube-proxy-%E6%A8%A1%E5%BC%8F"><span class="toc-text">4. 修改 kube-proxy 模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Service-%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">三、Service 的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ClusterIp-%E9%9B%86%E7%BE%A4%E5%86%85%E8%AE%BF%E9%97%AE"><span class="toc-text">1. ClusterIp 集群内访问</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D1%EF%BC%9A%E9%83%A8%E7%BD%B2-Service"><span class="toc-text">1.1 案例实操1：部署 Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D1%EF%BC%9A%E9%83%A8%E7%BD%B2-Deployment"><span class="toc-text">1.2 案例实操1：部署 Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-IPVS-%E6%8C%81%E4%B9%85%E5%8C%96%E8%BF%9E%E6%8E%A5"><span class="toc-text">1.3 IPVS 持久化连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8"><span class="toc-text">1.3.1 核心作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">1.3.2 工作原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-internalTrafficPolicy"><span class="toc-text">1.4 internalTrafficPolicy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-NodePort-%E9%9B%86%E7%BE%A4%E5%A4%96%E8%AE%BF%E9%97%AE"><span class="toc-text">2. NodePort 集群外访问</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D%EF%BC%9A%E9%83%A8%E7%BD%B2Service"><span class="toc-text">2.1 案例实操：部署Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D%EF%BC%9A%E9%83%A8%E7%BD%B2Deployment"><span class="toc-text">2.2 案例实操：部署Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-externalTrafficPolicy"><span class="toc-text">2.3 externalTrafficPolicy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-LoadBalancer-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">3. LoadBalancer 负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-LoadBalancer-Service-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">3.1 LoadBalancer Service 的工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%88%9B%E5%BB%BA-LoadBalancer-Service"><span class="toc-text">3.2 创建 LoadBalancer Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E9%AA%8C%E8%AF%81-LoadBalancer-Service"><span class="toc-text">3.3 验证 LoadBalancer Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE"><span class="toc-text">3.4 高级配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-%E6%8C%87%E5%AE%9A%E5%A4%96%E9%83%A8-IP%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">3.4 1 指定外部 IP（可选）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%99%A8%E8%A1%8C%E4%B8%BA"><span class="toc-text">3.4.2 自定义负载均衡器行为</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-3-%E9%99%90%E5%88%B6%E6%BA%90-IP%EF%BC%88%E7%99%BD%E5%90%8D%E5%8D%95%EF%BC%89"><span class="toc-text">3.4.3 限制源 IP（白名单）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-4-%E5%A4%9A%E7%AB%AF%E5%8F%A3%E6%9C%8D%E5%8A%A1"><span class="toc-text">3.4.4 多端口服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">3.5 使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">3.6 注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E7%A4%BA%E4%BE%8B%EF%BC%9A%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text">3.7 示例：部署一个简单的应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ExternalName-%E6%8C%87%E5%AE%9A%E5%A4%96%E9%83%A8%E8%AE%BF%E9%97%AE%E5%9F%9F%E5%90%8D"><span class="toc-text">4. ExternalName 指定外部访问域名</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9"><span class="toc-text">4.1 主要特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">4.2 使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-text">4.3 配置示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%B5%8B%E8%AF%95-Pod-%E8%AE%BF%E9%97%AE-External-Service"><span class="toc-text">4.4 测试 Pod 访问 External Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">4.5 工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">4.6 注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-text">4.7 局限性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Endpoints-Service-%E7%9A%84%E5%BA%95%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-text">四、Endpoints-Service 的底层模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Endpoint%EF%BC%9F"><span class="toc-text">1. 什么是 Endpoint？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Endpoint-%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">2. Endpoint 的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Endpoint-%E4%B8%8E-Service-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">3. Endpoint 与 Service 的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Endpoint-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">4. Endpoint 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoints"><span class="toc-text">4.1 自动创建 Endpoints</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%89%8B%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoints"><span class="toc-text">4.2 手动创建 Endpoints</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%8A%A8%E6%80%81%E7%AE%A1%E7%90%86Endpoint"><span class="toc-text">5. 动态管理Endpoint</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Endpoint-%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5"><span class="toc-text">6. Endpoint 增删改查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%88%9B%E5%BB%BA-Endpoint"><span class="toc-text">6.1 创建 Endpoint</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-1-%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoint"><span class="toc-text">6.1.1 自动创建 Endpoint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-2-%E6%89%8B%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoint"><span class="toc-text">6.1.2 手动创建 Endpoint</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-Endpoint-%E6%9B%B4%E6%96%B0"><span class="toc-text">6.2 Endpoint 更新</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-1-%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0-Endpoint"><span class="toc-text">6.2.1 自动更新 Endpoint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-2-%E6%89%8B%E5%8A%A8%E6%9B%B4%E6%96%B0-Endpoint"><span class="toc-text">6.2.2 手动更新 Endpoint</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-Endpoint-%E7%9A%84%E5%88%A0%E9%99%A4"><span class="toc-text">6.3 Endpoint 的删除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Endpoint-controlor"><span class="toc-text">7. Endpoint controlor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Endpoint%E5%8F%82%E6%95%B0%E8%A7%A3%E9%87%8A"><span class="toc-text">8. Endpoint参数解释</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%85%B3%E4%BA%8E-publishNotReadyAddresses"><span class="toc-text">五、关于 publishNotReadyAddresses</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Service-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">一、Service 工作原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Service-%E7%AE%80%E4%BB%8B"><span class="toc-text">1. Service 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B%E4%B8%80%EF%BC%9A%E9%80%9A%E8%BF%87%E9%80%89%E6%8B%A9%E5%99%A8%E8%87%AA%E5%8A%A8%E5%B0%86Sevice%E4%B8%8EPod%E7%BB%91%E5%AE%9A"><span class="toc-text">2. 案例一：通过选择器自动将Sevice与Pod绑定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%83%A8%E7%BD%B2Deployment"><span class="toc-text">2.1 部署Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E9%83%A8%E7%BD%B2-Service"><span class="toc-text">2.2 部署 Service</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A1%88%E4%BE%8B%E4%BA%8C%EF%BC%9A%E6%89%8B%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoints-%E5%B0%86Service%E4%B8%8EPod%E5%85%B3%E8%81%94"><span class="toc-text">3. 案例二：手动创建 Endpoints, 将Service与Pod关联</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E9%83%A8%E7%BD%B2-Deployment"><span class="toc-text">3.1 部署 Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E9%83%A8%E7%BD%B2-Service"><span class="toc-text">3.2 部署 Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E9%83%A8%E7%BD%B2-Endpoints"><span class="toc-text">3.3 部署 Endpoints</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Service-%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">二、Service 的负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-userspace-%E6%A8%A1%E5%BC%8F%EF%BC%88%E4%B8%8D%E5%B8%B8%E7%94%A8%EF%BC%89"><span class="toc-text">1. userspace 模式（不常用）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-iptables-%E6%A8%A1%E5%BC%8F%EF%BC%88%E9%BB%98%E8%AE%A4%E6%96%B9%E5%BC%8F%EF%BC%89"><span class="toc-text">2. iptables 模式（默认方式）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-ipvs-%E6%A8%A1%E5%BC%8F%EF%BC%88%E9%80%82%E7%94%A8%E4%BA%8E%E5%A4%A7%E8%A7%84%E6%A8%A1%E9%9B%86%E7%BE%A4%EF%BC%89"><span class="toc-text">3. ipvs 模式（适用于大规模集群）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BF%AE%E6%94%B9-kube-proxy-%E6%A8%A1%E5%BC%8F"><span class="toc-text">4. 修改 kube-proxy 模式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Service-%E7%9A%84%E7%B1%BB%E5%9E%8B"><span class="toc-text">三、Service 的类型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-ClusterIp-%E9%9B%86%E7%BE%A4%E5%86%85%E8%AE%BF%E9%97%AE"><span class="toc-text">1. ClusterIp 集群内访问</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D1%EF%BC%9A%E9%83%A8%E7%BD%B2-Service"><span class="toc-text">1.1 案例实操1：部署 Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D1%EF%BC%9A%E9%83%A8%E7%BD%B2-Deployment"><span class="toc-text">1.2 案例实操1：部署 Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-IPVS-%E6%8C%81%E4%B9%85%E5%8C%96%E8%BF%9E%E6%8E%A5"><span class="toc-text">1.3 IPVS 持久化连接</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-%E6%A0%B8%E5%BF%83%E4%BD%9C%E7%94%A8"><span class="toc-text">1.3.1 核心作用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">1.3.2 工作原理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-internalTrafficPolicy"><span class="toc-text">1.4 internalTrafficPolicy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-NodePort-%E9%9B%86%E7%BE%A4%E5%A4%96%E8%AE%BF%E9%97%AE"><span class="toc-text">2. NodePort 集群外访问</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D%EF%BC%9A%E9%83%A8%E7%BD%B2Service"><span class="toc-text">2.1 案例实操：部署Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D%EF%BC%9A%E9%83%A8%E7%BD%B2Deployment"><span class="toc-text">2.2 案例实操：部署Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-externalTrafficPolicy"><span class="toc-text">2.3 externalTrafficPolicy</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-LoadBalancer-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">3. LoadBalancer 负载均衡</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-LoadBalancer-Service-%E7%9A%84%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">3.1 LoadBalancer Service 的工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%88%9B%E5%BB%BA-LoadBalancer-Service"><span class="toc-text">3.2 创建 LoadBalancer Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E9%AA%8C%E8%AF%81-LoadBalancer-Service"><span class="toc-text">3.3 验证 LoadBalancer Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE"><span class="toc-text">3.4 高级配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-%E6%8C%87%E5%AE%9A%E5%A4%96%E9%83%A8-IP%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-text">3.4 1 指定外部 IP（可选）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%99%A8%E8%A1%8C%E4%B8%BA"><span class="toc-text">3.4.2 自定义负载均衡器行为</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-3-%E9%99%90%E5%88%B6%E6%BA%90-IP%EF%BC%88%E7%99%BD%E5%90%8D%E5%8D%95%EF%BC%89"><span class="toc-text">3.4.3 限制源 IP（白名单）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-4-%E5%A4%9A%E7%AB%AF%E5%8F%A3%E6%9C%8D%E5%8A%A1"><span class="toc-text">3.4.4 多端口服务</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">3.5 使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">3.6 注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E7%A4%BA%E4%BE%8B%EF%BC%9A%E9%83%A8%E7%BD%B2%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-text">3.7 示例：部署一个简单的应用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ExternalName-%E6%8C%87%E5%AE%9A%E5%A4%96%E9%83%A8%E8%AE%BF%E9%97%AE%E5%9F%9F%E5%90%8D"><span class="toc-text">4. ExternalName 指定外部访问域名</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E4%B8%BB%E8%A6%81%E7%89%B9%E7%82%B9"><span class="toc-text">4.1 主要特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">4.2 使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-text">4.3 配置示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%B5%8B%E8%AF%95-Pod-%E8%AE%BF%E9%97%AE-External-Service"><span class="toc-text">4.4 测试 Pod 访问 External Service</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="toc-text">4.5 工作原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">4.6 注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-%E5%B1%80%E9%99%90%E6%80%A7"><span class="toc-text">4.7 局限性</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Endpoints-Service-%E7%9A%84%E5%BA%95%E5%B1%82%E6%A8%A1%E5%9E%8B"><span class="toc-text">四、Endpoints-Service 的底层模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Endpoint%EF%BC%9F"><span class="toc-text">1. 什么是 Endpoint？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Endpoint-%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">2. Endpoint 的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Endpoint-%E4%B8%8E-Service-%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">3. Endpoint 与 Service 的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Endpoint-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">4. Endpoint 的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoints"><span class="toc-text">4.1 自动创建 Endpoints</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%89%8B%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoints"><span class="toc-text">4.2 手动创建 Endpoints</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%8A%A8%E6%80%81%E7%AE%A1%E7%90%86Endpoint"><span class="toc-text">5. 动态管理Endpoint</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Endpoint-%E5%A2%9E%E5%88%A0%E6%94%B9%E6%9F%A5"><span class="toc-text">6. Endpoint 增删改查</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%88%9B%E5%BB%BA-Endpoint"><span class="toc-text">6.1 创建 Endpoint</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-1-%E8%87%AA%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoint"><span class="toc-text">6.1.1 自动创建 Endpoint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-2-%E6%89%8B%E5%8A%A8%E5%88%9B%E5%BB%BA-Endpoint"><span class="toc-text">6.1.2 手动创建 Endpoint</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-Endpoint-%E6%9B%B4%E6%96%B0"><span class="toc-text">6.2 Endpoint 更新</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-1-%E8%87%AA%E5%8A%A8%E6%9B%B4%E6%96%B0-Endpoint"><span class="toc-text">6.2.1 自动更新 Endpoint</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-2-%E6%89%8B%E5%8A%A8%E6%9B%B4%E6%96%B0-Endpoint"><span class="toc-text">6.2.2 手动更新 Endpoint</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-Endpoint-%E7%9A%84%E5%88%A0%E9%99%A4"><span class="toc-text">6.3 Endpoint 的删除</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Endpoint-controlor"><span class="toc-text">7. Endpoint controlor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Endpoint%E5%8F%82%E6%95%B0%E8%A7%A3%E9%87%8A"><span class="toc-text">8. Endpoint参数解释</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81Service-%E8%AE%BE%E7%BD%AE-publishNotReadyAddresses"><span class="toc-text">五、Service 设置 publishNotReadyAddresses</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A1%88%E4%BE%8B%E4%B8%80%EF%BC%9A%E6%9C%AA%E8%AE%BE%E7%BD%AE-publishNotReadyAddresses"><span class="toc-text">1. 案例一：未设置 publishNotReadyAddresses</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B%E4%BA%8C%EF%BC%9A%E8%AE%BE%E7%BD%AE%E4%BA%86-publishNotReadyAddresses"><span class="toc-text">2. 案例二：设置了 publishNotReadyAddresses</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -2827,7 +2813,165 @@ $ kubectl get endpoints -n default service-demo -o yaml | kubectl apply -f -</co
 <li><code>endpoint. subsets[].ports[]</code>:  数据来源于 service.spec.ports ,当 pods 内的 port 并不满足 targetPort ，则会在 endpoint.subsets[].addresses[] 中剔除该pod ip</li>
 <li><code>endpoint. subsets[].notReadyAddresses</code> :未就绪 pod 列表</li>
 </ul>
-<h1 id="五、关于-publishNotReadyAddresses"><a href="#五、关于-publishNotReadyAddresses" class="headerlink" title="五、关于 publishNotReadyAddresses"></a>五、关于 publishNotReadyAddresses</h1>
+<h1 id="五、Service-设置-publishNotReadyAddresses"><a href="#五、Service-设置-publishNotReadyAddresses" class="headerlink" title="五、Service 设置 publishNotReadyAddresses"></a>五、Service 设置 publishNotReadyAddresses</h1><p>在 Kubernetes 中，默认情况下 Service 只将通过了就绪探针的 Pod 的 IP 和端口添加到其 Endpoints 对象中。这确保客户端只访问到健康且可用的 Pod。如果需要将未通过就绪探测的 Pod 也添加到 Endpoints 对象中，可通过 Service 访问。那么就需要设置 Service 的 publishNotReadyAddresses 属性。</p>
+<p>例如如下情况，Pod未能通过就绪探测，无法通过 Service 访问 Pod</p>
+<h2 id="1-案例一：未设置-publishNotReadyAddresses"><a href="#1-案例一：未设置-publishNotReadyAddresses" class="headerlink" title="1. 案例一：未设置 publishNotReadyAddresses"></a>1. 案例一：未设置 publishNotReadyAddresses</h2><p><strong>资源清单：</strong> <code>007-publishNotReadyAddresses-01.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">myapp-deployment-demo</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span> <span class="comment"># 标签选择器，管理具有包含以下标签的Pod</span>
+      <span class="attr">app:</span> <span class="string">nginx-pod</span>
+      <span class="attr">release:</span> <span class="string">stable</span>
+      <span class="attr">svc:</span> <span class="string">clusterip</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span> <span class="comment"># Pod模板定义标签，需完全包含 spec.selector.matchLabels 定义的标签</span>
+        <span class="attr">app:</span> <span class="string">nginx-pod</span>
+        <span class="attr">release:</span> <span class="string">stable</span>
+        <span class="attr">svc:</span> <span class="string">clusterip</span>
+        <span class="attr">env:</span> <span class="string">test</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-container</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span>
+              <span class="attr">containerPort:</span> <span class="number">80</span>
+          <span class="attr">readinessProbe:</span> <span class="comment"># 定义就绪探测</span>
+            <span class="attr">httpGet:</span>
+              <span class="attr">port:</span> <span class="number">80</span>
+              <span class="attr">path:</span> <span class="string">/index1.html</span>
+            <span class="attr">initialDelaySeconds:</span> <span class="number">1</span>
+            <span class="attr">periodSeconds:</span> <span class="number">3</span>
+            
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">myapp-clusterip-service</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">clusterIP:</span> <span class="number">10.96</span><span class="number">.120</span><span class="number">.10</span> <span class="comment"># 手动指定Service的Ip地址，不指定默认自动生成</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span> <span class="comment"># Service类型，默认为 ClusterIp，集群内部访问</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">nginx-pod</span>
+    <span class="attr">release:</span> <span class="string">stable</span>
+    <span class="attr">svc:</span> <span class="string">clusterip</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http</span>
+      <span class="attr">port:</span> <span class="number">80</span> <span class="comment"># Service对外暴露的端口</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span> <span class="comment"># 转发到Pod的端口</span></code></pre>
+
+
+
+<p><strong>部署后查看Pod、Service、Endpoints</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 部署资源</span>
+$ kubectl apply -f 007-publishNotReadyAddresses-01.yaml
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pods
+NAME                                     READY   STATUS    RESTARTS   AGE
+myapp-deployment-demo-54c7c7df5f-z7j57   0/1     Running   0          9s
+
+<span class="comment"># 查看 Service</span>
+$ kubectl get svc myapp-clusterip-service
+NAME                      TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE
+myapp-clusterip-service   ClusterIP   10.96.120.10   &lt;none&gt;        80/TCP    2m27s
+
+<span class="comment"># 查看 Endpoints</span>
+$ kubectl get Endpoints
+NAME                      ENDPOINTS            AGE
+kubernetes                192.168.6.139:6443   30h
+myapp-clusterip-service                        2m49s
+
+<span class="comment"># 访问 Service</span>
+$ curl 10.96.120.10
+curl: (7) Failed to connect to 10.96.120.10 port 80: Connection refused</code></pre>
+
+<p>由于部署的Deployment 没有 &#x2F;index1.html 这个资源，导致 Pod 无法通过就绪探测。因此 Pod 不能添加到 Endpoints 中，Service无法访问 Pod.</p>
+<h2 id="2-案例二：设置了-publishNotReadyAddresses"><a href="#2-案例二：设置了-publishNotReadyAddresses" class="headerlink" title="2. 案例二：设置了 publishNotReadyAddresses"></a>2. 案例二：设置了 publishNotReadyAddresses</h2><p>为了让未通过就绪探测的 Pod 也能添加 Endpoints中，暴露给 Service 访问，可以通过设置 <code>publishNotReadyAddresses</code> 实现。</p>
+<p><strong>方式一：通过命令行动态设置</strong></p>
+<pre><code class="highlight bash">$ kubectl patch service myapp-clusterip-service -p <span class="string">&#x27;&#123;&quot;spec&quot;:&#123;&quot;publishNotReadyAddresses&quot;: true&#125;&#125;&#x27;</span></code></pre>
+
+
+
+<p><strong>方式二：配置资源清单文件</strong></p>
+<p><code>007-publishNotReadyAddresses-02.yaml</code></p>
+<pre><code class="highlight bash">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels: <span class="comment"># 标签选择器，管理具有包含以下标签的Pod</span>
+      app: nginx-pod
+      release: stable
+      svc: clusterip
+  template:
+    metadata:
+      labels: <span class="comment"># Pod模板定义标签，需完全包含 spec.selector.matchLabels 定义的标签</span>
+        app: nginx-pod
+        release: stable
+        svc: clusterip
+        <span class="built_in">env</span>: <span class="built_in">test</span>
+    spec:
+      containers:
+        - name: myapp-container
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe: <span class="comment"># 定义就绪探测</span>
+            httpGet:
+              port: 80
+              path: /index1.html
+            initialDelaySeconds: 1
+            periodSeconds: 3
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-clusterip-service
+  namespace: default
+spec:
+  clusterIP: 10.96.120.10 <span class="comment"># 手动指定Service的Ip地址，不指定默认自动生成</span>
+  <span class="built_in">type</span>: ClusterIP <span class="comment"># Service类型，默认为 ClusterIp，集群内部访问</span>
+  selector:
+    app: nginx-pod
+    release: stable
+    svc: clusterip
+  ports:
+    - name: http
+      port: 80 <span class="comment"># Service对外暴露的端口</span>
+      targetPort: 80 <span class="comment"># 转发到Pod的端口</span>
+  publishNotReadyAddresses: <span class="literal">true</span> <span class="comment"># 允许未就绪的 Pod 添加到 Endpoints 中</span></code></pre>
+
+<p>添加了 <code>publishNotReadyAddresses: true</code> ， 允许未就绪的 Pod 添加到 Endpoints 中</p>
+<p>重新部署资源清单</p>
+<pre><code class="highlight bash">$ kubectl apply -f 007-publishNotReadyAddresses-02.yaml
+
+<span class="comment"># 查看 Endpoints </span>
+$ kubectl get endpoints 
+NAME                      ENDPOINTS            AGE
+myapp-clusterip-service   172.16.58.211:80     18s
+
+<span class="comment"># 测试 Service 访问</span>
+$ curl 172.16.58.211:80
+www.xinxianghf.com | hello MyAPP | version v1.0</code></pre>
+
+
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
     </div>

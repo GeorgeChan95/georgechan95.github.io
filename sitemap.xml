@@ -11,6 +11,24 @@
   </url>
   
   <url>
+    <loc>https://georgechan95.github.io/code/k8s/006/007-publishNotReadyAddresses-02.json</loc>
+    
+    <lastmod>2025-04-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/code/k8s/006/007-publishNotReadyAddresses-01.json</loc>
+    
+    <lastmod>2025-04-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://georgechan95.github.io/code/k8s/006/006-endpoints-01.json</loc>
     
     <lastmod>2025-04-29</lastmod>
@@ -353,6 +371,15 @@
   </url>
   
   <url>
+    <loc>https://georgechan95.github.io/code/k8s/004/005-liveness-httpget.json</loc>
+    
+    <lastmod>2025-04-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://georgechan95.github.io/code/k8s/004/003-readiness-exec.json</loc>
     
     <lastmod>2025-04-02</lastmod>
@@ -363,15 +390,6 @@
   
   <url>
     <loc>https://georgechan95.github.io/code/k8s/004/004-readiness-tcp.json</loc>
-    
-    <lastmod>2025-04-02</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/code/k8s/004/005-liveness-httpget.json</loc>
     
     <lastmod>2025-04-02</lastmod>
     
@@ -776,7 +794,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/blog/4de6a39b.html</loc>
+    <loc>https://georgechan95.github.io/blog/3e0d7592.html</loc>
     
     <lastmod>2024-10-08</lastmod>
     
@@ -785,7 +803,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/blog/3e0d7592.html</loc>
+    <loc>https://georgechan95.github.io/blog/4de6a39b.html</loc>
     
     <lastmod>2024-10-08</lastmod>
     
@@ -1280,27 +1298,6 @@
 
   
   <url>
-    <loc>https://georgechan95.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/tags/UML/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/tags/java/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://georgechan95.github.io/tags/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -1364,6 +1361,48 @@
   </url>
   
   <url>
+    <loc>https://georgechan95.github.io/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/tags/UML/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/tags/java/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/tags/linux/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/tags/Docker/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
     <loc>https://georgechan95.github.io/tags/hexo/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -1399,27 +1438,6 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/tags/linux/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/tags/Docker/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://georgechan95.github.io/tags/juc/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -1448,20 +1466,6 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/tags/ubuntu18/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/tags/jenkins/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://georgechan95.github.io/tags/neo4j/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -1475,7 +1479,28 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://georgechan95.github.io/tags/ubuntu18/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://georgechan95.github.io/tags/jenkins/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
+  
+  <url>
+    <loc>https://georgechan95.github.io/categories/%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2025-04-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
   <url>
     <loc>https://georgechan95.github.io/categories/UML/</loc>
@@ -1492,7 +1517,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/%E7%AE%97%E6%B3%95/</loc>
+    <loc>https://georgechan95.github.io/categories/Docker/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1506,7 +1531,7 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/Docker/</loc>
+    <loc>https://georgechan95.github.io/categories/JUC/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1514,13 +1539,6 @@
   
   <url>
     <loc>https://georgechan95.github.io/categories/Hexo/Typora/</loc>
-    <lastmod>2025-04-29</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://georgechan95.github.io/categories/JUC/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1541,14 +1559,14 @@
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/linux/</loc>
+    <loc>https://georgechan95.github.io/categories/neo4j/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://georgechan95.github.io/categories/neo4j/</loc>
+    <loc>https://georgechan95.github.io/categories/linux/</loc>
     <lastmod>2025-04-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
