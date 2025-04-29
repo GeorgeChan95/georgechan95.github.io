@@ -1,0 +1,1 @@
+{"apiVersion":"v1","kind":"Service","metadata":{"name":"nodeport-service-demo","namespace":"default","labels":{"type":"nodeport"}},"spec":{"type":"NodePort","clusterIP":"10.100.1.1","externalTrafficPolicy":"Local","selector":{"app":"myapp","release":"stabel","svc":"nodeport"},"ports":[{"name":"http","port":80,"targetPort":80,"nodePort":30008}]}}
