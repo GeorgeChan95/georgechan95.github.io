@@ -1,0 +1,1 @@
+{"apiVersion":"batch/v1","kind":"Job","metadata":{"name":"job-demo","namespace":"default","labels":{"app":"my-job"}},"spec":{"template":{"metadata":{"name":"my-job-pod","labels":{"app":"my-job"}},"spec":{"containers":[{"name":"job-demo-container","image":"wangyanglinux/tools:maqingpythonv1"}],"restartPolicy":"Never"}}}}
