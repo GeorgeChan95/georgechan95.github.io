@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: default
+  name: lifecycle-http-pod
+  labels:
+    app: myApp
+spec:
+  containers:
+    - name: lifecycle-httpget-container
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 80
+      lifecycle:
+        postStart: # 启动后钩子
+          httpGet: # 基于Http Get 请求方式
+            port: 1234 # http 访问端口
+            host: 192.168.6.139 # http访问Host地址
+            path: index.html # http访问资源路径
+        preStop:
+          httpGet:
+            port: 1234
+            host: 192.168.6.139
+            path: hostname.html
+  terminationGracePeriodSeconds: 30 # 如果执行 kubectl delete 不能顺利将pod关闭，最长30秒强制杀死pod

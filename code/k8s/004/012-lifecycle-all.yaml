@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: lifecycle-pod
+  namespace: default
+  labels:
+    app: myapp
+spec:
+  containers:
+    - name: busybox-container # 主容器1
+      image: wangyanglinux/tools:busybox
+      imagePullPolicy: IfNotPresent
+      command: ["/bin/sh","-c","touch /tmp/live ; sleep 600; rm -rf /tmp/live; sleep 3600"]
+      livenessProbe: # 主容器1存活探针
+        exec: # 基于 exec执行命令，探测主容器内文件是否存在
+          command: ["test","-e","/tmp/live"]
+        initialDelaySeconds: 1 # 容器启动1秒后探测
+        periodSeconds: 3 # 循环3秒
+      lifecycle:
+        postStart:
+          httpGet:
+            port: 1234
+            host: 192.168.6.139
+            path: index.html
+        preStop:
+          httpGet:
+            port: 1234
+            host: 192.168.6.139
+            path: hostname.html
+    - name: myapp-container
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        httpGet:
+          port: 80
+          path: /index.html
+        initialDelaySeconds: 1
+        periodSeconds: 3
+        timeoutSeconds: 3 # http Get 请求超时时间(秒)
+      readinessProbe:
+        httpGet:
+          port: 80
+          path: /index1.html
+        initialDelaySeconds: 1
+        periodSeconds: 3
+        timeoutSeconds: 3
+  initContainers:
+    - name: init-myservice
+      image: wangyanglinux/tools:busybox
+      imagePullPolicy: IfNotPresent
+      command: ['sh', '-c', 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;']
+    - name: init-mydb
+      image: wangyanglinux/tools:busybox
+      command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']

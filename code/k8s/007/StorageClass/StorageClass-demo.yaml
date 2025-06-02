@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass # 资源的类型为 StorageClass
+metadata:
+  name: standard # 存储类的名称
+provisioner: kubernetes.io/aws-ebs # 指定了存储的提供者（Provisioner）,使用 AWS EBS（Elastic Block Store）作为存储后端
+parameters:
+  type: gp2 # 指定了 AWS EBS 卷的类型为 gp2。gp2 是 AWS EBS 的通用 SSD（General Purpose SSD）卷类型
+reclaimPolicy: Retain # 定义了存储卷的回收策略为 Retain。当 PVC 被删除时，与之关联的持久卷（PV）不会被自动删除，而是保留下来，需要手动清理。这可以防止意外删除重要数据。
+allowVolumeExpansion: true # 允许对使用此 StorageClass 创建的卷进行扩展, 如果 PVC 请求更大的容量，Kubernetes 允许动态扩展卷（前提是底层存储支持，例如 AWS EBS 的 gp2 支持扩展）。
+mountOptions:
+  - debug # 指定了挂载选项为 debug, 在挂载存储卷时启用调试模式，可能用于记录详细的挂载日志，便于排查问题。注意：生产环境中通常不建议使用 debug，因为它可能会增加日志输出
+volumeBindingMode: Immediate # 指定了卷绑定模式为 Immediate, 表示一旦 PVC 创建，Kubernetes 将立即尝试为它绑定一个持久卷（PV），而不等待 Pod 调度。这适用于大多数场景，但可能导致存储资源分配不灵活（相比 WaitForFirstConsumer 模式）。

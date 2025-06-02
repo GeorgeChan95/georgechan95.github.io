@@ -1,0 +1,9 @@
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: nfs-client # StorageClass 的名称
+  namespace: nfs-storageclass
+provisioner: k8s-sigs.io/nfs-subdir-external-provisioner
+parameters:
+  pathPattern: ${.PVC.namespace}/${.PVC.name}
+  onDelete: delete

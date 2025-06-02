@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-container-volume
+  namespace: default
+spec:
+  containers:
+    - name: busybox-container
+      image: busybox:latest
+      imagePullPolicy: IfNotPresent
+      command: ['sh', '-c'] # 容器启动后，每 10秒打印一次环境变量
+      args:
+        - while true; do
+            echo -en '\n';
+            if [[ -e /etc/container/cpu_limit ]]; then
+              echo -en '\n'; cat /etc/container/cpu_limit; fi;
+            if [[ -e /etc/container/cpu_request ]]; then
+              echo -en '\n'; cat /etc/container/cpu_request; fi;
+            if [[ -e /etc/container/memory_limit ]]; then
+              echo -en '\n'; cat /etc/container/memory_limit; fi;
+            if [[ -e /etc/container/memory_request ]]; then
+              echo -en '\n'; cat /etc/container/memory_request; fi;
+            sleep 5;
+          done;
+      resources: # 定义容器使用的资源
+        requests:
+          memory: "32Mi" # 请求 32 MiB 内存，保证 Pod 调度时节点有足够内存。
+          cpu: "125m" # 请求 125 毫核（0.125 CPU 核心），保证 CPU 资源
+        limits:
+          memory: "64Mi" # 限制内存使用不超过 64 MiB，防止过度消耗
+          cpu: "250m" # 限制 CPU 使用不超过 250 毫核（0.25 核心）
+      volumeMounts:
+        - name: container-volume
+          mountPath: /etc/container
+  volumes:
+    - name: container-volume
+      downwardAPI:
+        items:
+          - path: "cpu_request"
+            resourceFieldRef:
+              containerName: busybox-container
+              resource: requests.cpu
+              divisor: 1m # 指定资源值的单位转换因子，用于将 Kubernetes 内部的资源值（如 CPU 或内存）转换为用户期望的单位，并在注入到文件或环境变量时以该单位表示。支持如 1、1m（毫）、1Mi（Mebibyte）、1k（千）等单位
+          - path: "cpu_limit"
+            resourceFieldRef:
+              containerName: busybox-container
+              resource: limits.cpu
+              divisor: 1m
+          - path: "memory_request"
+            resourceFieldRef:
+              containerName: busybox-container
+              resource: requests.memory
+              divisor: 1Mi
+          - path: "memory_limit"
+            resourceFieldRef:
+              containerName: busybox-container
+              resource: limits.memory
+              divisor: 1Mi
+  restartPolicy: Never

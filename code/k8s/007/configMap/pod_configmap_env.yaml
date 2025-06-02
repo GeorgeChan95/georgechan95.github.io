@@ -1,0 +1,54 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-1
+  namespace: default
+data:
+  # 类属性键，每个键都映射一个简单的值
+  username: "george"
+  password: "123456"
+
+---
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-2
+  namespace: default
+data:
+  # 类文件键，每个键都对应一个文件，| 下是文件的内容
+  user.properties: |
+    age=23
+    address=中国
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-configmap-env
+  namespace: default
+spec:
+  restartPolicy: Never # Pod 重启策略
+  containers:
+    - name: myapp
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent
+      command: # 打印完环境变量后休眠3600秒
+        - "/bin/sh"
+        - "-c"
+        - "env && sleep 3600"
+      env:
+        - name: USERNAME # 容器内环境变量的名称
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-1 # configMap名称
+              key: username # configMap中定义的属性键
+        - name: PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-1
+              key: password
+      envFrom:
+        - configMapRef:
+            name: configmap-2 # configMap名称

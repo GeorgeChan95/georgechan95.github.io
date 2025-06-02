@@ -1,0 +1,44 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: node-affinity-deploy
+  labels:
+    app: nodeaffinity-deploy
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: nginx
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: web
+              protocol: TCP
+      affinity: # 亲和性
+        nodeAffinity: # 节点亲和性
+          requiredDuringSchedulingIgnoredDuringExecution: # 节点硬亲和性
+            nodeSelectorTerms:
+              - matchExpressions:
+                  # 表示node标签存在 cpu-num且值大于10
+                  - key: cpu-num
+                    operator: Gt
+                    values:
+                      - "10"
+          preferredDuringSchedulingIgnoredDuringExecution: # 节点软亲和性
+            - weight: 50 # 权重，范围 1-100
+              preference:
+                matchExpressions:
+                  # 表示node标签存在 disk-type=ssd 或 disk-type=sas
+                  - key: disk-type
+                    operator: In
+                    values:
+                      - ssd
+                      - sas

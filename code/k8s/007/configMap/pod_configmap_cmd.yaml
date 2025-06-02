@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-3
+  namespace: default
+data:
+  # 类属性键，每个键都映射一个简单的值
+  username: "george"
+  password: "123456"
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-configmap-cmd
+  namespace: default
+spec:
+  restartPolicy: Never # Pod 重启策略
+  containers:
+    - name: myapp-cmd
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent
+      command: # 打印环境变量指定的键值
+        - "/bin/sh"
+        - "-c"
+        - "echo $(USERNAME) $(PASSWORD)"
+      env:
+        - name: USERNAME # 容器内环境变量的名称
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-3 # configMap名称
+              key: username # configMap中定义的属性键
+        - name: PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: configmap-3
+              key: password

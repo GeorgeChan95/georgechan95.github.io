@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: startup-exec-pod
+  namespace: default
+  labels:
+    app: myapp
+    env: test
+spec:
+  containers:
+    - name: startup-exec-container
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent # 镜像拉取策略，如果存在则不拉取
+      # 主容器启动成功后自动创建目录 /tmp/live, 3秒后删除该目录，
+      command: ['/bin/sh', '-c', 'touch /tmp/live; sleep 3; rm -rf /tmp/live; sleep 3600']
+      startupProbe:
+        exec:
+          command:
+            - 'test'
+            - '-e'
+            - '/tmp/live'
+        initialDelaySeconds: 4 # 延迟4秒后启动探测，此时 /tmp/live 文件夹已被删除
+        periodSeconds: 3

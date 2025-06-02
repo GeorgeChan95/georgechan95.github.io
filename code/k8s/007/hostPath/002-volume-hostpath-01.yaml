@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: hostpath-deployment
+  labels:
+    name: volumn-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # Deployment控制器管理具有如下标签的Pod
+      type: hostpath
+  template:
+    metadata:
+      labels: # Pod模板设定生成的Pod有这些标签项
+        app: myapp
+        type: hostpath
+    spec:
+      containers:
+        - name: nginx-container # Pod1，nginx
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+          volumeMounts: # 设置 pod 挂载的容器卷
+            - name: log-volume
+              mountPath: /usr/local/nginx/logs # 镜像日志输出目录，必须存在
+        - name: busybox-container # Pod2，busybox
+          image: busybox:latest
+          imagePullPolicy: IfNotPresent
+          volumeMounts: # 设置 pod 挂载的容器卷
+            - name: log-volume
+              mountPath: /logs
+          command:
+            - '/bin/sh'
+            - '-c'
+            - 'tail -f /logs/access.log'
+      volumes:
+        - name: log-volume # 设置自定义容器卷的名称
+          hostPath: # 容器卷类型：hostPath
+            path: /root/logs
+            type: DirectoryOrCreate # 目录存在就使用，不存在就先创建后使用

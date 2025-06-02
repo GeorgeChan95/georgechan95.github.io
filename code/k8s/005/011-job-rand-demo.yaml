@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rand
+  namespace: default
+spec:
+  completions: 3 # 标志Job结束需要成功运行的 Pod 个数，默认为1
+  parallelism: 5 # 标志并行运行的Pod的个数，默认为1
+  template:
+    metadata:
+      name: rand
+    spec:
+      containers:
+        - name: rand
+          image: wangyanglinux/tools:randexitv1
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Never

@@ -1,1 +1,0 @@
-{"apiVersion":"v1","kind":"Service","metadata":{"name":"endpoints-demo"},"spec":{"ports":[{"name":"nginx80","protocol":"TCP","port":80,"targetPort":9376}]}}

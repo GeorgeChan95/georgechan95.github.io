@@ -1,0 +1,20 @@
+apiVersion: apps/v1 # 版本号
+kind: Deployment # 控制器类型为：Deployment
+metadata:
+  labels:
+    app: deployment-demo # 控制器标签
+  name: deployment-demo-1 # 控制器名称
+spec:
+  replicas: 1 # 初始Pod副本数
+  selector:
+    matchLabels:
+      app: deployment-demo # Pod标签选择器，管理 标签为 app: deployment-demo 的Pod
+  template:
+    metadata:
+      labels:
+        app: deployment-demo # Pod的标签，与 selector 标签选择器对应
+    spec:
+      containers:
+        - name: deployment-demo-container # 镜像
+          image: wangyanglinux/myapp:v1.0 # 容器使用的镜像
+          imagePullPolicy: IfNotPresent # 镜像拉取策略

@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: rand
+  namespace: default
+spec:
+  completions: 1 # 标志Job结束需要成功运行的 Pod 个数，默认为1
+  parallelism: 5 # 标志并行运行的Pod的个数，默认为1
+  # activeDeadlineSeconds: 10 # 标志失败Pod 的重试最大时间，由于Pod重启策略为Never，因此超过 10秒，整个Pod强制中止
+  template:
+    metadata:
+      name: rand
+    spec:
+      containers:
+        - name: rand
+          image: wangyanglinux/tools:randexitv1
+          imagePullPolicy: IfNotPresent
+          # 指定退出码
+          args: ["--exitcode=1"]
+      restartPolicy: Never

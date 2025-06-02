@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: startup-probe-pod
+  namespace: default
+spec:
+  containers:
+    - name: startup-probe-container
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 80
+          name: http
+      startupProbe: # 定义启动探针
+        initialDelaySeconds: 0
+        successThreshold: 1
+        failureThreshold: 30
+        periodSeconds: 10
+        httpGet:
+          port: 80
+          path: /index1.html

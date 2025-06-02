@@ -1,0 +1,18 @@
+apiVersion: batch/v1
+kind: Job # Job控制器资源类型
+metadata:
+  name: job-demo # Job 控制器的名称
+  namespace: default
+  labels:
+    app: my-job # Job控制器标签
+spec:
+  template:
+    metadata:
+      name: my-job-pod # Job控制器创建的 pod 名称
+      labels:
+        app: my-job # Pod的标签
+    spec:
+      containers:
+        - name: job-demo-container
+          image: wangyanglinux/tools:maqingpythonv1
+      restartPolicy: Never # 对于 Job 控制器，容器重启策略仅支持 Never 和 OnFailure

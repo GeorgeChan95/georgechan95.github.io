@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-httpget-pod
+  namespace: default
+  labels:
+    app: myapp
+spec:
+  containers:
+    - name: liveness-httpget-container
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent
+      ports:
+        - containerPort: 80 # 指定容器暴露的端口，这里是 80 端口（通常用于 HTTP 服务）
+          name: http # 为这个端口命名，方便引用（例如在 Service 中）。
+      livenessProbe: # 定义存活探针（Liveness Probe），用于检查容器是否健康。如果探针失败，Kubernetes 会重启容器。
+        initialDelaySeconds: 2 # 容器启动后，探针延迟 2 秒开始首次检查。这给应用留出启动时间。
+        periodSeconds: 3 # 探针检查的频率，每 3 秒执行一次。
+        successThreshold: 1 # 探针成功的次数阈值，设置为 1 表示一次成功即认为容器健康。
+        failureThreshold: 3 # 探针失败的次数阈值，设置为 3 表示连续 3 次失败后，Kubernetes 会重启容器。
+        httpGet: # 定义探针类型为 HTTP GET 请求。
+          port: 80 # 请求的目标端口，这里是容器的 80 端口。
+          path: /index1.html # 请求的路径，探针会访问 http://<容器IP>:80/index1.html。如果返回状态码 200-399，则认为容器健康。

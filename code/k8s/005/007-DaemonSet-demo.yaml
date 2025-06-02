@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: my-daemonset-demo # DaemonSet 控制器的名字
+  namespace: default # 命名空间
+  labels:
+    app: daemonset-demo # DaemonSet 控制的标签
+spec:
+  selector:
+    matchLabels:
+      name: daemonset-demo # 匹配标签为 name: daemonset-demo 的Pod
+  template:
+    metadata:
+      labels: # Pod模板标签，与 spec.selector.matchLabels 对应
+        name: daemonset-demo
+    spec:
+      containers: # 主容器
+        - name: daemonset-demo-container
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-demo
+spec:
+  selector: # 选择具有标签 app: nginx 的 Pod绑定到Service
+    app: nginx
+  ports:
+    - name: nginx80 # 给端口命名，方便后续引用
+      protocol: TCP
+      port: 80 # Service 对外暴漏的端口
+      targetPort: 9376 # 流量转发到后端Pod的端口

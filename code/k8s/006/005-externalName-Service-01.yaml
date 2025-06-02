@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: externalname-service
+spec:
+  type: ExternalName # 指定Service类型
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 80
+  externalName: www.baidu.com

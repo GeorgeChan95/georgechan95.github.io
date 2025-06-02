@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp-clusterip-service
+  namespace: default
+spec:
+  clusterIP: 10.96.120.10 # 手动指定Service的Ip地址，不指定默认自动生成
+  type: ClusterIP # Service类型，默认为 ClusterIp，集群内部访问
+  selector:
+    app: nginx-pod
+    release: stable
+    svc: clusterip
+  ports:
+    - name: http
+      port: 80 # Service对外暴露的端口
+      targetPort: 80 # 转发到Pod的端口
+  sessionAffinity: ClientIP # 启用会话保持
+  sessionAffinityConfig: # 会话保持有效期配置
+    clientIP:
+      timeoutSeconds: 3600 # 默认3小时，这里改为1小时

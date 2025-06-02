@@ -1,0 +1,17 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: test-pod
+  namespace: nfs-storageclass
+spec:
+  containers:
+    - name: test-pod
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent
+      volumeMounts:
+        - name: nfs-pvc # 使用的挂在卷名
+          mountPath: /usr/local/nginx/html # 挂载到容器内的路径
+  volumes:
+    - name: nfs-pvc # 挂在卷名
+      persistentVolumeClaim:
+        claimName: test-claim # 使用的PVC名称

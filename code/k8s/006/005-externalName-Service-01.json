@@ -1,1 +1,0 @@
-{"kind":"Service","apiVersion":"v1","metadata":{"name":"externalname-service"},"spec":{"type":"ExternalName","ports":[{"port":80,"protocol":"TCP","targetPort":80}],"externalName":"www.baidu.com"}}

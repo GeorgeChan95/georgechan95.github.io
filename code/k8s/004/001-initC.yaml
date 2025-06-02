@@ -1,0 +1,21 @@
+apiVersion: v1 # API版本
+kind: Pod # 资源类型
+metadata:
+  name: init-1 # Pod名称
+  labels: # 标签
+    app: initc
+spec: # Pod 期望
+  containers: # 容器定义
+    - name: myapp-container # 容器名
+      image: gcr.io/google-containers/busybox:1.27 # 该容器使用的镜像
+      command: ['sh', '-c', 'echo The app is running! && sleep 3600']
+  initContainers: # 初始化容器全部成功后，myapp-container容器才能启动成功
+    - name: init-myservice # 第一个初始化容器，等待 myservice 的 DNS 解析成功。
+      image: gcr.io/google-containers/busybox:1.27
+      command:
+        - 'sh'
+        - '-c'
+        - 'until nslookup myservice; do echo waiting for myservice; sleep 2; done;'
+    - name: init-mydb # 第二个初始化容器，等待 mydb 的 DNS 解析成功。 然后才会启动主容器 myapp-container。
+      image: gcr.io/google-containers/busybox:1.27
+      command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
