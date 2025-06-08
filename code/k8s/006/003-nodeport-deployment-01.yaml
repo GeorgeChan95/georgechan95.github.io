@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment-demo
+  namespace: default
+spec:
+  replicas: 3
+  selector:
+    matchLabels: # Deployment控制器匹配管理具有下面标签的Pod
+      app: myapp
+      release: stabel
+      svc: nodeport
+  template:
+    metadata: # 定义Pod模板元数据，Pod具有如下标签
+      labels:
+        app: myapp
+        release: stabel
+        svc: nodeport
+        env: test
+    spec:
+      containers:
+        - name: myapp-container
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp-deployment-demo
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels: # Deployment控制器匹配管理具有下面标签的Pod
+      app: myapp
+  template:
+    metadata: # 定义Pod模板元数据，Pod具有如下标签
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: my-busybox
+          image: busybox:latest
+          imagePullPolicy: IfNotPresent
+          # 启动Pod后探测域名：externalname-service.default.svc.cluster.local，探测到域名后停止运行Pod
+          args: ['sh', '-c', 'until nslookup externalname-service.default.svc.cluster.local; do echo waiting for externalname-service; sleep 2; done;']

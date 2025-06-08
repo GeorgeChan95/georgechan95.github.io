@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: rs-me-exists-demo
+spec:
+  selector:
+    matchExpressions:
+      - key: app # Pod 必须有 app 标签
+        operator: Exists
+      - key: version # Pod 必须有 version=v1 或 version=v2
+        operator: In
+        values:
+          - v1
+          - v2
+      - key: souce # Pod不能有 souce 标签
+        operator: DoesNotExist
+  template:
+    metadata:
+      namespace: default
+      labels: # 为 Pod 设置标签
+        app: rs-ml-demo # 给 Pod 打上标签 app=rs-ml-demo，与 selector 中的 matchLabels 对应
+        version: v1
+    spec:
+      containers:
+        - name: rs-ml-container
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          env: # 定义容器的环境变量
+            - name: GET_HOSTS_FROM
+              value: dns
+            - name: George
+              value: "30"
+          ports:
+            - containerPort: 80

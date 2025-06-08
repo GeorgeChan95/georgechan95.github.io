@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness-exec-pod
+  namespace: default
+  labels:
+    app: myapp
+    env: test
+spec:
+  containers:
+    - name: readiness-exec-container
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent # 镜像拉取策略，如果存在则不拉取
+      # 主容器启动成功后自动创建目录 /tmp/live, 60秒后删除该目录，
+      command: ['/bin/sh', '-c', 'touch /tmp/live; sleep 60; rm -rf /tmp/live; sleep 3600']
+      readinessProbe:
+        exec:
+          command:
+            - 'test'
+            - '-e'
+            - '/tmp/live'
+        initialDelaySeconds: 2 # 容器启动后要等待多少秒后就探针开始工作，单位“秒”，默认是 0 秒，最小值是 0
+        periodSeconds: 3 # 执行探测的时间间隔（单位是秒），默认为 10s，单位“秒”，最小值是 1

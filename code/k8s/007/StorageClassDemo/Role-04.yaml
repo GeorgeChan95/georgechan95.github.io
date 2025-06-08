@@ -1,0 +1,9 @@
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-nfs-client-provisioner # 角色的名称，表明它与 NFS 客户端存储提供者的领导者选举（leader election）机制相关。
+  namespace: nfs-storageclass
+rules:
+  - apiGroups: [""] # 空字符串表示核心 API 组（core API group），包含 Kubernetes 的基本资源，如 endpoints。
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]

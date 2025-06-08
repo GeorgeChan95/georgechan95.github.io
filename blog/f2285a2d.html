@@ -1,0 +1,3419 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>008-Kubernetes 调度器 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" linux , Docker , Rocky ">
+  <meta name="description" content="008-Kubernetes 调度器 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="一、kube-scheduler 详解1. kube-scheduler 调度概述在 Kubernetes 中，调度是指将 Pod 放置到合适的 Node 节点上，然后对应 Node 上的 Kubelet 才能够运行这些 pod。 调度器通过 kubernetes 的 watch 机制来发现集群中新创建且尚未被调度到 Node 上的 Pod。调度器会将发现的每一个未调度的 Pod 调度到一个合适的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="008-Kubernetes 调度器">
+<meta property="og:url" content="https://georgechan95.github.io/blog/f2285a2d.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="一、kube-scheduler 详解1. kube-scheduler 调度概述在 Kubernetes 中，调度是指将 Pod 放置到合适的 Node 节点上，然后对应 Node 上的 Kubelet 才能够运行这些 pod。 调度器通过 kubernetes 的 watch 机制来发现集群中新创建且尚未被调度到 Node 上的 Pod。调度器会将发现的每一个未调度的 Pod 调度到一个合适的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/02/20250602-170832.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/02/20250602-170929.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/02/20250602-171010.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/06/20250606-113704.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/06/20250606-113844.png">
+<meta property="article:published_time" content="2025-06-02T06:40:00.000Z">
+<meta property="article:modified_time" content="2025-06-08T05:26:53.589Z">
+<meta property="article:author" content="George">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Rocky">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/02/20250602-170832.png">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<script src="/js/image-loader.js"></script>
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(102)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="设计模式">
+            
+            设计模式
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Docker">
+            
+            Docker
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="k8s">
+            
+            k8s
+            <small>(8)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(4)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="neo4j">
+            
+            neo4j
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="UML">
+            
+            UML
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="102">
+<input type="hidden" id="yelog_site_word_count" value="475.4k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>科学上网</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>设计模式</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>neo4j</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Rocky</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>SpringBoot</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu18</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>UML</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/f2285a2d.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="008-Kubernetes 调度器">008-Kubernetes 调度器</span>
+            <span class="post-date" title="2025-06-02 14:40:00">2025/06/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/ef156b88.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="007-Kubernetes 存储">007-Kubernetes 存储</span>
+            <span class="post-date" title="2025-05-02 10:26:00">2025/05/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/970719d6.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="006-Kubernetes Service">006-Kubernetes Service</span>
+            <span class="post-date" title="2025-04-28 22:10:00">2025/04/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/c790096a.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="005-Kubernetes控制器">005-Kubernetes控制器</span>
+            <span class="post-date" title="2025-04-02 20:12:00">2025/04/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/79e06aab.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="004-Pod的生命周期">004-Pod的生命周期</span>
+            <span class="post-date" title="2025-03-22 09:05:00">2025/03/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 Docker "
+           href="/blog/b01d5c62.html"
+           data-tag="linux,Docker,科学上网"
+           data-author="" >
+            <span class="post-title" title="Docker配置网络代理实现外网镜像下载">Docker配置网络代理实现外网镜像下载</span>
+            <span class="post-date" title="2025-01-08 23:00:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/7f174b3e.html"
+           data-tag="linux,科学上网,Rocky"
+           data-author="" >
+            <span class="post-title" title="Rocky9安装Shadowsocks实现科学上网">Rocky9安装Shadowsocks实现科学上网</span>
+            <span class="post-date" title="2025-01-08 21:09:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/b00f53e9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群">003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群</span>
+            <span class="post-date" title="2025-01-03 22:05:00">2025/01/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/3c79d8d9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="002-Rocky9.3系统初始化设置和Docker安装">002-Rocky9.3系统初始化设置和Docker安装</span>
+            <span class="post-date" title="2025-01-02 13:25:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/7e3a5200.html"
+           data-tag="linux,Rocky"
+           data-author="" >
+            <span class="post-title" title="001-ESXi8安装Rocky9.3虚拟机">001-ESXi8安装Rocky9.3虚拟机</span>
+            <span class="post-date" title="2025-01-02 09:34:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/77d85f50.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="25-责任链模式">25-责任链模式</span>
+            <span class="post-date" title="2024-12-03 21:08:00">2024/12/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/fcec839d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="24-策略模式">24-策略模式</span>
+            <span class="post-date" title="2024-12-02 18:16:00">2024/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/6109865a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="23-状态模式">23-状态模式</span>
+            <span class="post-date" title="2024-11-29 19:30:00">2024/11/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/58d4db7.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="22-解释器模式">22-解释器模式</span>
+            <span class="post-date" title="2024-11-28 22:00:00">2024/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/a5cf7eb4.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="21-备忘录模式">21-备忘录模式</span>
+            <span class="post-date" title="2024-11-27 21:40:00">2024/11/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3148d6be.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="20-中介者模式">20-中介者模式</span>
+            <span class="post-date" title="2024-11-26 20:35:00">2024/11/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f06aea0b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="19-观察者模式">19-观察者模式</span>
+            <span class="post-date" title="2024-11-25 21:07:00">2024/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/7dbd9149.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="18-迭代器模式">18-迭代器模式</span>
+            <span class="post-date" title="2024-11-24 00:02:00">2024/11/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4fdf6e52.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="17-访问者模式">17-访问者模式</span>
+            <span class="post-date" title="2024-11-23 21:55:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/60fd53f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="16-命令模式">16-命令模式</span>
+            <span class="post-date" title="2024-11-23 20:30:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4930323d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="15-模板方法模式">15-模板方法模式</span>
+            <span class="post-date" title="2024-11-23 19:40:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/e4235185.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="14-代理模式">14-代理模式</span>
+            <span class="post-date" title="2024-11-21 23:16:00">2024/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/1b225c1f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="13-享元模式">13-享元模式</span>
+            <span class="post-date" title="2024-11-20 23:10:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/906e9e8b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="12-外观模式">12-外观模式</span>
+            <span class="post-date" title="2024-11-20 22:09:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c456a66a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="11-组合模式">11-组合模式</span>
+            <span class="post-date" title="2024-11-16 17:00:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90213fc6.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="10-装饰器模式">10-装饰器模式</span>
+            <span class="post-date" title="2024-11-16 14:06:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c7419cfa.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="09-桥接模式">09-桥接模式</span>
+            <span class="post-date" title="2024-11-14 20:51:00">2024/11/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f77fc055.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="08-适配器模式">08-适配器模式</span>
+            <span class="post-date" title="2024-11-12 22:55:00">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/a3b0b090.html"
+           data-tag="SpringBoot,neo4j"
+           data-author="" >
+            <span class="post-title" title="Spring Boot对Neo4j节点关系的增删改查">Spring Boot对Neo4j节点关系的增删改查</span>
+            <span class="post-date" title="2024-11-12 21:00:30">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3ab9aa56.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="07-建造者模式">07-建造者模式</span>
+            <span class="post-date" title="2024-11-11 21:55:00">2024/11/11</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/7dc0fcde.html"
+           data-tag="SpringBoot,neo4j"
+           data-author="" >
+            <span class="post-title" title="Spring Boot整合Neo4j实现增删改查">Spring Boot整合Neo4j实现增删改查</span>
+            <span class="post-date" title="2024-11-07 19:04:30">2024/11/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/564adc33.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="06-原型模式">06-原型模式</span>
+            <span class="post-date" title="2024-11-06 19:00:00">2024/11/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/effeea78.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="05-工厂模式">05-工厂模式</span>
+            <span class="post-date" title="2024-11-04 21:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/d7e99843.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="04-单例模式">04-单例模式</span>
+            <span class="post-date" title="2024-11-04 19:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90f1850a.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="03-UML类图">03-UML类图</span>
+            <span class="post-date" title="2024-11-02 14:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 UML "
+           href="/blog/c13304c1.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="02-UML图绘制工具">02-UML图绘制工具</span>
+            <span class="post-date" title="2024-11-02 09:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2e826df1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Docker环境下RTSP流转RTMP和HLS">Docker环境下RTSP流转RTMP和HLS</span>
+            <span class="post-date" title="2024-11-01 15:17:33">2024/11/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/cd625bba.html"
+           data-tag="设计模式,java"
+           data-author="" >
+            <span class="post-title" title="01-设计模式六大原则">01-设计模式六大原则</span>
+            <span class="post-date" title="2024-10-31 17:00:00">2024/10/31</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1a649f4c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="13-JUC进阶-ReentrantReadWriteLock与StampedLock">13-JUC进阶-ReentrantReadWriteLock与StampedLock</span>
+            <span class="post-date" title="2024-10-19 09:26:00">2024/10/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/5c93903a.html"
+           data-tag="linux,neo4j"
+           data-author="" >
+            <span class="post-title" title="Docker部署Neo4j并导入CSV数据">Docker部署Neo4j并导入CSV数据</span>
+            <span class="post-date" title="2024-10-17 15:00:30">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/ad38e6b1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Ubuntu18.04离线源环境搭建">Ubuntu18.04离线源环境搭建</span>
+            <span class="post-date" title="2024-10-17 09:47:33">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3fdbf0f6.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
+            <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3e0d7592.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
+            <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4502cffa.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
+            <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4de6a39b.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
+            <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/72329cf5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
+            <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/5e3757c1.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
+            <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-k8s/008-K8S调度器" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">008-Kubernetes 调度器</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="k8s">k8s</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">linux</a>
+            
+            <a class="color2">Docker</a>
+            
+            <a class="color1">Rocky</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2025-06-08 13:26:53'>2025-06-02 14:40</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:15.8k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81kube-scheduler-%E8%AF%A6%E8%A7%A3"><span class="toc-text">一、kube-scheduler 详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-kube-scheduler-%E8%B0%83%E5%BA%A6%E6%A6%82%E8%BF%B0"><span class="toc-text">1. kube-scheduler 调度概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-kube-scheduler-%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B"><span class="toc-text">2. kube-scheduler 调度流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%A2%84%E9%80%89%E7%AD%96%E7%95%A5%EF%BC%88Predicates%EF%BC%89"><span class="toc-text">2.1 预选策略（Predicates）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BC%98%E9%80%89%E7%AD%96%E7%95%A5%EF%BC%88Priorities%EF%BC%89"><span class="toc-text">2.2 优选策略（Priorities）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%87%AA%E5%AE%9A%E4%B9%89%E8%B0%83%E5%BA%A6%E5%99%A8"><span class="toc-text">2.3 自定义调度器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BA%B2%E5%92%8C%E6%80%A7%E5%92%8C%E5%8F%8D%E4%BA%B2%E5%92%8C%E6%80%A7"><span class="toc-text">二、亲和性和反亲和性</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0"><span class="toc-text">1. 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Node-%E8%8A%82%E7%82%B9%E4%BA%B2%E5%92%8C%E6%80%A7"><span class="toc-text">2. Node 节点亲和性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-text">2.1 相关概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%8A%82%E7%82%B9%E4%BA%B2%E5%92%8C%E6%80%A7%E9%87%8D%E8%A6%81%E8%AF%B4%E6%98%8E"><span class="toc-text">2.2 节点亲和性重要说明</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%8A%82%E7%82%B9%E4%BA%B2%E5%92%8C%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="toc-text">2.3 节点亲和性示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-1-%E5%87%86%E5%A4%87%E4%BA%8B%E9%A1%B9"><span class="toc-text">2.3.1 准备事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-2-%E8%8A%82%E7%82%B9%E7%A1%AC%E4%BA%B2%E5%92%8C%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="toc-text">2.3.2 节点硬亲和性示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-3-%E8%8A%82%E7%82%B9%E8%BD%AF%E4%BA%B2%E5%92%8C%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="toc-text">2.3.3 节点软亲和性示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3-4-%E8%8A%82%E7%82%B9%E7%A1%AC%E4%BA%B2%E5%92%8C%E6%80%A7-%E5%92%8C-%E8%BD%AF%E4%BA%B2%E5%92%8C%E6%80%A7%E8%81%94%E5%90%88%E7%A4%BA%E4%BE%8B"><span class="toc-text">2.3.4 节点硬亲和性 和 软亲和性联合示例</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Pod-%E4%BA%B2%E5%92%8C%E6%80%A7-%E5%8F%8D%E4%BA%B2%E5%92%8C%E6%80%A7"><span class="toc-text">3. Pod 亲和性 &#x2F; 反亲和性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%9B%B8%E5%85%B3%E6%A6%82%E5%BF%B5"><span class="toc-text">3.1 相关概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-pod%E4%BA%B2%E5%92%8C%E6%80%A7%E4%B8%8E%E5%8F%8D%E4%BA%B2%E5%92%8C%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="toc-text">3.2 pod亲和性与反亲和性示例</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E5%87%86%E5%A4%87%E4%BA%8B%E9%A1%B9"><span class="toc-text">3.2.1 准备事项</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-pod-%E7%A1%AC%E4%BA%B2%E5%92%8C%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="toc-text">3.2.2 pod 硬亲和性示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-pod-%E8%BD%AF%E4%BA%B2%E5%92%8C%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="toc-text">3.2.3 pod 软亲和性示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-pod-%E7%A1%AC%E5%8F%8D%E4%BA%B2%E5%92%8C%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="toc-text">3.2.4 pod 硬反亲和性示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-5-pod-%E8%BD%AF%E5%8F%8D%E4%BA%B2%E5%92%8C%E6%80%A7%E7%A4%BA%E4%BE%8B"><span class="toc-text">3.2.5 pod 软反亲和性示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-6-pod-%E4%BA%B2%E5%92%8C%E6%80%A7%E4%B8%8E%E5%8F%8D%E4%BA%B2%E5%92%8C%E6%80%A7%E8%81%94%E5%90%88%E7%A4%BA%E4%BE%8B"><span class="toc-text">3.2.6 pod 亲和性与反亲和性联合示例</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%B1%A1%E7%82%B9%E4%B8%8E%E5%AE%B9%E5%BF%8D"><span class="toc-text">三、污点与容忍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E8%BF%B0-1"><span class="toc-text">1. 概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Taints-%E6%B1%A1%E7%82%B9"><span class="toc-text">2. Taints 污点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E6%B1%A1%E7%82%B9taint%E7%9A%84NoExecute%E8%AF%A6%E8%A7%A3"><span class="toc-text">2.1 污点taint的NoExecute详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-Taints%E6%B1%A1%E7%82%B9%E8%AE%BE%E7%BD%AE"><span class="toc-text">2.2 Taints污点设置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E6%B1%A1%E7%82%B9%EF%BC%88Taints%EF%BC%89%E6%9F%A5%E7%9C%8B"><span class="toc-text">2.2.1 污点（Taints）查看</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E6%B1%A1%E7%82%B9%EF%BC%88Taints%EF%BC%89%E6%B7%BB%E5%8A%A0"><span class="toc-text">2.2.2 污点（Taints）添加</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-3-%E6%B1%A1%E7%82%B9%EF%BC%88Taints%EF%BC%89%E5%88%A0%E9%99%A4"><span class="toc-text">2.2.3 污点（Taints）删除</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Tolerations-%E5%AE%B9%E5%BF%8D"><span class="toc-text">3. Tolerations 容忍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E5%AE%B9%E5%BF%8D%E8%AE%BE%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-text">3.1 容忍设置示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E5%BD%93%E4%B8%8D%E6%8C%87%E5%AE%9Akey%E5%80%BC%E6%97%B6"><span class="toc-text">3.2 当不指定key值时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%BD%93%E4%B8%8D%E6%8C%87%E5%AE%9Aeffect%E5%80%BC%E6%97%B6"><span class="toc-text">3.3 当不指定effect值时</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%BD%93%E6%9C%89%E5%A4%9A%E4%B8%AAMaster%E5%AD%98%E5%9C%A8%E6%97%B6"><span class="toc-text">3.4 当有多个Master存在时</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%A4%9A%E4%B8%AA-Taints-%E6%B1%A1%E7%82%B9%E5%92%8C%E5%A4%9A%E4%B8%AA-Tolerations-%E5%AE%B9%E5%BF%8D%E6%80%8E%E4%B9%88%E5%88%A4%E6%96%AD"><span class="toc-text">4. 多个 Taints 污点和多个 Tolerations 容忍怎么判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%B1%A1%E7%82%B9%E5%92%8C%E5%AE%B9%E5%BF%8D%E7%A4%BA%E4%BE%8B"><span class="toc-text">5. 污点和容忍示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-Node-%E6%B1%A1%E7%82%B9%E4%B8%BA-NoExecute-%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="toc-text">5.1 Node 污点为 NoExecute 的示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Pod-%E6%B2%A1%E6%9C%89%E5%AE%B9%E5%BF%8D%E6%97%B6%EF%BC%88Tolerations%EF%BC%89"><span class="toc-text">5.2 Pod 没有容忍时（Tolerations）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Pod-%E5%8D%95%E4%B8%AA%E5%AE%B9%E5%BF%8D%E6%97%B6%EF%BC%88Tolerations%EF%BC%89"><span class="toc-text">5.3 Pod 单个容忍时（Tolerations）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-Pod%E5%A4%9A%E4%B8%AA%E5%AE%B9%E5%BF%8D%E6%97%B6%EF%BC%88Tolerations%EF%BC%89"><span class="toc-text">5.4 Pod多个容忍时（Tolerations）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-Pod%E5%AE%B9%E5%BF%8D%E6%8C%87%E5%AE%9A%E6%B1%A1%E7%82%B9key%E7%9A%84%E6%89%80%E6%9C%89effects%E6%83%85%E5%86%B5"><span class="toc-text">5.5 Pod容忍指定污点key的所有effects情况</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-Pod%E5%AE%B9%E5%BF%8D%E6%89%80%E6%9C%89%E6%B1%A1%E7%82%B9"><span class="toc-text">5.6 Pod容忍所有污点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%9B%BA%E5%AE%9A%E8%8A%82%E7%82%B9nodeName%E5%92%8CnodeSelector%E8%B0%83%E5%BA%A6"><span class="toc-text">四、固定节点nodeName和nodeSelector调度</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%8C%87%E5%AE%9A-nodeName-%E7%A4%BA%E4%BE%8B"><span class="toc-text">1. 指定 nodeName 示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%BD%93-nodeName-%E6%8C%87%E5%AE%9A%E8%8A%82%E7%82%B9%E5%AD%98%E5%9C%A8"><span class="toc-text">1.1 当 nodeName 指定节点存在</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%BD%93-nodeName-%E6%8C%87%E5%AE%9A%E8%8A%82%E7%82%B9%E4%B8%8D%E5%AD%98%E5%9C%A8"><span class="toc-text">1.2 当 nodeName 指定节点不存在</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BD%BF%E7%94%A8-nodeSelector-%E8%B0%83%E5%BA%A6"><span class="toc-text">2. 使用 nodeSelector 调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%BD%93-nodeSelector-%E6%A0%87%E7%AD%BE%E5%AD%98%E5%9C%A8"><span class="toc-text">2.1 当 nodeSelector 标签存在</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%BD%93-nodeSelector-%E6%A0%87%E7%AD%BE%E4%B8%8D%E5%AD%98%E5%9C%A8"><span class="toc-text">2.2 当 nodeSelector 标签不存在</span></a></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一、kube-scheduler-详解"><a href="#一、kube-scheduler-详解" class="headerlink" title="一、kube-scheduler 详解"></a>一、kube-scheduler 详解</h1><h2 id="1-kube-scheduler-调度概述"><a href="#1-kube-scheduler-调度概述" class="headerlink" title="1. kube-scheduler 调度概述"></a>1. kube-scheduler 调度概述</h2><p>在 Kubernetes 中，调度是指将 Pod 放置到合适的 Node 节点上，然后对应 Node 上的 Kubelet 才能够运行这些 pod。</p>
+<p><strong>调度器通过 kubernetes 的 watch 机制来发现集群中新创建且尚未被调度到 Node 上的 Pod。</strong>调度器会将发现的每一个未调度的 Pod 调度到一个合适的 Node 上来运行。调度器会依据下文的调度原则来做出调度选择。</p>
+<p>调度是容器编排的重要环节，需要经过严格的监控和控制，现实生产通常对调度有各类限制，譬如某些服务必须在业务独享的机器上运行，或者从灾备的角度考虑尽量把服务调度到不同机器，这些需求在Kubernetes集群依靠调度组件kube-scheduler满足。</p>
+<p>kube-scheduler 是 Kubernetes 中的关键模块，扮演管家的角色遵从一套机制——为Pod提供调度服务，例如基于资源的公平调度、调度Pod到指定节点、或者通信频繁的Pod调度到同一节点等。容器调度本身是一件比较复杂的事，因为要确保以下几个目标：</p>
+<ul>
+<li>公平性：在调度 Pod 时需要公平的进行决策，每个节点都有被分配资源的机会，调度器需要对不同节点的使用作出平衡决策。</li>
+<li>资源高效利用：最大化群集所有资源的利用率，使有限的 CPU、内存等资源服务尽可能更多的 Pod。</li>
+<li>效率问题：能快速的完成对大批量 Pod 的调度工作，在集群规模扩增的情况下，依然保证调度过程的性能。</li>
+<li>灵活性：在实际运作中，用户往往希望Pod的调度策略是可控的，从而处理大量复杂的实际问题。因此平台要允许多个调度器并行工作，同时支持自定义调度器。</li>
+</ul>
+<p>为达到上述目标，kube-scheduler 通过结合 Node 资源、负载情况、数据位置等各种因素进行调度判断，确保在满足场景需求的同时将Pod 分配到最优节点。显然，kube-scheduler 影响着 Kubernetes 集群的可用性与性能，Pod 数量越多集群的调度能力越重要，尤其达到了数千级节点数时，优秀的调度能力将显著提升容器平台性能。</p>
+<h2 id="2-kube-scheduler-调度流程"><a href="#2-kube-scheduler-调度流程" class="headerlink" title="2. kube-scheduler 调度流程"></a>2. kube-scheduler 调度流程</h2><p>kube-scheduler的根本工作任务是根据各种调度算法将Pod绑定（bind）到最合适的工作节点，整个调度流程分为两个阶段：<strong>预选策略（Predicates）</strong>和<strong>优选策略（Priorities）</strong>。</p>
+<ul>
+<li><strong>预选（Predicates）：</strong>输入是所有节点，输出是满足预选条件的节点。kube-scheduler 根据预选策略过滤掉不满足策略的 Nodes。例如，如果某节点的资源不足或者不满足预选策略的条件如 “ Node 的 label 必须与 Pod 的 Selector 一致”时则无法通过预选。</li>
+<li><strong>优选（Priorities）：</strong>输入是预选阶段筛选出的节点，优选会根据优先策略为通过预选的 Nodes 进行打分排名，选择得分最高的Node。例如，资源越富裕、负载越小的 Node 可能具有越高的排名。</li>
+</ul>
+<p>通俗点说，调度的过程就是在回答两个问题：1. 候选有哪些？2. 其中最适合的是哪个？</p>
+<p>值得一提的是，<em>如果在预选阶段没有节点满足条件，Pod会一直处在Pending状态直到出现满足的节点，在此期间调度器会不断的进行重试。</em></p>
+<h3 id="2-1-预选策略（Predicates）"><a href="#2-1-预选策略（Predicates）" class="headerlink" title="2.1 预选策略（Predicates）"></a>2.1 预选策略（Predicates）</h3><p>官网地址：<a target="_blank" rel="noopener" href="https://kubernetes.io/docs/reference/scheduling/policies/">调度器预选、优选策略</a></p>
+<p>过滤条件包含如下：</p>
+<ul>
+<li>PodFitsHostPorts：检查 Pod 容器所需的 HostPort 是否已被节点上其它容器或服务占用。如果已被占用，则禁止 Pod 调度到该节点。</li>
+<li>PodFitsHost：检查 Pod 指定的 NodeName 是否匹配当前节点。</li>
+<li>PodFitsResources：检查节点是否有足够空闲资源（例如 CPU 和内存）来满足 Pod 的要求。</li>
+<li>PodMatchNodeSelector：检查 Pod 的节点选择器( nodeSelector )是否与节点( Node )的标签匹配</li>
+<li>NoVolumeZoneConflict：对于给定的某块区域，判断如果在此区域的节点上部署 Pod 是否存在卷冲突。</li>
+<li>NoDiskConflict：根据节点请求的卷和已经挂载的卷，评估 Pod 是否适合该节点。</li>
+<li>MaxCSIVolumeCount：决定应该附加多少 CSI 卷，以及该卷是否超过配置的限制。</li>
+<li>CheckNodeMemoryPressure：如果节点报告内存压力，并且没有配置异常，那么将不会往那里调度 Pod。</li>
+<li>CheckNodePIDPressure：如果节点报告进程 id 稀缺，并且没有配置异常，那么将不会往那里调度 Pod。</li>
+<li>CheckNodeDiskPressure：如果节点报告存储压力(文件系统已满或接近满)，并且没有配置异常，那么将不会往那里调度 Pod。</li>
+<li>CheckNodeCondition：节点可以报告它们有一个完全完整的文件系统，然而网络不可用，或者 kubelet 没有准备好运行 Pods。如果为节点设置了这样的条件，并且没有配置异常，那么将不会往那里调度 Pod。</li>
+<li>PodToleratesNodeTaints：检查 Pod 的容忍度是否能容忍节点的污点。</li>
+<li>CheckVolumeBinding：评估 Pod 是否适合它所请求的容量。这适用于约束和非约束 PVC。</li>
+</ul>
+<p><strong>如果在predicates(预选)过程中没有合适的节点，那么Pod会一直在pending状态，不断重试调度，直到有节点满足条件。</strong></p>
+<p>经过这个步骤，如果有多个节点满足条件，就继续priorities过程，最后按照优先级大小对节点排序。</p>
+<h3 id="2-2-优选策略（Priorities）"><a href="#2-2-优选策略（Priorities）" class="headerlink" title="2.2 优选策略（Priorities）"></a>2.2 优选策略（Priorities）</h3><p>包含如下优选评分条件：</p>
+<ul>
+<li>SelectorSpreadPriority：对于属于同一服务、有状态集或副本集（Service，StatefulSet or ReplicaSet）的Pods，会将Pods尽量分散到不同主机上。</li>
+<li>InterPodAffinityPriority：策略有podAffinity和podAntiAffinity两种配置方式。简单来说，就说根据Node上运行的Pod的Label来进行调度匹配的规则，匹配的表达式有：In, NotIn, Exists, DoesNotExist，通过该策略，可以更灵活地对Pod进行调度。</li>
+<li>LeastRequestedPriority：偏向使用较少请求资源的节点。换句话说，放置在节点上的Pod越多，这些Pod使用的资源越多，此策略给出的排名就越低。</li>
+<li>MostRequestedPriority：偏向具有最多请求资源的节点。这个策略将把计划的Pods放到整个工作负载集所需的最小节点上运行。</li>
+<li>RequestedToCapacityRatioPriority：使用默认的资源评分函数模型创建基于ResourceAllocationPriority的requestedToCapacity。</li>
+<li>BalancedResourceAllocation：偏向具有平衡资源使用的节点。</li>
+<li>NodePreferAvoidPodsPriority：根据节点注释scheduler.alpha.kubernet .io&#x2F;preferAvoidPods为节点划分优先级。可以使用它来示意两个不同的Pod不应在同一Node上运行。</li>
+<li>NodeAffinityPriority：根据preferredduringschedulingignoredingexecution中所示的节点关联调度偏好来对节点排序。</li>
+<li>TaintTolerationPriority：根据节点上无法忍受的污点数量，为所有节点准备优先级列表。此策略将考虑该列表调整节点的排名。</li>
+<li>ImageLocalityPriority：偏向已经拥有本地缓存Pod容器镜像的节点。</li>
+<li>ServiceSpreadingPriority：对于给定的服务，此策略旨在确保Service的Pods运行在不同的节点上。总的结果是，Service对单个节点故障变得更有弹性。</li>
+<li>EqualPriority：赋予所有节点相同的权值1。</li>
+<li>EvenPodsSpreadPriority：实现择优 pod的拓扑扩展约束</li>
+</ul>
+<h3 id="2-3-自定义调度器"><a href="#2-3-自定义调度器" class="headerlink" title="2.3 自定义调度器"></a>2.3 自定义调度器</h3><p>除了Kubernetes自带的调度器，我们也可以编写自己的调度器。通过spec.schedulername参数指定调度器名字，可以为Pod选择某个调度器进行调度。</p>
+<pre><code class="highlight bash"><span class="comment"># 在 kubernetes Master 节点开启 apiServer 的代理</span>
+$ kubectl proxy --port=8001</code></pre>
+
+
+
+<blockquote>
+<p>基于 shell 编写一个自定义调度器</p>
+</blockquote>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">vi my-scheduler.sh</span>
+<span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span>
+
+SERVER=&#x27;localhost:8001&#x27;
+
+while true;
+do
+    for PODNAME in $(kubectl --server $SERVER get pods -o json | jq &#x27;.items[] | select(.spec.schedulerName ==&quot;my-scheduler&quot;) | select(.spec.nodeName == null) | .metadata.name&#x27; | tr -d &#x27;&quot;&#x27;)
+    do
+        NODES=($(kubectl --server $SERVER get nodes -o json | jq &#x27;.items[].metadata.name&#x27; | tr -d &#x27;&quot;&#x27;))
+        NUMNODES=$&#123;#NODES[@]&#125;
+        CHOSEN=$&#123;NODES[$[ $RANDOM % $NUMNODES]]&#125;
+        curl --header &quot;Content-Type:application/json&quot; --request POST --data &#x27;&#123;&quot;apiVersion&quot;:&quot;v1&quot;,&quot;kind&quot;:&quot;Binding&quot;,&quot;metadata&quot;: &#123;&quot;name&quot;:&quot;&#x27;$PODNAME&#x27;&quot;&#125;,&quot;target&quot;: &#123;&quot;apiVersion&quot;:&quot;v1&quot;,&quot;kind&quot;: &quot;Node&quot;, &quot;name&quot;: &quot;&#x27;$CHOSEN&#x27;&quot;&#125;&#125;&#x27; http://$SERVER/api/v1/namespaces/default/pods/$PODNAME/binding/
+        echo &quot;Assigned $PODNAME to $CHOSEN&quot;
+    done
+    sleep 1
+done</code></pre>
+
+
+
+<blockquote>
+<p>如下Pod选择my-scheduler进行调度，而不是默认的default-scheduler</p>
+</blockquote>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">name:</span> <span class="string">myapp</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">schedulerName:</span> <span class="string">my-scheduler</span>
+      <span class="attr">containers:</span>
+      <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+        <span class="attr">name:</span> <span class="string">myapp</span></code></pre>
+
+<p>自定义调度器在日常工作中几乎不会用到。</p>
+<h1 id="二、亲和性和反亲和性"><a href="#二、亲和性和反亲和性" class="headerlink" title="二、亲和性和反亲和性"></a>二、亲和性和反亲和性</h1><p><strong>主机配置规划</strong></p>
+<table>
+<thead>
+<tr>
+<th>服务器名称(hostname)</th>
+<th>系统版本</th>
+<th>配置</th>
+<th>内网IP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>k8s-master</td>
+<td>Rocky 9.3</td>
+<td>2C&#x2F;4G&#x2F;100G</td>
+<td>192.168.142.199</td>
+</tr>
+<tr>
+<td>k8s-node01</td>
+<td>Rocky 9.3</td>
+<td>2C&#x2F;4G&#x2F;100G</td>
+<td>192.168.142.201</td>
+</tr>
+<tr>
+<td>k8s-node02</td>
+<td>Rocky 9.3</td>
+<td>2C&#x2F;4G&#x2F;100G</td>
+<td>192.168.142.202</td>
+</tr>
+</tbody></table>
+<h2 id="1-概述"><a href="#1-概述" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>nodeSelector提供了一种非常简单的方法，将pods约束到具有特定标签的节点。而亲和性&#x2F;反亲和性极大地扩展了可表达的约束类型。关键的增强是：</p>
+<ul>
+<li>亲和性&#x2F;反亲和性语言更具表达性。除了使用逻辑AND操作创建的精确匹配之外，该语言还提供了更多的匹配规则；</li>
+<li>可以指示规则是优选项而不是硬要求，因此如果调度器不能满足，pod仍将被调度；</li>
+<li>可以针对节点（或其他拓扑域）上运行的 pods 的标签进行约束，而不是针对节点的自身标签，<strong>这影响哪些 Pod 可以或不可以共处</strong>。</li>
+</ul>
+<p><strong>亲和特性包括两种类型：node节点亲和性&#x2F;反亲和性 和 pod亲和性&#x2F;反亲和性。pod亲和性&#x2F;反亲和性约束针对的是pod标签而不是节点标签。</strong></p>
+<p><strong>拓扑域是什么：多个node节点，拥有相同的label标签【节点标签的键值相同】，那么这些节点就处于同一个拓扑域。</strong></p>
+<h2 id="2-Node-节点亲和性"><a href="#2-Node-节点亲和性" class="headerlink" title="2. Node 节点亲和性"></a>2. Node 节点亲和性</h2><h3 id="2-1-相关概念"><a href="#2-1-相关概念" class="headerlink" title="2.1 相关概念"></a>2.1 相关概念</h3><p>当前有两种类型的节点亲和性，称为 <code>requiredDuringSchedulingIgnoredDuringExecution</code> 和 <code>preferredDuringSchedulingIgnoredDuringExecution</code> ，可以将它们分别视为“硬策略”【必须满足条件】和“软策略”【优选满足条件】要求。</p>
+<p>前者表示Pod要调度到的节点必须满足规则条件，不满足则不会调度，pod会一直处于Pending状态；后者表示优先调度到满足规则条件的节点，如果不能满足再调度到其他节点。</p>
+<p>名称中的 <code>IgnoredDuringExecution</code> 部分意味着，与 nodeSelector 的工作方式类似，如果节点上的标签在 Pod 运行时发生更改，使得pod 上的亲和性规则不再满足，那么 pod 仍将继续在该节点上运行。</p>
+<p>在未来，会计划提供 <code>requiredDuringSchedulingRequiredDuringExecution</code> ，类似 <code>requiredDuringSchedulingIgnoredDuringExecution</code> 。不同之处就是 pod 运行过程中如果节点不再满足 pod 的亲和性，则 pod 会在该节点中逐出。</p>
+<p><strong>节点亲和性语法支持以下运算符：In，NotIn，Exists，DoesNotExist，Gt，Lt。可以使用 NotIn 和 DoesNotExist 实现节点的反亲和行为。</strong></p>
+<p>运算符关系：</p>
+<ul>
+<li>In：label 的值在某个列表中</li>
+<li>NotIn：label 的值不在某个列表中</li>
+<li>Gt：label 的值大于某个值</li>
+<li>Lt：label 的值小于某个值</li>
+<li>Exists：某个label 存在</li>
+<li>DoesNotExist：某个 label 不存在</li>
+</ul>
+<h3 id="2-2-节点亲和性重要说明"><a href="#2-2-节点亲和性重要说明" class="headerlink" title="2.2 节点亲和性重要说明"></a>2.2 节点亲和性重要说明</h3><ol>
+<li><p>如果同时指定 nodeSelector 和 nodeAffinity ，则必须满足两个条件，才能将 Pod 调度到候选节点上。</p>
+</li>
+<li><p>如果在 nodeAffinity 类型下指定了多个 nodeSelectorTerms 对象【对象不能有多个，如果存在多个只有最后一个生效】，那么只有最后一个 nodeSelectorTerms 对象生效。</p>
+</li>
+<li><p>如果在 nodeSelectorTerms 下指定了多个 matchExpressions 列表，那么只要能满足其中一个 matchExpressions ，就可以将 pod 调度到某个节点上【针对节点硬亲和】。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/02/20250602-170832.png" alt="在 nodeSelectorTerms 下指定了多个 matchExpressions 列表"></p>
+</li>
+<li><p>如果在 matchExpressions下有多个 key 列表，那么只有当所有 key 满足时，才能将 pod 调度到某个节点【针对硬亲和】。</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/02/20250602-170929.png" alt="在 matchExpressions下有多个 key 列表"></p>
+</li>
+<li><p>在key下的values只要有一个满足条件，那么当前的key就满足条件</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/02/20250602-171010.png" alt="在key下的values只要有一个满足条件，那么当前的key就满足条件"></p>
+</li>
+<li><p>如果 pod 已经调度在该节点，当我们删除或修该节点的标签时，pod 不会被移除。换句话说，亲和性选择只有在 pod 调度期间有效。</p>
+</li>
+<li><p><code>preferredDuringSchedulingIgnoredDuringExecution</code> 中的 weight（权重）字段在1-100范围内。对于每个满足所有调度需求的节点(资源请求、RequiredDuringScheduling 亲和表达式等)，调度器将通过迭代该字段的元素来计算一个总和，如果节点与相应的匹配表达式匹配，则向该总和添加“权重”。然后将该分数与节点的其他优先级函数的分数结合起来。总得分最高的节点是最受欢迎的。</p>
+</li>
+</ol>
+<h3 id="2-3-节点亲和性示例"><a href="#2-3-节点亲和性示例" class="headerlink" title="2.3 节点亲和性示例"></a>2.3 节点亲和性示例</h3><h4 id="2-3-1-准备事项"><a href="#2-3-1-准备事项" class="headerlink" title="2.3.1 准备事项"></a>2.3.1 准备事项</h4><p>给node节点打label标签</p>
+<pre><code class="highlight bash"><span class="comment"># 查看当前集群节点列表</span>
+$ kubectl get nodes
+NAME         STATUS   ROLES           AGE   VERSION
+k8s-node01   Ready    &lt;none&gt;          76d   v1.29.15
+k8s-node02   Ready    &lt;none&gt;          76d   v1.29.15
+node         Ready    control-plane   76d   v1.29.15
+
+
+<span class="comment"># 1.给node01节点打标签</span>
+<span class="comment">### --overwrite覆盖已存在的标签信息</span>
+$ kubectl label nodes k8s-node01 disk-type=ssd --overwrite
+node/k8s-node01 labeled
+$ kubectl label nodes k8s-node01 cpu-num=12
+node/k8s-node01 labeled
+
+<span class="comment"># 2.给node02节点打标签</span>
+$ kubectl label nodes k8s-node02 disk-type=sata --overwrite
+node/k8s-node02 labeled
+$ kubectl label nodes k8s-node02 cpu-num=24
+node/k8s-node02 labeled</code></pre>
+
+
+
+<p>查询所有节点标签信息</p>
+<pre><code class="highlight bash">$ kubectl get node --show-labels
+NAME         STATUS   ROLES           AGE   VERSION    LABELS
+k8s-node01   Ready    &lt;none&gt;          76d   v1.29.15   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,cpu-num=12,disk-type=ssd,kubernetes.io/arch=amd64,kubernetes.io/hostname=k8s-node01,kubernetes.io/os=linux
+k8s-node02   Ready    &lt;none&gt;          76d   v1.29.15   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,cpu-num=24,disk-type=sata,kubernetes.io/arch=amd64,kubernetes.io/hostname=k8s-node02,kubernetes.io/os=linux
+node         Ready    control-plane   76d   v1.29.15   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,kubernetes.io/arch=amd64,kubernetes.io/hostname=node,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=,node.kubernetes.io/exclude-from-external-load-balancers=</code></pre>
+
+
+
+<h4 id="2-3-2-节点硬亲和性示例"><a href="#2-3-2-节点硬亲和性示例" class="headerlink" title="2.3.2 节点硬亲和性示例"></a>2.3.2 节点硬亲和性示例</h4><p><strong>必须满足条件才能调度，否则不会调度</strong></p>
+<p>资源清单：<code>node_required_affinity.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">node-affinity-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">nodeaffinity-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">5</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+              <span class="attr">name:</span> <span class="string">web</span>
+              <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">affinity:</span> <span class="comment"># 亲和性</span>
+        <span class="attr">nodeAffinity:</span> <span class="comment"># 节点亲和性</span>
+          <span class="attr">requiredDuringSchedulingIgnoredDuringExecution:</span> <span class="comment"># 节点硬亲和性</span>
+            <span class="attr">nodeSelectorTerms:</span>
+              <span class="bullet">-</span> <span class="attr">matchExpressions:</span>
+                  <span class="comment"># 表示node标签存在 disk-type=ssd 或 disk-type=sas</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">disk-type</span>
+                    <span class="attr">operator:</span> <span class="string">In</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">ssd</span>
+                      <span class="bullet">-</span> <span class="string">sas</span>
+                  <span class="comment"># 表示node标签存在 cpu-num且值大于6</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">cpu-num</span>
+                    <span class="attr">operator:</span> <span class="string">Gt</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">&quot;6&quot;</span></code></pre>
+
+
+
+<p>执行资源清单，并查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建Deployment 和 Pod</span>
+$ kubectl apply -f node_required_affinity.yaml
+
+<span class="comment"># 查看Deployment控制器</span>
+$ kubectl get deploy -o wide
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+node-affinity-deploy   5/5     5            5           9s    nginx        wangyanglinux/myapp:v1.0   app=myapp
+
+<span class="comment"># 查看Pod</span>
+$ kubectl get pods -o wide
+NAME                                    READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+node-affinity-deploy-7f4f994b48-747jn   1/1     Running   0          31s   192.168.85.244   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-7f4f994b48-8cvx8   1/1     Running   0          31s   192.168.85.243   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-7f4f994b48-9rcs6   1/1     Running   0          31s   192.168.85.240   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-7f4f994b48-dckdb   1/1     Running   0          31s   192.168.85.241   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-7f4f994b48-fmmbf   1/1     Running   0          31s   192.168.85.242   k8s-node01   &lt;none&gt;           &lt;none&gt;
+
+<span class="comment"># 查看rs</span>
+$ kubectl get rs -o wide
+NAME                              DESIRED   CURRENT   READY   AGE     CONTAINERS   IMAGES                     SELECTOR
+node-affinity-deploy-7f4f994b48   5         5         5       3m46s   nginx        wangyanglinux/myapp:v1.0   app=myapp,pod-template-hash=7f4f994b48</code></pre>
+
+<p>由上可见，由于节点硬亲和性的限制，Pod 都运行到了 k8s-node01 节点上了，即便是删除 Pod 重新创建新的Pod，依然会运行到 k8s-node01 节点上。</p>
+<pre><code class="highlight bash"><span class="comment"># 删除 Pod</span>
+$ kubectl delete pod node-affinity-deploy-7f4f994b48-747jn
+pod <span class="string">&quot;node-affinity-deploy-7f4f994b48-747jn&quot;</span> deleted
+
+<span class="comment"># 再次查看Pod</span>
+$ kubectl get pods -o wide
+NAME                                    READY   STATUS    RESTARTS   AGE     IP               NODE         NOMINATED NODE   READINESS GATES
+node-affinity-deploy-7f4f994b48-8cvx8   1/1     Running   0          5m57s   192.168.85.243   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-7f4f994b48-9rcs6   1/1     Running   0          5m57s   192.168.85.240   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-7f4f994b48-dckdb   1/1     Running   0          5m57s   192.168.85.241   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-7f4f994b48-fmmbf   1/1     Running   0          5m57s   192.168.85.242   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-7f4f994b48-r22mr   1/1     Running   0          6s      192.168.85.245   k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+
+
+
+
+<h4 id="2-3-3-节点软亲和性示例"><a href="#2-3-3-节点软亲和性示例" class="headerlink" title="2.3.3 节点软亲和性示例"></a>2.3.3 节点软亲和性示例</h4><p><strong>优先调度到满足条件的节点，如果都不满足也会调度到其他节点。</strong></p>
+<p>资源清单：<code>node_preferred_affinity.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">node-affinity-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">nodeaffinity-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">5</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+              <span class="attr">name:</span> <span class="string">web</span>
+              <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">affinity:</span> <span class="comment"># 亲和性</span>
+        <span class="attr">nodeAffinity:</span> <span class="comment"># 节点亲和性</span>
+          <span class="attr">preferredDuringSchedulingIgnoredDuringExecution:</span> <span class="comment"># 节点软亲和性</span>
+            <span class="bullet">-</span> <span class="attr">weight:</span> <span class="number">1</span> <span class="comment"># 权重，范围 1-100</span>
+              <span class="attr">preference:</span>
+                <span class="attr">matchExpressions:</span>
+                  <span class="comment"># 表示node标签存在 disk-type=ssd 或 disk-type=sas</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">disk-type</span>
+                    <span class="attr">operator:</span> <span class="string">In</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">ssd</span>
+                      <span class="bullet">-</span> <span class="string">sas</span>
+            <span class="bullet">-</span> <span class="attr">weight:</span> <span class="number">50</span> <span class="comment"># 权重，范围 1-100</span>
+              <span class="attr">preference:</span>
+                <span class="attr">matchExpressions:</span>
+                  <span class="comment"># 表示node标签存在 cpu-num且值大于16</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">cpu-num</span>
+                    <span class="attr">operator:</span> <span class="string">Gt</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">&quot;16&quot;</span></code></pre>
+
+
+
+<p>执行资源清单，并查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 运行资源清单，创建Deployment</span>
+$ kubectl apply -f node_preferred_affinity.yaml
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deployment -o wide
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+node-affinity-deploy   5/5     5            5           6s    nginx        wangyanglinux/myapp:v1.0   app=myapp
+
+<span class="comment"># 查看 RS</span>
+$ kubectl get rs -o wide
+NAME                              DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES                     SELECTOR
+node-affinity-deploy-649bb7b9cf   5         5         5       12s   nginx        wangyanglinux/myapp:v1.0   app=myapp,pod-template-hash=649bb7b9cf
+
+<span class="comment"># 查看 Pod详情</span>
+$ kubectl get pods -o wide
+NAME                                    READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+node-affinity-deploy-649bb7b9cf-7mj7p   1/1     Running   0          19s   192.168.58.239   k8s-node02   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-649bb7b9cf-9q56z   1/1     Running   0          19s   192.168.58.242   k8s-node02   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-649bb7b9cf-b7gtd   1/1     Running   0          19s   192.168.58.240   k8s-node02   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-649bb7b9cf-qp775   1/1     Running   0          19s   192.168.58.238   k8s-node02   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-649bb7b9cf-ztkl8   1/1     Running   0          19s   192.168.58.241   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>由于 Node 软亲和性的限制，可以推断出 Pod 会运行在 k8s-node02 节点上。</p>
+<h4 id="2-3-4-节点硬亲和性-和-软亲和性联合示例"><a href="#2-3-4-节点硬亲和性-和-软亲和性联合示例" class="headerlink" title="2.3.4 节点硬亲和性 和 软亲和性联合示例"></a>2.3.4 节点硬亲和性 和 软亲和性联合示例</h4><p>资源清单：<code>node_affinity.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">node-affinity-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">nodeaffinity-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">5</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nginx</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+              <span class="attr">name:</span> <span class="string">web</span>
+              <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">affinity:</span> <span class="comment"># 亲和性</span>
+        <span class="attr">nodeAffinity:</span> <span class="comment"># 节点亲和性</span>
+          <span class="attr">requiredDuringSchedulingIgnoredDuringExecution:</span> <span class="comment"># 节点硬亲和性</span>
+            <span class="attr">nodeSelectorTerms:</span>
+              <span class="bullet">-</span> <span class="attr">matchExpressions:</span>
+                  <span class="comment"># 表示node标签存在 cpu-num且值大于10</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">cpu-num</span>
+                    <span class="attr">operator:</span> <span class="string">Gt</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">&quot;10&quot;</span>
+          <span class="attr">preferredDuringSchedulingIgnoredDuringExecution:</span> <span class="comment"># 节点软亲和性</span>
+            <span class="bullet">-</span> <span class="attr">weight:</span> <span class="number">50</span> <span class="comment"># 权重，范围 1-100</span>
+              <span class="attr">preference:</span>
+                <span class="attr">matchExpressions:</span>
+                  <span class="comment"># 表示node标签存在 disk-type=ssd 或 disk-type=sas</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">disk-type</span>
+                    <span class="attr">operator:</span> <span class="string">In</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">ssd</span>
+                      <span class="bullet">-</span> <span class="string">sas</span></code></pre>
+
+
+
+<p>执行资源清单并查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 运行资源清单，创建Deployment</span>
+$ kubectl apply -f node_affinity.yaml 
+deployment.apps/node-affinity-deploy created
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deployment -o wide
+NAME                   READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+node-affinity-deploy   5/5     5            5           6s    nginx        wangyanglinux/myapp:v1.0   app=myapp
+
+<span class="comment"># 查看 RS</span>
+$ kubectl get rs -o wide
+NAME                              DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES                     SELECTOR
+node-affinity-deploy-5498f54ffc   5         5         5       10s   nginx        wangyanglinux/myapp:v1.0   app=myapp,pod-template-hash=5498f54ffc
+
+<span class="comment"># 查看 Pod 详情</span>
+$ kubectl get pods -o wide
+NAME                                    READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+node-affinity-deploy-5498f54ffc-dcp9v   1/1     Running   0          13s   192.168.85.248   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-5498f54ffc-kkss7   1/1     Running   0          13s   192.168.85.250   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-5498f54ffc-nd6sb   1/1     Running   0          13s   192.168.85.247   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-5498f54ffc-p5x2t   1/1     Running   0          13s   192.168.85.249   k8s-node01   &lt;none&gt;           &lt;none&gt;
+node-affinity-deploy-5498f54ffc-r5pbd   1/1     Running   0          13s   192.168.85.246   k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>从资源清单可以看出，节点的硬亲和要求，k8s-node01 与 k8s-node02 都满足要求，节点的软亲和只有 k8s-node01 满足，所以 Pod 优先调度到 k8s-node01 节点上。</p>
+<h2 id="3-Pod-亲和性-反亲和性"><a href="#3-Pod-亲和性-反亲和性" class="headerlink" title="3. Pod 亲和性 &#x2F; 反亲和性"></a>3. Pod 亲和性 &#x2F; 反亲和性</h2><h3 id="3-1-相关概念"><a href="#3-1-相关概念" class="headerlink" title="3.1 相关概念"></a>3.1 相关概念</h3><p>与节点亲和性一样，当前有Pod亲和性&#x2F;反亲和性都有两种类型，称为 <code>requiredDuringSchedulingIgnoredDuringExecution</code> 和 <code>preferredDuringSchedulingIgnoredDuringExecution</code>，分别表示“硬”与“软”要求。对于硬要求，如果不满足则pod会一直处于Pending状态。</p>
+<p>Pod 的亲和性与反亲和性是基于 Node 节点上已经运行 pod 的标签(而不是节点上的标签)决定的，从而约束哪些节点适合调度你的 pod。</p>
+<p>规则的形式是：如果X已经运行了一个或多个符合规则Y的pod，则此pod应该在X中运行(如果是反亲和的情况下，则不应该在X中运行）。当然pod必须处在同一名称空间，不然亲和性&#x2F;反亲和性无作用。<strong>从概念上讲，X是一个拓扑域。我们可以使用topologyKey来表示它，topologyKey 的值是node节点标签的键以便系统用来表示这样的拓扑域。当然这里也有个隐藏条件，就是node节点标签的键值相同时，才是在同一拓扑域中；如果只是节点标签名相同，但是值不同，那么也不在同一拓扑域。</strong> </p>
+<p>也就是说：<strong>Pod的亲和性&#x2F;反亲和性调度是根据拓扑域来界定调度的，而不是根据node节点。</strong></p>
+<p><strong>注意事项</strong></p>
+<ul>
+<li>Pod 之间亲和性&#x2F;反亲和性需要大量的处理，这会明显降低大型集群中的调度速度。不建议在大于几百个节点的集群中使用它们。</li>
+<li>Pod 反亲和性要求对节点进行一致的标记。换句话说，集群中的每个节点都必须有一个匹配 topologyKey 的适当标签。如果某些或所有节点缺少指定的topologyKey 标签，可能会导致意外行为。</li>
+</ul>
+<p><code>requiredDuringSchedulingIgnoredDuringExecution</code> 中亲和性的一个示例是“将服务A和服务B的Pod放置在同一区域【拓扑域】中，因为它们之间有很多交流”； <code>preferredDuringSchedulingIgnoredDuringExecution</code> 中反亲和性的示例是“将此服务的 pod 跨区域【拓扑域】分布”【此时硬性要求是说不通的，因为你可能拥有的 pod 数多于区域数】。</p>
+<p>Pod 亲和性&#x2F;反亲和性语法支持以下运算符：<code>In</code>，<code>NotIn</code>，<code>Exists</code>，<code>DoesNotExist</code>。</p>
+<p><strong>原则上，topologyKey可以是任何合法的标签键。但是，出于性能和安全方面的原因，topologyKey有一些限制：</strong></p>
+<ol>
+<li>对于 Pod 亲和性，在 requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution 中 topologyKey 都不允许为空。</li>
+<li>对于 Pod 反亲和性，在 requiredDuringSchedulingIgnoredDuringExecution 和 preferredDuringSchedulingIgnoredDuringExecution 中 topologyKey 也都不允许为空。</li>
+<li>对于 requiredDuringSchedulingIgnoredDuringExecution 的 pod 反亲和性，引入了允许控制器 LimitPodHardAntiAffinityTopology 来限制 topologyKey 的kubernet.io&#x2F;hostname 。如果你想让它对自定义拓扑可用，你可以修改许可控制器，或者干脆禁用它。</li>
+<li>除上述情况外，topologyKey 可以是任何合法的标签键。</li>
+</ol>
+<p><strong>Pod 间亲和通过 PodSpec 中 affinity 字段下的 podAffinity 字段进行指定。而 pod 间反亲和通过 PodSpec 中 affinity 字段下的 podAntiAffinity 字段进行指定。</strong></p>
+<p><strong>Pod亲和性&#x2F;反亲和性的requiredDuringSchedulingIgnoredDuringExecution所关联的matchExpressions下有多个key列表，那么只有当所有key满足时，才能将pod调度到某个区域【针对Pod硬亲和】。</strong></p>
+<h3 id="3-2-pod亲和性与反亲和性示例"><a href="#3-2-pod亲和性与反亲和性示例" class="headerlink" title="3.2 pod亲和性与反亲和性示例"></a>3.2 pod亲和性与反亲和性示例</h3><p>为了更好的演示Pod亲和性与反亲和性，本次示例我们会将k8s-master节点也加入进来进行演示。</p>
+<h4 id="3-2-1-准备事项"><a href="#3-2-1-准备事项" class="headerlink" title="3.2.1 准备事项"></a>3.2.1 准备事项</h4><p>给 node 节点打 label 标签</p>
+<pre><code class="highlight bash"><span class="comment"># 删除已存在标签</span>
+kubectl label nodes k8s-node01 cpu-num-
+kubectl label nodes k8s-node01 disk-type-
+kubectl label nodes k8s-node02 cpu-num-
+kubectl label nodes k8s-node02 disk-type-
+
+
+<span class="comment">###  --overwrite覆盖已存在的标签信息</span>
+<span class="comment"># master节点 标签添加(master节点的名称叫做 node)</span>
+kubectl label nodes node busi-use=www --overwrite
+kubectl label nodes node disk-type=ssd --overwrite
+kubectl label nodes node busi-db=redis
+
+<span class="comment"># k8s-node01 标签添加</span>
+kubectl label nodes k8s-node01 busi-use=www
+kubectl label nodes k8s-node01 disk-type=sata
+kubectl label nodes k8s-node01 busi-db=redis
+
+<span class="comment"># k8s-node02 标签添加</span>
+kubectl label nodes k8s-node02 busi-use=www
+kubectl label nodes k8s-node02 disk-type=ssd
+kubectl label nodes k8s-node02 busi-db=etcd</code></pre>
+
+
+
+<p>查询所有节点标签信息</p>
+<pre><code class="highlight bash">$ kubectl get node -o wide --show-labels
+NAME         STATUS   ROLES           AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                      KERNEL-VERSION                CONTAINER-RUNTIME   LABELS
+k8s-node01   Ready    &lt;none&gt;          69d   v1.29.15   192.168.6.140   &lt;none&gt;        Rocky Linux 9.3 (Blue Onyx)   5.14.0-362.8.1.el9_3.x86_64   docker://28.0.4     beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,busi-db=redis,busi-use=www,disk-type=sata,kubernetes.io/arch=amd64,kubernetes.io/hostname=k8s-node01,kubernetes.io/os=linux
+k8s-node02   Ready    &lt;none&gt;          69d   v1.29.15   192.168.6.141   &lt;none&gt;        Rocky Linux 9.3 (Blue Onyx)   5.14.0-362.8.1.el9_3.x86_64   docker://28.0.4     beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,busi-db=etcd,busi-use=www,disk-type=ssd,kubernetes.io/arch=amd64,kubernetes.io/hostname=k8s-node02,kubernetes.io/os=linux
+node         Ready    control-plane   69d   v1.29.15   192.168.6.139   &lt;none&gt;        Rocky Linux 9.3 (Blue Onyx)   5.14.0-362.8.1.el9_3.x86_64   docker://28.0.4     beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,busi-db=redis,busi-use=www,disk-type=ssd,kubernetes.io/arch=amd64,kubernetes.io/hostname=k8s-master01,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=,node.kubernetes.io/exclude-from-external-load-balancers=</code></pre>
+
+<p>master 节点添加了 disk-type&#x3D;ssd, busi-db&#x3D;redis, busi-use&#x3D;www 标签<br>k8s-node01 添加了 disk-type&#x3D;sata, busi-db&#x3D;redis, busi-use&#x3D;www 标签<br>k8s-node02 添加了 disk-type&#x3D;ssd, busi-db&#x3D;etcd, busi-use&#x3D;www 标签</p>
+<p>通过 deployment 运行一个 pod，或者直接运行一个 pod 也可以。为后续的 Pod 亲和性与反亲和性测验做基础。</p>
+<p>演示Pod资源清单：<code>web_deploy.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">web-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">myweb-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp-web</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp-web</span>
+        <span class="attr">version:</span> <span class="string">v1</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></code></pre>
+
+
+
+<p>执行资源清单</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建Pod</span>
+$ kubectl apply -f web_deploy.yaml
+
+<span class="comment"># 获取Pod</span>
+$ kubectl get pod -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+web-deploy-7b868c54f5-x78hw   1/1     Running   0          17s   172.16.58.243   k8s-node02   &lt;none&gt;           &lt;none&gt;
+
+<span class="comment"># 查看 k8s-node02 节点标签</span>
+$ kubectl get node k8s-node02 -o wide --show-labels
+NAME         STATUS   ROLES    AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE                      KERNEL-VERSION                CONTAINER-RUNTIME   LABELS
+k8s-node02   Ready    &lt;none&gt;   69d   v1.29.15   192.168.6.141   &lt;none&gt;        Rocky Linux 9.3 (Blue Onyx)   5.14.0-362.8.1.el9_3.x86_64   docker://28.0.4     beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,busi-db=etcd,busi-use=www,disk-type=ssd,kubernetes.io/arch=amd64,kubernetes.io/hostname=k8s-node02,kubernetes.io/os=linux</code></pre>
+
+<p>当前 pod 在 k8s-node02 节点；其中 pod 的标签 app&#x3D;myapp-web,version&#x3D;v1 会在后面 pod 亲和性&#x2F;反亲和性示例中使用。</p>
+<h4 id="3-2-2-pod-硬亲和性示例"><a href="#3-2-2-pod-硬亲和性示例" class="headerlink" title="3.2.2 pod 硬亲和性示例"></a>3.2.2 pod 硬亲和性示例</h4><p>资源清单：<code>pod_required_affinity.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">pod-podaffinity-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">podaffinity-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">tolerations:</span> <span class="comment"># 配置容忍，允许运行到 Master 节点上</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">node-role.kubernetes.io/control-plane</span>
+          <span class="attr">effect:</span> <span class="string">NoSchedule</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">affinity:</span>
+        <span class="attr">podAffinity:</span>
+          <span class="attr">requiredDuringSchedulingIgnoredDuringExecution:</span>
+            <span class="comment"># 由于是Pod亲和性/反亲和性， 因此这里匹配规则写的是Pod的标签信息</span>
+            <span class="bullet">-</span> <span class="attr">labelSelector:</span>
+                <span class="attr">matchExpressions:</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">app</span>
+                    <span class="attr">operator:</span> <span class="string">In</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">myapp-web</span>
+              <span class="comment"># 拓扑域  若多个node节点具有相同的标签信息【标签键值相同】，则表示这些node节点就在同一拓扑域</span>
+              <span class="attr">topologyKey:</span> <span class="string">disk-type</span></code></pre>
+
+
+
+<p>执行资源清单</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建Pod</span>
+$ kubectl apply -f pod_required_affinity.yaml
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deploy 
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE
+pod-podaffinity-deploy   6/6     6            6           7s
+web-deploy               1/1     1            1           27m
+
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pod -o wide
+NAME                                      READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+pod-podaffinity-deploy-6b588d4649-2ztpj   1/1     Running   0          13s   172.16.167.133   node         &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6b588d4649-7pghc   1/1     Running   0          13s   172.16.58.208    k8s-node02   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6b588d4649-d68kl   1/1     Running   0          13s   172.16.167.131   node         &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6b588d4649-dpnzg   1/1     Running   0          13s   172.16.58.228    k8s-node02   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6b588d4649-qjbwn   1/1     Running   0          13s   172.16.58.251    k8s-node02   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6b588d4649-vcvhg   1/1     Running   0          13s   172.16.167.132   node         &lt;none&gt;           &lt;none&gt;
+web-deploy-7b868c54f5-x78hw               1/1     Running   0          27m   172.16.58.243    k8s-node02   &lt;none&gt;           &lt;none</code></pre>
+
+<p>yaml 文件中为 topologyKey: disk-type；虽然 k8s-master、k8s-node01、k8s-node02 都有 disk-type 标签；但是 k8s-master 和 k8s-node02 节点的 disk-type 标签值为 ssd；而 k8s-node01 节点的 disk-type 标签值为 sata。因此 k8s-master 和 k8s-node02 节点属于同一拓扑域，Pod 只会调度到这两个节点上。</p>
+<p>补充说明：因为 设置了 Pod 硬亲和，匹配运行了包含标签为 app: myapp-web 的 Pod 所在的 Node 节点（k8s-node02）,而 k8s-node02 节点 topologyKey disk-type 为 ssd，而 topologyKey 满足 disk-type&#x3D;ssd 的只有 master 节点和 k8s-node02.</p>
+<h4 id="3-2-3-pod-软亲和性示例"><a href="#3-2-3-pod-软亲和性示例" class="headerlink" title="3.2.3 pod 软亲和性示例"></a>3.2.3 pod 软亲和性示例</h4><p>资源清单：<code>pod_preferred_affinity.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">pod-podaffinity-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">podaffinity-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">tolerations:</span> <span class="comment"># 配置容忍，允许运行到 Master 节点上</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">node-role.kubernetes.io/control-plane</span>
+          <span class="attr">effect:</span> <span class="string">NoSchedule</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">affinity:</span>
+        <span class="attr">podAffinity:</span>
+          <span class="attr">preferredDuringSchedulingIgnoredDuringExecution:</span>
+            <span class="bullet">-</span> <span class="attr">weight:</span> <span class="number">100</span> <span class="comment"># 权重（1-100）</span>
+              <span class="attr">podAffinityTerm:</span>
+                <span class="comment"># 由于是Pod亲和性/反亲和性，因此这里匹配规则写的是Pod的标签信息</span>
+                <span class="attr">labelSelector:</span>
+                    <span class="attr">matchExpressions:</span>
+                      <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">version</span>
+                        <span class="attr">operator:</span> <span class="string">In</span>
+                        <span class="attr">values:</span>
+                          <span class="bullet">-</span> <span class="string">v1</span>
+                          <span class="bullet">-</span> <span class="string">v2</span>
+                <span class="comment"># 拓扑域  若多个node节点具有相同的标签信息【标签键值相同】，则表示这些node节点就在同一拓扑域</span>
+                <span class="attr">topologyKey:</span> <span class="string">disk-type</span></code></pre>
+
+
+
+<p>运行yaml文件并查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 运行资源清单，创建deploy 和 Pod</span>
+$ kubectl apply -f pod_preferred_affinity.yaml
+
+<span class="comment"># 查看deploy</span>
+$ kubectl get deploy -o wide
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+pod-podaffinity-deploy   6/6     6            6           17s   myapp-pod    wangyanglinux/myapp:v1.0   app=myapp
+web-deploy               1/1     1            1           13h   myapp-pod    wangyanglinux/myapp:v1.0   app=myapp-web
+
+<span class="comment"># 查看 Pod </span>
+$ kubectl get pods -o wide
+NAME                                      READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+pod-podaffinity-deploy-6d486b88bf-2lx4m   1/1     Running   0          5s    172.16.167.138   node         &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6d486b88bf-4n258   1/1     Running   0          5s    172.16.167.137   node         &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6d486b88bf-7xn7w   1/1     Running   0          5s    172.16.58.235    k8s-node02   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6d486b88bf-8f647   1/1     Running   0          5s    172.16.167.139   node         &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6d486b88bf-92w5r   1/1     Running   0          5s    172.16.58.219    k8s-node02   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-6d486b88bf-nhnzk   1/1     Running   0          5s    172.16.58.238    k8s-node02   &lt;none&gt;           &lt;none&gt;
+web-deploy-7b868c54f5-x78hw               1/1     Running   0          13h   172.16.58.243    k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>根据节点的标签信息，可以得出 Pod 会优先调度到 k8s-node2 和 master 节点上。</p>
+<h4 id="3-2-4-pod-硬反亲和性示例"><a href="#3-2-4-pod-硬反亲和性示例" class="headerlink" title="3.2.4 pod 硬反亲和性示例"></a>3.2.4 pod 硬反亲和性示例</h4><p>资源清单：<code>pod_required_AntiAffinity.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">pod-podantiaffinity-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">podantiaffinity-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">tolerations:</span> <span class="comment"># 配置容忍，允许运行到 Master 节点上</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">node-role.kubernetes.io/control-plane</span>
+          <span class="attr">effect:</span> <span class="string">NoSchedule</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">affinity:</span>
+        <span class="attr">podAntiAffinity:</span>
+          <span class="attr">requiredDuringSchedulingIgnoredDuringExecution:</span>
+            <span class="comment"># 由于是Pod亲和性/反亲和性， 因此这里匹配规则写的是Pod的标签信息</span>
+            <span class="bullet">-</span> <span class="attr">labelSelector:</span>
+                <span class="attr">matchExpressions:</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">app</span>
+                    <span class="attr">operator:</span> <span class="string">In</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">myapp-web</span>
+              <span class="comment"># 拓扑域  若多个node节点具有相同的标签信息【标签键值相同】，则表示这些node节点就在同一拓扑域</span>
+              <span class="attr">topologyKey:</span> <span class="string">disk-type</span></code></pre>
+
+
+
+<p>运行yaml文件并查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建Deployment 和 Pod</span>
+$ kubectl apply -f pod_required_AntiAffinity.yaml
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deploy -o wide
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+pod-podantiaffinity-deploy   6/6     6            6           8s    myapp-pod    wangyanglinux/myapp:v1.0   app=myapp
+web-deploy                   1/1     1            1           13h   myapp-pod    wangyanglinux/myapp:v1.0   app=myapp-web
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pods -o wide
+NAME                                          READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+pod-podantiaffinity-deploy-54b4fd688f-2jb2x   1/1     Running   0          14s   172.16.85.216   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podantiaffinity-deploy-54b4fd688f-2lppr   1/1     Running   0          14s   172.16.85.213   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podantiaffinity-deploy-54b4fd688f-hmwqp   1/1     Running   0          14s   172.16.85.218   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podantiaffinity-deploy-54b4fd688f-qgt95   1/1     Running   0          14s   172.16.85.217   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podantiaffinity-deploy-54b4fd688f-tprg4   1/1     Running   0          14s   172.16.85.215   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podantiaffinity-deploy-54b4fd688f-xz2gt   1/1     Running   0          14s   172.16.85.212   k8s-node01   &lt;none&gt;           &lt;none&gt;
+web-deploy-7b868c54f5-x78hw                   1/1     Running   0          13h   172.16.58.243   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>调度说明：由于设置了 Pod 反亲和性的硬策略（必须执行），不允许 Pod 调度到已运行了包含标签为 <code>app: myapp-web</code> 的pod所在的节点，以及相同 topologyKey 的其它节点，限制了 topoloyKey key 为 disk-type 。</p>
+<p>运行 <code>app: myapp-web</code> 的Pod 在 k8s-node02 节点上，该节点 topologyKey disk-type&#x3D;ssd，与之相同的节点是 master 节点，由于设置了反亲和性，所以 资源清单运行的 Pod 不会运行在 master 节点和 k8s-node02 节点上，因此产生的Pod只能运行到 k8s-node01 节点上。</p>
+<h4 id="3-2-5-pod-软反亲和性示例"><a href="#3-2-5-pod-软反亲和性示例" class="headerlink" title="3.2.5 pod 软反亲和性示例"></a>3.2.5 pod 软反亲和性示例</h4><p>资源清单：<code>pod_preferred_AntiAffinity.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">pod-podantiaffinity-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">podantiaffinity-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">tolerations:</span> <span class="comment"># 配置容忍，允许运行到 Master 节点上</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">node-role.kubernetes.io/control-plane</span>
+          <span class="attr">effect:</span> <span class="string">NoSchedule</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">affinity:</span>
+        <span class="attr">podAntiAffinity:</span> <span class="comment"># Pod 反亲和性</span>
+          <span class="attr">preferredDuringSchedulingIgnoredDuringExecution:</span> <span class="comment"># 软策略</span>
+            <span class="bullet">-</span> <span class="attr">weight:</span> <span class="number">100</span> <span class="comment"># 权重（1-100）</span>
+              <span class="attr">podAffinityTerm:</span>
+                <span class="comment"># 由于是Pod亲和性/反亲和性，因此这里匹配规则写的是Pod的标签信息</span>
+                <span class="attr">labelSelector:</span>
+                  <span class="attr">matchExpressions:</span>
+                    <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">version</span>
+                      <span class="attr">operator:</span> <span class="string">In</span>
+                      <span class="attr">values:</span>
+                        <span class="bullet">-</span> <span class="string">v1</span>
+                        <span class="bullet">-</span> <span class="string">v2</span>
+                  <span class="comment"># 拓扑域  若多个node节点具有相同的标签信息【标签键值相同】，则表示这些node节点就在同一拓扑域</span>
+                <span class="attr">topologyKey:</span> <span class="string">disk-type</span></code></pre>
+
+
+
+<p>运行yaml文件并查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建 Pod</span>
+$ kubectl apply -f pod_preferred_AntiAffinity.yaml
+
+<span class="comment"># 查看Pod详情</span>
+$ kubectl get pods -o wide
+NAME                                      READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+pod-podaffinity-deploy-67b85c69b9-74s92   1/1     Running   0          6s    172.16.85.228   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-67b85c69b9-kzdkj   1/1     Running   0          6s    172.16.85.220   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-67b85c69b9-mlnzf   1/1     Running   0          6s    172.16.85.222   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-67b85c69b9-n7c4k   1/1     Running   0          6s    172.16.85.221   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-67b85c69b9-r6ps6   1/1     Running   0          6s    172.16.85.223   k8s-node01   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-deploy-67b85c69b9-wwfld   1/1     Running   0          6s    172.16.85.219   k8s-node01   &lt;none&gt;           &lt;none&gt;
+web-deploy-7b868c54f5-x78hw               1/1     Running   0          14h   172.16.58.243   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>由于是Pod反亲和测验，再根据 master、k8s-node01、k8s-node02的标签信息；很容易推断出 Pod 会优先调度到 k8s-node01 节点。</p>
+<h4 id="3-2-6-pod-亲和性与反亲和性联合示例"><a href="#3-2-6-pod-亲和性与反亲和性联合示例" class="headerlink" title="3.2.6 pod 亲和性与反亲和性联合示例"></a>3.2.6 pod 亲和性与反亲和性联合示例</h4><p>资源清单：<code>pod_podAffinity_all.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">pod-podaffinity-all-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">podaffinity-all-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">tolerations:</span> <span class="comment"># 配置容忍，允许运行到 Master 节点上</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">node-role.kubernetes.io/control-plane</span>
+          <span class="attr">effect:</span> <span class="string">NoSchedule</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">affinity:</span>
+        <span class="attr">podAffinity:</span> <span class="comment"># Pod亲和性</span>
+          <span class="attr">requiredDuringSchedulingIgnoredDuringExecution:</span> <span class="comment"># 硬策略</span>
+            <span class="comment"># 由于是Pod亲和性/反亲和性， 因此这里匹配规则写的是Pod的标签信息</span>
+            <span class="bullet">-</span> <span class="attr">labelSelector:</span>
+                <span class="attr">matchExpressions:</span>
+                  <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">app</span>
+                    <span class="attr">operator:</span> <span class="string">In</span>
+                    <span class="attr">values:</span>
+                      <span class="bullet">-</span> <span class="string">myapp-web</span>
+              <span class="comment"># 拓扑域  若多个node节点具有相同的标签信息【标签键值相同】，则表示这些node节点就在同一拓扑域</span>
+              <span class="attr">topologyKey:</span> <span class="string">disk-type</span>
+        <span class="attr">podAntiAffinity:</span> <span class="comment"># Pod反亲和性</span>
+          <span class="attr">preferredDuringSchedulingIgnoredDuringExecution:</span> <span class="comment"># 软策略</span>
+            <span class="bullet">-</span> <span class="attr">weight:</span> <span class="number">100</span>
+              <span class="attr">podAffinityTerm:</span>
+                <span class="attr">labelSelector:</span>
+                  <span class="attr">matchExpressions:</span>
+                    <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">version</span>
+                      <span class="attr">operator:</span> <span class="string">In</span>
+                      <span class="attr">values:</span>
+                        <span class="bullet">-</span> <span class="string">v1</span>
+                        <span class="bullet">-</span> <span class="string">v2</span>
+                <span class="attr">topologyKey:</span> <span class="string">disk-type</span></code></pre>
+
+
+
+<p>运行yaml文件并查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建 Deployment 和 Pod</span>
+$ kubectl apply -f pod_podAffinity_all.yaml
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deploy -o wide
+NAME                         READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+pod-podaffinity-all-deploy   6/6     6            6           6s    myapp-pod    wangyanglinux/myapp:v1.0   app=myapp
+web-deploy                   1/1     1            1           14h   myapp-pod    wangyanglinux/myapp:v1.0   app=myapp-web
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pods -o wide
+NAME                                          READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+pod-podaffinity-all-deploy-6d9d4f8fd4-5knr4   1/1     Running   0          11s   172.16.58.233    k8s-node02   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-all-deploy-6d9d4f8fd4-9hw46   1/1     Running   0          11s   172.16.167.142   node         &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-all-deploy-6d9d4f8fd4-csprs   1/1     Running   0          11s   172.16.167.141   node         &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-all-deploy-6d9d4f8fd4-md5f2   1/1     Running   0          11s   172.16.58.222    k8s-node02   &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-all-deploy-6d9d4f8fd4-rlm76   1/1     Running   0          11s   172.16.167.140   node         &lt;none&gt;           &lt;none&gt;
+pod-podaffinity-all-deploy-6d9d4f8fd4-vcmv7   1/1     Running   0          11s   172.16.58.253    k8s-node02   &lt;none&gt;           &lt;none&gt;
+web-deploy-7b868c54f5-x78hw                   1/1     Running   0          14h   172.16.58.243    k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>调度解析：在这个示例中，Pod 的亲和性和 Pod 的反亲和性是冲突的，因为他们指向的节点都是 k8s-node02, 但是由于Pod 亲和性采用的是硬策略，优先级更高，因此最终产生的 Pod 会调度在 k8s-node02 节点和 master 节点上。</p>
+<h1 id="三、污点与容忍"><a href="#三、污点与容忍" class="headerlink" title="三、污点与容忍"></a>三、污点与容忍</h1><h2 id="1-概述-1"><a href="#1-概述-1" class="headerlink" title="1. 概述"></a>1. 概述</h2><p>节点和 Pod 亲和力，是将 Pod 吸引到一组节点【根据拓扑域】（作为优选或硬性要求）。污点（Taints）则相反，它们允许一个节点排斥一组 Pod。</p>
+<p>容忍（Tolerations）应用于 pod，允许（但不强制要求）pod 调度到具有匹配污点的节点上。</p>
+<p>污点（Taints）和容忍（Tolerations）共同作用，确保 pods 不会被调度到不适当的节点。一个或多个污点应用于节点；这标志着该节点不应该接受任何不容忍污点的 Pod 。</p>
+<p>说明：我们在平常使用中发现pod不会调度到k8s的master节点，就是因为master节点存在污点。</p>
+<h2 id="2-Taints-污点"><a href="#2-Taints-污点" class="headerlink" title="2. Taints 污点"></a>2. Taints 污点</h2><p>使用 kubectl taint 命令可以给某个 Node 节点设置污点，Node 被设置污点之后就和 Pod 之间存在一种相斥的关系，可以让 Node 拒绝Pod的调度执行，甚至将Node 上已经存在的 Pod 驱逐出去。</p>
+<p>每个污点的组成如下：</p>
+<pre><code class="highlight bash">key=value:effect</code></pre>
+
+<p>每个污点有一个 key 和 value 作为污点的标签，effect描述污点的作用。当前 taint effect 支持如下选项：</p>
+<ul>
+<li>NoSchedule：表示 K8S 将不会把 Pod 调度到具有该污点的 Node 节点上</li>
+<li>PreferNoSchedule：表示 K8S 将尽量避免把 Pod 调度到具有该污点的 Node 节点上</li>
+<li>NoExecute：表示 K8S 将不会把 Pod 调度到具有该污点的 Node 节点上，同时会将 Node 上已经存在的 Pod 驱逐出去</li>
+</ul>
+<h3 id="2-1-污点taint的NoExecute详解"><a href="#2-1-污点taint的NoExecute详解" class="headerlink" title="2.1 污点taint的NoExecute详解"></a>2.1 污点taint的NoExecute详解</h3><p>taint 的 effect 值 NoExecute，它会影响已经在节点上运行的 pod：</p>
+<ul>
+<li>如果 pod 不能容忍 effect 值为 NoExecute 的 taint，那么 pod 将马上被驱逐</li>
+<li>如果 pod 能够容忍 effect 值为 NoExecute 的 taint，且在 toleration 定义中没有指定 tolerationSeconds，则 pod 会一直在这个节点上运行。</li>
+<li>如果 pod 能够容忍 effect 值为 NoExecute 的 taint，但是在toleration定义中指定了 tolerationSeconds，则表示 pod 还能在这个节点上继续运行的时间长度。</li>
+</ul>
+<h3 id="2-2-Taints污点设置"><a href="#2-2-Taints污点设置" class="headerlink" title="2.2 Taints污点设置"></a>2.2 Taints污点设置</h3><h4 id="2-2-1-污点（Taints）查看"><a href="#2-2-1-污点（Taints）查看" class="headerlink" title="2.2.1 污点（Taints）查看"></a>2.2.1 污点（Taints）查看</h4><pre><code class="highlight bash"><span class="comment"># 查看 master 节点的污点（master 节点的名称也叫node）</span>
+$ kubectl describe node node</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/06/20250606-113704.png" alt="查看master节点的污点"></p>
+<p>查看 k8s-node01 节点的污点</p>
+<pre><code class="highlight bash">$ kubectl describe node k8s-node01</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/06/20250606-113844.png" alt="查看 k8s-node01 节点的污点"></p>
+<h4 id="2-2-2-污点（Taints）添加"><a href="#2-2-2-污点（Taints）添加" class="headerlink" title="2.2.2 污点（Taints）添加"></a>2.2.2 污点（Taints）添加</h4><pre><code class="highlight bash"><span class="comment"># 给 k8s-node01 设置污点</span>
+$ kubectl taint node k8s-node01 check=george:NoSchedule
+node/k8s-node01 tainted
+
+<span class="comment"># 查看 k8s-node01 节点设置的污点</span>
+$ kubectl describe node k8s-node01
+Name:               k8s-node01
+Roles:              &lt;none&gt;
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    busi-db=redis
+                    busi-use=www
+                    disk-type=sata
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=k8s-node01
+                    kubernetes.io/os=linux
+Annotations:        kubeadm.alpha.kubernetes.io/cri-socket: unix:///var/run/cri-dockerd.sock
+                    node.alpha.kubernetes.io/ttl: 0
+                    projectcalico.org/IPv4Address: 192.168.6.140/24
+                    projectcalico.org/IPv4IPIPTunnelAddr: 172.16.85.192
+                    volumes.kubernetes.io/controller-managed-attach-detach: <span class="literal">true</span>
+CreationTimestamp:  Fri, 28 Mar 2025 17:31:29 +0800
+Taints:             check=george:NoSchedule <span class="comment"># 已设置污点</span>
+Unschedulable:      <span class="literal">false</span></code></pre>
+
+<p>在 k8s-node01 节点添加了一个污点（taint），污点的 key 为 check，value 为 george，污点 effec 为 NoSchedule。这意味着没有 pod 可以调度到 k8s-node01 节点，除非具有相匹配的容忍。</p>
+<h4 id="2-2-3-污点（Taints）删除"><a href="#2-2-3-污点（Taints）删除" class="headerlink" title="2.2.3 污点（Taints）删除"></a>2.2.3 污点（Taints）删除</h4><pre><code class="highlight bash"><span class="comment"># 污点删除：方式一</span>
+$ kubectl taint nodes k8s-node01 check:NoSchedule-
+node/k8s-node01 untainted
+
+<span class="comment"># 污点删除：方式二</span>
+$ kubectl taint nodes k8s-node01 check=george:NoSchedule-
+
+<span class="comment"># 查看 k8s-node01 污点</span>
+$ kubectl describe node k8s-node01
+Name:               k8s-node01
+Roles:              &lt;none&gt;
+Labels:             beta.kubernetes.io/arch=amd64
+                    beta.kubernetes.io/os=linux
+                    busi-db=redis
+                    busi-use=www
+                    disk-type=sata
+                    kubernetes.io/arch=amd64
+                    kubernetes.io/hostname=k8s-node01
+                    kubernetes.io/os=linux
+Annotations:        kubeadm.alpha.kubernetes.io/cri-socket: unix:///var/run/cri-dockerd.sock
+                    node.alpha.kubernetes.io/ttl: 0
+                    projectcalico.org/IPv4Address: 192.168.6.140/24
+                    projectcalico.org/IPv4IPIPTunnelAddr: 172.16.85.192
+                    volumes.kubernetes.io/controller-managed-attach-detach: <span class="literal">true</span>
+CreationTimestamp:  Fri, 28 Mar 2025 17:31:29 +0800
+Taints:             &lt;none&gt; <span class="comment"># 污点已删除</span>
+Unschedulable:      <span class="literal">false</span></code></pre>
+
+
+
+
+
+<h2 id="3-Tolerations-容忍"><a href="#3-Tolerations-容忍" class="headerlink" title="3. Tolerations 容忍"></a>3. Tolerations 容忍</h2><p>设置了污点的 Node 将根据 taint 的 effect：NoSchedule、PreferNoSchedule、NoExecute 和 Pod 之间产生互斥的关系，Pod 将在一定程度上不会被调度到 Node上。</p>
+<p>但我们可以在 Pod 上设置容忍（Tolerations），意思是设置了容忍的 Pod 将可以容忍污点的存在，可以被调度到存在污点的 Node 上。</p>
+<h3 id="3-1-容忍设置示例"><a href="#3-1-容忍设置示例" class="headerlink" title="3.1 容忍设置示例"></a>3.1 容忍设置示例</h3><p><strong>pod.spec.tolerations示例</strong></p>
+<pre><code class="highlight yaml"><span class="attr">tolerations:</span>
+<span class="bullet">-</span> <span class="attr">key:</span> <span class="string">&quot;key&quot;</span>
+  <span class="attr">operator:</span> <span class="string">&quot;Equal&quot;</span>
+  <span class="attr">value:</span> <span class="string">&quot;value&quot;</span>
+  <span class="attr">effect:</span> <span class="string">&quot;NoSchedule&quot;</span>
+<span class="meta">---</span>
+<span class="attr">tolerations:</span>
+<span class="bullet">-</span> <span class="attr">key:</span> <span class="string">&quot;key&quot;</span>
+  <span class="attr">operator:</span> <span class="string">&quot;Exists&quot;</span>
+  <span class="attr">effect:</span> <span class="string">&quot;NoSchedule&quot;</span>
+<span class="meta">---</span>
+<span class="attr">tolerations:</span>
+<span class="bullet">-</span> <span class="attr">key:</span> <span class="string">&quot;key&quot;</span>
+  <span class="attr">operator:</span> <span class="string">&quot;Equal&quot;</span>
+  <span class="attr">value:</span> <span class="string">&quot;value&quot;</span>
+  <span class="attr">effect:</span> <span class="string">&quot;NoExecute&quot;</span>
+  <span class="attr">tolerationSeconds:</span> <span class="number">3600</span></code></pre>
+
+
+
+<p><strong>重要说明：</strong></p>
+<ul>
+<li>其中 key、value、effect 要与 Node 上设置的 taint 保持一致</li>
+<li>operator 的值为 Exists 时，将会忽略 value；只要有 key 和 effect 就行</li>
+<li>tolerationSeconds：表示 pod 能够容忍 effect 值为 NoExecute 的 taint；当指定了 tolerationSeconds【容忍时间】，则表示 pod 还能在这个节点上继续运行的时间长度。</li>
+</ul>
+<h3 id="3-2-当不指定key值时"><a href="#3-2-当不指定key值时" class="headerlink" title="3.2 当不指定key值时"></a>3.2 当不指定key值时</h3><p>当不指定 key 值和 effect 值时，且 operator 为 Exists，表示容忍所有的污点【能匹配污点所有的 keys，values 和 effects】</p>
+<pre><code class="highlight yaml"><span class="attr">tolerations:</span>
+<span class="bullet">-</span> <span class="attr">operator:</span> <span class="string">&quot;Exists&quot;</span></code></pre>
+
+
+
+<h3 id="3-3-当不指定effect值时"><a href="#3-3-当不指定effect值时" class="headerlink" title="3.3 当不指定effect值时"></a>3.3 当不指定effect值时</h3><p>当不指定 effect 值时，则能匹配污点 key 对应的所有 effects 情况</p>
+<pre><code class="highlight yaml"><span class="attr">tolerations:</span>
+<span class="bullet">-</span> <span class="attr">key:</span> <span class="string">&quot;key&quot;</span>
+  <span class="attr">operator:</span> <span class="string">&quot;Exists&quot;</span></code></pre>
+
+
+
+<h3 id="3-4-当有多个Master存在时"><a href="#3-4-当有多个Master存在时" class="headerlink" title="3.4 当有多个Master存在时"></a>3.4 当有多个Master存在时</h3><p>当有多个Master存在时，为了防止资源浪费，可以进行如下设置：</p>
+<pre><code class="highlight bash">kubectl taint nodes Node-name node-role.kubernetes.io/control-plane=:PreferNoSchedule</code></pre>
+
+
+
+
+
+<h2 id="4-多个-Taints-污点和多个-Tolerations-容忍怎么判断"><a href="#4-多个-Taints-污点和多个-Tolerations-容忍怎么判断" class="headerlink" title="4. 多个 Taints 污点和多个 Tolerations 容忍怎么判断"></a>4. 多个 Taints 污点和多个 Tolerations 容忍怎么判断</h2><p>可以在同一个 node 节点上设置多个污点（Taints），在同一个 pod 上设置多个容忍（Tolerations）。Kubernetes 处理多个污点和容忍的方式就像一个过滤器：从节点的所有污点开始，然后忽略可以被 Pod 容忍匹配的污点；保留其余不可忽略的污点，污点的 effect 对 Pod 具有显示效果：特别是：</p>
+<ul>
+<li>如果有至少一个不可忽略污点，effect 为 NoSchedule，那么 Kubernetes 将不调度 Pod 到该节点</li>
+<li>如果没有 effect 为 NoSchedule 的不可忽视污点，但有至少一个不可忽视污点，effect 为 PreferNoSchedule，那么 Kubernetes 将尽量不调度 Pod 到该节点</li>
+<li>如果有至少一个不可忽视污点，effect 为 NoExecute，那么 Pod 将被从该节点驱逐（如果 Pod 已经在该节点运行），并且不会被调度到该节点（如果 Pod 还未在该节点运行）</li>
+</ul>
+<h2 id="5-污点和容忍示例"><a href="#5-污点和容忍示例" class="headerlink" title="5. 污点和容忍示例"></a>5. 污点和容忍示例</h2><h3 id="5-1-Node-污点为-NoExecute-的示例"><a href="#5-1-Node-污点为-NoExecute-的示例" class="headerlink" title="5.1 Node 污点为 NoExecute 的示例"></a>5.1 Node 污点为 NoExecute 的示例</h3><p><em>目标：测试给节点添加 effect 为 NoExecute 的污点，是否会驱逐已经运行的 Pod。</em></p>
+<p>注意：在开始测试实验前，将节点添加的污点清除。</p>
+<p><strong>初始状态下</strong></p>
+<ul>
+<li>master 节点污点为：node-role.kubernetes.io&#x2F;control-plane:NoSchedule</li>
+<li>k8s-node01 节点污点为空</li>
+<li>k8s-node02 节点污点为空</li>
+</ul>
+<p><strong>查看污点</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看 master 节点的污点设置</span>
+$ kubectl describe node node | grep <span class="string">&#x27;Taints&#x27;</span> -A 5
+
+<span class="comment"># 查看 k8s-node01 节点的污点设置</span>
+$ kubectl describe node k8s-node01 | grep <span class="string">&#x27;Taints&#x27;</span> -A 5
+
+<span class="comment"># 查看 k8s-node02 节点的污点设置</span>
+$ kubectl describe node k8s-node02 | grep <span class="string">&#x27;Taints&#x27;</span> -A 5</code></pre>
+
+<p>除了 master 默认的污点，在 k8s-node01、k8s-node02 无污点。</p>
+<p><strong>污点为NoExecute示例</strong></p>
+<p>资源清单：<code>noexecute_tolerations.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">noexec-tolerations-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">noexectolerations-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></code></pre>
+
+
+
+<p>执行资源清单</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建 Pod</span>
+$ kubectl apply -f noexecute_tolerations.yaml
+
+<span class="comment"># 查看 Pod 运行详情</span>
+$ kubectl get pods -o wide
+NAME                                         READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+noexec-tolerations-deploy-75dbf9dcdc-4vd9c   1/1     Running   0          46s   172.16.58.224   k8s-node02   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-76k76   1/1     Running   0          46s   172.16.85.227   k8s-node01   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-nm7xd   1/1     Running   0          46s   172.16.58.196   k8s-node02   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-pp2f7   1/1     Running   0          46s   172.16.85.230   k8s-node01   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-x92bz   1/1     Running   0          46s   172.16.85.225   k8s-node01   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-xfc25   1/1     Running   0          46s   172.16.58.211   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>此时 k8s-node01 与 k8s-node02 节点没有设置 taint，资源清单也没有添加 tolerations ，此时 Pod 在这两个节点上均匀的分布。</p>
+<p><strong>给 k8s-node02 节点添加 effect 为 NoExecute 的污点</strong></p>
+<pre><code class="highlight bash">$ kubectl taint nodes k8s-node02 check-mem=memdb:NoExecute</code></pre>
+
+<p>此时再查看集群中节点的污点设置情况如下：</p>
+<ul>
+<li>master 节点污点为：node-role.kubernetes.io&#x2F;control-plane:NoSchedule</li>
+<li>k8s-node01 节点污点为空</li>
+<li>k8s-node02 节点污点：check-mem&#x3D;memdb:NoExecute</li>
+</ul>
+<p><strong>再次查看Pod分布</strong></p>
+<pre><code class="highlight bash">$ kubectl get pods -o wide
+NAME                                         READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+noexec-tolerations-deploy-75dbf9dcdc-76k76   1/1     Running   0          13m   172.16.85.227   k8s-node01   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-ctj5q   1/1     Running   0          83s   172.16.85.234   k8s-node01   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-pp2f7   1/1     Running   0          13m   172.16.85.230   k8s-node01   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-qpsxh   1/1     Running   0          83s   172.16.85.226   k8s-node01   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-x92bz   1/1     Running   0          13m   172.16.85.225   k8s-node01   &lt;none&gt;           &lt;none&gt;
+noexec-tolerations-deploy-75dbf9dcdc-z72r2   1/1     Running   0          83s   172.16.85.232   k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>所有 Pod 都已转移到 k8s-node01 节点上了，原本运行在 k8s-node02 节点上的 Pod 都被驱逐。</p>
+<h3 id="5-2-Pod-没有容忍时（Tolerations）"><a href="#5-2-Pod-没有容忍时（Tolerations）" class="headerlink" title="5.2 Pod 没有容忍时（Tolerations）"></a>5.2 Pod 没有容忍时（Tolerations）</h3><p>目标：测试在节点设置了污点，且 Pod 没有设置容忍时，观察 k8s 对 Pod 的调度情况</p>
+<p>注意：在实验前，将之前给节点添加的污点删除，避免对后面的实验产生影响。</p>
+<p><strong>给节点设置污点</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 删除 node02 污点</span>
+$ kubectl taint nodes k8s-node02 check-mem:NoExecute-
+
+<span class="comment"># 给 node01 设置污点</span>
+$ kubectl taint nodes k8s-node01 check-nginx=web:PreferNoSchedule
+
+<span class="comment"># 给 node02 设置污点</span>
+$ kubectl taint nodes k8s-node02 check-nginx=web:NoSchedule</code></pre>
+
+
+
+<p><strong>当前集群节点的污点设置情况</strong></p>
+<ul>
+<li>master 节点污点为：node-role.kubernetes.io&#x2F;control-plane:NoSchedule</li>
+<li>k8s-node01 节点污点为：check-nginx&#x3D;web:PreferNoSchedule</li>
+<li>k8s-node02 节点污点为：check-nginx&#x3D;web:NoSchedule</li>
+</ul>
+<p><strong>资源清单</strong></p>
+<p><code>no_tolerations.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="literal">no</span><span class="string">-tolerations-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">notolerations-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span></code></pre>
+
+
+
+<p>执行资源清单</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建 Pod</span>
+$ kubectl apply -f no_tolerations.yaml
+
+<span class="comment"># 查看 Pod 详情</span>
+$ kubectl get pods -o wide
+NAME                                     READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+no-tolerations-deploy-75dbf9dcdc-2242k   1/1     Running   0          6s    172.16.85.236   k8s-node01   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-75dbf9dcdc-5q5sd   1/1     Running   0          6s    172.16.85.240   k8s-node01   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-75dbf9dcdc-b2ztm   1/1     Running   0          6s    172.16.85.239   k8s-node01   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-75dbf9dcdc-crnp9   1/1     Running   0          6s    172.16.85.235   k8s-node01   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-75dbf9dcdc-ktcz6   1/1     Running   0          6s    172.16.85.237   k8s-node01   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-75dbf9dcdc-xjr5f   1/1     Running   0          6s    172.16.85.233   k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>因为 k8s-node02 节点的污点 check-nginx 的 effect 为 NoSchedule，说明 pod 不能被调度到该节点。此时 k8s-node01 节点的污点 check-nginx 的 effect 为PreferNoSchedule【尽量不调度到该节点】；但只有该节点满足调度条件，因此都调度到了 k8s-node01 节点。</p>
+<h3 id="5-3-Pod-单个容忍时（Tolerations）"><a href="#5-3-Pod-单个容忍时（Tolerations）" class="headerlink" title="5.3 Pod 单个容忍时（Tolerations）"></a>5.3 Pod 单个容忍时（Tolerations）</h3><p>目标：测试在节点设置了污点，给 Pod 设置一个容忍时，观察 k8s 对 Pod 的调度情况</p>
+<p>注意：在实验前，将之前给节点添加的污点删除，避免对后面的实验产生影响。</p>
+<p><strong>给节点设置污点</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 给 node01 设置污点</span>
+$ kubectl taint nodes k8s-node01 check-nginx=web:PreferNoSchedule
+
+<span class="comment"># 给 node02 设置污点</span>
+$ kubectl taint nodes k8s-node02 check-nginx=web:NoSchedule</code></pre>
+
+
+
+<p><strong>当前集群节点的污点设置情况</strong></p>
+<ul>
+<li>master 节点污点为：node-role.kubernetes.io&#x2F;control-plane:NoSchedule</li>
+<li>k8s-node01 节点污点为：check-nginx&#x3D;web:PreferNoSchedule</li>
+<li>k8s-node02 节点污点为：check-nginx&#x3D;web:NoSchedule</li>
+</ul>
+<p><strong>单个容忍的示例</strong></p>
+<p>资源清单：<code>one_tolerations.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">one-tolerations-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">onetolerations-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">30</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">tolerations:</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">&quot;check-nginx&quot;</span>
+          <span class="attr">operator:</span> <span class="string">&quot;Equal&quot;</span>
+          <span class="attr">value:</span> <span class="string">&quot;web&quot;</span>
+          <span class="attr">effect:</span> <span class="string">&quot;NoSchedule&quot;</span></code></pre>
+
+
+
+<p>执行资源清单</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建 Pod</span>
+$ kubectl apply -f one_tolerations.yaml
+
+<span class="comment"># 查看 Pod 调度详情</span>
+$ kubectl get pods -o wide
+NAME                                    READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+no-tolerations-deploy-6675cffc9-ccz55   1/1     Running   0          6s    172.16.58.226   k8s-node02   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-6675cffc9-ff5m4   1/1     Running   0          6s    172.16.58.214   k8s-node02   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-6675cffc9-mg99m   1/1     Running   0          6s    172.16.58.248   k8s-node02   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-6675cffc9-pdqvh   1/1     Running   0          6s    172.16.58.242   k8s-node02   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-6675cffc9-s8bxh   1/1     Running   0          6s    172.16.58.217   k8s-node02   &lt;none&gt;           &lt;none&gt;
+no-tolerations-deploy-6675cffc9-zjzkl   1/1     Running   0          6s    172.16.58.221   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>由于给 Pod 添加了容忍（针对 node02 节点），因此 Pod 可以运行到 k8s-node02 节点上。但是没有运行到 k8s-node01 节点上，这是由于 node01 节点的 污点 effect 设置为 PreferNoSchedule （尽可能不调度），因此只有当 node02 节点的压力比较大时，才会往 node01 节点调度。</p>
+<p><strong>给Pod添加副本，让Pod调度到 k8s-node01 节点</strong></p>
+<pre><code class="highlight bash"><span class="comment"># Pod 副本数扩展到 120个</span>
+$ kubectl scale deployment one-tolerations-deploy --replicas 120
+
+<span class="comment"># 再次查看 Pod 调度情况</span>
+$ kubectl get pods -o wide
+NAME                                     READY   STATUS              RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES
+one-tolerations-deploy-6675cffc9-2ff55   0/1     ContainerCreating   0          2s      &lt;none&gt;          k8s-node01   &lt;none&gt;           &lt;none&gt;
+one-tolerations-deploy-6675cffc9-2k7pm   1/1     Running             0          35s     172.16.58.243   k8s-node02   &lt;none&gt;           &lt;none&gt;
+one-tolerations-deploy-6675cffc9-2tkw9   0/1     ContainerCreating   0          2s      &lt;none&gt;          k8s-node02   &lt;none&gt;           &lt;none&gt;
+......</code></pre>
+
+<p>终于让 node01 节点也运行了 Pod 了。</p>
+<h3 id="5-4-Pod多个容忍时（Tolerations）"><a href="#5-4-Pod多个容忍时（Tolerations）" class="headerlink" title="5.4 Pod多个容忍时（Tolerations）"></a>5.4 Pod多个容忍时（Tolerations）</h3><p>目标：测试在节点设置了污点，给 Pod 设置多个容忍时，观察 k8s 对 Pod 的调度情况</p>
+<p>注意：在实验前，将之前给节点添加的污点删除，避免对后面的实验产生影响。</p>
+<p><strong>给节点设置污点</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 给 node01 设置污点</span>
+$ kubectl taint nodes k8s-node01 check-nginx=web:PreferNoSchedule
+$ kubectl taint nodes k8s-node01 check-redis=memdb:NoSchedule
+
+<span class="comment"># 给 node02 设置污点</span>
+$ kubectl taint nodes k8s-node02 check-nginx=web:NoSchedule
+$ kubectl taint nodes k8s-node02 check-redis=database:NoSchedule</code></pre>
+
+
+
+<p><strong>当前集群节点的污点设置情况</strong></p>
+<ul>
+<li>master 节点污点为：node-role.kubernetes.io&#x2F;control-plane:NoSchedule</li>
+<li>k8s-node01 节点污点为：check-nginx&#x3D;web:PreferNoSchedule、check-redis&#x3D;memdb:NoSchedule</li>
+<li>k8s-node02 节点污点为：check-nginx&#x3D;web:NoSchedule、check-redis&#x3D;database:NoSchedule</li>
+</ul>
+<p><strong>污点查看操作如下：</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看 master 节点的污点（master节点名称叫 node）</span>
+kubectl describe node node | grep <span class="string">&#x27;Taints&#x27;</span> -A 5
+
+<span class="comment"># 查看 k8s-node01 节点的污点</span>
+kubectl describe node k8s-node01 | grep <span class="string">&#x27;Taints&#x27;</span> -A 5
+
+<span class="comment"># 查看 k8s-node02 节点的污点</span>
+kubectl describe node k8s-node02 | grep <span class="string">&#x27;Taints&#x27;</span> -A 5</code></pre>
+
+
+
+<p><strong>多个容忍示例</strong></p>
+<p>资源清单：<code>multi_tolerations.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">multi-tolerations-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">multitolerations-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">tolerations:</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">&quot;check-nginx&quot;</span>
+          <span class="attr">operator:</span> <span class="string">&quot;Equal&quot;</span>
+          <span class="attr">value:</span> <span class="string">&quot;web&quot;</span>
+          <span class="attr">effect:</span> <span class="string">&quot;NoSchedule&quot;</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">check-redis</span>
+          <span class="attr">operator:</span> <span class="string">Exists</span>
+          <span class="attr">effect:</span> <span class="string">NoSchedule</span></code></pre>
+
+
+
+<p>执行资源清单</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建Pod</span>
+$ kubectl apply -f multi_tolerations.yaml 
+
+<span class="comment"># 查看Pod</span>
+$ kubectl get pods -o wide
+NAME                                        READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+multi-tolerations-deploy-6879db4797-8qqzg   1/1     Running   0          3s    172.16.58.231   k8s-node02   &lt;none&gt;           &lt;none&gt;
+multi-tolerations-deploy-6879db4797-9hgn9   1/1     Running   0          3s    172.16.58.211   k8s-node02   &lt;none&gt;           &lt;none&gt;
+multi-tolerations-deploy-6879db4797-gfnwm   1/1     Running   0          3s    172.16.58.241   k8s-node02   &lt;none&gt;           &lt;none&gt;
+multi-tolerations-deploy-6879db4797-k5twd   1/1     Running   0          3s    172.16.58.205   k8s-node02   &lt;none&gt;           &lt;none&gt;
+multi-tolerations-deploy-6879db4797-k5z7x   1/1     Running   0          3s    172.16.58.230   k8s-node02   &lt;none&gt;           &lt;none&gt;
+multi-tolerations-deploy-6879db4797-rhlnx   1/1     Running   0          3s    172.16.58.234   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>示例中的pod容忍为：check-nginx&#x3D;web:NoSchedule；check-redis&#x3D;:NoSchedule。因此 pod 会尽量调度到k8s-node02节点，尽量不调度到 k8s-node01 节点。</p>
+<h3 id="5-5-Pod容忍指定污点key的所有effects情况"><a href="#5-5-Pod容忍指定污点key的所有effects情况" class="headerlink" title="5.5 Pod容忍指定污点key的所有effects情况"></a>5.5 Pod容忍指定污点key的所有effects情况</h3><p>实验目的：测试 Pod 容忍设置了 key 后，将 operator 设置为 Exists 时，节点的调度情况。</p>
+<p>提示：把已有的污点清除，以免影响测验。</p>
+<pre><code class="highlight bash"><span class="comment"># 删除污点</span>
+kubectl taint nodes k8s-node01 check-redis=memdb:NoSchedule- check-nginx=web:PreferNoSchedule-
+kubectl taint nodes k8s-node02 check-nginx=web:NoSchedule- check-redis=database:NoSchedule-</code></pre>
+
+
+
+<p><strong>节点上的污点设置（Taints）</strong></p>
+<pre><code class="highlight bash">kubectl taint nodes k8s-node01 check-redis=memdb:NoSchedule
+kubectl taint nodes k8s-node02 check-redis=database:NoSchedule</code></pre>
+
+
+
+<p><strong>当前集群节点的污点设置情况</strong></p>
+<ul>
+<li>master 节点污点为：node-role.kubernetes.io&#x2F;control-plane:NoSchedule</li>
+<li>k8s-node01 节点污点为：check-redis&#x3D;memdb:NoSchedule</li>
+<li>k8s-node02 节点污点为：check-redis&#x3D;database:NoSchedule</li>
+</ul>
+<p><strong>污点查看操作如下：</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看 master 节点的污点（master节点名称叫 node）</span>
+kubectl describe node node | grep <span class="string">&#x27;Taints&#x27;</span> -A 5
+
+<span class="comment"># 查看 k8s-node01 节点的污点</span>
+kubectl describe node k8s-node01 | grep <span class="string">&#x27;Taints&#x27;</span> -A 5
+
+<span class="comment"># 查看 k8s-node02 节点的污点</span>
+kubectl describe node k8s-node02 | grep <span class="string">&#x27;Taints&#x27;</span> -A 5</code></pre>
+
+
+
+<p><strong>指定污点key的所有effects示例</strong></p>
+<p>资源清单：<code>key_tolerations.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">key-tolerations-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">keytolerations-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">tolerations:</span> <span class="comment"># 容忍指定污点key的所有effects</span>
+        <span class="bullet">-</span> <span class="attr">key:</span> <span class="string">check-redis</span>
+          <span class="attr">operator:</span> <span class="string">Exists</span></code></pre>
+
+
+
+<p>执行资源清单，查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建 Pod</span>
+$ kubectl apply -f key_tolerations.yaml
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deploy -o wide
+NAME                     READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+key-tolerations-deploy   6/6     6            6           18s   myapp-pod    wangyanglinux/myapp:v1.0   app=myapp
+
+<span class="comment"># 查看 Pod </span>
+$ kubectl get pods -o wide
+NAME                                     READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+key-tolerations-deploy-65c6c87cd-k8xdg   1/1     Running   0          24s   172.16.85.214   k8s-node01   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-65c6c87cd-lvmcv   1/1     Running   0          24s   172.16.58.201   k8s-node02   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-65c6c87cd-njdhh   1/1     Running   0          24s   172.16.58.228   k8s-node02   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-65c6c87cd-ppcs5   1/1     Running   0          24s   172.16.58.226   k8s-node02   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-65c6c87cd-ts7zn   1/1     Running   0          24s   172.16.85.208   k8s-node01   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-65c6c87cd-x25nb   1/1     Running   0          24s   172.16.58.207   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>Pod 在 k8s-node01 k8s-node02 节点都有运行，虽然两个节点 Taint 设置的 value 不同，Key相同，由于资源清单中设置的 <code>tolerations.operator: Exists</code> 所有两个节点都有机会被调度执行。</p>
+<h3 id="5-6-Pod容忍所有污点"><a href="#5-6-Pod容忍所有污点" class="headerlink" title="5.6 Pod容忍所有污点"></a>5.6 Pod容忍所有污点</h3><p>实验目的：测试 Pod 容忍仅设置：<code>tolerations.operator: Exists</code>  时，节点的调度情况。</p>
+<p>提示：把已有的污点清除，以免影响测验。</p>
+<pre><code class="highlight bash"><span class="comment"># 删除污点</span>
+kubectl taint nodes k8s-node01 check-redis=memdb:NoSchedule- check-nginx=web:PreferNoSchedule-
+kubectl taint nodes k8s-node02 check-nginx=web:NoSchedule- check-redis=database:NoSchedule-</code></pre>
+
+
+
+<p><strong>节点上的污点设置（Taints）</strong></p>
+<pre><code class="highlight bash">kubectl taint nodes k8s-node01 check-nginx=web:PreferNoSchedule check-redis=memdb:NoSchedule
+kubectl taint nodes k8s-node02 check-nginx=web:NoSchedule check-redis=database:NoSchedule</code></pre>
+
+
+
+<p><strong>当前集群节点的污点设置情况</strong></p>
+<ul>
+<li>master 节点污点为：node-role.kubernetes.io&#x2F;control-plane:NoSchedule</li>
+<li>k8s-node01 节点污点为：check-redis&#x3D;memdb:NoSchedule 、check-nginx&#x3D;web:PreferNoSchedule</li>
+<li>k8s-node02 节点污点为：check-redis&#x3D;database:NoSchedule、 check-nginx&#x3D;web:NoSchedule</li>
+</ul>
+<p><strong>污点查看操作如下：</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看 master 节点的污点（master节点名称叫 node）</span>
+kubectl describe node node | grep <span class="string">&#x27;Taints&#x27;</span> -A 5
+
+<span class="comment"># 查看 k8s-node01 节点的污点</span>
+kubectl describe node k8s-node01 | grep <span class="string">&#x27;Taints&#x27;</span> -A 5
+
+<span class="comment"># 查看 k8s-node02 节点的污点</span>
+kubectl describe node k8s-node02 | grep <span class="string">&#x27;Taints&#x27;</span> -A 5</code></pre>
+
+
+
+<p><strong>所有容忍示例</strong></p>
+<p>资源清单：<code>all_tolerations.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">key-tolerations-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">keytolerations-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="attr">tolerations:</span> <span class="comment"># 容忍所有污点</span>
+        <span class="bullet">-</span> <span class="attr">operator:</span> <span class="string">Exists</span></code></pre>
+
+
+
+<p>执行资源清单，查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单</span>
+$ kubectl apply -f all_tolerations.yaml
+
+$ kubectl get pods -o wide
+NAME                                      READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+key-tolerations-deploy-7d8d44b494-5r7c9   1/1     Running   0          11s   172.16.167.143   node         &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-7d8d44b494-bmzfq   1/1     Running   0          12s   172.16.58.220    k8s-node02   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-7d8d44b494-djhpm   1/1     Running   0          11s   172.16.85.210    k8s-node01   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-7d8d44b494-g4rxp   1/1     Running   0          11s   172.16.85.196    k8s-node01   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-7d8d44b494-s4qdh   1/1     Running   0          11s   172.16.58.238    k8s-node02   &lt;none&gt;           &lt;none&gt;
+key-tolerations-deploy-7d8d44b494-txtnq   1/1     Running   0          11s   172.16.167.144   node         &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>pod 在 master 节点、k8s-node01节点、k8s-node02 节点都有运行。</p>
+<h1 id="四、固定节点nodeName和nodeSelector调度"><a href="#四、固定节点nodeName和nodeSelector调度" class="headerlink" title="四、固定节点nodeName和nodeSelector调度"></a>四、固定节点nodeName和nodeSelector调度</h1><p>nodeName 是节点选择约束的最简单形式，但是由于其限制，通常很少使用它。nodeName 是 PodSpec 的领域。</p>
+<p><code>pod.spec.nodeName</code> 将 Pod 直接调度到指定的 Node 节点上，会【跳过 <code>Scheduler</code> 的调度策略】，该匹配规则是【强制】匹配。可以越过 <code>Taints</code> 污点进行调度。</p>
+<p>nodeName用于选择节点的一些限制是：</p>
+<ul>
+<li>如果指定的节点不存在，则容器将不会运行，并且在某些情况下可能会自动删除。</li>
+<li>如果指定的节点没有足够的资源来容纳该Pod，则该Pod将会失败，并且其原因将被指出，例如OutOfmemory或OutOfcpu。</li>
+<li>云环境中的节点名称并非总是可预测或稳定的。</li>
+</ul>
+<h2 id="1-指定-nodeName-示例"><a href="#1-指定-nodeName-示例" class="headerlink" title="1. 指定 nodeName 示例"></a>1. 指定 nodeName 示例</h2><p><strong>当前集群节点如下：</strong></p>
+<pre><code class="highlight bash">$ kubectl get node
+NAME         STATUS   ROLES           AGE   VERSION
+k8s-node01   Ready    &lt;none&gt;          71d   v1.29.15
+k8s-node02   Ready    &lt;none&gt;          71d   v1.29.15
+node         Ready    control-plane   71d   v1.29.15</code></pre>
+
+
+
+<h3 id="1-1-当-nodeName-指定节点存在"><a href="#1-1-当-nodeName-指定节点存在" class="headerlink" title="1.1 当 nodeName 指定节点存在"></a>1.1 当 nodeName 指定节点存在</h3><p>资源清单：<code>scheduler_nodeName.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">scheduler-nodename-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">nodename-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="comment"># 指定节点运行</span>
+      <span class="attr">nodeName:</span> <span class="string">node</span> <span class="comment"># 指定 master 节点运行，这里 master 节点的名称为 node</span></code></pre>
+
+
+
+<p>执行资源清单，查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单</span>
+$ kubectl apply -f scheduler_nodeName.yaml
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deployment -o wide
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+scheduler-nodename-deploy   6/6     6            6           18s   myapp-pod    wangyanglinux/myapp:v1.0   app=myapp
+
+<span class="comment"># 查看 ReplicSet</span>
+$ kubectl get rs -o wide
+NAME                                   DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES                     SELECTOR
+scheduler-nodename-deploy-6d6fdcbf6c   6         6         6       15s   myapp-pod    wangyanglinux/myapp:v1.0   app=myapp,pod-template-hash=6d6fdcbf6c
+
+<span class="comment"># 查看Pod</span>
+$ kubectl get pod -o wide
+NAME                                         READY   STATUS    RESTARTS   AGE   IP               NODE   NOMINATED NODE   READINESS GATES
+scheduler-nodename-deploy-6d6fdcbf6c-7crw8   1/1     Running   0          27s   172.16.167.147   node   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-6d6fdcbf6c-9kg4p   1/1     Running   0          27s   172.16.167.149   node   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-6d6fdcbf6c-j7qq4   1/1     Running   0          27s   172.16.167.150   node   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-6d6fdcbf6c-kz6n2   1/1     Running   0          28s   172.16.167.145   node   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-6d6fdcbf6c-v9tlk   1/1     Running   0          28s   172.16.167.146   node   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-6d6fdcbf6c-wr6jj   1/1     Running   0          28s   172.16.167.148   node   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>可以看到 Pod 都运行到了 master 节点上，尽管 master 节点上存在着污点。由于设置了 nodeName, Scheduler 在调度时忽略了污点。</p>
+<h3 id="1-2-当-nodeName-指定节点不存在"><a href="#1-2-当-nodeName-指定节点不存在" class="headerlink" title="1.2 当 nodeName 指定节点不存在"></a>1.2 当 nodeName 指定节点不存在</h3><p>资源清单：<code>scheduler_nodeName_02.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">scheduler-nodename-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">nodename-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="comment"># 指定节点运行</span>
+      <span class="attr">nodeName:</span> <span class="string">k8s-node05</span> <span class="comment"># 指定一个不存在的节点</span></code></pre>
+
+
+
+<p>执行资源清单，查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单</span>
+$ kubectl apply -f scheduler_nodeName02.yaml
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deployment -o wide
+NAME                        READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS   IMAGES                     SELECTOR
+scheduler-nodename-deploy   0/6     6            0           7s    myapp-pod    wangyanglinux/myapp:v1.0   app=myapp
+
+<span class="comment"># 查看 RS</span>
+$ kubectl get rs -o wide
+NAME                                   DESIRED   CURRENT   READY   AGE   CONTAINERS   IMAGES                     SELECTOR
+scheduler-nodename-deploy-765654657f   6         6         0       14s   myapp-pod    wangyanglinux/myapp:v1.0   app=myapp,pod-template-hash=765654657f
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pod -o wide
+NAME                                         READY   STATUS    RESTARTS   AGE   IP       NODE         NOMINATED NODE   READINESS GATES
+scheduler-nodename-deploy-765654657f-898xn   0/1     Pending   0          22s   &lt;none&gt;   k8s-node05   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-765654657f-dbbqw   0/1     Pending   0          22s   &lt;none&gt;   k8s-node05   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-765654657f-gslks   0/1     Pending   0          22s   &lt;none&gt;   k8s-node05   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-765654657f-j5tnk   0/1     Pending   0          22s   &lt;none&gt;   k8s-node05   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-765654657f-s74wk   0/1     Pending   0          22s   &lt;none&gt;   k8s-node05   &lt;none&gt;           &lt;none&gt;
+scheduler-nodename-deploy-765654657f-smcmt   0/1     Pending   0          22s   &lt;none&gt;   k8s-node05   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>由于 nodeName 指定的节点不存在, 因此 Pod 无法被调度。</p>
+<h2 id="2-使用-nodeSelector-调度"><a href="#2-使用-nodeSelector-调度" class="headerlink" title="2. 使用 nodeSelector 调度"></a>2. 使用 nodeSelector 调度</h2><p>nodeSelector 是节点选择约束的最简单推荐形式。nodeSelector 是 PodSpec 的领域。它指定键值对的映射。</p>
+<p><strong>pod.spec.nodeSelector 是通过 kubernetes 的 label-selector 机制选择节点，由调度器调度策略匹配 label，而后调度 Pod 到目标节点，该匹配规则属于【强制】约束。由于是调度器调度，因此不能越过Taints污点进行调度。</strong></p>
+<p><strong>当前集群节点信息</strong></p>
+<pre><code class="highlight bash">$ kubectl get node --show-labels
+NAME         STATUS   ROLES           AGE   VERSION    LABELS
+k8s-node01   Ready    &lt;none&gt;          71d   v1.29.15   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,busi-db=redis,busi-use=www,disk-type=sata,kubernetes.io/arch=amd64,kubernetes.io/hostname=k8s-node01,kubernetes.io/os=linux
+k8s-node02   Ready    &lt;none&gt;          71d   v1.29.15   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,busi-db=etcd,busi-use=www,disk-type=ssd,kubernetes.io/arch=amd64,kubernetes.io/hostname=k8s-node02,kubernetes.io/os=linux
+node         Ready    control-plane   71d   v1.29.15   beta.kubernetes.io/arch=amd64,beta.kubernetes.io/os=linux,busi-db=redis,busi-use=www,disk-type=ssd,kubernetes.io/arch=amd64,kubernetes.io/hostname=node,kubernetes.io/os=linux,node-role.kubernetes.io/control-plane=,node.kubernetes.io/exclude-from-external-load-balancers=</code></pre>
+
+
+
+<h3 id="2-1-当-nodeSelector-标签存在"><a href="#2-1-当-nodeSelector-标签存在" class="headerlink" title="2.1 当 nodeSelector 标签存在"></a>2.1 当 nodeSelector 标签存在</h3><p>资源清单：<code>scheduler_nodeSelector.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">scheduler-nodeselector-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">nodeselector-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="comment"># 指定节点标签的 key: value</span>
+      <span class="attr">nodeSelector:</span>
+        <span class="attr">disk-type:</span> <span class="string">ssd</span></code></pre>
+
+
+
+<p>执行资源清单，查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建Pod</span>
+$ kubectl apply -f scheduler_nodeSelector.yaml
+
+<span class="comment"># 查看 Pod </span>
+$ kubectl get pods -o wide
+NAME                                             READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+scheduler-nodeselector-deploy-84dccd9bf8-4vwh5   1/1     Running   0          15s   172.16.58.217   k8s-node02   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-84dccd9bf8-kbpl9   1/1     Running   0          15s   172.16.58.222   k8s-node02   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-84dccd9bf8-mvtp2   1/1     Running   0          15s   172.16.58.196   k8s-node02   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-84dccd9bf8-p568f   1/1     Running   0          15s   172.16.58.209   k8s-node02   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-84dccd9bf8-rmnf2   1/1     Running   0          15s   172.16.58.203   k8s-node02   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-84dccd9bf8-twnjh   1/1     Running   0          15s   172.16.58.195   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>可以看到 Pod 都被调度到了 k8s-node02 节点上了，虽然 k8s-node02 节点与 master 节点都存在标签为 disk-type: ssd，但是由于 master 节点设置了 Taint <code>node-role.kubernetes.io/control-plane:NoSchedule</code> , 因此Pod不能调度到 master 节点上。</p>
+<h3 id="2-2-当-nodeSelector-标签不存在"><a href="#2-2-当-nodeSelector-标签不存在" class="headerlink" title="2.2 当 nodeSelector 标签不存在"></a>2.2 当 nodeSelector 标签不存在</h3><p>资源清单：<code>scheduler_nodeSelector02.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">scheduler-nodeselector-deploy</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">nodeselector-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">6</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp-pod</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+      <span class="comment"># 指定节点标签的 key: value</span>
+      <span class="attr">nodeSelector:</span>
+        <span class="attr">disk-type:</span> <span class="string">abc</span></code></pre>
+
+
+
+<p>执行资源清单，查看状态</p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单</span>
+$ kubectl apply -f scheduler_nodeSelector02.yaml
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pods -o wide 
+NAME                                             READY   STATUS    RESTARTS   AGE   IP       NODE     NOMINATED NODE   READINESS GATES
+scheduler-nodeselector-deploy-686bd46f76-4n8qg   0/1     Pending   0          23s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-686bd46f76-5zsdx   0/1     Pending   0          22s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-686bd46f76-6hmd5   0/1     Pending   0          22s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-686bd46f76-dpzmh   0/1     Pending   0          22s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-686bd46f76-hrhqv   0/1     Pending   0          23s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;
+scheduler-nodeselector-deploy-686bd46f76-nkd4g   0/1     Pending   0          23s   &lt;none&gt;   &lt;none&gt;   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+<p>由于没有节点存在标签为 disk-type: abc， 因此 Pod 无法被调度执行，一直处于Pending 状态。</p>
+<p><strong>参考链接</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhanglianghhh/p/13875203.html">https://www.cnblogs.com/zhanglianghhh/p/13875203.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhanglianghhh/p/13922945.html">https://www.cnblogs.com/zhanglianghhh/p/13922945.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhanglianghhh/p/14022018.html">https://www.cnblogs.com/zhanglianghhh/p/14022018.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhanglianghhh/p/14077078.html">https://www.cnblogs.com/zhanglianghhh/p/14077078.html</a></p>
+</blockquote>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>

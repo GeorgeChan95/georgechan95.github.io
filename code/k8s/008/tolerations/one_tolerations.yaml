@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: one-tolerations-deploy
+  labels:
+    app: onetolerations-deploy
+spec:
+  replicas: 30
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp-pod
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+      tolerations:
+        - key: "check-nginx"
+          operator: "Equal"
+          value: "web"
+          effect: "NoSchedule"

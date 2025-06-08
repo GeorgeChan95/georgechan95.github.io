@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: readiness-httpget-pod # pod 名
+  namespace: default # 名称空间
+  labels: # 定义多个标签
+    app: myapp
+    env: test
+spec:
+  containers: # 定义主容器
+    - name: readiness-httpget-container
+      image: wangyanglinux/myapp:v1.0
+      imagePullPolicy: IfNotPresent # 镜像拉取策略，如果存在则不拉取
+      readinessProbe: # 定义就绪探测
+        httpGet: # http请求
+          port: 80 # 请求端口
+          path: /index1.html # 访问资源地址
+        initialDelaySeconds: 1 # 容器启动后要等待多少秒后就探针开始工作，单位“秒”，默认是 0 秒，最小值是 0
+        periodSeconds: 30 # 执行探测的时间间隔（单位是秒），默认为 10s，单位“秒”，最小值是 1
+        timeoutSeconds: 1 # 探针执行检测请求后，等待响应的超时时间，默认为 1s，单位“秒”，最小值是 1
+        successThreshold: 1 # 探针检测失败后认为成功的最小连接成功次数，默认值为 1。必须为 1 才能激活和启动。最小值为1
+        failureThreshold: 10 # 探测失败的重试次数，重试一定次数后将认为失败，默认值为 3 ，最小值 为 1

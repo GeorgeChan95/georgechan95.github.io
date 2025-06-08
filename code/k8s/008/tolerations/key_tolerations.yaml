@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: key-tolerations-deploy
+  labels:
+    app: keytolerations-deploy
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp-pod
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+      tolerations: # 容忍指定污点key的所有effects
+        - key: check-redis
+          operator: Exists

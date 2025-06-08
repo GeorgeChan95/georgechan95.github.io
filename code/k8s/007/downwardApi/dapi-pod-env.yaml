@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-pod-env
+  namespace: default
+spec:
+  containers:
+    - name: busybox-container
+      image: busybox:latest
+      imagePullPolicy: IfNotPresent
+      command: ['sh', '-c'] # 容器启动后，每 10秒打印一次环境变量
+      args:
+        - while true; do
+            echo -en '\n';
+            printenv MY_NODE_NAME MY_POD_NAMESPACE MY_POD_NAME;
+            printenv MY_POD_IP MY_POD_SERVICE_ACCOUNT;
+            sleep 10;
+          done;
+      env:
+        - name: MY_NODE_NAME # 环境变量，获取服务器节点名称
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName # Pod 所在服务器节点的名称，例如：k8s-node01、k8s-node02
+        - name: MY_POD_NAME # 环境变量，获取 Pod 名称
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name # 读取 Pod 名称属性
+        - name: MY_POD_NAMESPACE # 环境变量，获取 POD 所在的名称空间
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace # 读取名称空间属性
+        - name: MY_POD_IP # 读取Pod Ip
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP # 读取当前 Pod ip，由于IP是Pod运行后才生成的，属于状态信息，从 status 字段读取
+        - name: MY_POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName # Pod 服务账户
+  restartPolicy: Never

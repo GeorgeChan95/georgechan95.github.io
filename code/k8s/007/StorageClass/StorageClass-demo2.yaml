@@ -1,0 +1,14 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: standard
+provisioner: kubernetes.io/gce-pd
+parameters:
+  type: pd-standard
+volumeBindingMode: WaitForFirstConsumer # 指定了卷绑定模式为 WaitForFirstConsumer。
+allowedTopologies: # 定义了存储卷可以被分配的拓扑范围。
+  - matchLabelExpressions: # 使用标签选择器来限制存储卷的拓扑。
+      - key: failure-domain.beta.kubernetes.io/zone # Kubernetes 内置标签，用于表示节点的可用区（Zone）
+        values: # 限制存储卷只能在 Google Cloud 的 us-central1-a 和 us-central1-b 两个可用区中创建。
+          - us-central1-a
+          - us-central1-b

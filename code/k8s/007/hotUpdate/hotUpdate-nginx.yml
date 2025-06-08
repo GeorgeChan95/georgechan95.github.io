@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hotupdate-deployment
+  namespace: default
+spec:
+  replicas: 3
+  selector: # 标签选择器
+    matchLabels:
+      app: hotupdate-deploy
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: hotupdate-deploy
+        version: v1
+        env: test
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.28.0
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: config-volume # 挂载的volumn名称，必须 volumes 中定义存在
+              mountPath: /etc/nginx/conf.d/
+      volumes:
+        - name: config-volume # 挂在卷名称
+          configMap:
+            name: default-nginx # 创建的configmap名称

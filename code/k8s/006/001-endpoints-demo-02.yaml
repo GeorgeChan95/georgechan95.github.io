@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: endpoints-demo # endpoints 名称必须与 Service名称完全一致，k8s 才会将 endpoints与service关联起来
+subsets: # 定义 Endpoints 的子集，每个子集对应一个后端服务实例
+  - addresses: # 列出后端服务实例的 IP 地址列表，通过 kubectl get pods -o wide -l app=nginx 查看
+      - ip: 172.16.58.246
+      - ip: 172.16.58.216
+      - ip: 172.16.85.246
+    ports: # 定义后端服务实例监听的端口列表
+      - port: 9376
+        name: nginx80 # 端口名称，必须要与Service中的port名称一致

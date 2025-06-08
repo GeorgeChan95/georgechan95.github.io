@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-deploy
+  labels:
+    app: myweb-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp-web
+  template:
+    metadata:
+      labels:
+        app: myapp-web
+        version: v1
+    spec:
+      containers:
+        - name: myapp-pod
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80

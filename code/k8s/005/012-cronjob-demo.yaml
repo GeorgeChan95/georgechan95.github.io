@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cronjob-demo
+  namespace: default
+spec:
+  # 调度，必需字段，指定任务运行周期，格式同 Cron
+  schedule: "*/1 * * * *" # 每分钟执行一次
+  startingDeadlineSeconds: 30 # 启动 Job 的期限（秒级别），该字段是可选的。如果因为任何原因而错过了被调度的时间，那么错过执行时间的 Job 将被认为是失败的。如果没有指定，则没有期限
+  concurrencyPolicy: Allow # 并发策略，该字段也是可选的。（默认）允许并发运行 Job
+  successfulJobsHistoryLimit: 10 # 保留运行成功的job数，默认：3
+  failedJobsHistoryLimit: 3 #保留云心告失败的Job数，默认：1
+  # Job 模板，必需字段，指定需要运行的任务，格式同 Job
+  jobTemplate:
+    spec:
+      completions: 3 # 标志Job结束需要成功运行的 Pod 个数，默认为1
+      parallelism: 3 # 标志并行运行的Pod的个数，默认为1
+      template:
+        spec:
+          containers:
+            - name: cronjob-demo-container
+              image: busybox
+              imagePullPolicy: IfNotPresent
+              args:
+                - /bin/sh
+                - -c
+                - date; echo Hello from the Kubernetes cluster
+          restartPolicy: OnFailure #  重启策略：失败重启

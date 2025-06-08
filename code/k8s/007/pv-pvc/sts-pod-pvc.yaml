@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx # 服务的名称为 nginx
+  labels:
+    app: nginx # 给 服务打一个标签
+spec:
+  ports: # 指定服务暴露的端口
+    - port: 80 # 服务监听在 80 端口，外部请求通过该端口访问
+  clusterIP: None # 设置为 None，表示这是一个 Headless Service。Headless Service 不会分配集群 IP，而是直接通过 DNS 解析到后端的 Pod。
+  selector:
+    app: nginx # 服务通过标签选择器 app: nginx 找到匹配的 Pod，将流量路由到这些 Pod。
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: web # StatefulSet 名称为 web，用于管理一组 Pod。
+spec:
+  selector:
+    matchLabels: # 通过标签 app: nginx 选择要管理的 Pod，确保 StatefulSet 只控制带有该标签的 Pod。
+      app: nginx
+  serviceName: nginx # 指定关联的 Service 的名称为 nginx， StatefulSet 使用此 Service 来为每个 Pod 提供稳定的 DNS 名称（例如 web-0.nginx.default.svc.cluster.local）
+  replicas: 3 # 创建 3 个 Pod 副本，分别命名为 web-0、web-1 和 web-2
+  template:
+    metadata:
+      labels: # 为 Pod 添加标签 app: nginx，与 Service 的选择器匹配。
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: web
+          volumeMounts:
+            - name: www # 挂载的卷名称为 www
+              mountPath: /usr/local/nginx/html
+  volumeClaimTemplates:
+    - metadata:
+        name: www # PVC 名称为 www，与 volumeMounts 中的名称对应
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        storageClassName: nfs
+        resources:
+          requests:
+            storage: 3Gi

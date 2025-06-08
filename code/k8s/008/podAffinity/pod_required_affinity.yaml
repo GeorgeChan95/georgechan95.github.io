@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-podaffinity-deploy
+  labels:
+    app: podaffinity-deploy
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      tolerations: # 配置容忍，允许运行到 Master 节点上
+        - key: node-role.kubernetes.io/control-plane
+          effect: NoSchedule
+      containers:
+        - name: myapp-pod
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+      affinity:
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            # 由于是Pod亲和性/反亲和性， 因此这里匹配规则写的是Pod的标签信息
+            - labelSelector:
+                matchExpressions:
+                  - key: app
+                    operator: In
+                    values:
+                      - myapp-web
+              # 拓扑域  若多个node节点具有相同的标签信息【标签键值相同】，则表示这些node节点就在同一拓扑域
+              topologyKey: disk-type

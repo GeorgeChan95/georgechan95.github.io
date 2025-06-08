@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dapi-container-env
+  namespace: default
+spec:
+  containers:
+    - name: busybox-container
+      image: busybox:latest
+      imagePullPolicy: IfNotPresent
+      command: ['sh', '-c'] # 容器启动后，每 10秒打印一次环境变量
+      args:
+        - while true; do
+            echo -en '\n';
+            printenv MY_CPU_REQUEST MY_CPU_LIMIT;
+            printenv MY_MEMORY_REQUEST MY_MEMORY_LIMIT;
+            sleep 10;
+          done;
+      resources: # 定义容器使用的资源
+        requests:
+          memory: "32Mi" # 请求 32 MiB 内存，保证 Pod 调度时节点有足够内存。
+          cpu: "125m" # 请求 125 毫核（0.125 CPU 核心），保证 CPU 资源
+        limits:
+          memory: "64Mi" # 限制内存使用不超过 64 MiB，防止过度消耗
+          cpu: "250m" # 限制 CPU 使用不超过 250 毫核（0.25 核心）
+      env:
+        - name: MY_CPU_REQUEST # 容器请求的CPU资源大小
+          valueFrom:
+            resourceFieldRef:
+              containerName: busybox-container # 指定容器
+              resource: requests.cpu
+              divisor: 1m # 指定资源值的单位转换因子，用于将 Kubernetes 内部的资源值（如 CPU 或内存）转换为用户期望的单位，并在注入到文件或环境变量时以该单位表示。支持如 1、1m（毫）、1Mi（Mebibyte）、1k（千）等单位
+        - name: MY_CPU_LIMIT # 容器请求的CPU资源上限
+          valueFrom:
+            resourceFieldRef:
+              containerName: busybox-container
+              resource: limits.cpu
+              divisor: 1m
+        - name: MY_MEMORY_REQUEST # 容器请求的内存资源大小
+          valueFrom:
+            resourceFieldRef:
+              containerName: busybox-container
+              resource: requests.memory
+              divisor: 1Mi
+        - name: MY_MEMORY_LIMIT # 容器请求的内存资源上限
+          valueFrom:
+            resourceFieldRef:
+              containerName: busybox-container
+              resource: limits.memory
+              divisor: 1Mi
+  restartPolicy: Never

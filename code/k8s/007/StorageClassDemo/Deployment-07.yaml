@@ -1,0 +1,37 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: nfs-client-provisioner
+  namespace: nfs-storageclass
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  strategy:
+    type: Recreate # 更新策略为重新创建，即先删除旧 Pod 再创建新 Pod，适合单一实例场景。
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner # 使用 nfs-client-provisioner ServiceAccount，赋予其 RBAC 权限。
+      containers:
+        - name: nfs-client-provisioner
+          image: k8s.dockerproxy.com/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: nfs-client-root # 挂载的卷名称，与 volumes 部分定义的卷对应
+              mountPath: /persistentvolumes # 将 NFS 卷挂载到容器内的 /persistentvolumes 路径，供容器读写 NFS 共享数据。
+          env:
+            - name: PROVISIONER_NAME
+              value: k8s-sigs.io/nfs-subdir-external-provisioner # 指定配置器名称，与 StorageClass 保持一致
+            - name: NFS_SERVER
+              value: 192.168.6.139 # NFS 服务器地址
+            - name: NFS_PATH
+              value: /root/data # NFS 共享路径
+      volumes:
+        - name: nfs-client-root # 挂载卷的名称
+          nfs:
+            server: 192.168.6.139
+            path: /root/data

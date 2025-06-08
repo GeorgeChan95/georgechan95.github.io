@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: deployment-demo
+spec:
+  selector:
+    matchLabels: # 选择所有标签为 app: nginx 的 Pod
+      app: nginx
+  replicas: 3 # 指定需要维持的Pod副本数量为3
+  template:
+    metadata: # 配置Pod元数据模板，例如 labels
+      labels: # # 为 Pod 打上 app: nginx 标签（与 selector.matchLabels 匹配）
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: mirrorgooglecontainers/serve_hostname:v1.4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9376 # 指定容器的内部端口
+              protocol: TCP

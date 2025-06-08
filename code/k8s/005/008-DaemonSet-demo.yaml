@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: my-daemonset-demo # DaemonSet 控制器的名字
+  namespace: default # 命名空间
+  labels:
+    app: daemonset-demo # DaemonSet 控制的标签
+spec:
+  selector:
+    matchLabels:
+      name: daemonset-demo # 匹配标签为 name: daemonset-demo 的Pod
+  template:
+    metadata:
+      labels: # Pod模板标签，与 spec.selector.matchLabels 对应
+        name: daemonset-demo
+    spec:
+      tolerations: # 定义了 Pod 的容忍度，允许 Pod 被调度到带有特定污点的节点上
+        - key: node-role.kubernetes.io/control-plane # 这里允许 Pod 被调度到控制平面节点（通常有 node-role.kubernetes.io/control-plane:NoSchedule 污点）
+          operator: Exists # 表示只要存在指定的 key 就容忍(Exists：只要节点上有这个键的污点就匹配（不需要检查值）, 如果是Equal：要求键和值都匹配（此时需要指定 value 字段）)
+          effect: NoSchedule # 指定要容忍污点的影响效果
+      containers: # 主容器
+        - name: daemonset-demo-container
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent

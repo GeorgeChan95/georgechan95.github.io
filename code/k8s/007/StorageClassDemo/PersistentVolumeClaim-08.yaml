@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: test-claim
+  namespace: nfs-storageclass
+  annotations: # 注解部分为空（annotations: ），通常用于存储非关键的元数据信息（如描述、工具标记等）
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi # 请求 1MiB 的存储空间（实际存储大小由 NFS 服务器控制）
+  storageClassName: nfs-client # StorageClass(存储类) 的名称

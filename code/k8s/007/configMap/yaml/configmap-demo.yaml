@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmap-demo
+  namespace: default
+  labels:
+    configmap: myconfig
+data:
+  # 类属性键，每个键都映射一个简单的值
+  username: "george"
+  user_file: 'user.properties'
+  game_file: 'game.properties'
+  # 类文件键，每个键都对应一个文件，| 下是文件的内容
+  user.properties: |
+    age=23
+    address=中国
+  game.propertie: |
+    enemy.types=aliens,monsters
+    player.maximum-lives=5

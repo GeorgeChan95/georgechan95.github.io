@@ -1,0 +1,13 @@
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: run-leader-locking-nfs-client-provisioner
+  namespace: nfs-storageclass
+subjects:
+  - kind: ServiceAccount # 绑定资源类型为 ServiceAccount
+    name: nfs-client-provisioner # 绑定的ServiceAccount 名称
+    namespace: nfs-storageclass
+roleRef:
+  kind: Role # 绑定角色（nfs-storageclass名称空间的角色）
+  apiGroup: rbac.authorization.k8s.io
+  name: leader-locking-nfs-client-provisioner # 角色的名称

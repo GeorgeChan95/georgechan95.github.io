@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ReplicationController # 资源类型为 ReplicationController（旧版副本控制器）
+metadata:
+  name: rc-demo # RC 的名称，在命名空间中唯一
+  namespace: default
+spec:
+  replicas: 3 # 确保始终有 3 个 Pod 副本在运行
+  selector:
+    app: rc-demo  # 选择标签为 `app: rc-demo` 的 Pod 进行管理
+  template: # Pod 模板
+    metadata:
+      labels:
+        app: rc-demo # 给 Pod 打上标签，与 selector 对应
+    spec:
+      containers:
+        - name: rc-demo-container # 容器名称
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          env: # 定义环境变量
+            - name: GET_HOSTS_FROM # 环境变量1 key
+              value: dns
+            - name: zhangsan # 环境变量2 key
+              value: "123"
+          ports:
+            - containerPort: 80 # 容器暴露的端口

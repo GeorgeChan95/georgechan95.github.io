@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-service-demo
+  namespace: default
+  labels:
+    type: nodeport
+spec:
+  type: NodePort
+  clusterIP: 10.100.1.1 # 手动指定Service的Ip地址，不指定默认自动生成
+  selector: # 标签选择器，只管理包含下面标签的Pod
+    app: myapp
+    release: stabel
+    svc: nodeport
+  ports:
+    - name: http
+      port: 80 # service对外暴露的端口
+      targetPort: 80 # 转发到容器内部的端口
+      nodePort: 30008 # 手动指定NodePort端口，默认范围：30000-32767 ，不指定则默认分配一个端口

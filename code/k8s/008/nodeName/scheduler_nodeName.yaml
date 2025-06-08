@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scheduler-nodename-deploy
+  labels:
+    app: nodename-deploy
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: myapp-pod
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+      # 指定节点运行
+      nodeName: node # 指定 master 节点运行，这里 master 节点的名称为 node
