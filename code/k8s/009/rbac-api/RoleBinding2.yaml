@@ -1,0 +1,13 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding # 定义资源的类型为 RoleBinding，用于将一个角色（Role 或 ClusterRole）绑定到用户、组或服务账户
+metadata:
+  name: read-secrets # RoleBinding 的名称
+  namespace: default # 此 RoleBinding 作用于 default 命名空间，仅对该命名空间内的资源生效
+subjects:
+  - kind: User # 主体类型为用户
+    name: dave # 名称大小写敏感
+    apiGroup: rbac.authorization.k8s.io # 指定主体所属的 API 组
+roleRef:
+  kind: ClusterRole # 引用的角色类型为 ClusterRole（集群级别的角色）,集群角色降维到命名空间
+  name: secret-reader # 引用的角色名称为 secret-reader，需要在 default 命名空间中存在
+  apiGroup: rbac.authorization.k8s.io # 角色所属的 API 组

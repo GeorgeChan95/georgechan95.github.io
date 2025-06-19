@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+# 这个集群角色绑定允许 "manager" 组中的任何用户读取任意命名空间中 "secrets"s
+kind: ClusterRoleBinding
+metadata:
+  name: read-secrets-global # 集群角色的名称
+  # 不需要定义 namespace，对所有名称空间有效
+subjects:
+  - kind: Group # 绑定的主体类型为 Group
+    name: manager # 名称区分大小写
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: ClusterRole
+  name: secret-reader # 集群角色的名称，需要在集群中存在
+  apiGroup: rbac.authorization.k8s.io

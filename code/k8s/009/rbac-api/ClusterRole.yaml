@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole # 资源类型
+metadata:
+  name: secret-reader # 集群角色的名称
+  # 此处的 "namespace" 被省略掉是因为 ClusterRoles 是没有命名空间的。
+rules:
+  - apiGroups: [""] # 指定 API 组，空字符串 "" 表示 Kubernetes 核心 API 组（secrets 属于核心组）。
+    resources: ["secrets"] # 指定规则适用的规则类型
+    verbs: ["get", "watch", "list"]

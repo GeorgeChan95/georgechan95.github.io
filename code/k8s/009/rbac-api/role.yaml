@@ -1,0 +1,9 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role  # 资源类型为：角色
+metadata:
+  name: pod-reader # 角色的名称
+  namespace: default # 角色所属的命名空间
+rules:
+  - apiGroups: [""] # 指定 API 组，空字符串 "" 表示 Kubernetes 核心 API 组（例如 pods、services 等资源属于核心组）。
+    resources: ["pods"] # 指定规则适用的资源类型，这里是 pods（即 Pod 资源）。
+    verbs: ["get", "watch", "list"] # 指定角色对Pod资源允许的操作，获取、监控、列出

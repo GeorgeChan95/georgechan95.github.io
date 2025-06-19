@@ -1,0 +1,10 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: configmap-updater
+  namespace: default
+rules:
+  - apiGroups: [""] # 核心 API 组
+    resources: ["configmaps"] # 可操作的资源类型为 Configmap
+    resourceNames: ["configmap-demo"] # 可操作的具体是哪个 ConfigMap
+    verbs: ["update", "get"] # 定义操作类型，只能 更新和读取
