@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: myapp-deploy
+  name: myapp-deploy
+spec:
+  replicas: {{ .Values.replicaCount }} # Pod副本数，从 values.yaml 文件取
+  selector:
+    matchLabels:
+      app: myapp-test
+  template:
+    metadata:
+      labels:
+        app: myapp-test
+    spec:
+      containers:
+        - name: myapp
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: {{ .Values.image.pullPolicy }} # 镜像拉取策略，从 values.yaml 文件取

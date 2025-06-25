@@ -9,12 +9,12 @@
   <meta name="keywords" content=" linux , Docker , Rocky ">
   <meta name="description" content="010-Kubernetes Helm | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#x65;&#95;&#57;&#53;&#x40;&#x31;&#x32;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#x6f;&#114;&#103;&#101;&#95;&#57;&#53;&#64;&#49;&#50;&#x36;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#x65;&#95;&#57;&#53;&#x40;&#x31;&#x32;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#x6f;&#114;&#103;&#101;&#95;&#57;&#53;&#64;&#49;&#50;&#x36;&#46;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
@@ -340,7 +340,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="104">
-<input type="hidden" id="yelog_site_word_count" value="486.7k">
+<input type="hidden" id="yelog_site_word_count" value="488.5k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1489,12 +1489,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2025-06-22 18:37:09'>2025-06-21 14:12</time>
+            发布时间 : <time class="date" title='最后更新: 2025-06-25 13:29:37'>2025-06-21 14:12</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:4.9k</span>
+        <span>字数:6.7k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1524,7 +1524,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80"><span class="toc-text">一、引言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Helm-V2-%E4%B8%8E-V3-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">二、Helm V2 与 V3 的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Helm%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">三、Helm工作流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Helm%E6%A6%82%E5%BF%B5"><span class="toc-text">四、Helm概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81Helm%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">五、Helm的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85Helm"><span class="toc-text">1. 安装Helm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E7%94%A8%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%89%88%E6%9C%AC%E5%AE%89%E8%A3%85"><span class="toc-text">1.1 用二进制版本安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BD%BF%E7%94%A8%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85"><span class="toc-text">1.2 使用脚本安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Helm-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">2. Helm 初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Helm-%E4%BB%93%E5%BA%93%E7%AE%A1%E7%90%86"><span class="toc-text">3. Helm 仓库管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%B7%BB%E5%8A%A0%E4%BB%93%E5%BA%93"><span class="toc-text">3.1 添加仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%9F%A5%E7%9C%8B%E4%BB%93%E5%BA%93"><span class="toc-text">3.2 查看仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%9B%B4%E6%96%B0%E4%BB%93%E5%BA%93%E7%B4%A2%E5%BC%95"><span class="toc-text">3.3 更新仓库索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%88%A0%E9%99%A4%E4%BB%93%E5%BA%93"><span class="toc-text">3.4 删除仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%9C%A8%E4%BB%93%E5%BA%93%E4%B8%AD%E6%90%9C%E7%B4%A2-Chart-%E5%BA%94%E7%94%A8"><span class="toc-text">3.5 在仓库中搜索 Chart 应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%9F%A5%E7%9C%8B%E6%8C%87%E5%AE%9A%E4%BB%93%E5%BA%93%E4%B8%ADChart%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-text">3.6  查看指定仓库中Chart的版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84-Chart"><span class="toc-text">3.7 拉取远程仓库的 Chart</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%89%E8%A3%85-chart-%E7%A4%BA%E4%BE%8B"><span class="toc-text">4. 安装 chart 示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85"><span class="toc-text">4.1 在线安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85"><span class="toc-text">4.2 离线安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%8D%B8%E8%BD%BDChart%E5%BA%94%E7%94%A8"><span class="toc-text">5. 卸载Chart应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%A1%88%E4%BE%8B-%E5%AE%89%E8%A3%85Nginx"><span class="toc-text">六、案例-安装Nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD-Nginx-Chart-%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-text">1. 下载 Nginx Chart 安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-Nginx-Chart"><span class="toc-text">2. 安装 Nginx Chart</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9B%B4%E6%96%B0Chart"><span class="toc-text">3. 更新Chart</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8D%B8%E8%BD%BDNginx"><span class="toc-text">4. 卸载Nginx</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81Helm-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">七、Helm 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Repository-%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">1. Repository 相关命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Chart-%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">2. Chart 相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-helm-create"><span class="toc-text">2.1 helm create</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-helm-package"><span class="toc-text">2.2 helm package</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-helm-lint"><span class="toc-text">2.3 helm lint</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-helm-show"><span class="toc-text">2.4 helm show</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-helm-pull"><span class="toc-text">2.5 helm pull</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-helm-push"><span class="toc-text">2.6 helm push</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Release-%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">3. Release 相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-helm-install"><span class="toc-text">3.1 helm install</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-helm-list"><span class="toc-text">3.2 helm list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-helm-status"><span class="toc-text">3.3 helm status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-helm-get"><span class="toc-text">3.4 helm get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-helm-upgrade"><span class="toc-text">3.5 helm upgrade</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-helm-history"><span class="toc-text">3.6 helm history</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-helm-rollback"><span class="toc-text">3.7 helm rollback</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8-helm-uninstall"><span class="toc-text">3.8 helm uninstall</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E6%90%AD%E5%BB%BA-Chart-%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="toc-text">八、搭建 Chart 私有仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA-HTTP-Server-%E4%BD%9C%E4%B8%BAchart%E4%BB%93%E5%BA%93"><span class="toc-text">1. 创建一个 HTTP Server 作为chart仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Helm-Chart%E4%B8%8A%E4%BC%A0%E5%88%B0%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="toc-text">2. Helm Chart上传到私有仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="toc-text">3. 测试私有仓库</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80"><span class="toc-text">一、引言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Helm-V2-%E4%B8%8E-V3-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">二、Helm V2 与 V3 的区别</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81Helm%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-text">三、Helm工作流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Helm%E6%A6%82%E5%BF%B5"><span class="toc-text">四、Helm概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81Helm%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">五、Helm的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%AE%89%E8%A3%85Helm"><span class="toc-text">1. 安装Helm</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E7%94%A8%E4%BA%8C%E8%BF%9B%E5%88%B6%E7%89%88%E6%9C%AC%E5%AE%89%E8%A3%85"><span class="toc-text">1.1 用二进制版本安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E4%BD%BF%E7%94%A8%E8%84%9A%E6%9C%AC%E5%AE%89%E8%A3%85"><span class="toc-text">1.2 使用脚本安装</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Helm-%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-text">2. Helm 初始化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Helm-%E4%BB%93%E5%BA%93%E7%AE%A1%E7%90%86"><span class="toc-text">3. Helm 仓库管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%B7%BB%E5%8A%A0%E4%BB%93%E5%BA%93"><span class="toc-text">3.1 添加仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%9F%A5%E7%9C%8B%E4%BB%93%E5%BA%93"><span class="toc-text">3.2 查看仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%9B%B4%E6%96%B0%E4%BB%93%E5%BA%93%E7%B4%A2%E5%BC%95"><span class="toc-text">3.3 更新仓库索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%88%A0%E9%99%A4%E4%BB%93%E5%BA%93"><span class="toc-text">3.4 删除仓库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%9C%A8%E4%BB%93%E5%BA%93%E4%B8%AD%E6%90%9C%E7%B4%A2-Chart-%E5%BA%94%E7%94%A8"><span class="toc-text">3.5 在仓库中搜索 Chart 应用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%9F%A5%E7%9C%8B%E6%8C%87%E5%AE%9A%E4%BB%93%E5%BA%93%E4%B8%ADChart%E7%9A%84%E7%89%88%E6%9C%AC"><span class="toc-text">3.6  查看指定仓库中Chart的版本</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E6%8B%89%E5%8F%96%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84-Chart"><span class="toc-text">3.7 拉取远程仓库的 Chart</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%AE%89%E8%A3%85-chart-%E7%A4%BA%E4%BE%8B"><span class="toc-text">4. 安装 chart 示例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85"><span class="toc-text">4.1 在线安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85"><span class="toc-text">4.2 离线安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-Chart-%E5%AE%89%E8%A3%85%E8%B5%84%E6%BA%90%E9%A1%BA%E5%BA%8F"><span class="toc-text">4.3 Chart 安装资源顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%AE%89%E8%A3%85%E8%BF%87%E7%A8%8B%E4%B8%AD%E6%9C%89%E4%B8%A4%E7%A7%8D%E6%96%B9%E5%BC%8F%E4%BC%A0%E9%80%92%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE"><span class="toc-text">4.4 安装过程中有两种方式传递配置数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-1-set-%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%92%8C%E9%99%90%E5%88%B6"><span class="toc-text">4.4.1 --set 的格式和限制</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E5%AE%89%E8%A3%85%E3%80%81%E5%8D%87%E7%BA%A7%E3%80%81%E5%9B%9E%E6%BB%9A%E6%97%B6%E7%9A%84%E6%9C%89%E7%94%A8%E9%80%89%E9%A1%B9"><span class="toc-text">4.5 安装、升级、回滚时的有用选项</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%8D%B8%E8%BD%BDChart%E5%BA%94%E7%94%A8"><span class="toc-text">5. 卸载Chart应用</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%A1%88%E4%BE%8B-%E5%AE%89%E8%A3%85Nginx"><span class="toc-text">六、案例-安装Nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD-Nginx-Chart-%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-text">1. 下载 Nginx Chart 安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85-Nginx-Chart"><span class="toc-text">2. 安装 Nginx Chart</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%9B%B4%E6%96%B0Chart"><span class="toc-text">3. 更新Chart</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%8D%B8%E8%BD%BDNginx"><span class="toc-text">4. 卸载Nginx</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%83%E3%80%81Helm-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">七、Helm 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Repository-%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">1. Repository 相关命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Chart-%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">2. Chart 相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-helm-create"><span class="toc-text">2.1 helm create</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-helm-package"><span class="toc-text">2.2 helm package</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-helm-lint"><span class="toc-text">2.3 helm lint</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-helm-show"><span class="toc-text">2.4 helm show</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-helm-pull"><span class="toc-text">2.5 helm pull</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-helm-push"><span class="toc-text">2.6 helm push</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Release-%E7%9B%B8%E5%85%B3%E5%91%BD%E4%BB%A4"><span class="toc-text">3. Release 相关命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-helm-install"><span class="toc-text">3.1 helm install</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-helm-list"><span class="toc-text">3.2 helm list</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-helm-status"><span class="toc-text">3.3 helm status</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-helm-get"><span class="toc-text">3.4 helm get</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-helm-upgrade"><span class="toc-text">3.5 helm upgrade</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-helm-history"><span class="toc-text">3.6 helm history</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-helm-rollback"><span class="toc-text">3.7 helm rollback</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8-helm-uninstall"><span class="toc-text">3.8 helm uninstall</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E6%90%AD%E5%BB%BA-Chart-%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="toc-text">八、搭建 Chart 私有仓库</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E4%B8%80%E4%B8%AA-HTTP-Server-%E4%BD%9C%E4%B8%BAchart%E4%BB%93%E5%BA%93"><span class="toc-text">1. 创建一个 HTTP Server 作为chart仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Helm-Chart%E4%B8%8A%E4%BC%A0%E5%88%B0%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="toc-text">2. Helm Chart上传到私有仓库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%B5%8B%E8%AF%95%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="toc-text">3. 测试私有仓库</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B9%9D%E3%80%81%E8%87%AA%E5%AE%9A%E4%B9%89Chart"><span class="toc-text">九、自定义Chart</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%88%9B%E5%BB%BA%E6%A8%A1%E6%9D%BF"><span class="toc-text">1. 创建模板</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%A0%E9%99%A4%E5%A4%9A%E4%BD%99%E7%9A%84%E6%96%87%E4%BB%B6"><span class="toc-text">2. 删除多余的文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-service-yaml"><span class="toc-text">3. service.yaml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-deployment-yaml"><span class="toc-text">4. deployment.yaml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-values-yaml"><span class="toc-text">5. values.yaml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Chart-yaml"><span class="toc-text">6. Chart.yaml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%8F%91%E5%B8%83%E9%83%A8%E7%BD%B2"><span class="toc-text">7. 发布部署</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E6%89%93%E5%8C%85Chart%EF%BC%8C%E5%8F%91%E5%B8%83%E5%88%B0%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93"><span class="toc-text">8. 打包Chart，发布到私有仓库</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1803,6 +1803,81 @@ $ helm install ms/redis --generate-name</code></pre>
 
 
 
+<h3 id="4-3-Chart-安装资源顺序"><a href="#4-3-Chart-安装资源顺序" class="headerlink" title="4.3 Chart 安装资源顺序"></a>4.3 Chart 安装资源顺序</h3><pre><code class="highlight plaintext">Namespace	&gt;	NetworkPolicy	&gt;	ResourceQuota	&gt;	LimitRange	&gt;	PodSecurityPolicy	&gt;	PodDisruptionBudget	&gt;	ServiceAccount	&gt;	Secret	&gt;	SecretList	&gt;	ConfigMap	&gt;	StorageClass
+PersistentVolume	&gt;	PersistentVolumeClaim	&gt;	CustomResourceDefinition	&gt;	ClusterRole
+ClusterRoleList	&gt;	ClusterRoleBinding	&gt;	ClusterRoleBindingList	&gt;	Role	&gt;	RoleList
+RoleBinding	&gt;	RoleBindingList	&gt;	Service	&gt;	DaemonSet	&gt;	Pod	&gt;	ReplicationController	&gt;	ReplicaSet	&gt;	Deployment	&gt;	HorizontalPodAutoscaler	&gt;	StatefulSet	&gt;	Job	&gt;	CronJob	&gt;	Ingress	&gt;	APIService</code></pre>
+
+<!--Helm 客户端不会等到所有资源都运行才退出。许多 charts 需要大小超过 600M 的 Docker 镜像，可能需要很长时间才能安装到集群中。-->
+
+
+
+<h3 id="4-4-安装过程中有两种方式传递配置数据"><a href="#4-4-安装过程中有两种方式传递配置数据" class="headerlink" title="4.4 安装过程中有两种方式传递配置数据"></a>4.4 安装过程中有两种方式传递配置数据</h3><ul>
+<li><code>--values</code> (或 <code>-f</code>)：使用 YAML 文件覆盖配置。可以指定多次，优先使用最右边的文件</li>
+<li><code>--set</code>：通过命令行的方式对指定项进行覆盖</li>
+</ul>
+<p>如果同时使用两种方式，则 <code>--set</code> 中的值会被合并到 <code>--values</code> 中，但是 <code>--set</code> 中的值优先级更高。在<code>--set</code> 中覆盖的内容会被被保存在 ConfigMap 中。可以通过 <code>helm get values &lt;release-name&gt;</code> 来查看指定 release 中 <code>--set</code> 设置的值。也可以通过运行 <code>helm upgrade</code> 并指定 <code>--reset-values</code> 字段来清除 <code>--set</code> 中设置的值</p>
+<h4 id="4-4-1-set-的格式和限制"><a href="#4-4-1-set-的格式和限制" class="headerlink" title="4.4.1 --set 的格式和限制"></a>4.4.1 <code>--set</code> 的格式和限制</h4><p><code>--set</code> 选项使用0或多个 name&#x2F;value 对。最简单的用法类似于： <code>--set name=value</code> ，等价于如下 YAML 格式：</p>
+<pre><code class="highlight yaml"><span class="attr">name:</span> <span class="string">value</span></code></pre>
+
+
+
+<p>多个值使用逗号分割，因此 <code>--set a=b,c=d</code> 的 YAML 表示是：</p>
+<pre><code class="highlight yaml"><span class="attr">a:</span> <span class="string">b</span>
+<span class="attr">c:</span> <span class="string">d</span></code></pre>
+
+
+
+<p>支持更复杂的表达式。例如，<code>--set outer.inner=value</code> 被转换成了：</p>
+<pre><code class="highlight yaml"><span class="attr">outer:</span>
+  <span class="attr">inner:</span> <span class="string">value</span></code></pre>
+
+
+
+<p>列表使用花括号（<code>&#123;&#125;</code>）来表示。例如，<code>--set name=&#123;a, b, c&#125;</code> 被转换成了：</p>
+<pre><code class="highlight yaml"><span class="attr">name:</span>
+  <span class="bullet">-</span> <span class="string">a</span>
+  <span class="bullet">-</span> <span class="string">b</span>
+  <span class="bullet">-</span> <span class="string">c</span></code></pre>
+
+
+
+<p>某些 name&#x2F;key 可以设置为 <code>null</code> 或者空数组，例如  <code>--set name=[],a=null</code>  </p>
+<pre><code class="highlight yaml"><span class="attr">name:</span> []
+<span class="attr">a:</span> <span class="literal">null</span></code></pre>
+
+
+
+<p>从 2.5.0 版本开始，可以使用数组下标的语法来访问列表中的元素。例如 <code>--set servers[0].port=80</code> 就变成了：</p>
+<pre><code class="highlight yaml"><span class="attr">servers:</span>
+  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">80</span></code></pre>
+
+
+
+<p>多个值也可以通过这种方式来设置。<code>--set servers[0].port=80,servers[0].host=example</code> 变成了：</p>
+<pre><code class="highlight yaml"><span class="attr">servers:</span>
+  <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">80</span>
+    <span class="attr">host:</span> <span class="string">example</span></code></pre>
+
+
+
+<p>如果需要在 <code>--set</code> 中使用特殊字符，你可以使用反斜线来进行转义；<code>--set name=value1\,value2</code> 就变成了：</p>
+<pre><code class="highlight yaml"><span class="attr">name:</span> <span class="string">&quot;value1,value2&quot;</span></code></pre>
+
+<p>–set nodeSelector.”kubernetes.io&#x2F;role”&#x3D;master</p>
+<pre><code class="highlight yaml"><span class="attr">nodeSelector:</span>
+  <span class="attr">kubernetes.io/role:</span> <span class="string">master</span></code></pre>
+
+
+
+
+
+<h3 id="4-5-安装、升级、回滚时的有用选项"><a href="#4-5-安装、升级、回滚时的有用选项" class="headerlink" title="4.5 安装、升级、回滚时的有用选项"></a>4.5 安装、升级、回滚时的有用选项</h3><ul>
+<li>–timeout：一个 Go duration 类型的值， 用来表示等待 Kubernetes 命令完成的超时时间，默认值为 5m0s。such as “300ms”, “-1.5h” or “2h45m”. Valid time units are “ns”, “us” (or “µs”), “ms”, “s”, “m”, “h”。</li>
+<li>–wait：表示必须要等到所有的 Pods 都处于 ready 状态，PVC 都被绑定，Deployments 都至少拥有最小 ready 状态 Pods 个数（Desired 减去 maxUnavailable ），并且 Services 都具有 IP 地址（如果是 LoadBalancer， 则为 Ingress ），才会标记该 release 为成功。最长等待时间由 –timeout 值指定。如果达到超时时间，release 将被标记为 FAILED。注意：当 Deployment 的 replicas 被设置为1，但其滚动升级策略中的 maxUnavailable 没有被设置为0时，–wait 将返回就绪，因为已经满足了最小 ready Pod 数</li>
+<li><code>--no-hooks</code>：不运行当前命令的钩子，即为安装此 chart 时的已定义的安装前或者安装后的动作</li>
+<li>–recreate-pods：（仅适用于 <code>upgrade</code> 和 <code>rollback</code>）：这个参数会导致重建所有的 Pod（deployment 中的 Pod 除外）。（在 Helm 3 中已被废弃）</li>
+</ul>
 <h2 id="5-卸载Chart应用"><a href="#5-卸载Chart应用" class="headerlink" title="5. 卸载Chart应用"></a>5. 卸载Chart应用</h2><p>卸载一个已安装的 Release 实例</p>
 <pre><code class="highlight bash"><span class="comment"># 查看当前运行的 release </span>
 $ helm list
@@ -2128,6 +2203,206 @@ nginx-1750588514	default  	1       	2025-06-22 18:35:14.639466957 +0800 CST	depl
 
 <p>浏览器查看私有仓库</p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/22/20250622-183645.png" alt="私有Chart仓库"></p>
+<h1 id="九、自定义Chart"><a href="#九、自定义Chart" class="headerlink" title="九、自定义Chart"></a>九、自定义Chart</h1><h2 id="1-创建模板"><a href="#1-创建模板" class="headerlink" title="1. 创建模板"></a>1. 创建模板</h2><pre><code class="highlight bash"><span class="comment"># 创建chart模板</span>
+$ helm create myapp
+
+<span class="comment"># 查看模板目录结构</span>
+$ tree myapp/
+myapp/
+├── Chart.yaml
+├── charts
+├── templates
+│   ├── NOTES.txt
+│   ├── _helpers.tpl
+│   ├── deployment.yaml
+│   ├── hpa.yaml
+│   ├── ingress.yaml
+│   ├── service.yaml
+│   ├── serviceaccount.yaml
+│   └── tests
+│       └── test-connection.yaml
+└── values.yaml</code></pre>
+
+
+
+<h2 id="2-删除多余的文件"><a href="#2-删除多余的文件" class="headerlink" title="2. 删除多余的文件"></a>2. 删除多余的文件</h2><pre><code class="highlight bash"><span class="comment"># 当前案例比较简单，暂时用不到这些文件，先删除</span>
+$ <span class="built_in">rm</span> -rf templates/_helpers.tpl templates/hpa.yaml templates/ingress.yaml templates/serviceaccount.yaml templates/tests/test-connection.yaml templates/NOTES.txt</code></pre>
+
+
+
+<h2 id="3-service-yaml"><a href="#3-service-yaml" class="headerlink" title="3. service.yaml"></a>3. service.yaml</h2><pre><code class="highlight yaml"><span class="string">$</span> <span class="string">vim</span> <span class="string">service.yaml</span>
+
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">myapp-test</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">myapp-svc</span>
+<span class="attr">spec:</span>
+  <span class="comment"># Service 类型，从 values.yaml 文件取</span>
+  <span class="attr">type:</span> &#123;&#123; <span class="string">.Values.service.type</span> &#125;&#125;
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">port:</span> &#123;&#123; <span class="string">.Values.service.port</span> &#125;&#125; <span class="comment"># Service 端口，从 values.yaml 文件取</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">nodePort:</span> <span class="number">30003</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">myapp-test</span></code></pre>
+
+
+
+<h2 id="4-deployment-yaml"><a href="#4-deployment-yaml" class="headerlink" title="4. deployment.yaml"></a>4. deployment.yaml</h2><pre><code class="highlight yaml"><span class="string">$</span> <span class="string">vim</span> <span class="string">deployment.yaml</span>
+
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">myapp-deploy</span>
+  <span class="attr">name:</span> <span class="string">myapp-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> &#123;&#123; <span class="string">.Values.replicaCount</span> &#125;&#125; <span class="comment"># Pod副本数，从 values.yaml 文件取</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp-test</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp-test</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> &#123;&#123; <span class="string">.Values.image.pullPolicy</span> &#125;&#125; <span class="comment"># 镜像拉取策略，从 values.yaml 文件取</span></code></pre>
+
+
+
+<h2 id="5-values-yaml"><a href="#5-values-yaml" class="headerlink" title="5. values.yaml"></a>5. values.yaml</h2><pre><code class="highlight yaml"><span class="string">$</span> <span class="string">vim</span> <span class="string">values.yaml</span>
+
+<span class="comment"># Pod副本数</span>
+<span class="attr">replicaCount:</span> <span class="number">1</span>
+
+<span class="attr">image:</span>
+  <span class="comment"># 镜像拉取策略</span>
+  <span class="attr">pullPolicy:</span> <span class="string">IfNotPresent</span>
+
+<span class="attr">service:</span>
+  <span class="comment"># Service类型</span>
+  <span class="attr">type:</span> <span class="string">NodePort</span>
+  <span class="comment"># service端口</span>
+  <span class="attr">port:</span> <span class="number">80</span></code></pre>
+
+
+
+<h2 id="6-Chart-yaml"><a href="#6-Chart-yaml" class="headerlink" title="6. Chart.yaml"></a>6. Chart.yaml</h2><pre><code class="highlight yaml"><span class="string">$</span> <span class="string">vim</span> <span class="string">Chart.yaml</span>
+
+<span class="attr">apiVersion:</span> <span class="string">v2</span>
+<span class="attr">name:</span> <span class="string">myapp</span>
+<span class="attr">description:</span> <span class="string">A</span> <span class="string">Helm</span> <span class="string">chart</span> <span class="string">for</span> <span class="string">Kubernetes</span>
+
+<span class="comment"># A chart can be either an &#x27;application&#x27; or a &#x27;library&#x27; chart.</span>
+<span class="comment">#</span>
+<span class="comment"># Application charts are a collection of templates that can be packaged into versioned archives</span>
+<span class="comment"># to be deployed.</span>
+<span class="comment">#</span>
+<span class="comment"># Library charts provide useful utilities or functions for the chart developer. They&#x27;re included as</span>
+<span class="comment"># a dependency of application charts to inject those utilities and functions into the rendering</span>
+<span class="comment"># pipeline. Library charts do not define any templates and therefore cannot be deployed.</span>
+<span class="attr">type:</span> <span class="string">application</span>
+
+<span class="comment"># This is the chart version. This version number should be incremented each time you make changes</span>
+<span class="comment"># to the chart and its templates, including the app version.</span>
+<span class="comment"># Versions are expected to follow Semantic Versioning (https://semver.org/)</span>
+<span class="attr">version:</span> <span class="number">0.1</span><span class="number">.0</span>
+
+<span class="comment"># This is the version number of the application being deployed. This version number should be</span>
+<span class="comment"># incremented each time you make changes to the application. Versions are not expected to</span>
+<span class="comment"># follow Semantic Versioning. They should reflect the version the application is using.</span>
+<span class="comment"># It is recommended to use it with quotes.</span>
+<span class="attr">appVersion:</span> <span class="string">&quot;1.16.0&quot;</span></code></pre>
+
+
+
+<h2 id="7-发布部署"><a href="#7-发布部署" class="headerlink" title="7. 发布部署"></a>7. 发布部署</h2><pre><code class="highlight bash">$ helm install myapp myapp/
+NAME: myapp
+LAST DEPLOYED: Wed Jun 25 12:57:58 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+
+<span class="comment"># 查看部署的 Release</span>
+$ helm list
+NAME 	NAMESPACE	REVISION	UPDATED                               	STATUS  	CHART      	APP VERSION
+myapp	default  	1       	2025-06-25 12:57:58.07309733 +0800 CST	deployed	myapp-0.1.0	1.16.0
+
+<span class="comment"># 查看 Service</span>
+$ kubectl get svc -o wide
+NAME         TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)        AGE     SELECTOR
+kubernetes   ClusterIP   10.96.0.1        &lt;none&gt;        443/TCP        57d     &lt;none&gt;
+myapp-test   NodePort    10.108.147.243   &lt;none&gt;        80:30003/TCP   3m41s   app=myapp-test
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deploy -o wide
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE     CONTAINERS   IMAGES                     SELECTOR
+myapp-deploy   1/1     1            1           4m58s   myapp        wangyanglinux/myapp:v1.0   app=myapp-test
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pod -o wide
+NAME                            READY   STATUS    RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES
+myapp-deploy-7ff87cfb6c-nfff4   1/1     Running   0          5m29s   172.16.58.227   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+
+
+<p>浏览器访问 Service</p>
+<p><a target="_blank" rel="noopener" href="http://192.168.6.139:30003/">http://192.168.6.139:30003/</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/25/20250625-130414.png" alt="访问自定Chart"></p>
+<h2 id="8-打包Chart，发布到私有仓库"><a href="#8-打包Chart，发布到私有仓库" class="headerlink" title="8. 打包Chart，发布到私有仓库"></a>8. 打包Chart，发布到私有仓库</h2><pre><code class="highlight bash"><span class="comment"># 1.将 myapp 目录打包成tgz文件,用于发布。</span>
+$ helm package myapp/
+Successfully packaged chart and saved it to: /opt/k8s/10/myapp-0.1.0.tgz
+
+<span class="comment"># 2.将打包好的压缩包移动到创建的私有仓库目录中（本文第八段有说明）</span>
+$ <span class="built_in">mv</span> myapp-0.1.0.tgz /opt/software/myrepo/
+
+<span class="comment"># 3. 在myrepo目录生成index.yaml索引文件,用于仓库查询。</span>
+$ $ helm repo index /opt/software/myrepo/ --url http://192.168.6.203:8899/charts
+
+<span class="comment"># 4. 将index和chart复制到Web服务器目录下,提供下载。</span>
+$ <span class="built_in">cd</span> /opt/software/myrepo/
+$ scp -r ./* root@192.168.6.203:/var/www/charts/
+
+<span class="comment"># 5. 在本地Helm中添加这个chart仓库源,名为newrepo。</span>
+$ helm repo add newrepo http://192.168.6.203:8899/charts
+
+<span class="comment"># 6. 列出已知的仓库列表,确保newrepo添加成功。</span>
+$ helm repo list
+
+<span class="comment"># 7. 更新本地缓存的仓库index文件。</span>
+$ helm repo update
+
+<span class="comment"># 8. 在newrepo仓库中搜索 nginx 是否可用。</span>
+$ helm search repo newrepo/myapp
+NAME         	CHART VERSION	APP VERSION	DESCRIPTION                
+newrepo/myapp	0.1.0        	1.16.0     	A Helm chart <span class="keyword">for</span> Kubernetes
+
+<span class="comment"># 9. 从私有仓库拉取chart，并安装到服务器</span>
+$ helm install newrepo/myapp --generate-name
+NAME: myapp-1750829238
+LAST DEPLOYED: Wed Jun 25 13:27:18 2025
+NAMESPACE: default
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+
+<span class="comment"># 10. 卸载 Chart</span>
+$ helm uninstall myapp-1750829238
+release <span class="string">&quot;myapp-1750829238&quot;</span> uninstalled</code></pre>
+
+
+
+
+
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>

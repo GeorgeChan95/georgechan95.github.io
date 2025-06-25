@@ -1,0 +1,12 @@
+# Pod副本数
+replicaCount: 1
+
+image:
+  # 镜像拉取策略
+  pullPolicy: IfNotPresent
+
+service:
+  # Service类型
+  type: NodePort
+  # service端口
+  port: 80
