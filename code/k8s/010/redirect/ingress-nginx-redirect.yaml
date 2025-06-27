@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: my-nginx
+          image: nginx:1.29.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80 # 指定容器监听的端口
+              protocol: TCP # 指定端口使用的协议，TCP 表示端口处理 TCP 流量，适合 nginx 的 HTTP 服务
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  namespace: default
+spec:
+  ports:
+    - port: 80 # Service 对外暴露的端口号
+      targetPort: 80 # Service 将流量转发到的目标 Pod 的端口号
+      protocol: TCP
+  selector:
+    app: nginx # Service 将流量路由到带有标签 app=nginx-https 的 Pod
+
+---
+
+apiVersion: networking.k8s.io/v1 # 指定 API 版本
+kind: Ingress # 指定资源类型为 Ingress，表示这是一个用于管理 HTTP/HTTPS 流量的 Kubernetes 资源
+metadata:
+  name: ingress-redirect
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "nginx" # 指定使用的Ingress控制器类名，与 ingressClassName 作用相同
+    nginx.ingress.kubernetes.io/permanent-redirect: https://www.baidu.com # 永久重定向网址
+    nginx.ingress.kubernetes.io/permanent-redirect-code: '301' # 永久重定向状态码
+spec:
+  ingressClassName: nginx # 指定此 Ingress 资源由名称为 nginx 的 IngressClass 处理，定义在 values.yaml 中 controller.ingressClassResource.name
+  rules: # 定义了流量路由的规则，即如何根据域名（host）和路径（path）将请求转发到后端服务。
+    - host: ingress-redirect.com # 指定此规则适用于请求的 HTTP 主机头（Host Header）为 ingress-redirect.com 的流量。客户端必须通过该域名访问, 如果省略 host，Ingress 会匹配所有域名（即通配规则）。

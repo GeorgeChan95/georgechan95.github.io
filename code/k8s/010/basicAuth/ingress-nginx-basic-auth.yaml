@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deploy
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: my-nginx
+          image: nginx:1.29.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80 # 指定容器监听的端口
+              protocol: TCP # 指定端口使用的协议，TCP 表示端口处理 TCP 流量，适合 nginx 的 HTTP 服务
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-svc
+  namespace: default
+spec:
+  ports:
+    - port: 80 # Service 对外暴露的端口号
+      targetPort: 80 # Service 将流量转发到的目标 Pod 的端口号
+      protocol: TCP
+  selector:
+    app: nginx # Service 将流量路由到带有标签 app=nginx 的 Pod
+
+---
+
+apiVersion: networking.k8s.io/v1 # 指定 API 版本
+kind: Ingress # 指定资源类型为 Ingress，表示这是一个用于管理 HTTP/HTTPS 流量的 Kubernetes 资源
+metadata:
+  name: ingress-basic-auth
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/auth-type: basic # 认证类型
+    nginx.ingress.kubernetes.io/auth-secret: ingress-basic-auth # 密码文件的 Secret 名称
+    nginx.ingress.kubernetes.io/auth-realm: '请输入用户名和密码：' # 需要密码认证的消息提醒
+spec:
+  ingressClassName: nginx # 指定此 Ingress 资源由名称为 nginx 的 IngressClass 处理，定义在 values.yaml 中 controller.ingressClassResource.name
+  rules: # 定义了流量路由的规则，即如何根据域名（host）和路径（path）将请求转发到后端服务。
+    - host: auth.basic.com # 指定此规则适用于请求的 HTTP 主机头（Host Header）为 auth.basic.com 的流量。
+      http: # 定义了 HTTP 协议的路由规则
+        paths: # 用于指定路径匹配规则
+          - path: / # 指定匹配的 URL 路径为 /，即根路径,这是最常见的路径，表示匹配所有以 / 开头的请求
+            pathType: ImplementationSpecific # 表示路径匹配行为由 Ingress 控制器定义,对于 nginx Ingress 控制器，ImplementationSpecific 通常等同于 Prefix，即匹配以指定路径开头的请求。
+            backend: # 定义请求的转发目标，即后端服务
+              service:
+                name: nginx-svc # 指定后端服务的名称为 nginx-svc.（必须存在于同一命名空间，或通过 <namespace>/<service-name> 跨命名空间引用）
+                port:
+                  number: 80 # 指定目标 Service 的端口为 80
