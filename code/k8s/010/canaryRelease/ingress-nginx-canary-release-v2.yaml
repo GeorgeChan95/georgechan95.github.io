@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: canary-deploy-v2
+  labels:
+    app: v2
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: v2
+  template:
+    metadata:
+      labels:
+        app: v2
+    spec:
+      containers:
+        - name: deploy-v2
+          image: wangyanglinux/myapp:v2.0
+          imagePullPolicy: IfNotPresent
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: v2
+  name: canary-svc-v2
+  namespace: default
+spec:
+  ports:
+    - name: 80-80
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: v2
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: default
+  name: ingress-v2
+  annotations:
+    nginx.ingress.kubernetes.io/canary: "true" # 启用金丝雀发布模式
+    nginx.ingress.kubernetes.io/canary-weight: "10" # 定义金丝雀服务的流量权重，单位为百分比
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: canary.release.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: canary-svc-v2
+                port:
+                  number: 80

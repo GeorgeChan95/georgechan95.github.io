@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: proxyhttps
+  name: proxyhttps-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: proxyhttps
+  template:
+    metadata:
+      labels:
+        app: proxyhttps
+    spec:
+      containers:
+        - image: wangyanglinux/tools:httpsv1
+          imagePullPolicy: IfNotPresent
+          name: myapp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: proxyhttps
+  name: proxyhttps-svc
+spec:
+  ports:
+    - name: 443-443
+      port: 443
+      protocol: TCP
+      targetPort: 443
+  selector:
+    app: proxyhttps
+  type: ClusterIP

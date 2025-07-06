@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: test
+  name: test-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+        - image: nginx:1.29.0
+          name: myapp
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: test
+  name: test-svc
+spec:
+  ports:
+    - name: 80-80
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: test
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: global.black.com
+spec:
+  rules:
+    - host: global.black.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: test-svc
+                port:
+                  number: 80

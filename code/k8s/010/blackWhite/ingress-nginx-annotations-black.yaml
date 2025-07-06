@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: black
+  name: black-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: black
+  template:
+    metadata:
+      labels:
+        app: black
+    spec:
+      containers:
+        - image: nginx:1.29.0
+          name: myapp
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: black
+  name: black-svc
+spec:
+  ports:
+    - name: 80-80
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: black
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/server-snippet: |
+      deny 10.20.1.141;       # 拒绝特定 IP
+      deny 192.168.6.0/24;    # 拒绝特定网段
+      allow all;              # 允许其他 IP
+  name: annotaions.black.com
+spec:
+  rules:
+    - host: annotaions.black.com
+      http:
+        paths:
+          - pathType: Prefix
+            backend:
+              service:
+                name: black-svc
+                port:
+                  number: 80
+            path: /

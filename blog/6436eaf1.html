@@ -9,39 +9,17 @@
   <meta name="keywords" content=" linux , Docker , Rocky ">
   <meta name="description" content="011-Kubernetes Ingress-Nginx | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、负载均衡器负载均衡器有两类，区别在于 四层网络 和 七层网络 的支持，传输层在第四层，这层协议有 TCP&#x2F;UDP&#x2F;TCP SSL 等，而七层有 HTTP&#x2F;HTTPS。 1. 基于 LVS 的 HTTPS 负载均衡基于 LVS 的 HTTPS 负载均衡 是 典型的四层代理架构。客户端发出请求，经过LVS直接转发到服务器，然后服务器返回结果，从请求的发出到结果的响应，">
-<meta property="og:type" content="article">
-<meta property="og:title" content="011-Kubernetes Ingress-Nginx">
-<meta property="og:url" content="https://georgechan95.github.io/blog/6436eaf1.html">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#95;&#57;&#53;&#x40;&#x31;&#50;&#x36;&#x2e;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="一、负载均衡器负载均衡器有两类，区别在于 四层网络 和 七层网络 的支持，传输层在第四层，这层协议有 TCP&#x2F;UDP&#x2F;TCP SSL 等，而七层有 HTTP&#x2F;HTTPS。 1. 基于 LVS 的 HTTPS 负载均衡基于 LVS 的 HTTPS 负载均衡 是 典型的四层代理架构。客户端发出请求，经过LVS直接转发到服务器，然后服务器返回结果，从请求的发出到结果的响应，">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#111;&#114;&#103;&#101;&#95;&#57;&#53;&#x40;&#x31;&#50;&#x36;&#x2e;&#x63;&#x6f;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-194737.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-195032.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-193516">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-200950.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/25/20250625-171224.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-212802.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-212903.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-213205.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/27/20250627-131509.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/27/20250627-173744.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/27/20250627-173836.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/27/20250627-134058.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-163538.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-163727.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-163727.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-163958.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-172533.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-181844.png">
-<meta property="article:published_time" content="2025-06-25T11:42:00.000Z">
-<meta property="article:modified_time" content="2025-06-28T10:19:18.638Z">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
 <meta property="article:author" content="George">
-<meta property="article:tag" content="linux">
-<meta property="article:tag" content="Docker">
-<meta property="article:tag" content="Rocky">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-194737.png">
 
 
 <link rel="icon" href="/img/favicon.png">
@@ -362,7 +340,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="105">
-<input type="hidden" id="yelog_site_word_count" value="498.1k">
+<input type="hidden" id="yelog_site_word_count" value="503.7k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1446,19 +1424,19 @@
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/2016918085.html"
+           href="/blog/3069199997.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/3069199997.html"
+           href="/blog/2016918085.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
@@ -1520,12 +1498,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2025-06-28 18:19:18'>2025-06-25 19:42</time>
+            发布时间 : <time class="date" title='最后更新: 2025-07-06 17:01:02'>2025-06-25 19:42</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:9.6k</span>
+        <span>字数:15.2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1555,7 +1533,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%99%A8"><span class="toc-text">一、负载均衡器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E4%BA%8E-LVS-%E7%9A%84-HTTPS-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">1. 基于 LVS 的 HTTPS 负载均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9F%BA%E4%BA%8E-Nginx-%E7%9A%84-HTTPS-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">2. 基于 Nginx 的 HTTPS 负载均衡</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Ingress%E7%AE%80%E4%BB%8B"><span class="toc-text">二、Ingress简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Ingress-%E4%BB%8B%E7%BB%8D"><span class="toc-text">1. Ingress 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Ingress-%E4%B8%8E-Service"><span class="toc-text">2.  Ingress 与 Service</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81-%E5%AE%89%E8%A3%85-Ingress-%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">三、 安装 Ingress 控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD-Ingress-nginx-%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-text">1. 下载 Ingress-nginx 安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AF%BC%E5%85%A5-Ingress-nginx-%E9%95%9C%E5%83%8F"><span class="toc-text">2. 导入 Ingress-nginx 镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85-Ingress-nginx"><span class="toc-text">3. 安装 Ingress-nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%A7%A3%E5%8E%8B-Ingress-nginx-%E5%8E%8B%E7%BC%A9%E5%8C%85"><span class="toc-text">3.1 解压  Ingress-nginx 压缩包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%BC%96%E8%BE%91-values-yaml"><span class="toc-text">3.2 编辑 values.yaml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%85%B3%E4%BA%8E-dnsPolicy"><span class="toc-text">3.3 关于 dnsPolicy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%AE%89%E8%A3%85-ingress-nginx"><span class="toc-text">3.4 安装 ingress-nginx</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%B5%8B%E8%AF%95-Ingress-nginx"><span class="toc-text">4. 测试 Ingress-nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%88%9B%E5%BB%BA-Service-%E5%92%8C-Deployment"><span class="toc-text">4.1 创建 Service 和 Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%88%9B%E5%BB%BA-Ingress"><span class="toc-text">4.2 创建 Ingress</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA-host-%E6%96%87%E4%BB%B6"><span class="toc-text">4.3 修改主机 host 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E5%9F%9F%E5%90%8D"><span class="toc-text">4.4 浏览器访问域名</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Ingress-Nginx-%E4%BD%BF%E7%94%A8"><span class="toc-text">四、Ingress Nginx 使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Ingress-nginx-HTTP-%E4%BB%A3%E7%90%86"><span class="toc-text">1. Ingress-nginx HTTP 代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Ingress-nginx-HTTPS-%E4%BB%A3%E7%90%86"><span class="toc-text">2. Ingress-nginx HTTPS 代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6%E5%92%8C%E7%A7%81%E9%92%A5"><span class="toc-text">2.1 生成证书和私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%88%9B%E5%BB%BA%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">2.2 创建资源清单</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Ingress-nginx-BasicAuth-%E4%BB%A3%E7%90%86"><span class="toc-text">3. Ingress-nginx BasicAuth 代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Ingress-nginx-%E5%9F%9F%E5%90%8D%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-text">4. Ingress-nginx 域名重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Ingress-nginx-Rewrite"><span class="toc-text">5. Ingress-nginx  Rewrite</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%A1%88%E4%BE%8B"><span class="toc-text">5.1 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-rewrite-%E5%92%8C-redirect"><span class="toc-text">5.1 rewrite 和 redirect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Ingress-nginx-%E9%94%99%E8%AF%AF%E4%BB%A3%E7%A0%81%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-text">6. Ingress-nginx 错误代码重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E9%BB%98%E8%AE%A4%E9%94%99%E8%AF%AF%E5%90%8E%E7%AB%AF%EF%BC%88%E5%85%A8%E5%B1%80%EF%BC%89"><span class="toc-text">6.1 默认错误后端（全局）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-1-%E4%BF%AE%E6%94%B9-values-yaml"><span class="toc-text">6.1.1 修改 values.yaml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-2-%E6%9B%B4%E6%96%B0-Ingress-Nginx"><span class="toc-text">6.1.2 更新 Ingress Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-3-%E6%B5%8B%E8%AF%95%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">6.1.3 测试资源清单</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%8D%95%E7%8B%AC%E5%A3%B0%E6%98%8E%E9%94%99%E8%AF%AF%E5%90%8E%E7%AB%AF"><span class="toc-text">6.2 单独声明错误后端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Ingress-nginx-%E5%8C%B9%E9%85%8D%E8%AF%B7%E6%B1%82%E5%A4%B4"><span class="toc-text">7. Ingress-nginx  匹配请求头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Ingress-nginx-%E9%85%8D%E7%BD%AE%E9%BB%91%E7%99%BD%E5%90%8D%E5%8D%95"><span class="toc-text">8. Ingress-nginx  配置黑白名单</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Ingress-nginx-%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="toc-text">9. Ingress-nginx  速率限制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-Ingress-nginx-%E7%81%B0%E5%BA%A6%E6%88%96%E8%80%85%E9%87%91%E4%B8%9D%E9%9B%80%E5%8F%91%E5%B8%83"><span class="toc-text">10. Ingress-nginx  灰度或者金丝雀发布</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-Ingress-nginx-%E4%BB%A3%E7%90%86%E5%90%8E%E7%AB%AF-https-%E5%8D%8F%E8%AE%AE"><span class="toc-text">11. Ingress-nginx  代理后端 https 协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-Ingress-nginx-%E5%9B%9B%E5%B1%82%E4%BB%A3%E7%90%86"><span class="toc-text">12. Ingress-nginx  四层代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-Ingress-nginx-%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA"><span class="toc-text">13. Ingress-nginx  链路追踪</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E5%99%A8"><span class="toc-text">一、负载均衡器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9F%BA%E4%BA%8E-LVS-%E7%9A%84-HTTPS-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">1. 基于 LVS 的 HTTPS 负载均衡</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9F%BA%E4%BA%8E-Nginx-%E7%9A%84-HTTPS-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1"><span class="toc-text">2. 基于 Nginx 的 HTTPS 负载均衡</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Ingress%E7%AE%80%E4%BB%8B"><span class="toc-text">二、Ingress简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Ingress-%E4%BB%8B%E7%BB%8D"><span class="toc-text">1. Ingress 介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Ingress-%E4%B8%8E-Service"><span class="toc-text">2.  Ingress 与 Service</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81-%E5%AE%89%E8%A3%85-Ingress-%E6%8E%A7%E5%88%B6%E5%99%A8"><span class="toc-text">三、 安装 Ingress 控制器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD-Ingress-nginx-%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-text">1. 下载 Ingress-nginx 安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AF%BC%E5%85%A5-Ingress-nginx-%E9%95%9C%E5%83%8F"><span class="toc-text">2. 导入 Ingress-nginx 镜像</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85-Ingress-nginx"><span class="toc-text">3. 安装 Ingress-nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%A7%A3%E5%8E%8B-Ingress-nginx-%E5%8E%8B%E7%BC%A9%E5%8C%85"><span class="toc-text">3.1 解压  Ingress-nginx 压缩包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%BC%96%E8%BE%91-values-yaml"><span class="toc-text">3.2 编辑 values.yaml</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E5%85%B3%E4%BA%8E-dnsPolicy"><span class="toc-text">3.3 关于 dnsPolicy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E5%AE%89%E8%A3%85-ingress-nginx"><span class="toc-text">3.4 安装 ingress-nginx</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%B5%8B%E8%AF%95-Ingress-nginx"><span class="toc-text">4. 测试 Ingress-nginx</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%88%9B%E5%BB%BA-Service-%E5%92%8C-Deployment"><span class="toc-text">4.1 创建 Service 和 Deployment</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%88%9B%E5%BB%BA-Ingress"><span class="toc-text">4.2 创建 Ingress</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E4%BF%AE%E6%94%B9%E4%B8%BB%E6%9C%BA-host-%E6%96%87%E4%BB%B6"><span class="toc-text">4.3 修改主机 host 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E6%B5%8F%E8%A7%88%E5%99%A8%E8%AE%BF%E9%97%AE%E5%9F%9F%E5%90%8D"><span class="toc-text">4.4 浏览器访问域名</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Ingress-Nginx-%E4%BD%BF%E7%94%A8"><span class="toc-text">四、Ingress Nginx 使用</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Ingress-nginx-HTTP-%E4%BB%A3%E7%90%86"><span class="toc-text">1. Ingress-nginx HTTP 代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Ingress-nginx-HTTPS-%E4%BB%A3%E7%90%86"><span class="toc-text">2. Ingress-nginx HTTPS 代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%94%9F%E6%88%90%E8%AF%81%E4%B9%A6%E5%92%8C%E7%A7%81%E9%92%A5"><span class="toc-text">2.1 生成证书和私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%88%9B%E5%BB%BA%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">2.2 创建资源清单</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Ingress-nginx-BasicAuth-%E4%BB%A3%E7%90%86"><span class="toc-text">3. Ingress-nginx BasicAuth 代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Ingress-nginx-%E5%9F%9F%E5%90%8D%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-text">4. Ingress-nginx 域名重定向</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Ingress-nginx-Rewrite"><span class="toc-text">5. Ingress-nginx  Rewrite</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E6%A1%88%E4%BE%8B"><span class="toc-text">5.1 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-rewrite-%E5%92%8C-redirect"><span class="toc-text">5.1 rewrite 和 redirect</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Ingress-nginx-%E9%94%99%E8%AF%AF%E4%BB%A3%E7%A0%81%E9%87%8D%E5%AE%9A%E5%90%91"><span class="toc-text">6. Ingress-nginx 错误代码重定向</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E9%BB%98%E8%AE%A4%E9%94%99%E8%AF%AF%E5%90%8E%E7%AB%AF%EF%BC%88%E5%85%A8%E5%B1%80%EF%BC%89"><span class="toc-text">6.1 默认错误后端（全局）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-1-%E4%BF%AE%E6%94%B9-values-yaml"><span class="toc-text">6.1.1 修改 values.yaml</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-2-%E6%9B%B4%E6%96%B0-Ingress-Nginx"><span class="toc-text">6.1.2 更新 Ingress Nginx</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-3-%E6%B5%8B%E8%AF%95%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">6.1.3 测试资源清单</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%8D%95%E7%8B%AC%E5%A3%B0%E6%98%8E%E9%94%99%E8%AF%AF%E5%90%8E%E7%AB%AF"><span class="toc-text">6.2 单独声明错误后端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-Ingress-nginx-%E5%8C%B9%E9%85%8D%E8%AF%B7%E6%B1%82%E5%A4%B4"><span class="toc-text">7. Ingress-nginx  匹配请求头</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E5%BC%80%E5%90%AF-Snippet"><span class="toc-text">7.1 开启 Snippet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E7%BC%96%E8%BE%91%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">7.2 编辑资源清单</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-Ingress-nginx-%E9%85%8D%E7%BD%AE%E9%BB%91%E7%99%BD%E5%90%8D%E5%8D%95"><span class="toc-text">8. Ingress-nginx  配置黑白名单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E9%85%8D%E7%BD%AE%E6%96%B9%E6%A1%88"><span class="toc-text">8.1. 配置方案</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E9%BB%91%E7%99%BD%E5%90%8D%E5%8D%95%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">8.2 黑白名单的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-ConfigMap-%E6%B7%BB%E5%8A%A0%E9%BB%91%E5%90%8D%E5%8D%95"><span class="toc-text">8.3 ConfigMap 添加黑名单</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-3-1-%E7%BC%96%E8%BE%91-Ingress-Nginx-ConfigMap"><span class="toc-text">8.3.1 编辑 Ingress-Nginx ConfigMap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-3-2-%E6%B5%8B%E8%AF%95%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">8.3.2 测试资源清单</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-4-Annotations-%E6%B7%BB%E5%8A%A0%E9%BB%91%E5%90%8D%E5%8D%95"><span class="toc-text">8.4 Annotations 添加黑名单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-5-ConfigMap-%E8%AE%BE%E7%BD%AE%E7%99%BD%E5%90%8D%E5%8D%95"><span class="toc-text">8.5 ConfigMap 设置白名单</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#8-5-1-%E7%BC%96%E8%BE%91-Ingress-Nginx-ConfigMap"><span class="toc-text">8.5.1 编辑 Ingress-Nginx ConfigMap</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#8-5-2-%E6%B5%8B%E8%AF%95%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">8.5.2 测试资源清单</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-6-Annotations-%E6%B7%BB%E5%8A%A0%E7%99%BD%E5%90%8D%E5%8D%95"><span class="toc-text">8.6 Annotations 添加白名单</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#9-Ingress-nginx-%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="toc-text">9. Ingress-nginx  速率限制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6%E8%AE%BE%E7%BD%AE"><span class="toc-text">9.1 速率限制设置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-%E6%B5%8B%E8%AF%95%E6%A1%88%E4%BE%8B%EF%BC%9A%E6%97%A0%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="toc-text">9.2 测试案例：无速率限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-3-%E6%B5%8B%E8%AF%95%E6%A1%88%E4%BE%8B%EF%BC%9A%E4%BD%BF%E7%94%A8-Ingress-%E9%99%90%E5%88%B6%E8%AF%B7%E6%B1%82%E9%80%9F%E7%8E%87"><span class="toc-text">9.3 测试案例：使用 Ingress 限制请求速率</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-Ingress-nginx-%E7%81%B0%E5%BA%A6%E6%88%96%E8%80%85%E9%87%91%E4%B8%9D%E9%9B%80%E5%8F%91%E5%B8%83"><span class="toc-text">10. Ingress-nginx  灰度或者金丝雀发布</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-1-%E6%A6%82%E8%BF%B0"><span class="toc-text">10.1 概述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-2-%E5%88%9B%E5%BB%BA-V1-%E7%89%88%E6%9C%AC%E7%9A%84-Ingress"><span class="toc-text">10.2 创建  V1 版本的 Ingress</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-3-%E5%88%9B%E5%BB%BA-V2-%E7%89%88%E6%9C%AC%E7%9A%84-Ingress"><span class="toc-text">10.3 创建 V2 版本的 Ingress</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#11-Ingress-nginx-%E4%BB%A3%E7%90%86%E5%90%8E%E7%AB%AF-https-%E5%8D%8F%E8%AE%AE"><span class="toc-text">11. Ingress-nginx  代理后端 https 协议</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-Ingress-nginx-%E5%9B%9B%E5%B1%82%E4%BB%A3%E7%90%86"><span class="toc-text">12. Ingress-nginx  四层代理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#12-1TCP%E4%BB%A3%E7%90%86"><span class="toc-text">12.1TCP代理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-2-UDP%E4%BB%A3%E7%90%86"><span class="toc-text">12.2 UDP代理</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-Ingress-nginx-%E9%93%BE%E8%B7%AF%E8%BF%BD%E8%B8%AA"><span class="toc-text">13. Ingress-nginx  链路追踪</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#13-1-%E9%83%A8%E7%BD%B2-Jaeger"><span class="toc-text">13.1 部署 Jaeger</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-2-ingress-%E8%AE%BE%E7%BD%AE"><span class="toc-text">13.2 ingress 设置</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1571,7 +1549,28 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、负载均衡器"><a href="#一、负载均衡器" class="headerlink" title="一、负载均衡器"></a>一、负载均衡器</h1><p>负载均衡器有两类，区别在于 <strong>四层网络</strong> 和 <strong>七层网络</strong> 的支持，传输层在第四层，这层协议有 TCP&#x2F;UDP&#x2F;TCP SSL 等，而七层有 HTTP&#x2F;HTTPS。</p>
+        <p><strong>K8S集群服务器</strong></p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>Hostname</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10.20.1.139</td>
+<td>k8s-master01</td>
+</tr>
+<tr>
+<td>10.20.1.140</td>
+<td>k8s-node01</td>
+</tr>
+<tr>
+<td>10.20.1.141</td>
+<td>k8s-node02</td>
+</tr>
+</tbody></table>
+<h1 id="一、负载均衡器"><a href="#一、负载均衡器" class="headerlink" title="一、负载均衡器"></a>一、负载均衡器</h1><p>负载均衡器有两类，区别在于 <strong>四层网络</strong> 和 <strong>七层网络</strong> 的支持，传输层在第四层，这层协议有 TCP&#x2F;UDP&#x2F;TCP SSL 等，而七层有 HTTP&#x2F;HTTPS。</p>
 <h2 id="1-基于-LVS-的-HTTPS-负载均衡"><a href="#1-基于-LVS-的-HTTPS-负载均衡" class="headerlink" title="1. 基于 LVS 的 HTTPS 负载均衡"></a>1. 基于 LVS 的 HTTPS 负载均衡</h2><p>基于 LVS 的 HTTPS 负载均衡 是 典型的四层代理架构。客户端发出请求，经过LVS直接转发到服务器，然后服务器返回结果，从请求的发出到结果的响应，中间仅仅产生一次完整的TCP连接。</p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-194737.png" alt="四层代理架构"></p>
 <h2 id="2-基于-Nginx-的-HTTPS-负载均衡"><a href="#2-基于-Nginx-的-HTTPS-负载均衡" class="headerlink" title="2. 基于 Nginx 的 HTTPS 负载均衡"></a>2. 基于 Nginx 的 HTTPS 负载均衡</h2><p>基于 Nginx 的 HTTPS 负载均衡是一种基于七层网络代理架构的实现。客户端发出 https 请求，请求到达nginx服务器，nginx 重新生成一个新的 http 请求发到真实的服务器，服务器计算结果后发往 nginx，nginx再将结果以 https 的方式返回给客户端。从请求的发出到结果的响应，中间产生了两次请求。</p>
@@ -1841,15 +1840,18 @@ ingress-httpproxy   nginx   www.test-http-proxy.com             80      18</code
 
 
 <h3 id="4-3-修改主机-host-文件"><a href="#4-3-修改主机-host-文件" class="headerlink" title="4.3 修改主机 host 文件"></a>4.3 修改主机 host 文件</h3><p>修改host文件，将其中一台集群节点的IP，映射域名：<a target="_blank" rel="noopener" href="http://www.test-http-proxy.com/">www.test-http-proxy.com</a></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-212802.png" alt="修改主机 host 文件"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-212903.png" alt="测试Host文件域名映射"></p>
-<h3 id="4-4-浏览器访问域名"><a href="#4-4-浏览器访问域名" class="headerlink" title="4.4 浏览器访问域名"></a>4.4 浏览器访问域名</h3><p>打开浏览器，访问 <a target="_blank" rel="noopener" href="http://www.test-http-proxy.com:32570/">http://www.test-http-proxy.com:32570/</a> ,其中 32570 端口是在创建 ingress-nginx 时自动分配的物理端口，可以通过命令查看：</p>
+<pre><code class="highlight bash">$ <span class="built_in">cat</span> /etc/hosts
+10.20.1.140 www.test-http-proxy.com</code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-151113.png" alt="测试Host文件域名映射"></p>
+<p>10.20.1.140 是 node节点的Ip，部署了 Ingress 控制器。这里通过 Ingress 控制器 将请求转发到 SVC。</p>
+<h3 id="4-4-浏览器访问域名"><a href="#4-4-浏览器访问域名" class="headerlink" title="4.4 浏览器访问域名"></a>4.4 浏览器访问域名</h3><p>打开浏览器，访问 <a target="_blank" rel="noopener" href="http://www.test-http-proxy.com,/">http://www.test-http-proxy.com，</a> 通过访问 Ingress Controller ，访问到 Nginx Svc</p>
 <pre><code class="highlight bash">$ kubectl get service -n ingress-nginx
 NAME                                 TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
 ingress-nginx-controller             LoadBalancer   10.105.7.64     &lt;pending&gt;     80:32570/TCP,443:31991/TCP   117m
 ingress-nginx-controller-admission   ClusterIP      10.102.42.201   &lt;none&gt;        443/TCP                      117m</code></pre>
 
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/26/20250626-213205.png" alt="Ingress-Nginx 实现 Http 代理"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-151605.png" alt="Ingress-Nginx 实现 Http 代理"></p>
 <p>至此可以了解到通过使用 Ingress-Nginx 让外部流量能够访问集群内部的服务。</p>
 <h1 id="四、Ingress-Nginx-使用"><a href="#四、Ingress-Nginx-使用" class="headerlink" title="四、Ingress Nginx 使用"></a>四、Ingress Nginx 使用</h1><p>ingress的api版本历经过多次变化他们的配置项也不太一样分别是：</p>
 <ul>
@@ -1955,14 +1957,14 @@ ingress-httpproxy   nginx   www.test-http-proxy.com             80      18</code
 <p>修改主机 Host 文件</p>
 <p>IP 可以是集群内部署了 Ingress-Controler 的任意一台服务器 IP</p>
 </blockquote>
-<pre><code class="highlight bash">192.168.6.139 www.test-http-proxy.com</code></pre>
+<pre><code class="highlight bash">10.20.1.140 www.test-http-proxy.com</code></pre>
 
 
 
 <blockquote>
 <p>测试访问 HTTP</p>
 </blockquote>
-<pre><code class="highlight bash">$ curl http://www.test-http-proxy.com:32570
+<pre><code class="highlight bash">$ curl http://www.test-http-proxy.com
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;<span class="built_in">head</span>&gt;
@@ -2165,13 +2167,13 @@ ingress-https-proxy   nginx   www.https-proxy.com             80, 443   2m57s</c
 <p>修改主机 Host 文件</p>
 <p>IP 可以是集群内部署了 Ingress-Controler 的任意一台服务器 IP</p>
 </blockquote>
-<pre><code class="highlight bash">192.168.6.139 www.https-proxy.com</code></pre>
+<pre><code class="highlight bash">10.20.1.140 www.https-proxy.com</code></pre>
 
 <blockquote>
 <p>测试访问 HTTPS访问<br>端口号通过命令：kubectl get svc -n ingress-nginx 查看 443 映射端口</p>
 </blockquote>
 <pre><code class="highlight bash"><span class="comment"># 用命令行测试 https 请求，其中 -k 表示忽略自签名证书警告</span>
-$ curl -k https://www.https-proxy.com:31991/
+$ curl -k https://www.https-proxy.com
 &lt;!DOCTYPE html&gt;
 &lt;html&gt;
 &lt;<span class="built_in">head</span>&gt;
@@ -2198,7 +2200,7 @@ Commercial support is available at
 
 
 
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/27/20250627-131509.png" alt="浏览器访问HTTPS"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-152114.png" alt="浏览器访问HTTPS"></p>
 <p>需要将自签发的 tls.crt 证书导入到浏览器中，否则会有 “不安全” 的告警提示</p>
 <p>如果在ingress中设置tls,即默认的http会被强制重定向到https，http即不可访问,如果需要http与https同时可以使用可以设置</p>
 <ul>
@@ -2314,15 +2316,15 @@ metadata:
 <p>修改主机 Host 文件</p>
 <p>IP 可以是集群内部署了 Ingress-Controler 的任意一台服务器 IP</p>
 </blockquote>
-<pre><code class="highlight bash">192.168.6.139 auth.basic.com</code></pre>
+<pre><code class="highlight bash">10.20.1.140 auth.basic.com</code></pre>
 
 
 
 <blockquote>
 <p>浏览器访问测试</p>
 </blockquote>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/27/20250627-173744.png" alt="basic auth 认证测试-登录用户名/密码"></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/27/20250627-173836.png" alt="basic auth 认证测试-登录成功"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-152550.png" alt="basic auth 认证测试-登录用户名/密码"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-152642.png" alt="basic auth 认证测试-登录成功"></p>
 <h2 id="4-Ingress-nginx-域名重定向"><a href="#4-Ingress-nginx-域名重定向" class="headerlink" title="4. Ingress-nginx 域名重定向"></a>4. Ingress-nginx 域名重定向</h2><p><strong>官方说明</strong>：<a target="_blank" rel="noopener" href="https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#permanent-redirect">https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/annotations/#permanent-redirect</a></p>
 <p>在 Nginx 作为代理服务器时，Redirect 可用于域名的重定向，比如访问 old.com 被重定向到 new.com。Ingress 可以更简单的实现 Redirect 功能，接下来用 ingress-redirect.com 作为旧域名， <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a> 作为新域名进行演示：</p>
 <p><strong>相关配置项</strong>：</p>
@@ -2393,11 +2395,11 @@ metadata:
 <blockquote>
 <p>修改主机host文件，添加域名映射</p>
 <p>IP 可以是集群内部署了 Ingress-Controler 的任意一台服务器 IP</p>
-<pre><code class="highlight plaintext">192.168.6.139 ingress-redirect.com</code></pre>
+<pre><code class="highlight plaintext">10.20.1.140 ingress-redirect.com</code></pre>
 </blockquote>
 <blockquote>
 <p>浏览器访问测试</p>
-<p><a target="_blank" rel="noopener" href="http://ingress-redirect.com:32570/">http://ingress-redirect.com:32570/</a></p>
+<p><a target="_blank" rel="noopener" href="http://ingress-redirect.com/">http://ingress-redirect.com</a></p>
 </blockquote>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/27/20250627-134058.png" alt="域名重定向"></p>
 <h2 id="5-Ingress-nginx-Rewrite"><a href="#5-Ingress-nginx-Rewrite" class="headerlink" title="5. Ingress-nginx  Rewrite"></a>5. Ingress-nginx  Rewrite</h2><p>官方示例：<a target="_blank" rel="noopener" href="https://kubernetes.github.io/ingress-nginx/examples/rewrite/">https://kubernetes.github.io/ingress-nginx/examples/rewrite/</a></p>
@@ -2477,23 +2479,19 @@ metadata:
 <blockquote>
 <p>修改主机host文件，添加域名映射</p>
 <p>IP 可以是集群内部署了 Ingress-Controler 的任意一台服务器 IP</p>
-<pre><code class="highlight plaintext">192.168.6.139 ingress-rewrite.com</code></pre>
+<pre><code class="highlight plaintext">10.20.1.140 ingress-rewrite.com</code></pre>
 </blockquote>
 <blockquote>
 <p>访问域名，不加 &#x2F;api 前缀：404</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-163538.png" alt="不加 /api 前缀：404"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-152851.png" alt="不加 /api 前缀：404"></p>
 </blockquote>
 <blockquote>
 <p>访问域名，添加 &#x2F;api 前缀：成功访问到 nginx-svc Service 的默认页面</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-163727.png" alt="添加 /api 前缀：成功访问到 nginx-svc Service 的默认页面"></p>
-</blockquote>
-<blockquote>
-<p>访问域名，添加路径 &#x2F;api&#x2F; 成功访问到 nginx-svc Service 的默认页面</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-163727.png" alt="访问路径 /api/ 成功访问到 nginx-svc Service 的默认页面"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-152935.png" alt="添加 /api 前缀：成功访问到 nginx-svc Service 的默认页面"></p>
 </blockquote>
 <blockquote>
 <p>访问域名，添加路径 &#x2F;api&#x2F;index.html 成功访问到 nginx-svc Service 的 &#x2F;index.html 页面</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-163958.png" alt="访问路径 /api/index.html 成功访问到 nginx-svc Service 的 /index.html 页面"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-153050.png" alt="访问路径 /api/index.html 成功访问到 nginx-svc Service 的 /index.html 页面"></p>
 </blockquote>
 <h3 id="5-1-rewrite-和-redirect"><a href="#5-1-rewrite-和-redirect" class="headerlink" title="5.1 rewrite 和 redirect"></a>5.1 rewrite 和 redirect</h3><p>在 Ingress 控制器中，rewrite 和 redirect 是两种不同的操作，它们的作用和行为有所不同：</p>
 <p><strong>Rewrite（重写）</strong></p>
@@ -2609,10 +2607,10 @@ ingress-nginx-defaultbackend-f7797494f-t77x4   1/1     Running       0          
 <blockquote>
 <p>修改主机host文件，添加域名映射</p>
 <p>IP 可以是集群内部署了 Ingress-Controler 的任意一台服务器 IP</p>
-<pre><code class="highlight plaintext">192.168.6.139 global.errorcode.com</code></pre>
+<pre><code class="highlight plaintext">10.20.1.140 global.errorcode.com</code></pre>
 </blockquote>
 <p>当开启 Ingress Nginx 全局错误码重定向时，此时请求不存在的路径，服务端会返回默认的内容</p>
-<p>例如请求 <a target="_blank" rel="noopener" href="http://ingress-rewrite.com:32570/123.html">http://ingress-rewrite.com:32570/123.html</a></p>
+<p>例如请求 <a target="_blank" rel="noopener" href="http://ingress-rewrite.com/123.html">http://ingress-rewrite.com/123.html</a></p>
 <p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-172533.png" alt="全局错误码重定向"></p>
 <h3 id="6-2-单独声明错误后端"><a href="#6-2-单独声明错误后端" class="headerlink" title="6.2 单独声明错误后端"></a>6.2 单独声明错误后端</h3><p><strong>设置某个ingress的错误重定向会覆盖全局设置，示例如下</strong></p>
 <ul>
@@ -2751,13 +2749,1325 @@ ingress-nginx-defaultbackend-f7797494f-t77x4   1/1     Running       0          
 <blockquote>
 <p>修改主机host文件，添加域名映射</p>
 <p>IP 可以是集群内部署了 Ingress-Controler 的任意一台服务器 IP</p>
-<pre><code class="highlight plaintext">192.168.6.139 single.errorcode.com</code></pre>
+<pre><code class="highlight plaintext">10.20.1.140 single.errorcode.com</code></pre>
 </blockquote>
 <p><strong>测试：</strong></p>
 <p>使用浏览器访问一个不存在的路径，在没有错误码重定向时会返回 404， 如今为 Ingress 单独配置了错误码，会返回配置的 Service 的数据。</p>
-<p><a target="_blank" rel="noopener" href="http://single.errorcode.com:32570/api/index1.html">http://single.errorcode.com:32570/api/index1.html</a></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/06/28/20250628-181844.png" alt="自定义错误码返回"></p>
-<h2 id="7-Ingress-nginx-匹配请求头"><a href="#7-Ingress-nginx-匹配请求头" class="headerlink" title="7. Ingress-nginx  匹配请求头"></a>7. Ingress-nginx  匹配请求头</h2><h2 id="8-Ingress-nginx-配置黑白名单"><a href="#8-Ingress-nginx-配置黑白名单" class="headerlink" title="8. Ingress-nginx  配置黑白名单"></a>8. Ingress-nginx  配置黑白名单</h2><h2 id="9-Ingress-nginx-速率限制"><a href="#9-Ingress-nginx-速率限制" class="headerlink" title="9. Ingress-nginx  速率限制"></a>9. Ingress-nginx  速率限制</h2><h2 id="10-Ingress-nginx-灰度或者金丝雀发布"><a href="#10-Ingress-nginx-灰度或者金丝雀发布" class="headerlink" title="10. Ingress-nginx  灰度或者金丝雀发布"></a>10. Ingress-nginx  灰度或者金丝雀发布</h2><h2 id="11-Ingress-nginx-代理后端-https-协议"><a href="#11-Ingress-nginx-代理后端-https-协议" class="headerlink" title="11. Ingress-nginx  代理后端 https 协议"></a>11. Ingress-nginx  代理后端 https 协议</h2><h2 id="12-Ingress-nginx-四层代理"><a href="#12-Ingress-nginx-四层代理" class="headerlink" title="12. Ingress-nginx  四层代理"></a>12. Ingress-nginx  四层代理</h2><h2 id="13-Ingress-nginx-链路追踪"><a href="#13-Ingress-nginx-链路追踪" class="headerlink" title="13. Ingress-nginx  链路追踪"></a>13. Ingress-nginx  链路追踪</h2><p>参考链接</p>
+<p><a target="_blank" rel="noopener" href="http://single.errorcode.com/api/index1.html">http://single.errorcode.com/api/index1.html</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/04/20250704-153741.png" alt="自定义错误码返回"></p>
+<h2 id="7-Ingress-nginx-匹配请求头"><a href="#7-Ingress-nginx-匹配请求头" class="headerlink" title="7. Ingress-nginx  匹配请求头"></a>7. Ingress-nginx  匹配请求头</h2><p>使用 ingress-nginx 实现根据不同的请求头，将请求转发到不同的服务。需要先开启 ingress-nginx 的 snippet 功能。</p>
+<h3 id="7-1-开启-Snippet"><a href="#7-1-开启-Snippet" class="headerlink" title="7.1 开启 Snippet"></a>7.1 开启 Snippet</h3><pre><code class="highlight bash"><span class="comment"># 编辑 ingress-nginx-controller ConfigMap</span>
+$ kubectl edit cm ingress-nginx-controller -n ingress-nginx
+
+<span class="comment"># 开启 snippet</span>
+apiVersion: v1
+data:
+  allow-snippet-annotations: <span class="string">&quot;true&quot;</span></code></pre>
+
+
+
+<h3 id="7-2-编辑资源清单"><a href="#7-2-编辑资源清单" class="headerlink" title="7.2 编辑资源清单"></a>7.2 编辑资源清单</h3><p><code>ingress-nginx-match-request-header.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">snippet</span>
+  <span class="attr">name:</span> <span class="string">snippet-dep</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">snippet</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">snippet</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">snippet-deploy</span>
+          <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+<span class="meta">---</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">snippet</span>
+  <span class="attr">name:</span> <span class="string">snippet-svc</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">port:</span> <span class="number">80</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">snippet</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+<span class="meta">---</span>
+<span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">snippet-igs</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+  <span class="attr">annotations:</span>
+    <span class="attr">nginx.ingress.kubernetes.io/server-snippet:</span> <span class="string">|</span>
+<span class="string">      set $agentflag 0;</span>
+<span class="string">      if ($http_user_agent ~* &quot;(Android|IPhone)&quot;) &#123; # 如果是Android或IPhone访问会重定向到 www.baidu.com 的新网站</span>
+<span class="string">        set $agentflag 1;</span>
+<span class="string">      &#125;</span>
+<span class="string">      if ($agentflag = 1) &#123;</span>
+<span class="string">        return 302 http://www.baidu.com;</span>
+<span class="string">      &#125;</span>
+<span class="string"></span><span class="attr">spec:</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">snippet.request.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span> <span class="comment"># 定义路径匹配的类型为 Prefix，表示匹配以指定路径（/) 开头的所有请求</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">snippet-svc</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span></code></pre>
+
+
+
+<blockquote>
+<p>执行资源清单</p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-match-request-header.yaml</code></pre>
+</blockquote>
+<blockquote>
+<p>编辑Host文件</p>
+<pre><code class="highlight bash">$ <span class="built_in">cat</span> /etc/hosts
+10.20.1.140 snippet.request.com</code></pre>
+
+<p>10.20.1.140 是 node 节点，部署了 Ingress 控制器</p>
+</blockquote>
+<blockquote>
+<p>测试访问：<strong>默认请求头</strong></p>
+<pre><code class="highlight bash">$ curl http://snippet.request.com
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;style&gt;</code></pre>
+
+<p>成功访问到 Nginx</p>
+</blockquote>
+<blockquote>
+<p>测试访问：添加请求头</p>
+<pre><code class="highlight bash">$ curl http://snippet.request.com -H <span class="string">&#x27;User-Agent: Android&#x27;</span>  -I
+HTTP/1.1 302 Moved Temporarily
+Date: Fri, 04 Jul 2025 07:08:56 GMT
+Content-Type: text/html
+Content-Length: 138
+Connection: keep-alive
+Location: http://www.baidu.com</code></pre>
+
+<p>请求重定向到了 <a target="_blank" rel="noopener" href="http://www.baidu.com/">www.baidu.com</a></p>
+</blockquote>
+<h2 id="8-Ingress-nginx-配置黑白名单"><a href="#8-Ingress-nginx-配置黑白名单" class="headerlink" title="8. Ingress-nginx  配置黑白名单"></a>8. Ingress-nginx  配置黑白名单</h2><h3 id="8-1-配置方案"><a href="#8-1-配置方案" class="headerlink" title="8.1. 配置方案"></a>8.1. 配置方案</h3><p>Ingress-nginx 配置黑白名单有两种方式：</p>
+<ul>
+<li>Annotations：只对指定的ingress生效</li>
+<li>ConfigMap：全局生效</li>
+</ul>
+<p>configmap官方配置文档说明：<a target="_blank" rel="noopener" href="https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/">https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/</a></p>
+<p><strong>若是同时配置了 Annotations 和 configmap，一般都是 annotations 生效，configmap 不生效，因为 annotations 优先级比 configmap 高</strong></p>
+<h3 id="8-2-黑白名单的区别"><a href="#8-2-黑白名单的区别" class="headerlink" title="8.2 黑白名单的区别"></a>8.2 黑白名单的区别</h3><ul>
+<li>白名单是默认是拒绝所有，只允许一个地址去访问</li>
+<li>黑名单是不允许该地址去访问所有</li>
+</ul>
+<p>黑白名单配置使用 configmap 还是 annotations</p>
+<ul>
+<li>黑名单建议使用 ConfigMap 去配置</li>
+<li>白名单建议使用 Annotations 去配置</li>
+</ul>
+<h3 id="8-3-ConfigMap-添加黑名单"><a href="#8-3-ConfigMap-添加黑名单" class="headerlink" title="8.3 ConfigMap 添加黑名单"></a>8.3 ConfigMap 添加黑名单</h3><p>配置黑名单禁止某一个或某一段 IP，需要在 Nginx Ingress 的 ConfigMap 中配置，比如将 10.20.1.141（多个配置逗号分隔）添加至黑名单。</p>
+<p>configmap官方配置文档说明：<a target="_blank" rel="noopener" href="https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/">https://kubernetes.github.io/ingress-nginx/user-guide/nginx-configuration/configmap/</a></p>
+<h4 id="8-3-1-编辑-Ingress-Nginx-ConfigMap"><a href="#8-3-1-编辑-Ingress-Nginx-ConfigMap" class="headerlink" title="8.3.1 编辑 Ingress-Nginx ConfigMap"></a>8.3.1 编辑 Ingress-Nginx ConfigMap</h4><pre><code class="highlight bash">$ kubectl  edit cm ingress-nginx-controller -n ingress-nginx
+apiVersion: v1
+data:
+  allow-snippet-annotations: <span class="string">&quot;true&quot;</span>
+  block-cidrs: 10.20.1.141,10.20.1.149</code></pre>
+
+<p>编辑后保存！</p>
+<h4 id="8-3-2-测试资源清单"><a href="#8-3-2-测试资源清单" class="headerlink" title="8.3.2 测试资源清单"></a>8.3.2 测试资源清单</h4><p><code>ingress-nginx-black-block.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">test</span>
+  <span class="attr">name:</span> <span class="string">test-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">test</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">test</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+          <span class="attr">name:</span> <span class="string">myapp</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">test</span>
+  <span class="attr">name:</span> <span class="string">test-svc</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">port:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">test</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">global.black.com</span>
+<span class="attr">spec:</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">global.black.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">test-svc</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-global-black.yaml</code></pre>
+
+
+
+<p><strong>修改Host文件</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.140 服务器添加 Host 配置</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 global.black.com&quot;</span> &gt;&gt; /etc/hosts
+
+<span class="comment"># 在 10.20.1.141 服务器添加 Host 配置</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.141 global.black.com&quot;</span> &gt;&gt; /etc/hosts</code></pre>
+
+
+
+<p><strong>访问测试</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.140 服务器上测试，可以成功访问 Ingress</span>
+$ curl global.block.com
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Thank you <span class="keyword">for</span> using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+<span class="comment"># 在 10.20.1.141 服务器上测试，访问被禁止，全局配置生效</span>
+$ curl global.block.com
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;&lt;title&gt;403 Forbidden&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;403 Forbidden&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+
+
+
+
+<h3 id="8-4-Annotations-添加黑名单"><a href="#8-4-Annotations-添加黑名单" class="headerlink" title="8.4 Annotations 添加黑名单"></a>8.4 Annotations 添加黑名单</h3><p><strong>资源清单：</strong> <code>ingress-nginx-annotations-black.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">black</span>
+  <span class="attr">name:</span> <span class="string">black-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">black</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">black</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+          <span class="attr">name:</span> <span class="string">myapp</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">black</span>
+  <span class="attr">name:</span> <span class="string">black-svc</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">port:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">black</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">annotations:</span>
+    <span class="attr">nginx.ingress.kubernetes.io/server-snippet:</span> <span class="string">|</span>
+<span class="string">      deny 10.20.1.141;       # 拒绝特定 IP</span>
+<span class="string">      deny 192.168.6.0/24;    # 拒绝特定网段</span>
+<span class="string">      allow all;              # 允许其他 IP</span>
+<span class="string"></span>  <span class="attr">name:</span> <span class="string">annotaions.black.com</span>
+<span class="attr">spec:</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">annotaions.black.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">pathType:</span> <span class="string">Prefix</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">black-svc</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span>
+            <span class="attr">path:</span> <span class="string">/</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-annotations-black.yaml</code></pre>
+
+
+
+<p><strong>修改Host文件</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.140 服务器添加 Host 配置</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 annotaions.black.com&quot;</span> &gt;&gt; /etc/hosts
+
+<span class="comment"># 在 10.20.1.141 服务器添加 Host 配置</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.141 annotaions.black.com&quot;</span> &gt;&gt; /etc/hosts</code></pre>
+
+
+
+<p><strong>访问测试</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.140 服务器上测试，可以成功访问 Ingress</span>
+$ curl annotaions.black.com
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Thank you <span class="keyword">for</span> using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+<span class="comment"># 在 10.20.1.141 服务器上测试，访问被禁止，全局配置生效</span>
+$ curl annotaions.black.com
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;&lt;title&gt;403 Forbidden&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;403 Forbidden&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+
+
+
+
+<h3 id="8-5-ConfigMap-设置白名单"><a href="#8-5-ConfigMap-设置白名单" class="headerlink" title="8.5 ConfigMap 设置白名单"></a>8.5 ConfigMap 设置白名单</h3><p>白名单表示只允许某个IP可以访问 </p>
+<h4 id="8-5-1-编辑-Ingress-Nginx-ConfigMap"><a href="#8-5-1-编辑-Ingress-Nginx-ConfigMap" class="headerlink" title="8.5.1 编辑 Ingress-Nginx ConfigMap"></a>8.5.1 编辑 Ingress-Nginx ConfigMap</h4><p>添加 <code>whitelist-source-range</code> 配置</p>
+<pre><code class="highlight bash">$ kubectl  edit cm ingress-nginx-controller -n ingress-nginx
+apiVersion: v1
+data:
+  allow-snippet-annotations: <span class="string">&quot;true&quot;</span>
+  block-cidrs: 10.20.1.141,10.20.1.149
+  whitelist-source-range: 10.20.1.139,10.20.1.88</code></pre>
+
+<p>编辑后保存！</p>
+<h4 id="8-5-2-测试资源清单"><a href="#8-5-2-测试资源清单" class="headerlink" title="8.5.2 测试资源清单"></a>8.5.2 测试资源清单</h4><p><code>ingress-nginx-global-white.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">test</span>
+  <span class="attr">name:</span> <span class="string">test-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">test</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">test</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+          <span class="attr">name:</span> <span class="string">myapp</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">test</span>
+  <span class="attr">name:</span> <span class="string">test-svc</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">port:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">test</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">global.white.com</span>
+<span class="attr">spec:</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">global.white.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">test-svc</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-global-white.yaml</code></pre>
+
+
+
+<p><strong>修改Host文件</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.140 服务器添加 Host 配置</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 global.white.com&quot;</span> &gt;&gt; /etc/hosts
+
+<span class="comment"># 在 10.20.1.139 服务器添加 Host 配置</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 global.white.com&quot;</span> &gt;&gt; /etc/hosts</code></pre>
+
+
+
+<p><strong>访问测试</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.139 服务器上测试，可以成功访问 Ingress</span>
+$ curl global.white.com
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Thank you <span class="keyword">for</span> using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+<span class="comment"># 在 10.20.1.140 服务器上测试，访问被禁止，全局配置生效</span>
+$ curl global.white.com
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;&lt;title&gt;403 Forbidden&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;403 Forbidden&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+
+
+<h3 id="8-6-Annotations-添加白名单"><a href="#8-6-Annotations-添加白名单" class="headerlink" title="8.6 Annotations 添加白名单"></a>8.6 Annotations 添加白名单</h3><p><strong>资源清单：</strong> <code>ingress-nginx-annotations-white.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">white</span>
+  <span class="attr">name:</span> <span class="string">white-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">white</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">white</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+          <span class="attr">name:</span> <span class="string">myapp</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">white</span>
+  <span class="attr">name:</span> <span class="string">white-svc</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">port:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">white</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">annotations:</span>
+    <span class="attr">nginx.ingress.kubernetes.io/whitelist-source-range:</span> <span class="string">&quot;10.20.1.140&quot;</span>
+  <span class="attr">name:</span> <span class="string">annotations.white.com</span>
+<span class="attr">spec:</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">annotations.white.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">white-svc</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-annotations-white.yaml</code></pre>
+
+
+
+<p><strong>修改Host文件</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.140 服务器添加 Host 配置</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 annotations.white.com&quot;</span> &gt;&gt; /etc/hosts
+
+<span class="comment"># 在 10.20.1.141 服务器添加 Host 配置</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.141 annotations.white.com&quot;</span> &gt;&gt; /etc/hosts</code></pre>
+
+
+
+<p><strong>访问测试</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.140 服务器上测试，可以成功访问 Ingress</span>
+$ curl annotations.white.com
+&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;
+&lt;title&gt;Welcome to nginx!&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Welcome to nginx!&lt;/h1&gt;
+&lt;p&gt;&lt;em&gt;Thank you <span class="keyword">for</span> using nginx.&lt;/em&gt;&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+<span class="comment"># 在 10.20.1.141 服务器上测试，访问被禁止，全局配置生效</span>
+$ curl annotations.white.com
+&lt;html&gt;
+&lt;<span class="built_in">head</span>&gt;&lt;title&gt;403 Forbidden&lt;/title&gt;&lt;/head&gt;
+&lt;body&gt;
+&lt;center&gt;&lt;h1&gt;403 Forbidden&lt;/h1&gt;&lt;/center&gt;
+&lt;hr&gt;&lt;center&gt;nginx&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+
+
+
+
+<h2 id="9-Ingress-nginx-速率限制"><a href="#9-Ingress-nginx-速率限制" class="headerlink" title="9. Ingress-nginx  速率限制"></a>9. Ingress-nginx  速率限制</h2><p>有时候可能需要限制速率以降低后端压力，或者限制单个IP每秒的访问速率防止攻击。此时可以使用  Nginx 的 rate limit 进行配置</p>
+<h3 id="9-1-速率限制设置"><a href="#9-1-速率限制设置" class="headerlink" title="9.1 速率限制设置"></a>9.1 速率限制设置</h3><pre><code class="highlight bash"><span class="comment">#限制每秒的连接，单个 IP： </span>
+nginx.ingress.kubernetes.io/limit-rps
+
+<span class="comment">#限制每分钟的连接，单个 IP： </span>
+nginx.ingress.kubernetes.io/limit-rpm 
+
+<span class="comment">#限制客户端每秒传输的字节数，单位为 K，需要开启 proxy-buffering： </span>
+nginx.ingress.kubernetes.io/limit-rate 
+
+<span class="comment">#速率限制白名单 </span>
+nginx.ingress.kubernetes.io/limit-whitelist</code></pre>
+
+
+
+<h3 id="9-2-测试案例：无速率限制"><a href="#9-2-测试案例：无速率限制" class="headerlink" title="9.2 测试案例：无速率限制"></a>9.2 测试案例：无速率限制</h3><p>资源清单 ：<code>ingress-nginx-rate-limit-pod.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">speed-deploy</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">2</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">speed</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">speed</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">myapp</span>
+          <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+<span class="meta">---</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+  <span class="attr">name:</span> <span class="string">speed-svc</span>
+<span class="attr">spec:</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">speed</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">port:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-rate-limit-pod.yaml</code></pre>
+
+
+
+<p><strong>编辑Host文件</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.140 服务器写入</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 rate.limit.com&quot;</span> &gt;&gt; /etc/hosts
+
+<span class="comment"># 在 10.20.1.141 服务器写入</span>
+<span class="built_in">echo</span> <span class="string">&quot;10.20.1.141 rate.limit.com&quot;</span> &gt;&gt; /etc/hosts</code></pre>
+
+
+
+<p><strong>测试在无Ingress 限制速率的情况下， 发起100次请求</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 安装 ab 工具</span>
+$ sudo yum install -y httpd-tools
+
+<span class="comment"># 测试发起100个请求，并发数是 10</span>
+$ ab -c 10 -n 100 http://rate.limit.com/ | grep requests
+Complete requests:      100
+Failed requests:        0
+Time per request:       0.188 [ms] (mean, across all concurrent requests)
+Percentage of the requests served within a certain time (ms)</code></pre>
+
+<p>结论：在没有速率限制的情况下，100个请求全部成功。</p>
+<h3 id="9-3-测试案例：使用-Ingress-限制请求速率"><a href="#9-3-测试案例：使用-Ingress-限制请求速率" class="headerlink" title="9.3 测试案例：使用 Ingress 限制请求速率"></a>9.3 测试案例：使用 Ingress 限制请求速率</h3><p>资源清单：<code>ingress-nginx-rate-limit-ingress.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">speed-ingress</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+  <span class="attr">annotations:</span>
+    <span class="attr">nginx.ingress.kubernetes.io/limit-rps:</span> <span class="string">&quot;10&quot;</span>  <span class="comment"># 每秒最多 10 个请求</span>
+    <span class="attr">nginx.ingress.kubernetes.io/limit-whitelist:</span> <span class="string">&quot;10.20.1.140,192.168.6.0/24&quot;</span>  <span class="comment"># 这些 IP 范围免于速率限制</span>
+<span class="attr">spec:</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">rate.limit.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">speed-svc</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-rate-limit-ingress.yaml</code></pre>
+
+
+
+<p><strong>测试速率限制</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 在 10.20.1.141 服务器上使用 ab 同时发起100个请求</span>
+$ ab -c 10 -n 100 http://rate.limit.com/ | grep requests
+Complete requests:      100
+Failed requests:        49
+Time per request:       0.205 [ms] (mean, across all concurrent requests)
+Percentage of the requests served within a certain time (ms)
+<span class="comment">###</span>
+由于 Ingress 做了请求速率的限制，发起100个请求，有49个失败了
+<span class="comment">###</span>
+
+
+<span class="comment"># 在 10.20.1.140 服务器上使用 ab 同时发起100个请求</span>
+$ ab -c 10 -n 100 http://rate.limit.com/ | grep requests
+Complete requests:      100
+Failed requests:        0
+Time per request:       0.137 [ms] (mean, across all concurrent requests)
+Percentage of the requests served within a certain time (ms)
+<span class="comment">###</span>
+虽然Ingress对请求做了速率限制，由于 10.20.1.140 服务器ip在ingress 速率限制的白名单中，因此请求速率不受限制，100个请求全部成功
+<span class="comment">###</span></code></pre>
+
+
+
+
+
+<h2 id="10-Ingress-nginx-灰度或者金丝雀发布"><a href="#10-Ingress-nginx-灰度或者金丝雀发布" class="headerlink" title="10. Ingress-nginx  灰度或者金丝雀发布"></a>10. Ingress-nginx  灰度或者金丝雀发布</h2><h3 id="10-1-概述"><a href="#10-1-概述" class="headerlink" title="10.1 概述"></a>10.1 概述</h3><p>灰度发布（也称金丝雀发布，Canary Release）是一种软件部署策略，旨在降低新版本上线带来的风险。它通过将新版本逐步推送给一小部分用户或系统（称为“金丝雀”），观察其表现、稳定性及用户反馈，再决定是否推广到全部用户。以下是详细解释：</p>
+<p><strong>核心概念</strong></p>
+<ol>
+<li><strong>逐步推广</strong>：新版本不会一次性部署到所有用户，而是先部署到小规模用户群（如1%的用户或特定区域）。</li>
+<li><strong>监控与验证</strong>：在灰度发布期间，开发团队会密切监控新版本的性能、错误率、用户体验等指标。</li>
+<li><strong>快速回滚</strong>：如果发现问题，可以迅速回滚到旧版本，减少对用户的影响。</li>
+<li><strong>金丝雀的由来</strong>：名称源于煤矿工人使用金丝雀鸟来检测矿井中有毒气体。如果鸟儿出现异常，工人会立即撤离。类似地，灰度发布通过小范围测试来“预警”潜在问题。</li>
+</ol>
+<p><strong>实施步骤</strong></p>
+<ol>
+<li><strong>选择目标群体</strong>：确定一小部分用户或服务器作为“金丝雀”，可以基于地理位置、用户ID、设备类型等条件。</li>
+<li><strong>部署新版本</strong>：将新版本部署到选定群体，同时旧版本继续服务其他用户。</li>
+<li><strong>监控表现</strong>：使用监控工具（如日志分析、性能指标、用户反馈）评估新版本的稳定性。</li>
+<li><strong>逐步扩展</strong>：如果表现良好，逐步增加新版本的覆盖范围（如从1%到10%、50%直至100%）。</li>
+<li><strong>回滚或全量发布</strong>：若发现问题，回滚到旧版本；若一切正常，完成全量发布。</li>
+</ol>
+<h3 id="10-2-创建-V1-版本的-Ingress"><a href="#10-2-创建-V1-版本的-Ingress" class="headerlink" title="10.2 创建  V1 版本的 Ingress"></a>10.2 创建  V1 版本的 Ingress</h3><p><strong>资源清单：</strong> <code>ingress-nginx-canary-release-v1.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+  <span class="attr">name:</span> <span class="string">canary-deploy-v1</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">v1</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">10</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">v1</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">v1</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">deploy-v1</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v1.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">v1</span>
+  <span class="attr">name:</span> <span class="string">canary-svc-v1</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">port:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">v1</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+  <span class="attr">name:</span> <span class="string">ingress-v1</span>
+  <span class="attr">annotations:</span>
+    <span class="attr">kubernetes.io/ingress.class:</span> <span class="string">&quot;nginx&quot;</span>
+<span class="attr">spec:</span>
+  <span class="attr">ingressClassName:</span> <span class="string">&quot;nginx&quot;</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">canary.release.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">canary-svc-v1</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-canary-release-v1.yaml</code></pre>
+
+
+
+<p><strong>编辑Hosts文件</strong></p>
+<pre><code class="highlight bash">$ <span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 canary.release.com&quot;</span> &gt;&gt; /etc/hosts</code></pre>
+
+
+
+<p><strong>测试请求</strong></p>
+<pre><code class="highlight bash">$ curl http://canary.release.com
+www.xinxianghf.com | hello MyAPP | version v1.0</code></pre>
+
+
+
+<h3 id="10-3-创建-V2-版本的-Ingress"><a href="#10-3-创建-V2-版本的-Ingress" class="headerlink" title="10.3 创建 V2 版本的 Ingress"></a>10.3 创建 V2 版本的 Ingress</h3><p><strong>资源清单：</strong><code>ingress-nginx-canary-release-v2.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+  <span class="attr">name:</span> <span class="string">canary-deploy-v2</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">v2</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">10</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">v2</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">v2</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">deploy-v2</span>
+          <span class="attr">image:</span> <span class="string">wangyanglinux/myapp:v2.0</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">v2</span>
+  <span class="attr">name:</span> <span class="string">canary-svc-v2</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">80</span><span class="number">-80</span>
+      <span class="attr">port:</span> <span class="number">80</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">80</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">v2</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+  <span class="attr">name:</span> <span class="string">ingress-v2</span>
+  <span class="attr">annotations:</span>
+    <span class="attr">nginx.ingress.kubernetes.io/canary:</span> <span class="string">&quot;true&quot;</span> <span class="comment"># 启用金丝雀发布模式</span>
+    <span class="attr">nginx.ingress.kubernetes.io/canary-weight:</span> <span class="string">&quot;10&quot;</span> <span class="comment"># 定义金丝雀服务的流量权重，单位为百分比</span>
+<span class="attr">spec:</span>
+  <span class="attr">ingressClassName:</span> <span class="string">&quot;nginx&quot;</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">canary.release.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">canary-svc-v2</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-canary-release-v2.yaml</code></pre>
+
+
+
+<p><strong>编辑Hosts文件</strong></p>
+<pre><code class="highlight bash">$ <span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 canary.release.com&quot;</span> &gt;&gt; /etc/hosts</code></pre>
+
+
+
+<p><strong>测试请求</strong></p>
+<p>测试请求 100次， 查看请求汇总信息</p>
+<pre><code class="highlight bash"><span class="comment"># 做100次请求</span>
+$ <span class="keyword">for</span> i <span class="keyword">in</span> &#123;1..100&#125;;<span class="keyword">do</span> curl http://canary.release.com  &gt;&gt; <span class="built_in">sum</span>;<span class="keyword">done</span>
+
+<span class="comment"># 查看请求汇总信息</span>
+$ <span class="built_in">cat</span> <span class="built_in">sum</span> | <span class="built_in">sort</span> | <span class="built_in">uniq</span> -c
+     92 www.xinxianghf.com | hello MyAPP | version v1.0
+      8 www.xinxianghf.com | hello MyAPP | version v2.0</code></pre>
+
+<p>结论：请求了100次，其中 92次请求到了 v1.0 版本， 8次请求到 v2.0版本。v2.0 大约占了 10%</p>
+<h2 id="11-Ingress-nginx-代理后端-https-协议"><a href="#11-Ingress-nginx-代理后端-https-协议" class="headerlink" title="11. Ingress-nginx  代理后端 https 协议"></a>11. Ingress-nginx  代理后端 https 协议</h2><p>如果后端服务是 https 协议，需要使用 <code>nginx.ingress.kubernetes.io/backend-protocols</code> 声明后端服务是 <code>https</code> 。这里代理K8s的web控制台作为示例。代理后访问默认会强制跳转到 https 协议，返回的证书也是服务本身的证书。</p>
+<p>资源清单：<code>ingress-nginx-proxy-https-pod.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">proxyhttps</span>
+  <span class="attr">name:</span> <span class="string">proxyhttps-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">proxyhttps</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">proxyhttps</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">wangyanglinux/tools:httpsv1</span>
+          <span class="attr">name:</span> <span class="string">myapp</span>
+<span class="meta">---</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">proxyhttps</span>
+  <span class="attr">name:</span> <span class="string">proxyhttps-svc</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">443</span><span class="number">-443</span>
+      <span class="attr">port:</span> <span class="number">443</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">443</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">proxyhttps</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-proxy-https-pod.yaml</code></pre>
+
+
+
+<p><strong>访问Service</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看 Service 资源</span>
+$ kubectl get svc -o wide
+NAME             TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)   AGE     SELECTOR
+proxyhttps-svc   ClusterIP   10.103.15.21   &lt;none&gt;        443/TCP   3m25s   app=proxyhttps
+
+<span class="comment"># 访问Service</span>
+$ curl -k https://10.103.15.21
+Hello, HTTPS!
+
+$ curl http://10.103.15.21:443
+Client sent an HTTP request to an HTTPS server.</code></pre>
+
+<p>当前Service只能使用 HTTPS 访问</p>
+<p><strong>只用 Ingress 代理后端 HTTPS 服务</strong></p>
+<p>资源清单：<code>ingress-nginx-proxy-https-ingress.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">annotations:</span>
+    <span class="attr">nginx.ingress.kubernetes.io/backend-protocol:</span> <span class="string">HTTPS</span>
+  <span class="attr">name:</span> <span class="string">ingress.https.com</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">ingress.https.com</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>
+            <span class="attr">pathType:</span> <span class="string">ImplementationSpecific</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">proxyhttps-svc</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">443</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-proxy-https-ingress.yaml</code></pre>
+
+
+
+<p><strong>编辑Host文件</strong></p>
+<pre><code class="highlight bash">$ <span class="built_in">echo</span> <span class="string">&quot;10.20.1.140 ingress.https.com&quot;</span> &gt;&gt; /etc/hosts</code></pre>
+
+
+
+<p><strong>请求测试</strong></p>
+<pre><code class="highlight bash">$ curl http://ingress.https.com
+Hello, HTTPS!</code></pre>
+
+<p>结论：使用 Ingress 代理了后端HTTPS请求</p>
+<h2 id="12-Ingress-nginx-四层代理"><a href="#12-Ingress-nginx-四层代理" class="headerlink" title="12. Ingress-nginx  四层代理"></a>12. Ingress-nginx  四层代理</h2><p>在新版本的nginx也引入了四层代理的概念，可直接代理TCP与UDP协议，在ingress-nginx也可以通过四层代理实现service的代理，实现方式如下：</p>
+<p>官方文档：<a target="_blank" rel="noopener" href="https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/">https://kubernetes.github.io/ingress-nginx/user-guide/exposing-tcp-udp-services/</a></p>
+<p>首先在使用 helm 部署 ingress-nginx 之后，需修改 nginx 启动资源的启动参数添加<code>--tcp-services-configmap</code>、<code>--udp-services-configmap</code> 的配置启用四层代理，通过修改配置 configmap 资源进行四层代理的配置。</p>
+<h3 id="12-1TCP代理"><a href="#12-1TCP代理" class="headerlink" title="12.1TCP代理"></a>12.1TCP代理</h3><p><strong>修改 ingress-nginx 控制器</strong></p>
+<p>在 ingress-nginx-controller 中添加 <code>--tcp-services-configmap</code> 启动参数</p>
+<pre><code class="highlight bash">$ kubectl  edit ds -n ingress-nginx ingress-nginx-controller
+
+    spec:
+      containers:
+      - args:
+        - /nginx-ingress-controller
+        - --tcp-services-configmap=$(POD_NAMESPACE)/nginx-ingress-tcp-configmap
+        
+<span class="comment">#参数说明如下</span>
+--tcp-services-configmap=$(POD_NAMESPACE)/  这里为固定，表示tcp配置选择ingress-nginx安装的命名空间的configmap资源
+nginx-ingress-tcp-configmap  为configmap资源的名称</code></pre>
+
+
+
+<p><strong>编辑 ConfigMap</strong></p>
+<p><code>nginx-ingress-tcp-configmap.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ConfigMap</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">nginx-ingress-tcp-configmap</span>
+  <span class="attr">namespace:</span> <span class="string">ingress-nginx</span> <span class="comment"># ingress-nginx 所在的命名空间</span>
+<span class="attr">data:</span>
+  <span class="attr">&quot;9000&quot;:</span> <span class="string">&quot;default/proxyhttps-svc:443&quot;</span></code></pre>
+
+<pre><code class="highlight bash">$ kubectl apply -f nginx-ingress-tcp-configmap.yaml</code></pre>
+
+
+
+<p><strong>Pod资源清单</strong></p>
+<p><code>ingress-nginx-tcp-proxy-pod.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">proxyhttps</span>
+  <span class="attr">name:</span> <span class="string">proxyhttps-deploy</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">proxyhttps</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">proxyhttps</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">image:</span> <span class="string">wangyanglinux/tools:httpsv1</span>
+          <span class="attr">name:</span> <span class="string">myapp</span>
+<span class="meta">---</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">proxyhttps</span>
+  <span class="attr">name:</span> <span class="string">proxyhttps-svc</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="number">443</span><span class="number">-443</span>
+      <span class="attr">port:</span> <span class="number">443</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">443</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">proxyhttps</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f ingress-nginx-tcp-proxy-pod.yaml</code></pre>
+
+
+
+<p><strong>测试四层代理访问</strong></p>
+<pre><code class="highlight bash">$ kubectl get svc -o wide
+NAME             TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE    SELECTOR
+proxyhttps-svc   ClusterIP   10.96.172.123   &lt;none&gt;        443/TCP   63s    app=proxyhttps
+
+<span class="comment"># 首先直接访问 SVC，确认服务可用</span>
+$ curl -k https://10.96.172.123:443
+Hello, HTTPS!
+
+<span class="comment"># 测试通过ingress 4层代理访问</span>
+$ curl -k https://10.20.1.140:9000
+Hello, HTTPS!</code></pre>
+
+
+
+<h3 id="12-2-UDP代理"><a href="#12-2-UDP代理" class="headerlink" title="12.2 UDP代理"></a>12.2 UDP代理</h3><p><strong>修改 ingress-nginx 控制器</strong></p>
+<p>在 ingress-nginx-controller 中添加 <code>--tcp-services-configmap</code> 启动参数</p>
+<pre><code class="highlight bash">$ kubectl  edit ds -n ingress-nginx ingress-nginx-controller
+
+    spec:
+      containers:
+      - args:
+        - /nginx-ingress-controller
+        - --udp-services-configmap=$(POD_NAMESPACE)/nginx-ingress-udp-configmap
+        
+<span class="comment">#参数说明如下</span>
+--tcp-services-configmap=$(POD_NAMESPACE)/  这里为固定，表示tcp配置选择ingress-nginx安装的命名空间的configmap资源
+nginx-ingress-tcp-configmap  为configmap资源的名称</code></pre>
+
+
+
+<p><strong>编辑 ConfigMap</strong></p>
+<p><code>nginx-ingress-udp-configmap.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ConfigMap</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">nginx-ingress-udp-configmap</span>
+  <span class="attr">namespace:</span> <span class="string">ingress</span>
+<span class="attr">data:</span>
+  <span class="attr">&quot;53&quot;:</span> <span class="string">&quot;kube-system/kube-dns:53&quot;</span></code></pre>
+
+
+
+
+
+<h2 id="13-Ingress-nginx-链路追踪"><a href="#13-Ingress-nginx-链路追踪" class="headerlink" title="13. Ingress-nginx  链路追踪"></a>13. Ingress-nginx  链路追踪</h2><p>官方文档：<a target="_blank" rel="noopener" href="https://kubernetes.github.io/ingress-nginx/user-guide/third-party-addons/opentracing/#jaeger">https://kubernetes.github.io/ingress-nginx/user-guide/third-party-addons/opentracing/#jaeger</a></p>
+<p>官方推荐的链路追踪插件为 Zipkin 或者 Jaeger。这里我们选用 Jaeger。</p>
+<p>官方部署示例文件: <a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/jaegertracing/jaeger-kubernetes/master/all-in-one/jaeger-all-in-one-template.yml">https://raw.githubusercontent.com/jaegertracing/jaeger-kubernetes/master/all-in-one/jaeger-all-in-one-template.yml</a></p>
+<h3 id="13-1-部署-Jaeger"><a href="#13-1-部署-Jaeger" class="headerlink" title="13.1 部署 Jaeger"></a>13.1 部署 Jaeger</h3><pre><code class="highlight bash"><span class="comment"># 下载部署资源清单</span>
+wget https://raw.githubusercontent.com/jaegertracing/jaeger-kubernetes/master/all-in-one/jaeger-all-in-one-template.yml
+
+</code></pre>
+
+<p>修改 jaeger 资源清单</p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">List</span>
+<span class="attr">items:</span>
+<span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">apps/v1</span> <span class="comment"># 将版本修改为 apps/v1</span>
+  <span class="attr">kind:</span> <span class="string">Deployment</span>
+  <span class="attr">metadata:</span>
+    <span class="attr">name:</span> <span class="string">jaeger</span>
+    <span class="attr">labels:</span>
+      <span class="attr">app:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">all-in-one</span>
+  <span class="attr">spec:</span>
+    <span class="attr">replicas:</span> <span class="number">1</span>
+    <span class="attr">selector:</span> <span class="comment"># 添加选择器， apps/v1版本需要</span>
+      <span class="attr">matchLabels:</span>
+        <span class="attr">app:</span> <span class="string">jaeger</span>
+    <span class="attr">strategy:</span>
+      <span class="attr">type:</span> <span class="string">Recreate</span>
+    <span class="attr">template:</span>
+      <span class="attr">metadata:</span>
+        <span class="attr">labels:</span>
+          <span class="attr">app:</span> <span class="string">jaeger</span>
+          <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+          <span class="attr">app.kubernetes.io/component:</span> <span class="string">all-in-one</span>
+        <span class="attr">annotations:</span>
+          <span class="attr">prometheus.io/scrape:</span> <span class="string">&quot;true&quot;</span>
+          <span class="attr">prometheus.io/port:</span> <span class="string">&quot;16686&quot;</span>
+      <span class="attr">spec:</span>
+          <span class="attr">containers:</span>
+          <span class="bullet">-</span>   <span class="attr">env:</span>
+              <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">COLLECTOR_ZIPKIN_HTTP_PORT</span>
+                <span class="attr">value:</span> <span class="string">&quot;9411&quot;</span>
+              <span class="attr">image:</span> <span class="string">jaegertracing/all-in-one</span>
+              <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span> <span class="comment"># 修改镜像下载策略，提前将镜像下载好</span>
+              <span class="attr">name:</span> <span class="string">jaeger</span>
+              <span class="attr">ports:</span>
+                <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">5775</span>
+                  <span class="attr">protocol:</span> <span class="string">UDP</span>
+                <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">6831</span>
+                  <span class="attr">protocol:</span> <span class="string">UDP</span>
+                <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">6832</span>
+                  <span class="attr">protocol:</span> <span class="string">UDP</span>
+                <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">5778</span>
+                  <span class="attr">protocol:</span> <span class="string">TCP</span>
+                <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">16686</span>
+                  <span class="attr">protocol:</span> <span class="string">TCP</span>
+                <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">9411</span>
+                  <span class="attr">protocol:</span> <span class="string">TCP</span>
+              <span class="attr">readinessProbe:</span>
+                <span class="attr">httpGet:</span>
+                  <span class="attr">path:</span> <span class="string">&quot;/&quot;</span>
+                  <span class="attr">port:</span> <span class="number">14269</span>
+                <span class="attr">initialDelaySeconds:</span> <span class="number">5</span>
+<span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">v1</span>
+  <span class="attr">kind:</span> <span class="string">Service</span>
+  <span class="attr">metadata:</span>
+    <span class="attr">name:</span> <span class="string">jaeger-query</span>
+    <span class="attr">labels:</span>
+      <span class="attr">app:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">query</span>
+  <span class="attr">spec:</span>
+    <span class="attr">ports:</span>
+      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">query-http</span>
+        <span class="attr">port:</span> <span class="number">80</span>
+        <span class="attr">protocol:</span> <span class="string">TCP</span>
+        <span class="attr">targetPort:</span> <span class="number">16686</span>
+    <span class="attr">selector:</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">all-in-one</span>
+    <span class="attr">type:</span> <span class="string">LoadBalancer</span>
+<span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">v1</span>
+  <span class="attr">kind:</span> <span class="string">Service</span>
+  <span class="attr">metadata:</span>
+    <span class="attr">name:</span> <span class="string">jaeger-collector</span>
+    <span class="attr">labels:</span>
+      <span class="attr">app:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">collector</span>
+  <span class="attr">spec:</span>
+    <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jaeger-collector-tchannel</span>
+      <span class="attr">port:</span> <span class="number">14267</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">14267</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jaeger-collector-http</span>
+      <span class="attr">port:</span> <span class="number">14268</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">14268</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jaeger-collector-zipkin</span>
+      <span class="attr">port:</span> <span class="number">9411</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">9411</span>
+    <span class="attr">selector:</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">all-in-one</span>
+    <span class="attr">type:</span> <span class="string">ClusterIP</span>
+<span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">v1</span>
+  <span class="attr">kind:</span> <span class="string">Service</span>
+  <span class="attr">metadata:</span>
+    <span class="attr">name:</span> <span class="string">jaeger-agent</span>
+    <span class="attr">labels:</span>
+      <span class="attr">app:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">agent</span>
+  <span class="attr">spec:</span>
+    <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">agent-zipkin-thrift</span>
+      <span class="attr">port:</span> <span class="number">5775</span>
+      <span class="attr">protocol:</span> <span class="string">UDP</span>
+      <span class="attr">targetPort:</span> <span class="number">5775</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">agent-compact</span>
+      <span class="attr">port:</span> <span class="number">6831</span>
+      <span class="attr">protocol:</span> <span class="string">UDP</span>
+      <span class="attr">targetPort:</span> <span class="number">6831</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">agent-binary</span>
+      <span class="attr">port:</span> <span class="number">6832</span>
+      <span class="attr">protocol:</span> <span class="string">UDP</span>
+      <span class="attr">targetPort:</span> <span class="number">6832</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">agent-configs</span>
+      <span class="attr">port:</span> <span class="number">5778</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">5778</span>
+    <span class="attr">clusterIP:</span> <span class="string">None</span>
+    <span class="attr">selector:</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">all-in-one</span>
+<span class="bullet">-</span> <span class="attr">apiVersion:</span> <span class="string">v1</span>
+  <span class="attr">kind:</span> <span class="string">Service</span>
+  <span class="attr">metadata:</span>
+    <span class="attr">name:</span> <span class="string">zipkin</span>
+    <span class="attr">labels:</span>
+      <span class="attr">app:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">zipkin</span>
+  <span class="attr">spec:</span>
+    <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">jaeger-collector-zipkin</span>
+      <span class="attr">port:</span> <span class="number">9411</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="number">9411</span>
+    <span class="attr">clusterIP:</span> <span class="string">None</span>
+    <span class="attr">selector:</span>
+      <span class="attr">app.kubernetes.io/name:</span> <span class="string">jaeger</span>
+      <span class="attr">app.kubernetes.io/component:</span> <span class="string">all-in-one</span></code></pre>
+
+<blockquote>
+<p>可以将所有的 SVC、Deployment 都放到单独的命名空间中，这样就不会被误删除</p>
+</blockquote>
+<p><strong>执行 Jaeger 资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f jaeger-all-in-one-template.yml 
+
+<span class="comment"># 查看 SVC, !!! 注意：浏览器访问 jaeger 是通过 jaeger-query， 这里的 31272 就是对外暴露的端口</span>
+$ kubectl get svc
+NAME               TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                               AGE
+jaeger-agent       ClusterIP      None            &lt;none&gt;        5775/UDP,6831/UDP,6832/UDP,5778/TCP   12m
+jaeger-collector   ClusterIP      10.99.111.240   &lt;none&gt;        14267/TCP,14268/TCP,9411/TCP          12m
+jaeger-query       LoadBalancer   10.100.53.251   &lt;pending&gt;     80:31272/TCP                          12m
+kubernetes         ClusterIP      10.96.0.1       &lt;none&gt;        443/TCP                               4d5h
+zipkin             ClusterIP      None            &lt;none&gt;        9411/TCP                              12m
+
+<span class="comment"># 查看 Deployment</span>
+$ kubectl get deploy
+NAME     READY   UP-TO-DATE   AVAILABLE   AGE
+jaeger   1/1     1            1           20s
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pod
+NAME                     READY   STATUS    RESTARTS   AGE
+jaeger-cbfbf99b4-cxgq6   1/1     Running   0          22s</code></pre>
+
+<p>到此 Jaeger 就部署好了</p>
+<p><strong>注意：浏览器访问 jaeger 是通过 jaeger-query， 这里的 31272 就是对外暴露的端口，可以通过：http:&#x2F;&#x2F;物理机ip:31035 访问 Jaeger</strong></p>
+<h3 id="13-2-ingress-设置"><a href="#13-2-ingress-设置" class="headerlink" title="13.2 ingress 设置"></a>13.2 ingress 设置</h3><p>需要修改 ingress 的 configmap 文件，添加相应参数，开启 Ingress 链路追踪</p>
+<pre><code class="highlight bash">$ kubectl edit cm -n ingress-nginx ingress-nginx-controller
+
+apiVersion: v1
+data:
+  allow-snippet-annotations: <span class="string">&quot;true&quot;</span>
+  enable-opentracing: <span class="string">&quot;true&quot;</span>   <span class="comment">#开启链路追踪</span>
+  jaeger-collector-host: jaeger-agent.default.svc.cluster.local  <span class="comment">#链路追踪的svc名称</span></code></pre>
+
+
+
+<p><strong>重建 Ingress-Nginx Pod</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看Pod</span>
+$ kubectl get pods -n ingress-nginx
+NAME                             READY   STATUS    RESTARTS   AGE
+ingress-nginx-controller-25wk6   1/1     Running   0          150m
+ingress-nginx-controller-qcbp2   1/1     Running   0          151m
+
+<span class="comment"># 删除Pod，等待重建</span>
+$ kubectl delete pod ingress-nginx-controller-25wk6 ingress-nginx-controller-qcbp2 -n ingress-nginx</code></pre>
+
+
+
+<p><strong>浏览器访问Jaeger</strong></p>
+<p><a target="_blank" rel="noopener" href="http://10.20.1.139:31272/">http://10.20.1.139:31272/</a></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/06/20250706-165831.png" alt="浏览器访问Jaeger"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/06/20250706-170040.png" alt="查看请求"></p>
+<p>参考链接</p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://zhangzhuo.ltd/articles/2022/03/20/1647773666928.html">https://zhangzhuo.ltd/articles/2022/03/20/1647773666928.html</a></p>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/tencent-cloud-native/p/13865502.html">https://www.cnblogs.com/tencent-cloud-native/p/13865502.html</a></p>

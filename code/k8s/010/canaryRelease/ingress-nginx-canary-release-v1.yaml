@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: canary-deploy-v1
+  labels:
+    app: v1
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: v1
+  template:
+    metadata:
+      labels:
+        app: v1
+    spec:
+      containers:
+        - name: deploy-v1
+          image: wangyanglinux/myapp:v1.0
+          imagePullPolicy: IfNotPresent
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: v1
+  name: canary-svc-v1
+  namespace: default
+spec:
+  ports:
+    - name: 80-80
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: v1
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  namespace: default
+  name: ingress-v1
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  ingressClassName: "nginx"
+  rules:
+    - host: canary.release.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: canary-svc-v1
+                port:
+                  number: 80

@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: white
+  name: white-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: white
+  template:
+    metadata:
+      labels:
+        app: white
+    spec:
+      containers:
+        - image: nginx:1.29.0
+          name: myapp
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: white
+  name: white-svc
+spec:
+  ports:
+    - name: 80-80
+      port: 80
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: white
+  type: ClusterIP
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/whitelist-source-range: "10.20.1.140"
+  name: annotations.white.com
+spec:
+  rules:
+    - host: annotations.white.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: white-svc
+                port:
+                  number: 80
