@@ -1,0 +1,248 @@
+# 1.命名空间
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logging
+
+---
+
+# 2.ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: loki
+  namespace: logging
+
+---
+
+# 3.Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: loki
+  namespace: logging
+rules:
+  - apiGroups:
+      - extensions          # 指定 API 组为 extensions，这是 PodSecurityPolicy 在 Kubernetes 早期版本（v1.21 之前）使用的 API 组，v1.25 后完全移除
+    resourceNames:
+      - loki
+    resources:              # 指定权限针对的资源类型为 podsecuritypolicies（PSP）
+      - podsecuritypolicies # PSP 是一种 Kubernetes 资源，用于控制 Pod 的安全策略，例如是否允许以 root 运行、挂载主机路径等。在 v1.29 中，podsecuritypolicies 资源不存在，规则无效
+    verbs:
+      - use                 # 指定允许的操作是 use，表示主体可以应用指定的 PSP（loki）到 Pod
+
+---
+
+# 4. RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: loki
+  namespace: logging
+roleRef:
+  name: loki
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+subjects:
+  - name: loki
+    kind: ServiceAccount
+
+---
+
+# 5. ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+data:
+  loki.yaml: |    # Loki 的核心配置文件，控制认证、日志存储、索引、块存储、保留策略等
+    # 通过 X-Scope-OrgID Header 启用身份验证，如果为 true，该 Header 必须存在。
+    # 如果为 false，OrgID 将始终设置为 "fake"。（用于多租户隔离）
+    auth_enabled: false
+    ingester:
+      chunk_idle_period: 3m        # 如果一个块在 3 分钟内没有新日志写入，且未达到最大大小，Loki 会将其刷新到存储
+      chunk_block_size: 65535      # 每个块的最大大小（字节），这里约为 64KB
+      chunk_retain_period: 1m      # 块刷新到存储后，在内存中保留 1 分钟，允许查询最近的日志
+      max_transfer_retries: 0      # 当 ingester 退出时，尝试将块转移到其他 ingester 的次数（0 表示不转移，直接刷新到存储）
+      lifecycler:                  # 配置 ingester 的生命周期管理，决定如何注册和发现其他 ingester
+        ring:
+          kvstore:
+            store: inmemory        # 使用内存作为环存储（其他选项如 consul、etcd）
+          replication_factor: 1    # 写入和读取的ingesters数量，至少为1（为了冗余和弹性，默认情况下为3)
+      wal:                         # 配置日志预写
+        enabled: true              # 启用预写日志（Write-Ahead Log, WAL），在崩溃恢复时确保数据不丢失
+        dir: /data/wal             # WAL 文件存储路径
+    limits_config:                 # 设置日志写入的限制规则
+      enforce_metric_name: false          # 不强制要求日志流具有指标名称（metric name）
+      reject_old_samples: true            # 拒绝时间戳早于当前时间的旧日志
+      reject_old_samples_max_age: 8h      # 拒绝时间戳早于当前时间 8 小时的日志
+    schema_config:                        # 配置从特定时间段开始应该使用哪些索引模式
+      configs:                       # 定义 Loki 的索引模式和存储配置，指定从某个日期开始的存储方式
+        - from: 2025-07-15           # 指定此配置从 2023-12-05 开始生效
+          store: boltdb-shipper      # 索引存储使用 boltdb-shipper，一种高效的键值存储，适合分布式环境
+          object_store: filesystem   # 日志块（chunks）存储在本地文件系统，支持 S3、GCS 等，filesystem 适合单节点或测试环境
+          schema: v11           # 使用 Loki 的 v11 索引模式（Loki 的版本化架构）
+          index:                # 配置如何更新和存储索引
+            prefix: index_      # 索引表的名称前缀（如 index_2025_07_15 ）
+            period: 24h         # 索引表的时间周期为 24 小时（每天生成新表）
+    server:
+      http_listen_port: 3100    # 配置 Loki 的 HTTP 服务端口，Promtail 将日志发送到 http://loki:3100/loki/api/v1/push（与之前的 Promtail 配置一致）
+    storage_config:            # 为索引和块配置一个或多个存储
+      boltdb_shipper:
+        active_index_directory: /data/loki/boltdb-shipper-active    # 活动索引存储路径
+        cache_location: /data/loki/boltdb-shipper-cache             # 索引缓存路径
+        cache_ttl: 24h                                              # 缓存有效期为 24 小时
+        shared_store: filesystem                                    # 索引使用文件系统存储
+      filesystem:
+        directory: /data/loki/chunks                                # 日志块存储路径
+    chunk_store_config:             # 配置日志块的缓存和查询行为
+      max_look_back_period: 0s      # 限制查询数据的时间，默认是禁用的，这个值应该小于或等于table_manager.retention_period中的值
+    table_manager:                  # 管理索引表的保留和删除
+      retention_deletes_enabled: true   # 启用索引表和日志的删除
+      retention_period: 48h             # 日志和索引保留 48 小时，超过的会被删除，保留期必须是索引周期（schema_config.index.period: 24h）的倍数
+    compactor:                      # 配置 Loki 的压缩器（compactor），用于压缩和清理索引
+      working_directory: /data/loki/boltdb-shipper-compactor  # 压缩器工作目录
+      shared_store: filesystem                                # 压缩器使用文件系统存储，工作目录需持久化存储，避免数据丢失
+    # ruler:                              # 配置 Loki 的告警规则（ruler），用于基于日志触发告警。如果需要告警功能，需取消注释并确保 Alertmanager 服务可用
+    #   storage:                          # rules规则存储
+    #     type: local                     # 主要支持本地存储（local）和对象文件系统（azure, gcs, s3, swift）
+    #     local:
+    #       directory: /etc/loki/rules    # 告警文件存放目录
+    #   rule_path: /data/loki/rules-temp  # rules临时规则文件存储路径
+    #   flush_period: 1m                  # 规则刷新间隔为 1 分钟。
+    #   alertmanager_url: http://alertmanager-main.monitoring.svc:9093 # alertmanager地址 
+    #   external_url: http://alertmanager.od.com           # 外部访问 alertmanager
+    #   ring:
+    #     kvstore:
+    #       store: inmemory           # 规则环存储使用内存
+    #   enable_api: true              # 启用规则管理 API
+    #   enable_alertmanager_v2: true  # 支持 Alertmanager v2 协议
+
+---
+
+# 6.Lock Pod
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+spec:
+  podManagementPolicy: OrderedReady   # 指定 Pod 的管理策略为 OrderedReady：Pod 按顺序（0, 1, 2...）创建和删除，等待前一个 Pod 就绪后再创建下一个
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loki
+  serviceName: loki
+  updateStrategy:
+    type: RollingUpdate               # 使用滚动更新策略，逐步替换旧 Pod
+  template:
+    metadata:
+      labels:
+        app: loki
+    spec:
+      serviceAccountName: loki        # 指定 Pod 使用 loki 服务账号（之前定义的 ServiceAccount）
+      securityContext:          # 定义 Pod 级别的安全上下文，控制文件系统权限和用户/组 ID
+        fsGroup: 10001          # Pod 挂载的卷（如 /data）将归属组 ID 10001
+        runAsGroup: 10001       # 容器进程以组 ID 10001 运行，确保挂载的卷（如 PVC）归属组 10001，Loki 进程可以访问
+        runAsNonRoot: true      # 强制容器以非 root 用户运行，增强安全性
+        runAsUser: 10001        # 容器进程以用户 ID 10001 运行
+      initContainers:           # 定义初始化容器，在主容器启动前调整存储路径的权限
+        - name: fix-permissions # 初始化容器名称
+          image: busybox:1.37.0 # 使用 busybox 镜像，适合执行简单命令
+          securityContext:
+            privileged: true    # 以特权模式运行，允许修改文件系统权限
+            runAsGroup: 0       # 以 root 用户运行
+            runAsNonRoot: false
+            runAsUser: 0
+          command:              # 创建 /data/loki 目录，将 /data 及其子目录的拥有者改为 UID 10001 和 GID 10001，列出 /data 目录内容，验证权限
+            - sh
+            - -c
+            - >-
+              id;
+              mkdir -p /data/loki;
+              chown 10001:10001 /data -R;
+              ls -la /data/
+          volumeMounts:
+            - mountPath: /data  # 挂载 storage 卷到 /data，与主容器共享
+              name: storage
+      containers:
+        - name: loki
+          image: grafana/loki:2.9.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - -config.file=/etc/loki/config/loki.yaml   # 指定配置文件路径
+          volumeMounts:
+            - name: config
+              mountPath: /etc/loki/config/loki.yaml     # 挂载 ConfigMap loki 的 loki.yaml 到 /etc/loki/config/loki.yaml
+              subPath: loki.yaml                        # subPath: loki.yaml 表示只挂载 ConfigMap 中 loki.yaml 键对应的文件内容到 mountPath 指定的路径（/etc/loki/config/loki.yaml）
+            - name: storage
+              mountPath: "/data"                        # 挂载 PVC 到 /data，用于存储 WAL、索引和块
+          ports:
+            - name: http-metrics
+              containerPort: 3100       # Loki 监听 3100 端口（HTTP），用于接收日志和监控指标
+              protocol: TCP
+          livenessProbe:                # 存活探测
+            httpGet:
+              path: /ready              # 检查 /ready 端点，确认 Loki 是否健康/就绪
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45     # 启动后 45 秒开始探测
+            timeoutSeconds: 1           # 每次探测超时 1 秒
+            periodSeconds: 10           # 每 10 秒探测一次
+            successThreshold: 1         # 1 次成功即健康
+            failureThreshold: 3         # 3 次失败标记不健康
+          readinessProbe:               # 就绪探测
+            httpGet:
+              path: /ready
+              port: http-metrics
+              scheme: HTTP
+            initialDelaySeconds: 45
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          securityContext:
+            readOnlyRootFilesystem: true    # 容器根文件系统为只读，增强安全性。
+      terminationGracePeriodSeconds: 4800   # Pod 终止时的宽限期为 4800 秒（80 分钟）
+      volumes:
+        - name: config          # 定义卷，将 ConfigMap loki 挂载到容器
+          configMap:
+            defaultMode: 0640   # 文件权限为 rw-r-----（所有者读写，组可读）。0640 前面有0，因此被解析为八进制数
+            name: loki          # 引用名为 loki ConfigMap
+  volumeClaimTemplates:
+    - metadata:
+        name: storage
+        labels:
+          app: loki
+      spec:
+        storageClassName: "loki-storage"   # 注意修改 storageClass 名称
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: "10Gi"
+
+---
+
+# Loki Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: loki
+  namespace: logging
+  labels:
+    app: loki
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3100
+      protocol: TCP
+      name: http
+      targetPort: http-metrics
+  selector:
+    app: loki

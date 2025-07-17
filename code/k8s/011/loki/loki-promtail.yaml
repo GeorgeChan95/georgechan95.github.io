@@ -1,0 +1,414 @@
+# 1.命名空间
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: logging
+
+---
+
+# 2.ServiceAccount
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: loki-promtail
+  labels:
+    app: promtail
+  namespace: logging
+
+---
+
+# 3.集群角色
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: promtail-clusterrole
+  namespace: logging
+  labels:
+    app: promtail
+rules:
+  - apiGroups: [""] # 核心组
+    resources:
+      - nodes
+      - nodes/proxy
+      - services
+      - endpoints
+      - pods
+    verbs: ["get", "watch", "list"]
+
+---
+
+# 4.集群角色绑定
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: promtail-clusterrolebinding
+  labels:
+    app: promtail
+  namespace: logging
+subjects:
+  - name: loki-promtail
+    kind: ServiceAccount
+    namespace: logging
+roleRef:
+  name: promtail-clusterrole
+  kind: ClusterRole
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+# 5.ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: loki-promtail
+  namespace: logging
+  labels:
+    app: promtail
+data:
+  promtail.yaml: |
+    client:                # 定义 Promtail 如何与 Loki 服务器通信，发送收集到的日志
+      backoff_config:      # 配置当请求失败时的重试策略
+        max_period: 1s     # 重试间隔的最大时间为 1 秒
+        max_retries: 20    # 最多重试 20 次
+        min_period: 500ms  # 重试间隔的最小时间为 500 毫秒
+      batchsize: 10240        # 每次发送到 Loki 的日志批次最大大小为 10240 字节（约 10KB）
+      batchwait: 2s           # 即使批次大小未达到 batchsize，Promtail 最多等待 2 秒后也会发送日志。这是为了避免延迟过高
+      external_labels: {}     # 为所有发送到 Loki 的日志添加静态标签，这里为空（可以手动添加标签，如 env: prod）
+      timeout: 15s            # 等待 Loki 服务器响应的最大时间为 15 秒，超时后请求失败并触发重试
+    positions:
+      filename: /run/promtail/positions.yaml # Promtail 使用一个文件来记录它读取日志文件的位置（类似于书签），以避免重复读取或遗漏日志
+    server:
+      http_listen_port: 3101  # 配置 Promtail 自身的 HTTP 服务，用于暴露监控指标或调试
+    target_config:
+      sync_period: 10s        # 控制 Promtail 如何定期同步其发现目标（如 Kubernetes Pods）的元数据。
+    scrape_configs:           # 定义 Promtail 如何发现和收集 Kubernetes 集群中的日志。scrape_configs 包含多个任务（job），每个任务针对不同类型的 Pod 进行日志收集
+      - job_name: kubernetes-pods-name  # 收集由 name 标签定义的 Pod 日志
+        pipeline_stages:
+          - docker: {}                  # 指定日志格式为 Docker 格式（JSON 格式的容器日志）。Promtail 会解析 Docker 容器日志，提取时间戳和日志内容
+        kubernetes_sd_configs:
+          - role: pod                   # Promtail 通过 Kubernetes 服务发现（Service Discovery）查找 Pod，收集它们的日志
+        relabel_configs:
+          - source_labels:
+              - __meta_kubernetes_pod_label_name  # 从 Pod 的标签中提取 name 标签的值，设置为 __service__ 标签
+            target_label: __service__             # Kubernetes Pod 可能有标签 name=my-app，Promtail 将其值 my-app 保存为 __service__，用于标识服务
+          - source_labels:
+              - __meta_kubernetes_pod_node_name   # 将 Pod 所在节点的名称设置为 __host__ 标签
+            target_label: __host__                # 记录 Pod 运行在哪个 Kubernetes 节点上（比如 node-1），便于日志追踪
+          - action: drop                          # 如果 __service__ 标签为空（即 Pod 没有 name 标签），丢弃该 Pod，不收集其日志
+            regex: ''
+            source_labels:
+              - __service__
+          - action: labelmap                      # 将所有以 __meta_kubernetes_pod_label_ 开头的元数据标签（如 __meta_kubernetes_pod_label_app）映射为普通标签
+            regex: __meta_kubernetes_pod_label_(.+)
+          - action: replace                       # 将命名空间（namespace）和 __service__ 组合成 job 标签，格式为 namespace/service
+            replacement: $1
+            separator: /
+            source_labels:
+              - __meta_kubernetes_namespace       # 如果命名空间是 default，__service__ 是 my-app，则 job 标签为 default/my-app
+              - __service__
+            target_label: job
+          - action: replace                       # 将 Pod 的命名空间设置为 namespace 标签
+            source_labels:                        # 如果 Pod 在 default 命名空间，日志会带上 namespace=default 标签
+              - __meta_kubernetes_namespace
+            target_label: namespace
+          - action: replace                       # 将 Pod 的名称设置为 pod 标签
+            source_labels:                        # 如果 Pod 名为 my-app-1234，日志会带上 pod=my-app-1234 标签
+              - __meta_kubernetes_pod_name
+            target_label: pod
+          - action: replace                       # 将容器的名称设置为 container 标签
+            source_labels:                        # 如果容器名为 app-container，日志会带上 container=app-container 标签
+              - __meta_kubernetes_pod_container_name
+            target_label: container
+          - replacement: /var/log/pods/*$1/*.log  # 生成日志文件的路径，告诉 Promtail 从哪里读取日志，路径格式为 /var/log/pods/*<pod_uid>/<container_name>.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_uid               # Pod 的唯一 ID
+              - __meta_kubernetes_pod_container_name    # 容器名称
+            target_label: __path__                      # 例如，Pod UID 是 abc-123，容器名为 app-container，日志路径为 /var/log/pods/*abc-123/app-container.log
+      - job_name: kubernetes-pods-app # 收集由 app 标签定义的 Pod 日志
+        pipeline_stages:
+          - docker: {}
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - action: drop
+            regex: .+
+            source_labels:
+              - __meta_kubernetes_pod_label_name
+          - source_labels:
+              - __meta_kubernetes_pod_label_app
+            target_label: __service__
+          - source_labels:
+              - __meta_kubernetes_pod_node_name
+            target_label: __host__
+          - action: drop
+            regex: ''
+            source_labels:
+              - __service__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - action: replace
+            replacement: $1
+            separator: /
+            source_labels:
+              - __meta_kubernetes_namespace
+              - __service__
+            target_label: job
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_namespace
+            target_label: namespace
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_name
+            target_label: pod
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_container_name
+            target_label: container
+          - replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_uid
+              - __meta_kubernetes_pod_container_name
+            target_label: __path__
+      - job_name: kubernetes-pods-direct-controllers # 收集由直接控制器（如 Deployment）管理的 Pod 日志
+        pipeline_stages:
+          - docker: {}
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - action: drop # 首先检查 __meta_kubernetes_pod_label_name（name 标签）
+            regex: .+       # 如果 name 标签存在（匹配正则 .+，即非空），执行 drop 动作，丢弃该 Pod
+            separator: ''
+            source_labels:
+              - __meta_kubernetes_pod_label_name
+              - __meta_kubernetes_pod_label_app
+          - action: drop
+            regex: '[0-9a-z-.]+-[0-9a-f]{8,10}'
+            source_labels:
+              - __meta_kubernetes_pod_controller_name
+          - source_labels:
+              - __meta_kubernetes_pod_controller_name
+            target_label: __service__
+          - source_labels:
+              - __meta_kubernetes_pod_node_name
+            target_label: __host__
+          - action: drop
+            regex: ''
+            source_labels:
+              - __service__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - action: replace
+            replacement: $1
+            separator: /
+            source_labels:
+              - __meta_kubernetes_namespace
+              - __service__
+            target_label: job
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_namespace
+            target_label: namespace
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_name
+            target_label: pod
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_container_name
+            target_label: container
+          - replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_uid
+              - __meta_kubernetes_pod_container_name
+            target_label: __path__
+      - job_name: kubernetes-pods-indirect-controller # 收集由间接控制器（如 ReplicaSet）管理的 Pod 日志
+        pipeline_stages:
+          - docker: {}
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - action: drop        # 如果 Pod 有 name 或 app 标签，触发 drop 动作，丢弃该 Pod
+            regex: .+
+            separator: ''
+            source_labels:
+              - __meta_kubernetes_pod_label_name
+              - __meta_kubernetes_pod_label_app
+          - action: keep        # 如果 Pod 由 ReplicaSet 控制器管理（控制器名称匹配 xxx-12345678 模式），触发 keep 动作，保留该 Pod
+            regex: '[0-9a-z-.]+-[0-9a-f]{8,10}'
+            source_labels:
+              - __meta_kubernetes_pod_controller_name
+          - action: replace
+            regex: '([0-9a-z-.]+)-[0-9a-f]{8,10}'
+            source_labels:
+              - __meta_kubernetes_pod_controller_name
+            target_label: __service__
+          - source_labels:
+              - __meta_kubernetes_pod_node_name
+            target_label: __host__
+          - action: drop
+            regex: ''
+            source_labels:
+              - __service__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - action: replace
+            replacement: $1
+            separator: /
+            source_labels:
+              - __meta_kubernetes_namespace
+              - __service__
+            target_label: job
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_namespace
+            target_label: namespace
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_name
+            target_label: pod
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_container_name
+            target_label: container
+          - replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_uid
+              - __meta_kubernetes_pod_container_name
+            target_label: __path__
+      - job_name: kubernetes-pods-static # 收集静态配置的 Pod 日志（基于特定的注解）
+        pipeline_stages:
+          - docker: {}
+        kubernetes_sd_configs:
+          - role: pod
+        relabel_configs:
+          - action: drop
+            regex: ''
+            source_labels:
+              - __meta_kubernetes_pod_annotation_kubernetes_io_config_mirror
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_label_component
+            target_label: __service__
+          - source_labels:
+              - __meta_kubernetes_pod_node_name
+            target_label: __host__
+          - action: drop
+            regex: ''
+            source_labels:
+              - __service__
+          - action: labelmap
+            regex: __meta_kubernetes_pod_label_(.+)
+          - action: replace
+            replacement: $1
+            separator: /
+            source_labels:
+              - __meta_kubernetes_namespace
+              - __service__
+            target_label: job
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_namespace
+            target_label: namespace
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_name
+            target_label: pod
+          - action: replace
+            source_labels:
+              - __meta_kubernetes_pod_container_name
+            target_label: container
+          - replacement: /var/log/pods/*$1/*.log
+            separator: /
+            source_labels:
+              - __meta_kubernetes_pod_annotation_kubernetes_io_config_mirror
+              - __meta_kubernetes_pod_container_name
+            target_label: __path__
+
+---
+
+# 6.DaemonSet
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: loki-promtail
+  namespace: logging
+  labels:
+    app: promtail
+spec:
+  selector:
+    matchLabels:
+      app: promtail
+  updateStrategy: # 更新策略
+    rollingUpdate:
+      maxUnavailable: 1 # 滚动更新时最多一个pod不可用，即同一时刻只允许一个节点上的Pod不可用
+    type: RollingUpdate # 滚动更新
+  template:
+    metadata:
+      labels:
+        app: promtail
+    spec:
+      serviceAccountName: loki-promtail # 绑定的SA
+      containers:
+        - name: promtail
+          image: grafana/promtail:2.9.2
+          imagePullPolicy: IfNotPresent
+          args:
+            - -config.file=/etc/promtail/promtail.yaml        # 指定 Promtail 的配置文件路径，位于容器内的 /etc/promtail/promtail.yaml（由 ConfigMap 提供）
+            - -client.url=http://loki:3100/loki/api/v1/push   # 指定 Loki 服务器的地址，Promtail 将日志发送到 http://loki:3100/loki/api/v1/push
+          env:
+            - name: HOSTNAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName      # 从 Kubernetes Pod 的元数据中获取节点名称（如 k8s-node01）
+          volumeMounts:
+            - mountPath: /etc/promtail          # 挂载 config 卷，包含 Promtail 配置文件（promtail.yaml）
+              name: config
+            - mountPath: /run/promtail          # 挂载 run 卷，存储 Promtail 的位置文件（positions.yaml），用于记录日志读取偏移量
+              name: run
+            - mountPath: /data/docker/containers    # 挂载 docker 卷，包含 Docker 容器的日志文件（路径需要根据容器运行时调整,如果使用 containerd 可忽略）
+              name: docker
+              readOnly: true        # 挂载卷只读
+            - mountPath: /var/log/pods              # 挂载 pods 卷，包含 Kubernetes Pod 的日志文件（标准路径）
+              name: pods
+              readOnly: true        # 挂载卷只读
+          ports:
+            - containerPort: 3101   #Promtail 容器在 3101 端口提供 HTTP 服务，与 promtail.yaml 中的 server.http_listen_port: 3101 一致
+              name: http
+              protocol: TCP
+          securityContext:          # 定义容器的安全上下文，控制运行权限和文件系统访问
+            readOnlyRootFilesystem: true    # 容器根文件系统为只读，增强安全性，防止意外修改。Promtail 需要 root 权限访问节点上的日志文件（如 /var/log/pods）
+            runAsGroup: 0                   # 容器以 root 用户（UID 0）运行
+            runAsUser: 0                    # 容器以 root 组（GID 0）运行
+          readinessProbe:             # 定义就绪探针，检查 Promtail 容器是否准备好提供服务
+            httpGet:
+              path: /ready            # 访问 /ready 端点
+              port: http              # 使用命名为 http 的端口（3101）
+              scheme: HTTP
+            failureThreshold: 5       # 连续 5 次探测失败后，标记容器为未就绪
+            initialDelaySeconds: 10   # 容器启动后等待 10 秒开始第一次探测
+            periodSeconds: 10         # 每 10 秒探测一次
+            successThreshold: 1       # 一次探测成功即标记为就绪
+            timeoutSeconds: 1         # 每次探测的超时时间为 1 秒
+      tolerations:
+        - operator: Exists            # 允许 Pod 调度到带有任何污点（taint）的节点上
+      volumes:                # 定义 Pod 使用的卷，供容器挂载
+        - name: config
+          configMap:
+            defaultMode: 420              # 文件权限为 0644（即 rw-r--r--），适合配置文件（420为十进制，0644是Linux系统中使用的八进制）
+            name: loki-promtail           # 使用名为 loki-promtail 的 ConfigMap（即之前提供的配置）
+        - name: run
+          hostPath:
+            path: /run/promtail           # 挂载节点上的 /run/promtail 目录
+            type: ""                      # 默认类型，目录不存在时不会自动创建
+        - name: docker
+          hostPath:
+            path: /data/docker/containers # 挂载节点上的 Docker 容器日志目录
+        - name: pods
+          hostPath:
+            path: /var/log/pods           # 挂载节点上的 Kubernetes Pod 日志目录

@@ -1,0 +1,77 @@
+loki:
+  enabled: true
+  isDefault: true
+  url: http://{{(include "loki.serviceName" .)}}:{{ .Values.loki.service.port }}
+  readinessProbe:
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 45
+  livenessProbe:
+    httpGet:
+      path: /ready
+      port: http-metrics
+    initialDelaySeconds: 45
+  datasource:
+    jsonData: "{}"
+    uid: ""
+  persistence: # 添加存储设置
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    size: 10Gi
+    storageClassName: loki-storage # 使用 loki-storage 自动创建PV
+
+
+promtail:
+  enabled: true
+  config:
+    logLevel: info
+    serverPort: 3101
+    clients:
+      - url: http://{{ .Release.Name }}:3100/loki/api/v1/push
+  defaultVolumes: # 定时 Promtail Pod 使用的卷
+    - name: run
+      hostPath:
+        path: /run/promtail
+    - name: containers
+      hostPath:
+        path: /data/docker/containers
+    - name: pods
+      hostPath:
+        path: /var/log/pods
+  defaultVolumeMounts: # 定义容器内的挂载点，将上述卷挂载到 Promtail 容器
+    - name: run
+      mountPath: /run/promtail
+    - name: containers
+      mountPath: /data/docker/containers
+      readOnly: true
+    - name: pods
+      mountPath: /var/log/pods
+      readOnly: true
+
+
+grafana:
+  enabled: true     # 启用部署Grafana
+  persistence:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    size: 5Gi
+    storageClassName: loki-storage # 使用 loki-storage 自动创建PV
+    
+# 显式禁用不需要的子 Chart
+test_pod:
+  enabled: false
+  
+filebeat:
+  enabled: false
+
+fluent-bit:
+  enabled: false
+
+prometheus:
+  enabled: false
+
+logstash:
+  enabled: false

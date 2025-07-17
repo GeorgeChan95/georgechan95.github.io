@@ -1,0 +1,3691 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>014-K8S-部署Loki+Promtail+Grafana实现日志监控 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" linux , Docker , Rocky , Loki ">
+  <meta name="description" content="014-K8S-部署Loki+Promtail+Grafana实现日志监控 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="概要： 简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：使用 yaml 资源清单部署 和 使用 Helm 部署 集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点，NFS Server   10.20.1.140 k8s-node01 Node节点, NFS Client   10.20.1.14">
+<meta property="og:type" content="article">
+<meta property="og:title" content="014-K8S-部署Loki+Promtail+Grafana实现日志监控">
+<meta property="og:url" content="https://georgechan95.github.io/blog/f8cf646f.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="概要： 简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：使用 yaml 资源清单部署 和 使用 Helm 部署 集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点，NFS Server   10.20.1.140 k8s-node01 Node节点, NFS Client   10.20.1.14">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-131130.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-132416.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-161149.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135129.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135208.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135300.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135317.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135333.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135515.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135555.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-140241.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135126.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135316.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135346.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135559.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135639.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135917.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-140204.png">
+<meta property="article:published_time" content="2025-07-10T13:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-17T06:03:38.213Z">
+<meta property="article:author" content="George">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Rocky">
+<meta property="article:tag" content="Loki">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-131130.png">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<script src="/js/image-loader.js"></script>
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(108)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="设计模式">
+            
+            设计模式
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Docker">
+            
+            Docker
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="k8s">
+            
+            k8s
+            <small>(14)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(4)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="neo4j">
+            
+            neo4j
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="UML">
+            
+            UML
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="108">
+<input type="hidden" id="yelog_site_word_count" value="526.3k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>科学上网</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>设计模式</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Harbor</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Loki</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>neo4j</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Rocky</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>SpringBoot</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu18</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>UML</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/f8cf646f.html"
+           data-tag="linux,Docker,Rocky,Loki"
+           data-author="" >
+            <span class="post-title" title="014-K8S-部署Loki+Promtail+Grafana实现日志监控">014-K8S-部署Loki+Promtail+Grafana实现日志监控</span>
+            <span class="post-date" title="2025-07-10 21:00:00">2025/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/3fee6d19.html"
+           data-tag="linux,Docker,Rocky,Harbor"
+           data-author="" >
+            <span class="post-title" title="013-K8S-使用Helm安装Harbor">013-K8S-使用Helm安装Harbor</span>
+            <span class="post-date" title="2025-07-07 22:37:00">2025/07/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/b42f2c7b.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="012-新建Node节点添加到K8S集群中">012-新建Node节点添加到K8S集群中</span>
+            <span class="post-date" title="2025-07-07 20:32:00">2025/07/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/6436eaf1.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="011-Kubernetes Ingress-Nginx">011-Kubernetes Ingress-Nginx</span>
+            <span class="post-date" title="2025-06-25 19:42:00">2025/06/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/d8e3c7b3.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="010-Kubernetes Helm">010-Kubernetes Helm</span>
+            <span class="post-date" title="2025-06-21 14:12:00">2025/06/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/424f1119.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="009-Kubernetes 集群安全机制">009-Kubernetes 集群安全机制</span>
+            <span class="post-date" title="2025-06-14 09:18:00">2025/06/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/f2285a2d.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="008-Kubernetes 调度器">008-Kubernetes 调度器</span>
+            <span class="post-date" title="2025-06-02 14:40:00">2025/06/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/ef156b88.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="007-Kubernetes 存储">007-Kubernetes 存储</span>
+            <span class="post-date" title="2025-05-02 10:26:00">2025/05/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/970719d6.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="006-Kubernetes Service">006-Kubernetes Service</span>
+            <span class="post-date" title="2025-04-28 22:10:00">2025/04/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/c790096a.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="005-Kubernetes控制器">005-Kubernetes控制器</span>
+            <span class="post-date" title="2025-04-02 20:12:00">2025/04/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/79e06aab.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="004-Pod的生命周期">004-Pod的生命周期</span>
+            <span class="post-date" title="2025-03-22 09:05:00">2025/03/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 Docker "
+           href="/blog/b01d5c62.html"
+           data-tag="linux,Docker,科学上网"
+           data-author="" >
+            <span class="post-title" title="Docker配置网络代理实现外网镜像下载">Docker配置网络代理实现外网镜像下载</span>
+            <span class="post-date" title="2025-01-08 23:00:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/7f174b3e.html"
+           data-tag="linux,科学上网,Rocky"
+           data-author="" >
+            <span class="post-title" title="Rocky9安装Shadowsocks实现科学上网">Rocky9安装Shadowsocks实现科学上网</span>
+            <span class="post-date" title="2025-01-08 21:09:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/b00f53e9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群">003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群</span>
+            <span class="post-date" title="2025-01-03 22:05:00">2025/01/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/3c79d8d9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="002-Rocky9.3系统初始化设置和Docker安装">002-Rocky9.3系统初始化设置和Docker安装</span>
+            <span class="post-date" title="2025-01-02 13:25:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/7e3a5200.html"
+           data-tag="linux,Rocky"
+           data-author="" >
+            <span class="post-title" title="001-ESXi8安装Rocky9.3虚拟机">001-ESXi8安装Rocky9.3虚拟机</span>
+            <span class="post-date" title="2025-01-02 09:34:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/77d85f50.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="25-责任链模式">25-责任链模式</span>
+            <span class="post-date" title="2024-12-03 21:08:00">2024/12/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/fcec839d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="24-策略模式">24-策略模式</span>
+            <span class="post-date" title="2024-12-02 18:16:00">2024/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/6109865a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="23-状态模式">23-状态模式</span>
+            <span class="post-date" title="2024-11-29 19:30:00">2024/11/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/58d4db7.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="22-解释器模式">22-解释器模式</span>
+            <span class="post-date" title="2024-11-28 22:00:00">2024/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/a5cf7eb4.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="21-备忘录模式">21-备忘录模式</span>
+            <span class="post-date" title="2024-11-27 21:40:00">2024/11/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3148d6be.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="20-中介者模式">20-中介者模式</span>
+            <span class="post-date" title="2024-11-26 20:35:00">2024/11/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f06aea0b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="19-观察者模式">19-观察者模式</span>
+            <span class="post-date" title="2024-11-25 21:07:00">2024/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/7dbd9149.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="18-迭代器模式">18-迭代器模式</span>
+            <span class="post-date" title="2024-11-24 00:02:00">2024/11/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4fdf6e52.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="17-访问者模式">17-访问者模式</span>
+            <span class="post-date" title="2024-11-23 21:55:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/60fd53f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="16-命令模式">16-命令模式</span>
+            <span class="post-date" title="2024-11-23 20:30:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4930323d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="15-模板方法模式">15-模板方法模式</span>
+            <span class="post-date" title="2024-11-23 19:40:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/e4235185.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="14-代理模式">14-代理模式</span>
+            <span class="post-date" title="2024-11-21 23:16:00">2024/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/1b225c1f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="13-享元模式">13-享元模式</span>
+            <span class="post-date" title="2024-11-20 23:10:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/906e9e8b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="12-外观模式">12-外观模式</span>
+            <span class="post-date" title="2024-11-20 22:09:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c456a66a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="11-组合模式">11-组合模式</span>
+            <span class="post-date" title="2024-11-16 17:00:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90213fc6.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="10-装饰器模式">10-装饰器模式</span>
+            <span class="post-date" title="2024-11-16 14:06:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c7419cfa.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="09-桥接模式">09-桥接模式</span>
+            <span class="post-date" title="2024-11-14 20:51:00">2024/11/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f77fc055.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="08-适配器模式">08-适配器模式</span>
+            <span class="post-date" title="2024-11-12 22:55:00">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/a3b0b090.html"
+           data-tag="neo4j,SpringBoot"
+           data-author="" >
+            <span class="post-title" title="Spring Boot对Neo4j节点关系的增删改查">Spring Boot对Neo4j节点关系的增删改查</span>
+            <span class="post-date" title="2024-11-12 21:00:30">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3ab9aa56.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="07-建造者模式">07-建造者模式</span>
+            <span class="post-date" title="2024-11-11 21:55:00">2024/11/11</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/7dc0fcde.html"
+           data-tag="neo4j,SpringBoot"
+           data-author="" >
+            <span class="post-title" title="Spring Boot整合Neo4j实现增删改查">Spring Boot整合Neo4j实现增删改查</span>
+            <span class="post-date" title="2024-11-07 19:04:30">2024/11/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/564adc33.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="06-原型模式">06-原型模式</span>
+            <span class="post-date" title="2024-11-06 19:00:00">2024/11/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/effeea78.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="05-工厂模式">05-工厂模式</span>
+            <span class="post-date" title="2024-11-04 21:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/d7e99843.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="04-单例模式">04-单例模式</span>
+            <span class="post-date" title="2024-11-04 19:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90f1850a.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="03-UML类图">03-UML类图</span>
+            <span class="post-date" title="2024-11-02 14:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 UML "
+           href="/blog/c13304c1.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="02-UML图绘制工具">02-UML图绘制工具</span>
+            <span class="post-date" title="2024-11-02 09:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2e826df1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Docker环境下RTSP流转RTMP和HLS">Docker环境下RTSP流转RTMP和HLS</span>
+            <span class="post-date" title="2024-11-01 15:17:33">2024/11/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/cd625bba.html"
+           data-tag="设计模式,java"
+           data-author="" >
+            <span class="post-title" title="01-设计模式六大原则">01-设计模式六大原则</span>
+            <span class="post-date" title="2024-10-31 17:00:00">2024/10/31</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1a649f4c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="13-JUC进阶-ReentrantReadWriteLock与StampedLock">13-JUC进阶-ReentrantReadWriteLock与StampedLock</span>
+            <span class="post-date" title="2024-10-19 09:26:00">2024/10/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/5c93903a.html"
+           data-tag="linux,neo4j"
+           data-author="" >
+            <span class="post-title" title="Docker部署Neo4j并导入CSV数据">Docker部署Neo4j并导入CSV数据</span>
+            <span class="post-date" title="2024-10-17 15:00:30">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/ad38e6b1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Ubuntu18.04离线源环境搭建">Ubuntu18.04离线源环境搭建</span>
+            <span class="post-date" title="2024-10-17 09:47:33">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3fdbf0f6.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
+            <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3e0d7592.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
+            <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4502cffa.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
+            <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4de6a39b.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
+            <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/72329cf5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
+            <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/5e3757c1.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
+            <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-k8s/014-K8S-部署Loki+Promtail+Grafana实现日志监控" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">014-K8S-部署Loki+Promtail+Grafana实现日志监控</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="k8s">k8s</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">linux</a>
+            
+            <a class="color2">Docker</a>
+            
+            <a class="color1">Rocky</a>
+            
+            <a class="color5">Loki</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2025-07-17 14:03:38'>2025-07-10 21:00</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:14.6k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Loki-%E7%AE%80%E4%BB%8B"><span class="toc-text">一、Loki 简介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Loki-%E7%BB%84%E4%BB%B6"><span class="toc-text">1. Loki 组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Distributor"><span class="toc-text">1.1 Distributor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-Ingester"><span class="toc-text">1.2 Ingester</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-Querier"><span class="toc-text">1.3 Querier</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-Query-Frontend"><span class="toc-text">1.4 Query Frontend</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E8%AF%BB%E5%8F%96%E8%B7%AF%E5%BE%84"><span class="toc-text">1.5 读取路径</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-%E5%86%99%E5%85%A5%E8%B7%AF%E5%BE%84"><span class="toc-text">1.6 写入路径</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Promtail"><span class="toc-text">2. Promtail</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8YAML%E9%83%A8%E7%BD%B2-Loki"><span class="toc-text">二、使用YAML部署 Loki</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Promtail%E9%83%A8%E7%BD%B2"><span class="toc-text">1. Promtail部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-Promtail-%E9%83%A8%E7%BD%B2%E6%96%87%E4%BB%B6"><span class="toc-text">1.1 Promtail 部署文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-scrape-configs-%E9%85%8D%E7%BD%AE%E8%AF%A6%E8%A7%A3"><span class="toc-text">1.2 scrape_configs 配置详解</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Loki-%E9%83%A8%E7%BD%B2"><span class="toc-text">2. Loki 部署</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%AE%89%E8%A3%85NFS"><span class="toc-text">2.1 安装NFS</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-1-%E5%AE%89%E8%A3%85-NFS-%E6%9C%8D%E5%8A%A1"><span class="toc-text">2.1.1 安装 NFS 服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-2-%E5%88%9B%E5%BB%BA%E5%85%B1%E4%BA%AB%E7%9B%AE%E5%BD%95"><span class="toc-text">2.1.2 创建共享目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-3-%E7%BC%96%E8%BE%91%E5%85%B1%E4%BA%AB%E7%9B%AE%E5%BD%95%E8%AF%BB%E5%86%99%E9%85%8D%E7%BD%AE"><span class="toc-text">2.1.3 编辑共享目录读写配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-4-%E5%90%AF%E5%8A%A8NFS%E6%9C%8D%E5%8A%A1"><span class="toc-text">2.1.4 启动NFS服务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1-5-%E6%B5%8B%E8%AF%95-NFS-%E7%9B%AE%E5%BD%95%E6%8C%82%E8%BD%BD"><span class="toc-text">2.1.5 测试 NFS 目录挂载</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%88%9B%E5%BB%BA-StorageClass"><span class="toc-text">2.2 创建 StorageClass</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%83%A8%E7%BD%B2-Loki"><span class="toc-text">2.3 部署 Loki</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%83%A8%E7%BD%B2-Grafana"><span class="toc-text">3. 部署 Grafana</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-Grafana-%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">3.1 Grafana 资源清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E9%85%8D%E7%BD%AE-Host-%E5%9F%9F%E5%90%8D%E6%98%A0%E5%B0%84"><span class="toc-text">3.2 配置 Host 域名映射</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Grafana-%E5%9F%BA%E7%A1%80%E4%BD%BF%E7%94%A8"><span class="toc-text">4. Grafana 基础使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E7%99%BB%E5%BD%95-Grafana"><span class="toc-text">4.1 登录 Grafana</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E6%B7%BB%E5%8A%A0-Loki-%E4%BD%9C%E4%B8%BA%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-text">4.2 添加 Loki 作为数据源</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97"><span class="toc-text">4.3 查看日志</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BD%BF%E7%94%A8-Helm-%E9%83%A8%E7%BD%B2-Loki"><span class="toc-text">三、使用 Helm 部署 Loki</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E9%83%A8%E7%BD%B2-StorageClass"><span class="toc-text">1. 部署 StorageClass</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%8B%E8%BD%BD-Helm-Chat-%E5%8C%85"><span class="toc-text">2. 下载 Helm Chat 包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BC%96%E8%BE%91-values-yaml"><span class="toc-text">3. 编辑 values.yaml</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BF%AE%E6%94%B9-grafana-%E5%AF%86%E7%A0%81"><span class="toc-text">4. 修改 grafana 密码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%BD%BF%E7%94%A8Helm%E9%83%A8%E7%BD%B2Loki"><span class="toc-text">5. 使用Helm部署Loki</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E9%83%A8%E7%BD%B2-Ingress"><span class="toc-text">6. 部署 Ingress</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E6%B7%BB%E5%8A%A0-Loki-%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="toc-text">7. 添加 Loki 数据源</span></a></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>概要：</strong></p>
+<p>简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：<strong>使用 yaml 资源清单部署</strong> 和 <strong>使用 Helm 部署</strong></p>
+<p><strong>集群环境</strong></p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>Hostname</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10.20.1.139</td>
+<td>k8s-master01</td>
+<td>Master节点，NFS Server</td>
+</tr>
+<tr>
+<td>10.20.1.140</td>
+<td>k8s-node01</td>
+<td>Node节点, NFS Client</td>
+</tr>
+<tr>
+<td>10.20.1.141</td>
+<td>k8s-node02</td>
+<td>Node节点, NFS Client</td>
+</tr>
+<tr>
+<td>10.20.1.142</td>
+<td>k8s-node03</td>
+<td>安装NFS，Harbor, NFS Client</td>
+</tr>
+</tbody></table>
+<h1 id="一、Loki-简介"><a href="#一、Loki-简介" class="headerlink" title="一、Loki 简介"></a>一、Loki 简介</h1><p>是一个水平可扩展，高可用性，多租户的日志聚合系统，Loki 是基于仅索引有关日志元数据的想法而构建的：<strong>标签</strong>（就像 Prometheus 标签一样）。日志数据本身被压缩然后并存储在对象存储（例如 S3 或 GCS）的块中，甚至存储在本地文件系统上，轻量级的索引和高度压缩的块简化了操作，并显著降低了 Loki 的成本，Loki 更适合中小团队。由于 Loki 使用和 Prometheus 类似的标签概念，所以如果你熟悉 Prometheus 那么将很容易上手，也可以直接和 Grafana 集成，只需要添加 Loki 数据源就可以开始查询日志数据了。</p>
+<p>Loki 还提供了一个专门用于日志查询的 <code>LogQL</code> 查询语句，类似于 <code>PromQL</code>，通过 LogQL 我们可以很容易查询到需要的日志，也可以很轻松获取监控指标。Loki 还能够将 LogQL 查询直接转换为 Prometheus 指标。此外 Loki 允许我们定义有关 LogQL 指标的报警，并可以将它们和 Alertmanager 进行对接。</p>
+<p>Loki技术栈中使用了以下组件。</p>
+<ul>
+<li><p>Promtail</p>
+<p>用来将容器日志发送到 Loki 或者 Grafana 服务上的日志收集工具，该工具主要包括发现采集目标以及给日志流添加上 Label 标签 然后发送给 Loki，Promtail 的服务发现是基于 Prometheus 的服务发现机制实现的。</p>
+<p>相当于 EFK 中的 Filebeat&#x2F;Fluentd ，用于采集日志并将其发送给 Loki 。</p>
+</li>
+<li><p>Loki</p>
+<p>受 Prometheus 启发的可以水平扩展、高可用以及支持多租户的日志聚合系统，使用了和 Prometheus 相同的服务发现机制，将标签添加到日志流中而不是构建全文索引，从 Promtail 接收到的日志和应用的 metrics 指标就具有相同的标签集，不仅提供了更好的日志和指标之间的上下文切换，还避免了对日志进行全文索引。</p>
+<p>相当于 EFK 中的 ElasticSearch ，用于存储日志和处理查询。</p>
+</li>
+<li><p>Grafana</p>
+<p>一个用于监控和可视化观测的开源平台，支持非常丰富的数据源，在 Loki 技术栈中它专门用来展示来自 Prometheus 和 Loki 等数据源的时间序列数据，可进行查询、可视化、报警等操作，可以用于创建、探索和共享数据 Dashboard，鼓励数据驱动。</p>
+<p>相当于 EFK 中的 Kibana ，用于 UI 的展示。</p>
+</li>
+</ul>
+<p><strong>Loki的工作原理如下图所示：</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-131130.png" alt="Loki原理"></p>
+<p>Loki 针对本地运行（或小规模运行）和水平扩展进行了优化，Loki 带有单一进程模式，可在一个进程中运行所有必需的微服务。单进程模式非常适合测试 Loki 或以小规模运行。为了实现水平可伸缩性，可以将 Loki 的服务拆分为单独的组件，从而使它们彼此独立地扩展。每个组件都产生一个用于内部请求的 gRPC 服务器和一个用于外部 API 请求的 HTTP 服务，所有组件都带有 HTTP 服务器，但是大多数只暴露就绪接口、运行状况和指标端点。</p>
+<h2 id="1-Loki-组件"><a href="#1-Loki-组件" class="headerlink" title="1. Loki 组件"></a>1. Loki 组件</h2><p>Loki 运行哪个组件取决于命令行中的 <code>-target</code> 标志或 Loki 的配置文件中的 <code>target：&lt;string&gt;</code> 配置。 当 target 的值为 <code>all</code> 时，Loki 将在单进程中运行其所有组件。这称为 <code>单进程</code> 或 <code>单体模式</code> 。 <em>使用 Helm 安装 Loki 时，单体模式是默认部署方式</em>。</p>
+<p>当 target 未设置为 all（即被设置为 <code>querier</code>、<code>ingester</code>、<code>query-frontend</code> 或 <code>distributor</code>），则可以说 Loki 在 <code>水平伸缩</code> 或 <code>微服务模式</code> 下运行。</p>
+<p>Loki 的每个组件，例如 <code>ingester</code> 和 <code>distributors</code> 都使用 Loki 配置中定义的 gRPC 监听端口通过 gRPC 相互通信。当以单体模式运行组件时，仍然是这样的，尽管每个组件都以相同的进程运行，但它们仍将通过本地网络相互连接进行组件之间的通信。</p>
+<p>单体模式非常适合于本地开发、小规模等场景，单体模式可以通过多个进程进行扩展，但有以下限制：</p>
+<ul>
+<li>当运行带有多个副本的单体模式时，当前无法使用本地索引和本地存储，因为每个副本必须能够访问相同的存储后端，并且本地存储对于并发访问并不安全。</li>
+<li>各个组件无法独立缩放，因此读取组件的数量不能超过写入组件的数量。</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-132416.png" alt="Loki组件"></p>
+<h3 id="1-1-Distributor"><a href="#1-1-Distributor" class="headerlink" title="1.1 Distributor"></a>1.1 Distributor</h3><p><code>distributor</code> 服务负责处理客户端写入的日志，它本质上是日志数据写入路径中的<strong>第一站</strong>，一旦 <code>distributor</code> 收到日志数据，会将其拆分为多个批次，然后并行发送给多个 <code>ingester</code>。<code>distributor</code> 通过 gRPC 与 <code>ingester</code> 通信，它们都是无状态的，所以可以根据需要扩大或缩小规模。</p>
+<p><strong>Hashing</strong></p>
+<p><code>distributor</code> 将<strong>一致性 Hash</strong>和可配置的复制因子结合使用，以确定 <code>ingester</code> 服务的哪些实例应该接收指定的数据流。</p>
+<p>流是一组与<strong>租户和唯一标签集</strong>关联的日志，使用租户 ID 和标签集对流进行 hash 处理，然后使用哈希查询要发送流的 <code>ingester</code>。</p>
+<p>存储在 <strong>Consul&#x2F;Etcd</strong> 中的哈希环被用来实现一致性哈希，所有的 <code>ingester</code> 都会使用自己拥有的一组 Token 注册到哈希环中，每个 Token 是一个随机的无符号 32 位数字，与一组 Token 一起，<code>ingester</code> 将其状态注册到哈希环中，状态 <code>JOINING</code> 和 <code>ACTIVE</code> 都可以接收写请求，而 <code>ACTIVE</code> 和 <code>LEAVING</code> 的 <code>ingester</code> 可以接收读请求。在进行哈希查询时，<code>distributor</code> 只使用处于请求的适当状态的 ingester 的 Token。</p>
+<p>为了进行哈希查找，<code>distributor</code> 找到最小合适的 Token，其值大于日志流的哈希值，当复制因子大于 1 时，属于不同 <code>ingester</code> 的下一个后续 Token（在环中顺时针方向）也将被包括在结果中。</p>
+<p>这种哈希配置的效果是，一个 <code>ingester</code> 拥有的每个 Token 都负责一个范围的哈希值，如果有三个值为 0、25 和 50 的 Token，那么 3 的哈希值将被给予拥有 25 这个 Token 的 <code>ingester</code>，拥有 25 这个 Token 的 <code>ingester</code> 负责<code>1-25</code>的哈希值范围。</p>
+<h3 id="1-2-Ingester"><a href="#1-2-Ingester" class="headerlink" title="1.2 Ingester"></a>1.2 Ingester</h3><p><code>ingester</code> 负责接收 <code>distributor</code>  发送过来的日志数据，存储日志的索引数据以及内容数据。此外 <code>ingester</code> 会验证摄取的日志行是否按照时间戳递增的顺序接收的（即每条日志的时间戳都比前面的日志晚一些），当 <code>ingester</code> 收到不符合这个顺序的日志时，该日志行会被拒绝并返回一个错误。</p>
+<ul>
+<li><p>如果传入的行与之前收到的行完全匹配（与之前的时间戳和日志文本都匹配），传入的行将被视为完全重复并被忽略。</p>
+</li>
+<li><p>如果传入的行与前一行的时间戳相同，但内容不同，则接受该日志行，表示同一时间戳有两个不同的日志行是可能的。</p>
+</li>
+</ul>
+<p>来自每个唯一标签集的日志在内存中被建立成 <code>chunks(块)</code>，然后可以根据配置的时间间隔刷新到支持的后端存储。在下列情况下，块被压缩并标记为只读：</p>
+<ul>
+<li>当前块容量已满（该值可配置）</li>
+<li>过了太长时间没有更新当前块的内容</li>
+<li>刷新了</li>
+</ul>
+<p>每当一个数据块被压缩并标记为只读时，一个可写的数据块就会取代它。<em>如果一个 <code>ingester</code> 进程崩溃或突然退出，所有尚未刷新的数据都会丢失，Loki 通常配置为多个副本来降低这种风险</em>。</p>
+<p>当向持久存储刷新时，该块将根据其租户、标签和内容进行哈希处理，这意味着具有相同数据副本的多个 <code>ingester</code> 实例不会将相同的数据两次写入备份存储中，但如果对其中一个副本的写入失败，则会在备份存储中创建多个不同的块对象。（当写入因子大于1时，比如：3， 那么日志数据将会由3个不同的 Ingester 共同处理。每个日志都会计算出一个唯一hash值，同一个日志在不同的Ingester中 hash 值是相同的，正常情况下只会往持久存储中（入S3，minio）写入一次，如果某个Ingester 写入失败了，可能导入数据被重复写入持久存储中。）</p>
+<p><strong>WAL</strong></p>
+<p>上面我们提到了 <code>ingester</code> 将数据临时存储在内存中，如果发生了崩溃，可能会导致数据丢失，而 <code>WAL</code> 就可以帮助我们来提高这方面的可靠性。</p>
+<p>在计算机领域，WAL（Write-ahead logging，预写式日志）是数据库系统提供原子性和持久化的一系列技术。</p>
+<p>在使用 WAL 的系统中，所有的修改都先被写入到日志中，然后再被应用到系统状态中。通常包含 redo 和 undo 两部分信息。为什么需要使用 WAL，然后包含 redo 和 undo 信息呢？举个例子，如果一个系统直接将变更应用到系统状态中，那么在机器断电重启之后系统需要知道操作是成功了，还是只有部分成功或者是失败了（为了恢复状态）。如果使用了 WAL，那么在重启之后系统可以通过比较日志和系统状态来决定是继续完成操作还是撤销操作。</p>
+<p><code>redo log</code> 称为重做日志，每当有操作时，在数据变更之前将操作写入 <code>redo log</code>，这样当发生断电之类的情况时系统可以在重启后继续操作。<code>undo log</code> 称为撤销日志，当一些变更执行到一半无法完成时，可以根据撤销日志恢复到变更之前的状态。</p>
+<p>Loki 中的 WAL 记录了传入的数据，并将其存储在本地文件系统中，以保证在进程崩溃的情况下持久保存已确认的数据。重新启动后，Loki 将<strong>重放</strong>日志中的所有数据，然后将自身注册，准备进行后续写操作。这使得 Loki 能够保持在内存中缓冲数据的性能和成本优势，以及持久性优势（一旦写被确认，它就不会丢失数据）。</p>
+<p>Loki 通过校验日志的 Hash 值，以及在 WAL 中创建检查点，确保重放时数据不会重复。</p>
+<h3 id="1-3-Querier"><a href="#1-3-Querier" class="headerlink" title="1.3 Querier"></a>1.3 Querier</h3><p><code>Querier</code> 接收日志数据查询、聚合统计请求，使用 LogQL 查询语言处理查询，从 <code>ingester</code> 和长期存储中获取日志。</p>
+<p>查询器查询所有 <code>ingester</code> 的内存数据，然后再到后端存储运行相同的查询。由于复制因子，查询器有可能会收到重复的数据。为了解决这个问题，查询器在内部对具有相同纳秒时间戳、标签集和日志信息的数据进行重复数据删除。</p>
+<h3 id="1-4-Query-Frontend"><a href="#1-4-Query-Frontend" class="headerlink" title="1.4 Query Frontend"></a>1.4 Query Frontend</h3><p><code>Query Frontend</code> 查询前端是一个可选的服务，可以用来加速读取路径。当查询前端就位时，将传入的查询请求定向到查询前端，而不是 <code>querier</code>, 为了执行实际的查询，群集中仍需要 <code>querier</code> 服务。</p>
+<p>查询前端在内部执行一些查询调整，并在内部队列中保存查询。<code>querier</code> 作为 workers 从队列中提取作业，执行它们，并将它们返回到查询前端进行汇总。<code>querier</code> 需要配置查询前端地址，以便允许它们连接到查询前端。</p>
+<p>查询前端是无状态的，然而，由于内部队列的工作方式，建议运行几个查询前台的副本，以获得公平调度的好处，在大多数情况下，两个副本应该足够了。</p>
+<p><strong>队列</strong></p>
+<p>查询前端的排队机制用于：</p>
+<ul>
+<li>确保可能导致 <code>querier</code> 出现内存不足（OOM）错误的查询在失败时被重试。这样管理员就可以为查询提供稍低的内存，或者并行运行更多的小型查询，这有助于降低总成本。</li>
+<li>通过使用先进先出队列（FIFO）将多个大型请求分配到所有 <code>querier</code> 上，以防止在单个 <code>querier</code> 中进行多个大型请求。</li>
+<li>通过在租户之间公平调度查询。</li>
+</ul>
+<p><strong>分割</strong></p>
+<p>查询前端将较大的查询分割成多个较小的查询，在下游 <code>querier</code> 上并行执行这些查询，并将结果再次拼接起来。这可以防止大型查询在单个查询器中造成内存不足的问题，并有助于更快地执行这些查询。</p>
+<p><strong>缓存</strong></p>
+<p>查询前端支持缓存查询结果，并在后续查询中重复使用。如果缓存的结果不完整，查询前端会计算所需的子查询，并在下游 <code>querier</code> 上并行执行这些子查询。查询前端可以选择将查询与其 <code>step</code> 参数对齐，以提高查询结果的可缓存性。</p>
+<p><strong>举例</strong></p>
+<p>假设你用 Grafana 查询 Loki 中的日志数据，系统中有 Query Frontend 和多个 Querier：</p>
+<ol>
+<li>客户端发送查询：<ul>
+<li>你在 Grafana 输入查询 {app&#x3D;”frontend”} |~ “error”，请求发送到 Query Frontend。</li>
+</ul>
+</li>
+<li>Query Frontend 处理：<ul>
+<li>Query Frontend 接收请求，可能将查询拆分成多个子查询（比如按时间范围分成 3 段）。</li>
+<li>这些子查询被放入内部队列，等待处理。</li>
+</ul>
+</li>
+<li>Querier 执行查询：<ul>
+<li>集群中有 3 个 Querier（Q1、Q2、Q3），它们连接到 Query Frontend，从队列中领取子查询任务。</li>
+<li>Q1 取第一个子查询，Q2 取第二个，Q3 取第三个，分别去 ingester 或 S3 查询日志数据。</li>
+</ul>
+</li>
+<li>结果汇总：<ul>
+<li>Querier 完成查询后，将结果返回给 Query Frontend。</li>
+<li>Query Frontend 合并 3 个子查询的结果，形成完整的日志列表，返回给 Grafana。</li>
+</ul>
+</li>
+<li>多个副本：<ul>
+<li>如果有 2 个 Query Frontend 副本，客户端请求可能随机分配到其中一个。</li>
+<li>Querier 同时连接到两个副本的队列，动态领取任务，确保负载均衡。</li>
+</ul>
+</li>
+</ol>
+<h3 id="1-5-读取路径"><a href="#1-5-读取路径" class="headerlink" title="1.5 读取路径"></a>1.5 读取路径</h3><p>日志读取路径的流程如下所示：</p>
+<ul>
+<li>查询器收到一个对数据的 HTTP 请求。</li>
+<li>查询器将查询传递给所有 <code>ingester</code>。</li>
+<li><code>ingester</code> 收到读取请求，并返回与查询相匹配的数据。</li>
+<li>如果没有 <code>ingester</code> 返回数据，查询器会从后端存储加载数据，并对其运行查询。</li>
+<li>查询器对所有收到的数据进行迭代和重复计算，通过 HTTP 连接返回最后一组数据。</li>
+</ul>
+<p><strong>举个例子</strong></p>
+<p>假设你在 Grafana 中查询 {app&#x3D;”frontend”} |~ “error”，时间范围是过去 6 小时：</p>
+<ol>
+<li>客户端发送请求：<ul>
+<li>Grafana 通过 HTTP 发送查询到 Querier。</li>
+</ul>
+</li>
+<li>Querier 分发查询：<ul>
+<li>Querier 将查询 {app&#x3D;”frontend”} |~ “error” 广播给集群中的 3 个 Ingester（I1、I2、I3）。</li>
+</ul>
+</li>
+<li>Ingester 处理：<ul>
+<li>I1 发现自己有部分匹配的日志（比如过去 2 小时的数据），返回这些日志。</li>
+<li>I2 和 I3 可能也有部分数据（由于复制因子），返回相同的或不同的日志。</li>
+</ul>
+</li>
+<li>后端存储查询：<ul>
+<li>如果查询的 6 小时范围超出了 Ingester 的内存存储（比如 Ingester 只存 4 小时数据），Querier 会从 S3 加载更老的块（4-6 小时的数据），并执行查询。</li>
+</ul>
+</li>
+<li>合并和去重：<ul>
+<li>Querier 收集 I1、I2、I3 和 S3 返回的数据。</li>
+<li>如果 I1 和 I2 返回了相同的日志（由于复制），Querier 通过哈希值或时间戳去重。</li>
+<li>Querier 按时间排序所有日志，生成最终结果。</li>
+</ul>
+</li>
+<li>返回结果：<ul>
+<li>Querier 通过 HTTP 返回整理好的日志列表，Grafana 显示这些日志。</li>
+</ul>
+</li>
+</ol>
+<h3 id="1-6-写入路径"><a href="#1-6-写入路径" class="headerlink" title="1.6 写入路径"></a>1.6 写入路径</h3><p>整体的日志写入路径如下所示：</p>
+<ul>
+<li><code>distributor</code> 收到一个 HTTP 请求，以存储流的数据。</li>
+<li>每个流都使用哈希环进行哈希操作。</li>
+<li><code>distributor</code> 将每个流发送到合适的 <code>ingester</code> 和他们的副本（基于配置的复制因子）。</li>
+<li>每个 <code>ingester</code> 将为日志流数据创建一个块或附加到一个现有的块上。每个租户和每个标签集的块是唯一的。</li>
+</ul>
+<h2 id="2-Promtail"><a href="#2-Promtail" class="headerlink" title="2. Promtail"></a>2. Promtail</h2><p><a target="_blank" rel="noopener" href="https://grafana.com/docs/loki/latest/send-data/promtail/">官方文档</a></p>
+<p>promtail 是 loki 架构中最常用的采集器, 相当于 EFK 中的 filebeat&#x2F;fluentd 。</p>
+<p>Promtail 是 Loki 官方支持的日志采集端，在需要采集日志的节点上运行采集代理，再统一发送到 Loki 进行处理。除了使用 Promtail，社区还有很多采集日志的组件，比如 fluentd、fluent bit、logstash 等，也都支持发送到 Loki。</p>
+<p>但是 Promtail 是运行 Kubernetes 时的首选客户端，因为你可以将其配置为自动从 Promtail 运行的同一节点上运行的 Pod 中抓取日志。Promtail 和 Prometheus 在 Kubernetes 中一起运行，还可以实现非常强大的调试功能，如果 Prometheus 和 Promtail 使用相同的标签，用户还可以使用 Grafana 根据标签集在指标和日志之间切换。</p>
+<p>它的主要工作流程:</p>
+<ul>
+<li>使用 fsnotify 监听指定目录下（例如：&#x2F;var&#x2F;log&#x2F;*.log）的文件创建与删除</li>
+<li>对每个活跃的日志文件起一个 goroutine 进行类似 tail -f 的读取，读取到的内容发送给 channel</li>
+<li>有一个单独的 goroutine 会读取 channel 中的日志行，分批并附加上标签后推送给 Loki</li>
+</ul>
+<h1 id="二、使用YAML部署-Loki"><a href="#二、使用YAML部署-Loki" class="headerlink" title="二、使用YAML部署 Loki"></a>二、使用YAML部署 Loki</h1><p>这次部署的 loki 整体架构如下, </p>
+<ul>
+<li>loki 使用 <code>StatefulSet</code> 的方式运行,</li>
+<li>Promtail 以 <code>DaemonSet</code> 的方式运行在 k8s 集群的每个节点</li>
+<li>Grafana 以 Deploment 方式运行，通过 Ingress 暴露访问端口</li>
+</ul>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-161149.jpeg" alt="Loki-Promtail部署"></p>
+<h2 id="1-Promtail部署"><a href="#1-Promtail部署" class="headerlink" title="1. Promtail部署"></a>1. Promtail部署</h2><h3 id="1-1-Promtail-部署文件"><a href="#1-1-Promtail-部署文件" class="headerlink" title="1.1 Promtail 部署文件"></a>1.1 Promtail 部署文件</h3><p>资源清单：<code>loki-promtail.yaml</code></p>
+<pre><code class="highlight yaml"><span class="comment"># 1.命名空间</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Namespace</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">logging</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 2.ServiceAccount</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ServiceAccount</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki-promtail</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">promtail</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 3.集群角色</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">ClusterRole</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">promtail-clusterrole</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">promtail</span>
+<span class="attr">rules:</span>
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>] <span class="comment"># 核心组</span>
+    <span class="attr">resources:</span>
+      <span class="bullet">-</span> <span class="string">nodes</span>
+      <span class="bullet">-</span> <span class="string">nodes/proxy</span>
+      <span class="bullet">-</span> <span class="string">services</span>
+      <span class="bullet">-</span> <span class="string">endpoints</span>
+      <span class="bullet">-</span> <span class="string">pods</span>
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;list&quot;</span>]
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 4.集群角色绑定</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">promtail-clusterrolebinding</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">promtail</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+<span class="attr">subjects:</span>
+  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">loki-promtail</span>
+    <span class="attr">kind:</span> <span class="string">ServiceAccount</span>
+    <span class="attr">namespace:</span> <span class="string">logging</span>
+<span class="attr">roleRef:</span>
+  <span class="attr">name:</span> <span class="string">promtail-clusterrole</span>
+  <span class="attr">kind:</span> <span class="string">ClusterRole</span>
+  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 5.ConfigMap</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ConfigMap</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki-promtail</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">promtail</span>
+<span class="attr">data:</span>
+  <span class="attr">promtail.yaml:</span> <span class="string">|</span>
+<span class="string">    client:                # 定义 Promtail 如何与 Loki 服务器通信，发送收集到的日志</span>
+<span class="string">      backoff_config:      # 配置当请求失败时的重试策略</span>
+<span class="string">        max_period: 1s     # 重试间隔的最大时间为 1 秒</span>
+<span class="string">        max_retries: 20    # 最多重试 20 次</span>
+<span class="string">        min_period: 500ms  # 重试间隔的最小时间为 500 毫秒</span>
+<span class="string">      batchsize: 10240        # 每次发送到 Loki 的日志批次最大大小为 10240 字节（约 10KB）</span>
+<span class="string">      batchwait: 2s           # 即使批次大小未达到 batchsize，Promtail 最多等待 2 秒后也会发送日志。这是为了避免延迟过高</span>
+<span class="string">      external_labels: &#123;&#125;     # 为所有发送到 Loki 的日志添加静态标签，这里为空（可以手动添加标签，如 env: prod）</span>
+<span class="string">      timeout: 15s            # 等待 Loki 服务器响应的最大时间为 15 秒，超时后请求失败并触发重试</span>
+<span class="string">    positions:</span>
+<span class="string">      filename: /run/promtail/positions.yaml # Promtail 使用一个文件来记录它读取日志文件的位置（类似于书签），以避免重复读取或遗漏日志</span>
+<span class="string">    server:</span>
+<span class="string">      http_listen_port: 3101  # 配置 Promtail 自身的 HTTP 服务，用于暴露监控指标或调试</span>
+<span class="string">    target_config:</span>
+<span class="string">      sync_period: 10s        # 控制 Promtail 如何定期同步其发现目标（如 Kubernetes Pods）的元数据。</span>
+<span class="string">    scrape_configs:           # 定义 Promtail 如何发现和收集 Kubernetes 集群中的日志。scrape_configs 包含多个任务（job），每个任务针对不同类型的 Pod 进行日志收集</span>
+<span class="string">      - job_name: kubernetes-pods-name  # 收集由 name 标签定义的 Pod 日志</span>
+<span class="string">        pipeline_stages:</span>
+<span class="string">          - docker: &#123;&#125;                  # 指定日志格式为 Docker 格式（JSON 格式的容器日志）。Promtail 会解析 Docker 容器日志，提取时间戳和日志内容</span>
+<span class="string">        kubernetes_sd_configs:</span>
+<span class="string">          - role: pod                   # Promtail 通过 Kubernetes 服务发现（Service Discovery）查找 Pod，收集它们的日志</span>
+<span class="string">        relabel_configs:</span>
+<span class="string">          - source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_label_name  # 从 Pod 的标签中提取 name 标签的值，设置为 __service__ 标签</span>
+<span class="string">            target_label: __service__             # Kubernetes Pod 可能有标签 name=my-app，Promtail 将其值 my-app 保存为 __service__，用于标识服务</span>
+<span class="string">          - source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_node_name   # 将 Pod 所在节点的名称设置为 __host__ 标签</span>
+<span class="string">            target_label: __host__                # 记录 Pod 运行在哪个 Kubernetes 节点上（比如 node-1），便于日志追踪</span>
+<span class="string">          - action: drop                          # 如果 __service__ 标签为空（即 Pod 没有 name 标签），丢弃该 Pod，不收集其日志</span>
+<span class="string">            regex: &#x27;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __service__</span>
+<span class="string">          - action: labelmap                      # 将所有以 __meta_kubernetes_pod_label_ 开头的元数据标签（如 __meta_kubernetes_pod_label_app）映射为普通标签</span>
+<span class="string">            regex: __meta_kubernetes_pod_label_(.+)</span>
+<span class="string">          - action: replace                       # 将命名空间（namespace）和 __service__ 组合成 job 标签，格式为 namespace/service</span>
+<span class="string">            replacement: $1</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace       # 如果命名空间是 default，__service__ 是 my-app，则 job 标签为 default/my-app</span>
+<span class="string">              - __service__</span>
+<span class="string">            target_label: job</span>
+<span class="string">          - action: replace                       # 将 Pod 的命名空间设置为 namespace 标签</span>
+<span class="string">            source_labels:                        # 如果 Pod 在 default 命名空间，日志会带上 namespace=default 标签</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">            target_label: namespace</span>
+<span class="string">          - action: replace                       # 将 Pod 的名称设置为 pod 标签</span>
+<span class="string">            source_labels:                        # 如果 Pod 名为 my-app-1234，日志会带上 pod=my-app-1234 标签</span>
+<span class="string">              - __meta_kubernetes_pod_name</span>
+<span class="string">            target_label: pod</span>
+<span class="string">          - action: replace                       # 将容器的名称设置为 container 标签</span>
+<span class="string">            source_labels:                        # 如果容器名为 app-container，日志会带上 container=app-container 标签</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: container</span>
+<span class="string">          - replacement: /var/log/pods/*$1/*.log  # 生成日志文件的路径，告诉 Promtail 从哪里读取日志，路径格式为 /var/log/pods/*&lt;pod_uid&gt;/&lt;container_name&gt;.log</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_uid               # Pod 的唯一 ID</span>
+<span class="string">              - __meta_kubernetes_pod_container_name    # 容器名称</span>
+<span class="string">            target_label: __path__                      # 例如，Pod UID 是 abc-123，容器名为 app-container，日志路径为 /var/log/pods/*abc-123/app-container.log</span>
+<span class="string">      - job_name: kubernetes-pods-app # 收集由 app 标签定义的 Pod 日志</span>
+<span class="string">        pipeline_stages:</span>
+<span class="string">          - docker: &#123;&#125;</span>
+<span class="string">        kubernetes_sd_configs:</span>
+<span class="string">          - role: pod</span>
+<span class="string">        relabel_configs:</span>
+<span class="string">          - action: drop</span>
+<span class="string">            regex: .+</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_label_name</span>
+<span class="string">          - source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_label_app</span>
+<span class="string">            target_label: __service__</span>
+<span class="string">          - source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_node_name</span>
+<span class="string">            target_label: __host__</span>
+<span class="string">          - action: drop</span>
+<span class="string">            regex: &#x27;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __service__</span>
+<span class="string">          - action: labelmap</span>
+<span class="string">            regex: __meta_kubernetes_pod_label_(.+)</span>
+<span class="string">          - action: replace</span>
+<span class="string">            replacement: $1</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">              - __service__</span>
+<span class="string">            target_label: job</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">            target_label: namespace</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_name</span>
+<span class="string">            target_label: pod</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: container</span>
+<span class="string">          - replacement: /var/log/pods/*$1/*.log</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_uid</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: __path__</span>
+<span class="string">      - job_name: kubernetes-pods-direct-controllers # 收集由直接控制器（如 Deployment）管理的 Pod 日志</span>
+<span class="string">        pipeline_stages:</span>
+<span class="string">          - docker: &#123;&#125;</span>
+<span class="string">        kubernetes_sd_configs:</span>
+<span class="string">          - role: pod</span>
+<span class="string">        relabel_configs:</span>
+<span class="string">          - action: drop # 首先检查 __meta_kubernetes_pod_label_name（name 标签）</span>
+<span class="string">            regex: .+       # 如果 name 标签存在（匹配正则 .+，即非空），执行 drop 动作，丢弃该 Pod</span>
+<span class="string">            separator: &#x27;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_label_name</span>
+<span class="string">              - __meta_kubernetes_pod_label_app</span>
+<span class="string">          - action: drop</span>
+<span class="string">            regex: &#x27;[0-9a-z-.]+-[0-9a-f]&#123;8,10&#125;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_controller_name</span>
+<span class="string">          - source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_controller_name</span>
+<span class="string">            target_label: __service__</span>
+<span class="string">          - source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_node_name</span>
+<span class="string">            target_label: __host__</span>
+<span class="string">          - action: drop</span>
+<span class="string">            regex: &#x27;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __service__</span>
+<span class="string">          - action: labelmap</span>
+<span class="string">            regex: __meta_kubernetes_pod_label_(.+)</span>
+<span class="string">          - action: replace</span>
+<span class="string">            replacement: $1</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">              - __service__</span>
+<span class="string">            target_label: job</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">            target_label: namespace</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_name</span>
+<span class="string">            target_label: pod</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: container</span>
+<span class="string">          - replacement: /var/log/pods/*$1/*.log</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_uid</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: __path__</span>
+<span class="string">      - job_name: kubernetes-pods-indirect-controller # 收集由间接控制器（如 ReplicaSet）管理的 Pod 日志</span>
+<span class="string">        pipeline_stages:</span>
+<span class="string">          - docker: &#123;&#125;</span>
+<span class="string">        kubernetes_sd_configs:</span>
+<span class="string">          - role: pod</span>
+<span class="string">        relabel_configs:</span>
+<span class="string">          - action: drop        # 如果 Pod 有 name 或 app 标签，触发 drop 动作，丢弃该 Pod</span>
+<span class="string">            regex: .+</span>
+<span class="string">            separator: &#x27;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_label_name</span>
+<span class="string">              - __meta_kubernetes_pod_label_app</span>
+<span class="string">          - action: keep        # 如果 Pod 由 ReplicaSet 控制器管理（控制器名称匹配 xxx-12345678 模式），触发 keep 动作，保留该 Pod</span>
+<span class="string">            regex: &#x27;[0-9a-z-.]+-[0-9a-f]&#123;8,10&#125;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_controller_name</span>
+<span class="string">          - action: replace</span>
+<span class="string">            regex: &#x27;([0-9a-z-.]+)-[0-9a-f]&#123;8,10&#125;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_controller_name</span>
+<span class="string">            target_label: __service__</span>
+<span class="string">          - source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_node_name</span>
+<span class="string">            target_label: __host__</span>
+<span class="string">          - action: drop</span>
+<span class="string">            regex: &#x27;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __service__</span>
+<span class="string">          - action: labelmap</span>
+<span class="string">            regex: __meta_kubernetes_pod_label_(.+)</span>
+<span class="string">          - action: replace</span>
+<span class="string">            replacement: $1</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">              - __service__</span>
+<span class="string">            target_label: job</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">            target_label: namespace</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_name</span>
+<span class="string">            target_label: pod</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: container</span>
+<span class="string">          - replacement: /var/log/pods/*$1/*.log</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_uid</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: __path__</span>
+<span class="string">      - job_name: kubernetes-pods-static # 收集静态配置的 Pod 日志（基于特定的注解）</span>
+<span class="string">        pipeline_stages:</span>
+<span class="string">          - docker: &#123;&#125;</span>
+<span class="string">        kubernetes_sd_configs:</span>
+<span class="string">          - role: pod</span>
+<span class="string">        relabel_configs:</span>
+<span class="string">          - action: drop</span>
+<span class="string">            regex: &#x27;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_annotation_kubernetes_io_config_mirror</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_label_component</span>
+<span class="string">            target_label: __service__</span>
+<span class="string">          - source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_node_name</span>
+<span class="string">            target_label: __host__</span>
+<span class="string">          - action: drop</span>
+<span class="string">            regex: &#x27;&#x27;</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __service__</span>
+<span class="string">          - action: labelmap</span>
+<span class="string">            regex: __meta_kubernetes_pod_label_(.+)</span>
+<span class="string">          - action: replace</span>
+<span class="string">            replacement: $1</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">              - __service__</span>
+<span class="string">            target_label: job</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_namespace</span>
+<span class="string">            target_label: namespace</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_name</span>
+<span class="string">            target_label: pod</span>
+<span class="string">          - action: replace</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: container</span>
+<span class="string">          - replacement: /var/log/pods/*$1/*.log</span>
+<span class="string">            separator: /</span>
+<span class="string">            source_labels:</span>
+<span class="string">              - __meta_kubernetes_pod_annotation_kubernetes_io_config_mirror</span>
+<span class="string">              - __meta_kubernetes_pod_container_name</span>
+<span class="string">            target_label: __path__</span>
+<span class="string"></span>
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 6.DaemonSet</span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">DaemonSet</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki-promtail</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">promtail</span>
+<span class="attr">spec:</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">promtail</span>
+  <span class="attr">updateStrategy:</span> <span class="comment"># 更新策略</span>
+    <span class="attr">rollingUpdate:</span>
+      <span class="attr">maxUnavailable:</span> <span class="number">1</span> <span class="comment"># 滚动更新时最多一个pod不可用，即同一时刻只允许一个节点上的Pod不可用</span>
+    <span class="attr">type:</span> <span class="string">RollingUpdate</span> <span class="comment"># 滚动更新</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">promtail</span>
+    <span class="attr">spec:</span>
+      <span class="attr">serviceAccountName:</span> <span class="string">loki-promtail</span> <span class="comment"># 绑定的SA</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">promtail</span>
+          <span class="attr">image:</span> <span class="string">grafana/promtail:2.9.2</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">args:</span>
+            <span class="bullet">-</span> <span class="string">-config.file=/etc/promtail/promtail.yaml</span>        <span class="comment"># 指定 Promtail 的配置文件路径，位于容器内的 /etc/promtail/promtail.yaml（由 ConfigMap 提供）</span>
+            <span class="bullet">-</span> <span class="string">-client.url=http://loki:3100/loki/api/v1/push</span>   <span class="comment"># 指定 Loki 服务器的地址，Promtail 将日志发送到 http://loki:3100/loki/api/v1/push</span>
+          <span class="attr">env:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">HOSTNAME</span>
+              <span class="attr">valueFrom:</span>
+                <span class="attr">fieldRef:</span>
+                  <span class="attr">apiVersion:</span> <span class="string">v1</span>
+                  <span class="attr">fieldPath:</span> <span class="string">spec.nodeName</span>      <span class="comment"># 从 Kubernetes Pod 的元数据中获取节点名称（如 k8s-node01）</span>
+          <span class="attr">volumeMounts:</span>
+            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/etc/promtail</span>          <span class="comment"># 挂载 config 卷，包含 Promtail 配置文件（promtail.yaml）</span>
+              <span class="attr">name:</span> <span class="string">config</span>
+            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/run/promtail</span>          <span class="comment"># 挂载 run 卷，存储 Promtail 的位置文件（positions.yaml），用于记录日志读取偏移量</span>
+              <span class="attr">name:</span> <span class="string">run</span>
+            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/data/docker/containers</span>    <span class="comment"># 挂载 docker 卷，包含 Docker 容器的日志文件（路径需要根据容器运行时调整,如果使用 containerd 可忽略）</span>
+              <span class="attr">name:</span> <span class="string">docker</span>
+              <span class="attr">readOnly:</span> <span class="literal">true</span>        <span class="comment"># 挂载卷只读</span>
+            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/var/log/pods</span>              <span class="comment"># 挂载 pods 卷，包含 Kubernetes Pod 的日志文件（标准路径）</span>
+              <span class="attr">name:</span> <span class="string">pods</span>
+              <span class="attr">readOnly:</span> <span class="literal">true</span>        <span class="comment"># 挂载卷只读</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">3101</span>   <span class="comment">#Promtail 容器在 3101 端口提供 HTTP 服务，与 promtail.yaml 中的 server.http_listen_port: 3101 一致</span>
+              <span class="attr">name:</span> <span class="string">http</span>
+              <span class="attr">protocol:</span> <span class="string">TCP</span>
+          <span class="attr">securityContext:</span>          <span class="comment"># 定义容器的安全上下文，控制运行权限和文件系统访问</span>
+            <span class="attr">readOnlyRootFilesystem:</span> <span class="literal">true</span>    <span class="comment"># 容器根文件系统为只读，增强安全性，防止意外修改。Promtail 需要 root 权限访问节点上的日志文件（如 /var/log/pods）</span>
+            <span class="attr">runAsGroup:</span> <span class="number">0</span>                   <span class="comment"># 容器以 root 用户（UID 0）运行</span>
+            <span class="attr">runAsUser:</span> <span class="number">0</span>                    <span class="comment"># 容器以 root 组（GID 0）运行</span>
+          <span class="attr">readinessProbe:</span>             <span class="comment"># 定义就绪探针，检查 Promtail 容器是否准备好提供服务</span>
+            <span class="attr">httpGet:</span>
+              <span class="attr">path:</span> <span class="string">/ready</span>            <span class="comment"># 访问 /ready 端点</span>
+              <span class="attr">port:</span> <span class="string">http</span>              <span class="comment"># 使用命名为 http 的端口（3101）</span>
+              <span class="attr">scheme:</span> <span class="string">HTTP</span>
+            <span class="attr">failureThreshold:</span> <span class="number">5</span>       <span class="comment"># 连续 5 次探测失败后，标记容器为未就绪</span>
+            <span class="attr">initialDelaySeconds:</span> <span class="number">10</span>   <span class="comment"># 容器启动后等待 10 秒开始第一次探测</span>
+            <span class="attr">periodSeconds:</span> <span class="number">10</span>         <span class="comment"># 每 10 秒探测一次</span>
+            <span class="attr">successThreshold:</span> <span class="number">1</span>       <span class="comment"># 一次探测成功即标记为就绪</span>
+            <span class="attr">timeoutSeconds:</span> <span class="number">1</span>         <span class="comment"># 每次探测的超时时间为 1 秒</span>
+      <span class="attr">tolerations:</span>
+        <span class="bullet">-</span> <span class="attr">operator:</span> <span class="string">Exists</span>            <span class="comment"># 允许 Pod 调度到带有任何污点（taint）的节点上</span>
+      <span class="attr">volumes:</span>                <span class="comment"># 定义 Pod 使用的卷，供容器挂载</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config</span>
+          <span class="attr">configMap:</span>
+            <span class="attr">defaultMode:</span> <span class="number">420</span>              <span class="comment"># 文件权限为 0644（即 rw-r--r--），适合配置文件（420为十进制，0644是Linux系统中使用的八进制）</span>
+            <span class="attr">name:</span> <span class="string">loki-promtail</span>           <span class="comment"># 使用名为 loki-promtail 的 ConfigMap（即之前提供的配置）</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">run</span>
+          <span class="attr">hostPath:</span>
+            <span class="attr">path:</span> <span class="string">/run/promtail</span>           <span class="comment"># 挂载节点上的 /run/promtail 目录</span>
+            <span class="attr">type:</span> <span class="string">&quot;&quot;</span>                      <span class="comment"># 默认类型，目录不存在时不会自动创建</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">docker</span>
+          <span class="attr">hostPath:</span>
+            <span class="attr">path:</span> <span class="string">/data/docker/containers</span> <span class="comment"># 挂载节点上的 Docker 容器日志目录</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">pods</span>
+          <span class="attr">hostPath:</span>
+            <span class="attr">path:</span> <span class="string">/var/log/pods</span>           <span class="comment"># 挂载节点上的 Kubernetes Pod 日志目录</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单</span>
+$ kubectl apply -f loki-promtail.yaml</code></pre>
+
+
+
+<p><strong>查看资源</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看命名空间</span>
+$ kubectl get ns
+NAME              STATUS   AGE
+default           Active   13d
+harbor            Active   7d4h
+kube-node-lease   Active   13d
+kube-public       Active   13d
+kube-system       Active   13d
+logging           Active   2d4h
+
+<span class="comment"># 查看 ServiceAccount</span>
+$ kubectl get sa -n logging
+NAME            SECRETS   AGE
+default         0         2d4h
+loki-promtail   0         2d4h
+
+<span class="comment"># 查看集群角色</span>
+$ kubectl get ClusterRole | grep promtail
+promtail-clusterrole
+
+<span class="comment"># 查看集群角色绑定</span>
+$ kubectl get ClusterRoleBinding | grep promtail
+promtail-clusterrolebinding                              ClusterRole/promtail-clusterrole                                                   2d4h
+
+<span class="comment"># 查看 ConfigMap</span>
+$ kubectl get cm -n logging
+NAME               DATA   AGE
+kube-root-ca.crt   1      2d4h
+loki-promtail      1      2d1h
+
+<span class="comment"># 查看 DaemonSet</span>
+$ kubectl get ds -n logging
+NAME            DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR   AGE
+loki-promtail   4         4         4       4            4           &lt;none&gt;          27m
+
+<span class="comment"># 查看Pod</span>
+$ kubectl get pods -n logging
+NAME                  READY   STATUS    RESTARTS   AGE
+loki-promtail-lsqsg   1/1     Running   0          27m
+loki-promtail-r7vjh   1/1     Running   0          27m
+loki-promtail-szd8m   1/1     Running   0          27m
+loki-promtail-whffb   1/1     Running   0          27m</code></pre>
+
+
+
+<h3 id="1-2-scrape-configs-配置详解"><a href="#1-2-scrape-configs-配置详解" class="headerlink" title="1.2 scrape_configs 配置详解"></a>1.2 scrape_configs 配置详解</h3><p><code>scrape_configs</code> 配置了 Promtail 如何使用指定的发现方法从一系列目标中抓取日志，类似于 Prometheus 中的抓取配置。</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">任务名称，用于在 Promtail 中识别该抓取配置的名称。</span>
+job_name: &lt;string&gt;
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">描述如何对目标日志进行结构化</span>
+[pipeline_stages: &lt;pipeline_stages&gt;]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">如何从 jounal 抓取日志</span>
+[journal: &lt;journal_config&gt;]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">如何从 syslog 抓取日志</span>
+[syslog: &lt;syslog_config&gt;]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">如何通过 Loki push API 接收日志 (例如从其他 Promtail 或 Docker Logging Driver 中获取的数据)</span>
+[loki_push_api: &lt;loki_push_api_config&gt;]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">描述了如何 relabel 目标</span>
+relabel_configs:
+  - [&lt;relabel_config&gt;]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">抓取日志静态目标配置</span>
+static_configs:
+  - [&lt;static_config&gt;]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">包含要抓取的目标文件</span>
+file_sd_configs:
+  - [&lt;file_sd_configs&gt;]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">基于kubernetes的自动发现配置</span>
+kubernetes_sd_configs:
+  - [&lt;kubernetes_sd_config&gt;]
+</code></pre>
+
+
+
+<p><strong>relabel_configs</strong></p>
+<p><code>Relabeling</code> 是一个强大的工具，可以在日志被抓取之前动态地重写其标签集。每个抓取配置可以配置多个 <code>relabeling</code> 步骤，按照它们在配置文件中出现的顺序应用于每个目标的标签集。和 Prometheus 中的 Relabel 操作也非常类似。</p>
+<p>在 <code>relabeling</code> 之后，如果 <code>instance</code> 标签在 relabeling 的时候没有被设置，则默认设置为 <code>__address__</code> 的值。<code>__param_&lt;name&gt;</code> 标签被设置为第一个传递的 URL 参数 <code>&lt;name&gt;</code> 的值。</p>
+<p>在 <code>relabeling</code> 阶段，以 <code>__meta_</code> 为前缀的额外标签也是可用的，它们是由提供目标的服务发现机制设置的，不同的机制之间有所不同。</p>
+<p>在目标 <code>relabeling</code> 完成后，以 <code>__</code> 开头的标签将从标签集中删除。</p>
+<p>如果一个 <code>relabeling</code> 操作只需要临时存储一个标签值（作为后续重新标注步骤的输入），则可以使用 <code>__tmp</code> 标签名称前缀。</p>
+<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">从现有标签中选择 values 值的源标签</span>
+<span class="meta prompt_"># </span><span class="language-bash">它们的内容使用配置的分隔符连接起来，并与配置的正则表达式相匹配，以进行替换、保留和删除操作。</span>
+[ source_labels: &#x27;[&#x27; &lt;labelname&gt; [, ...] &#x27;]&#x27; ]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">连接源标签值之间的分隔符</span>
+[ separator: &lt;string&gt; | default = ; ]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">在一个 replace 替换操作后结果值被写入的标签</span>
+<span class="meta prompt_"># </span><span class="language-bash">它对替换动作是强制性的，Regex 捕获组是可用的。</span>
+[ target_label: &lt;labelname&gt; ]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">正则表达式，提取的值与之匹配</span>
+[ regex: &lt;regex&gt; | default = (.*) ]
+
+[ modulus: &lt;uint64&gt; ]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">Replacement 值：如果正则表达式匹配，则对其进行 regex 替换</span>
+[ replacement: &lt;string&gt; | default = $1 ]
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">根据正则匹配结果执行的动作</span>
+[ action: &lt;relabel_action&gt; | default = replace ]
+</code></pre>
+
+<p><code>&lt;regex&gt;</code> 是任何有效的 <code>RE2</code> 正则表达式，它是 <code>replace</code>、<code>keep</code>、<code>drop</code>、<code>labelmap</code>、<code>labeldrop</code> 和 <code>labelkeep</code> 操作的必要条件。</p>
+<p><code>&lt;relabel_action&gt;</code> 决定了要采取的 <code>relabeling</code> 动作：</p>
+<ul>
+<li><code>replace</code>：将正则表达式与连接的 <code>source_labels</code> 匹配，然后设置 <code>target_label</code> 为 <code>replacement</code>，用 replacement 中的匹配组引用（${1}、${2}…）替换其值，如果正则表达式不匹配，则不会进行替换。</li>
+<li><code>keep</code>：删除那些 regex 与 <code>source_labels</code> 不匹配的目标。</li>
+<li><code>drop</code>：删除与 regex 相匹配的 <code>source_labels</code> 目标。</li>
+<li><code>hashmod</code>：将 <code>target_label</code> 设置为 <code>source_labels</code> 的哈希值的模。</li>
+<li><code>labelmap</code>：将正则表达式与所有标签名称匹配，然后将匹配的标签值复制到由 <code>replacement</code> 给出的标签名中，replacement 中的匹配组引用（${1}, ${2}, …）由其值代替。</li>
+<li><code>labeldrop</code>：将正则表达式与所有标签名称匹配，任何匹配的标签都将从标签集中删除。</li>
+<li><code>labelkeep</code>：将正则表达式与所有标签名称匹配，任何不匹配的标签将被从标签集中删除。</li>
+</ul>
+<p>关于 Promotail 配置更加详细的介绍，见：<a target="_blank" rel="noopener" href="https://www.qikqiak.com/k3s/logging/loki/promtail/">https://www.qikqiak.com/k3s/logging/loki/promtail/</a></p>
+<h2 id="2-Loki-部署"><a href="#2-Loki-部署" class="headerlink" title="2. Loki 部署"></a>2. Loki 部署</h2><h3 id="2-1-安装NFS"><a href="#2-1-安装NFS" class="headerlink" title="2.1 安装NFS"></a>2.1 安装NFS</h3><p>安装 NFS,配置存储卷自动分配 PV，用于持久化 Harbor 存储的镜像。</p>
+<p>这里选用 k8s-master (10.20.1.139) 作为 nfs 服务端，其它节点作为 nfs 客户端</p>
+<h4 id="2-1-1-安装-NFS-服务"><a href="#2-1-1-安装-NFS-服务" class="headerlink" title="2.1.1 安装 NFS 服务"></a>2.1.1 安装 NFS 服务</h4><blockquote>
+<p>master节点、node01、node02、node03 节点都需要安装执行</p>
+</blockquote>
+<pre><code class="highlight bash">$ yum install -y nfs-utils rpcbind</code></pre>
+
+
+
+<h4 id="2-1-2-创建共享目录"><a href="#2-1-2-创建共享目录" class="headerlink" title="2.1.2 创建共享目录"></a>2.1.2 创建共享目录</h4><blockquote>
+<p>仅在 nfs 服务端 (master节点) 执行</p>
+</blockquote>
+<pre><code class="highlight bash"><span class="comment"># 创建 共享目录</span>
+$ <span class="built_in">mkdir</span> -p /root/data/loki/
+
+<span class="comment"># 目录提权</span>
+<span class="built_in">chmod</span> 777 /root/data/loki/
+
+<span class="comment"># 变更用户组</span>
+<span class="built_in">chown</span> nobody /root/data/loki/</code></pre>
+
+
+
+<h4 id="2-1-3-编辑共享目录读写配置"><a href="#2-1-3-编辑共享目录读写配置" class="headerlink" title="2.1.3 编辑共享目录读写配置"></a>2.1.3 编辑共享目录读写配置</h4><blockquote>
+<p>仅在 nfs 服务端 (master节点) 执行</p>
+</blockquote>
+<pre><code class="highlight bash">$ vim /etc/exports
+
+/root/data     10.20.1.0/24(rw,fsid=0,no_root_squash)
+/root/data/loki       10.20.1.0/24(rw,no_root_squash,no_all_squash,no_subtree_check,<span class="built_in">sync</span>)</code></pre>
+
+<p>这里使用的是 NFS4 服务，上面的配置表示 10.20.1.0&#x2F;24 网段的 ip 都可以与 nfs 主服务器共享 <code>/root/data/harbor</code> 目录内容</p>
+<h4 id="2-1-4-启动NFS服务"><a href="#2-1-4-启动NFS服务" class="headerlink" title="2.1.4 启动NFS服务"></a>2.1.4 启动NFS服务</h4><blockquote>
+<p>集群内所有节点都需要操作</p>
+</blockquote>
+<pre><code class="highlight bash"> <span class="comment"># 启动服务</span>
+$ systemctl start rpcbind
+$ systemctl restart nfs-server.service
+
+<span class="comment"># 设置开机自启</span>
+$ systemctl <span class="built_in">enable</span> rpcbind
+$ systemctl <span class="built_in">enable</span> nfs-server.service</code></pre>
+
+
+
+<h4 id="2-1-5-测试-NFS-目录挂载"><a href="#2-1-5-测试-NFS-目录挂载" class="headerlink" title="2.1.5 测试 NFS 目录挂载"></a>2.1.5 测试 NFS 目录挂载</h4><pre><code class="highlight bash"><span class="comment"># NFS 客户端执行：创建目录</span>
+$ <span class="built_in">mkdir</span> /data/test1
+
+<span class="comment"># NFS 客户端执行：挂载目录到NFS服务端</span>
+$ mount -t nfs4 10.20.1.139:/loki /data/test1
+
+<span class="comment"># NFS 客户端执行：查看挂载结果</span>
+$ mount | grep /data/test1
+10.20.1.139:/loki on /data/test1 <span class="built_in">type</span> nfs4 (rw,relatime,vers=4.2,rsize=524288,wsize=524288,namlen=255,hard,proto=tcp,timeo=600,retrans=2,sec=sys,clientaddr=10.20.1.142,local_lock=none,addr=10.20.1.139)
+
+<span class="comment"># NFS 客户端执行：写入数据</span>
+$ <span class="built_in">echo</span> <span class="string">&quot;this is client&quot;</span> &gt; /data/test1/a.txt
+
+<span class="comment"># NFS 服务端执行：查看数据， 结论：客户端数据已写入服务端挂载目录</span>
+$ <span class="built_in">cat</span> /root/data/loki/a.txt 
+this is client
+
+<span class="comment"># NFS 服务端执行：写入数据</span>
+$ <span class="built_in">echo</span> <span class="string">&quot;This is Server&quot;</span> &gt;&gt; /root/data/loki/a.txt
+
+<span class="comment"># NFS 客户端执行：查看数据， 结论：服务端数据已写入客户端挂载目录</span>
+$ <span class="built_in">cat</span> /data/test1/a.txt 
+this is client
+This is Server</code></pre>
+
+
+
+<p><strong>取消挂载</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 取消挂载</span>
+umount /data/test1
+
+
+<span class="comment"># 如果取消挂载出现报错，例如：</span>
+$ umount /data/test1
+umount.nfs4: /data/test1: device is busy
+<span class="comment"># 查看目录占用进程</span>
+$ fuser -m /data/test1
+/data/test1:         32679c
+<span class="comment"># kill 进程</span>
+$ <span class="built_in">kill</span> -9 32679
+
+
+<span class="comment"># 方式二：强制卸载</span>
+umount -l /data/test1</code></pre>
+
+
+
+<h3 id="2-2-创建-StorageClass"><a href="#2-2-创建-StorageClass" class="headerlink" title="2.2 创建 StorageClass"></a>2.2 创建 StorageClass</h3><p>promtail 抓取到的日志，推送给 Loki 存储，这里将 Loki 的数据通过 StorageClass 动态创建PV，将数据存储起来。</p>
+<p>资源清单：<code>loki-storage.yaml</code></p>
+<pre><code class="highlight yaml"><span class="comment"># 1.命名空间</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Namespace</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki-storage</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 2.存储类</span>
+<span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">StorageClass</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+  <span class="attr">name:</span> <span class="string">loki-storage</span>
+<span class="comment"># provisioner: nfs-provisioner</span>
+<span class="attr">provisioner:</span> <span class="string">k8s-sigs.io/nfs-subdir-external-provisioner</span> <span class="comment"># 指定动态配置器，NFS 子目录外部配置器</span>
+<span class="attr">parameters:</span>
+  <span class="attr">pathPattern:</span> <span class="string">$&#123;.PVC.namespace&#125;/$&#123;.PVC.name&#125;</span> <span class="comment"># 动态生成的 NFS 路径，格式为 &lt;PVC 命名空间&gt;/&lt;PVC 名称&gt;，例如 loki-storageclass/test-claim。</span>
+  <span class="attr">archiveOnDelete:</span> <span class="string">&quot;true&quot;</span> <span class="comment">##删除 pv,pv内容是否备份</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 3.NFS 动态存储配置器，用于自动为 PVC 创建 PV</span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+  <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># NFS 动态存储配置器，用于自动为 PVC 创建 PV</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">nfs-client-provisioner</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">nfs-client-provisioner</span>
+    <span class="attr">spec:</span>
+      <span class="attr">serviceAccountName:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># 指定使用的 ServiceAccountName</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span>
+          <span class="attr">image:</span> <span class="string">k8s.dockerproxy.com/sig-storage/nfs-subdir-external-provisioner:v4.0.2</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">volumeMounts:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-root</span> <span class="comment"># 挂载的卷名称，与 volumes 部分定义的卷对应</span>
+              <span class="attr">mountPath:</span> <span class="string">/persistentvolumes</span> <span class="comment"># 将 NFS 卷挂载到容器内的 /persistentvolumes 路径，供容器读写 NFS 共享数据。</span>
+          <span class="attr">env:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">PROVISIONER_NAME</span>
+              <span class="attr">value:</span> <span class="string">k8s-sigs.io/nfs-subdir-external-provisioner</span> <span class="comment"># 指定配置器名称，与 StorageClass 保持一致</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NFS_SERVER</span>
+              <span class="attr">value:</span> <span class="number">10.20</span><span class="number">.1</span><span class="number">.139</span> <span class="comment"># NFS 服务器地址</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NFS_PATH</span>
+              <span class="attr">value:</span> <span class="string">/root/data/loki</span> <span class="comment"># NFS 共享路径</span>
+      <span class="attr">volumes:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-root</span> <span class="comment"># 定义一个名为 nfs-client-root 的 NFS 卷，连接到 NFS 服务器的指定地址和路径</span>
+          <span class="attr">nfs:</span>
+            <span class="attr">server:</span> <span class="number">10.20</span><span class="number">.1</span><span class="number">.139</span> <span class="comment"># NFS 服务器地址</span>
+            <span class="attr">path:</span> <span class="string">/root/data/loki</span> <span class="comment"># NFS 共享路径</span>
+      <span class="attr">nodeSelector:</span> <span class="comment"># 指定Pod运行的节点</span>
+        <span class="attr">kubernetes.io/hostname:</span> <span class="string">k8s-node01</span>
+      <span class="comment"># nodeName: k8s-node01 # 指定 Pod 运行在 k8s-node02 节点上</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 4.服务账户</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ServiceAccount</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># SA 的名称</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 5.集群角色</span>
+<span class="attr">kind:</span> <span class="string">ClusterRole</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">nfs-client-provisioner-runner</span>
+<span class="attr">rules:</span>
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;nodes&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>]
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;persistentvolumes&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;create&quot;</span>, <span class="string">&quot;delete&quot;</span>]
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;persistentvolumeclaims&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;update&quot;</span>]
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;storage.k8s.io&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;storageclasses&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>]
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;events&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;create&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;patch&quot;</span>]
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 6.集群角色绑定</span>
+<span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">run-nfs-client-provisioner</span>
+<span class="attr">subjects:</span>
+  <span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span> <span class="comment"># 绑定类型 ServiceAccount</span>
+    <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># ServiceAccount 的名称</span>
+    <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+<span class="attr">roleRef:</span>
+  <span class="attr">kind:</span> <span class="string">ClusterRole</span> <span class="comment"># 绑定的角色类型</span>
+  <span class="attr">name:</span> <span class="string">nfs-client-provisioner-runner</span> <span class="comment"># 集群角色名称 nfs-client-provisioner-runner</span>
+  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 角色</span>
+<span class="attr">kind:</span> <span class="string">Role</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">leader-locking-nfs-client-provisioner</span> <span class="comment"># 角色的名称，表明它与 NFS 客户端存储提供者的领导者选举（leader election）机制相关。</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+<span class="attr">rules:</span>
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>] <span class="comment"># 空字符串表示核心 API 组（core API group），包含 Kubernetes 的基本资源，如 endpoints。</span>
+    <span class="attr">resources:</span> [<span class="string">&quot;endpoints&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;create&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;patch&quot;</span>]
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># SA角色绑定</span>
+<span class="attr">kind:</span> <span class="string">RoleBinding</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">run-leader-locking-nfs-client-provisioner</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+<span class="attr">subjects:</span>
+  <span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span> <span class="comment"># 绑定资源类型为 ServiceAccount</span>
+    <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># 绑定的ServiceAccount 名称</span>
+    <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+<span class="attr">roleRef:</span>
+  <span class="attr">kind:</span> <span class="string">Role</span> <span class="comment"># 绑定角色（loki-storage名称空间的角色）</span>
+  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span>
+  <span class="attr">name:</span> <span class="string">leader-locking-nfs-client-provisioner</span> <span class="comment"># 角色的名称</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 创建 StorageClass</span>
+$ kubectl apply -f loki-storage.yaml
+
+<span class="comment"># 查看 StorageClass</span>
+$ kubectl get StorageClass
+NAME           PROVISIONER                                   RECLAIMPOLICY   VOLUMEBINDINGMODE   ALLOWVOLUMEEXPANSION   AGE
+loki-storage   k8s-sigs.io/nfs-subdir-external-provisioner   Delete          Immediate           <span class="literal">false</span>                  16m
+nfs-client     k8s-sigs.io/nfs-subdir-external-provisioner   Delete          Immediate           <span class="literal">false</span>                  109m
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pods -n loki-storage -o wide
+NAME                                      READY   STATUS    RESTARTS   AGE   IP               NODE         NOMINATED NODE   READINESS GATES
+nfs-client-provisioner-79f97f7689-w2mtj   1/1     Running   0          15m   192.168.85.236   k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+
+
+
+
+<h3 id="2-3-部署-Loki"><a href="#2-3-部署-Loki" class="headerlink" title="2.3 部署 Loki"></a>2.3 部署 Loki</h3><p>Loki在接收日志后会对日志数据进行一定的加工整理，因为存储的数据为有状态的，安装时候推荐使用StatefulSet。</p>
+<p>资源清单：<code>loki.yaml</code></p>
+<pre><code class="highlight yaml"><span class="comment"># 1.命名空间</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Namespace</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">logging</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 2.ServiceAccount</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ServiceAccount</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 3.Role</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">Role</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+<span class="attr">rules:</span>
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span>
+      <span class="bullet">-</span> <span class="string">extensions</span>          <span class="comment"># 指定 API 组为 extensions，这是 PodSecurityPolicy 在 Kubernetes 早期版本（v1.21 之前）使用的 API 组，v1.25 后完全移除</span>
+    <span class="attr">resourceNames:</span>
+      <span class="bullet">-</span> <span class="string">loki</span>
+    <span class="attr">resources:</span>              <span class="comment"># 指定权限针对的资源类型为 podsecuritypolicies（PSP）</span>
+      <span class="bullet">-</span> <span class="string">podsecuritypolicies</span> <span class="comment"># PSP 是一种 Kubernetes 资源，用于控制 Pod 的安全策略，例如是否允许以 root 运行、挂载主机路径等。在 v1.29 中，podsecuritypolicies 资源不存在，规则无效</span>
+    <span class="attr">verbs:</span>
+      <span class="bullet">-</span> <span class="string">use</span>                 <span class="comment"># 指定允许的操作是 use，表示主体可以应用指定的 PSP（loki）到 Pod</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 4. RoleBinding</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">RoleBinding</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+<span class="attr">roleRef:</span>
+  <span class="attr">name:</span> <span class="string">loki</span>
+  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span>
+  <span class="attr">kind:</span> <span class="string">Role</span>
+<span class="attr">subjects:</span>
+  <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">loki</span>
+    <span class="attr">kind:</span> <span class="string">ServiceAccount</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 5. ConfigMap</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ConfigMap</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">loki</span>
+<span class="attr">data:</span>
+  <span class="attr">loki.yaml:</span> <span class="string">|</span>    <span class="comment"># Loki 的核心配置文件，控制认证、日志存储、索引、块存储、保留策略等</span>
+    <span class="comment"># 通过 X-Scope-OrgID Header 启用身份验证，如果为 true，该 Header 必须存在。</span>
+    <span class="comment"># 如果为 false，OrgID 将始终设置为 &quot;fake&quot;。（用于多租户隔离）</span>
+    <span class="attr">auth_enabled:</span> <span class="literal">false</span>
+    <span class="attr">ingester:</span>
+      <span class="attr">chunk_idle_period:</span> <span class="string">3m</span>        <span class="comment"># 如果一个块在 3 分钟内没有新日志写入，且未达到最大大小，Loki 会将其刷新到存储</span>
+      <span class="attr">chunk_block_size:</span> <span class="number">65535</span>      <span class="comment"># 每个块的最大大小（字节），这里约为 64KB</span>
+      <span class="attr">chunk_retain_period:</span> <span class="string">1m</span>      <span class="comment"># 块刷新到存储后，在内存中保留 1 分钟，允许查询最近的日志</span>
+      <span class="attr">max_transfer_retries:</span> <span class="number">0</span>      <span class="comment"># 当 ingester 退出时，尝试将块转移到其他 ingester 的次数（0 表示不转移，直接刷新到存储）</span>
+      <span class="attr">lifecycler:</span>                  <span class="comment"># 配置 ingester 的生命周期管理，决定如何注册和发现其他 ingester</span>
+        <span class="attr">ring:</span>
+          <span class="attr">kvstore:</span>
+            <span class="attr">store:</span> <span class="string">inmemory</span>        <span class="comment"># 使用内存作为环存储（其他选项如 consul、etcd）</span>
+          <span class="attr">replication_factor:</span> <span class="number">1</span>    <span class="comment"># 写入和读取的ingesters数量，至少为1（为了冗余和弹性，默认情况下为3)</span>
+      <span class="attr">wal:</span>                         <span class="comment"># 配置日志预写</span>
+        <span class="attr">enabled:</span> <span class="literal">true</span>              <span class="comment"># 启用预写日志（Write-Ahead Log, WAL），在崩溃恢复时确保数据不丢失</span>
+        <span class="attr">dir:</span> <span class="string">/data/wal</span>             <span class="comment"># WAL 文件存储路径</span>
+    <span class="attr">limits_config:</span>                 <span class="comment"># 设置日志写入的限制规则</span>
+      <span class="attr">enforce_metric_name:</span> <span class="literal">false</span>          <span class="comment"># 不强制要求日志流具有指标名称（metric name）</span>
+      <span class="attr">reject_old_samples:</span> <span class="literal">true</span>            <span class="comment"># 拒绝时间戳早于当前时间的旧日志</span>
+      <span class="attr">reject_old_samples_max_age:</span> <span class="string">8h</span>      <span class="comment"># 拒绝时间戳早于当前时间 8 小时的日志</span>
+    <span class="attr">schema_config:</span>                        <span class="comment"># 配置从特定时间段开始应该使用哪些索引模式</span>
+      <span class="attr">configs:</span>                       <span class="comment"># 定义 Loki 的索引模式和存储配置，指定从某个日期开始的存储方式</span>
+        <span class="bullet">-</span> <span class="attr">from:</span> <span class="number">2025-07-15</span>           <span class="comment"># 指定此配置从 2023-12-05 开始生效</span>
+          <span class="attr">store:</span> <span class="string">boltdb-shipper</span>      <span class="comment"># 索引存储使用 boltdb-shipper，一种高效的键值存储，适合分布式环境</span>
+          <span class="attr">object_store:</span> <span class="string">filesystem</span>   <span class="comment"># 日志块（chunks）存储在本地文件系统，支持 S3、GCS 等，filesystem 适合单节点或测试环境</span>
+          <span class="attr">schema:</span> <span class="string">v11</span>           <span class="comment"># 使用 Loki 的 v11 索引模式（Loki 的版本化架构）</span>
+          <span class="attr">index:</span>                <span class="comment"># 配置如何更新和存储索引</span>
+            <span class="attr">prefix:</span> <span class="string">index_</span>      <span class="comment"># 索引表的名称前缀（如 index_2025_07_15 ）</span>
+            <span class="attr">period:</span> <span class="string">24h</span>         <span class="comment"># 索引表的时间周期为 24 小时（每天生成新表）</span>
+    <span class="attr">server:</span>
+      <span class="attr">http_listen_port:</span> <span class="number">3100</span>    <span class="comment"># 配置 Loki 的 HTTP 服务端口，Promtail 将日志发送到 http://loki:3100/loki/api/v1/push（与之前的 Promtail 配置一致）</span>
+    <span class="attr">storage_config:</span>            <span class="comment"># 为索引和块配置一个或多个存储</span>
+      <span class="attr">boltdb_shipper:</span>
+        <span class="attr">active_index_directory:</span> <span class="string">/data/loki/boltdb-shipper-active</span>    <span class="comment"># 活动索引存储路径</span>
+        <span class="attr">cache_location:</span> <span class="string">/data/loki/boltdb-shipper-cache</span>             <span class="comment"># 索引缓存路径</span>
+        <span class="attr">cache_ttl:</span> <span class="string">24h</span>                                              <span class="comment"># 缓存有效期为 24 小时</span>
+        <span class="attr">shared_store:</span> <span class="string">filesystem</span>                                    <span class="comment"># 索引使用文件系统存储</span>
+      <span class="attr">filesystem:</span>
+        <span class="attr">directory:</span> <span class="string">/data/loki/chunks</span>                                <span class="comment"># 日志块存储路径</span>
+    <span class="attr">chunk_store_config:</span>             <span class="comment"># 配置日志块的缓存和查询行为</span>
+      <span class="attr">max_look_back_period:</span> <span class="string">0s</span>      <span class="comment"># 限制查询数据的时间，默认是禁用的，这个值应该小于或等于table_manager.retention_period中的值</span>
+    <span class="attr">table_manager:</span>                  <span class="comment"># 管理索引表的保留和删除</span>
+      <span class="attr">retention_deletes_enabled:</span> <span class="literal">true</span>   <span class="comment"># 启用索引表和日志的删除</span>
+      <span class="attr">retention_period:</span> <span class="string">48h</span>             <span class="comment"># 日志和索引保留 48 小时，超过的会被删除，保留期必须是索引周期（schema_config.index.period: 24h）的倍数</span>
+    <span class="attr">compactor:</span>                      <span class="comment"># 配置 Loki 的压缩器（compactor），用于压缩和清理索引</span>
+      <span class="attr">working_directory:</span> <span class="string">/data/loki/boltdb-shipper-compactor</span>  <span class="comment"># 压缩器工作目录</span>
+      <span class="attr">shared_store:</span> <span class="string">filesystem</span>                                <span class="comment"># 压缩器使用文件系统存储，工作目录需持久化存储，避免数据丢失</span>
+    <span class="comment"># ruler:                              # 配置 Loki 的告警规则（ruler），用于基于日志触发告警。如果需要告警功能，需取消注释并确保 Alertmanager 服务可用</span>
+    <span class="comment">#   storage:                          # rules规则存储</span>
+    <span class="comment">#     type: local                     # 主要支持本地存储（local）和对象文件系统（azure, gcs, s3, swift）</span>
+    <span class="comment">#     local:</span>
+    <span class="comment">#       directory: /etc/loki/rules    # 告警文件存放目录</span>
+    <span class="comment">#   rule_path: /data/loki/rules-temp  # rules临时规则文件存储路径</span>
+    <span class="comment">#   flush_period: 1m                  # 规则刷新间隔为 1 分钟。</span>
+    <span class="comment">#   alertmanager_url: http://alertmanager-main.monitoring.svc:9093 # alertmanager地址 </span>
+    <span class="comment">#   external_url: http://alertmanager.od.com           # 外部访问 alertmanager</span>
+    <span class="comment">#   ring:</span>
+    <span class="comment">#     kvstore:</span>
+    <span class="comment">#       store: inmemory           # 规则环存储使用内存</span>
+    <span class="comment">#   enable_api: true              # 启用规则管理 API</span>
+    <span class="comment">#   enable_alertmanager_v2: true  # 支持 Alertmanager v2 协议</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 6.Lock Pod</span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">StatefulSet</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">loki</span>
+<span class="attr">spec:</span>
+  <span class="attr">podManagementPolicy:</span> <span class="string">OrderedReady</span>   <span class="comment"># 指定 Pod 的管理策略为 OrderedReady：Pod 按顺序（0, 1, 2...）创建和删除，等待前一个 Pod 就绪后再创建下一个</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">loki</span>
+  <span class="attr">serviceName:</span> <span class="string">loki</span>
+  <span class="attr">updateStrategy:</span>
+    <span class="attr">type:</span> <span class="string">RollingUpdate</span>               <span class="comment"># 使用滚动更新策略，逐步替换旧 Pod</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">loki</span>
+    <span class="attr">spec:</span>
+      <span class="attr">serviceAccountName:</span> <span class="string">loki</span>        <span class="comment"># 指定 Pod 使用 loki 服务账号（之前定义的 ServiceAccount）</span>
+      <span class="attr">securityContext:</span>          <span class="comment"># 定义 Pod 级别的安全上下文，控制文件系统权限和用户/组 ID</span>
+        <span class="attr">fsGroup:</span> <span class="number">10001</span>          <span class="comment"># Pod 挂载的卷（如 /data）将归属组 ID 10001</span>
+        <span class="attr">runAsGroup:</span> <span class="number">10001</span>       <span class="comment"># 容器进程以组 ID 10001 运行，确保挂载的卷（如 PVC）归属组 10001，Loki 进程可以访问</span>
+        <span class="attr">runAsNonRoot:</span> <span class="literal">true</span>      <span class="comment"># 强制容器以非 root 用户运行，增强安全性</span>
+        <span class="attr">runAsUser:</span> <span class="number">10001</span>        <span class="comment"># 容器进程以用户 ID 10001 运行</span>
+      <span class="attr">initContainers:</span>           <span class="comment"># 定义初始化容器，在主容器启动前调整存储路径的权限</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">fix-permissions</span> <span class="comment"># 初始化容器名称</span>
+          <span class="attr">image:</span> <span class="string">busybox:1.37.0</span> <span class="comment"># 使用 busybox 镜像，适合执行简单命令</span>
+          <span class="attr">securityContext:</span>
+            <span class="attr">privileged:</span> <span class="literal">true</span>    <span class="comment"># 以特权模式运行，允许修改文件系统权限</span>
+            <span class="attr">runAsGroup:</span> <span class="number">0</span>       <span class="comment"># 以 root 用户运行</span>
+            <span class="attr">runAsNonRoot:</span> <span class="literal">false</span>
+            <span class="attr">runAsUser:</span> <span class="number">0</span>
+          <span class="attr">command:</span>              <span class="comment"># 创建 /data/loki 目录，将 /data 及其子目录的拥有者改为 UID 10001 和 GID 10001，列出 /data 目录内容，验证权限</span>
+            <span class="bullet">-</span> <span class="string">sh</span>
+            <span class="bullet">-</span> <span class="string">-c</span>
+            <span class="bullet">-</span> <span class="string">&gt;-</span>
+<span class="string">              id;</span>
+<span class="string">              mkdir -p /data/loki;</span>
+<span class="string">              chown 10001:10001 /data -R;</span>
+<span class="string">              ls -la /data/</span>
+<span class="string"></span>          <span class="attr">volumeMounts:</span>
+            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/data</span>  <span class="comment"># 挂载 storage 卷到 /data，与主容器共享</span>
+              <span class="attr">name:</span> <span class="string">storage</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">loki</span>
+          <span class="attr">image:</span> <span class="string">grafana/loki:2.9.2</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">args:</span>
+            <span class="bullet">-</span> <span class="string">-config.file=/etc/loki/config/loki.yaml</span>   <span class="comment"># 指定配置文件路径</span>
+          <span class="attr">volumeMounts:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config</span>
+              <span class="attr">mountPath:</span> <span class="string">/etc/loki/config/loki.yaml</span>     <span class="comment"># 挂载 ConfigMap loki 的 loki.yaml 到 /etc/loki/config/loki.yaml</span>
+              <span class="attr">subPath:</span> <span class="string">loki.yaml</span>                        <span class="comment"># subPath: loki.yaml 表示只挂载 ConfigMap 中 loki.yaml 键对应的文件内容到 mountPath 指定的路径（/etc/loki/config/loki.yaml）</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">storage</span>
+              <span class="attr">mountPath:</span> <span class="string">&quot;/data&quot;</span>                        <span class="comment"># 挂载 PVC 到 /data，用于存储 WAL、索引和块</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">http-metrics</span>
+              <span class="attr">containerPort:</span> <span class="number">3100</span>       <span class="comment"># Loki 监听 3100 端口（HTTP），用于接收日志和监控指标</span>
+              <span class="attr">protocol:</span> <span class="string">TCP</span>
+          <span class="attr">livenessProbe:</span>                <span class="comment"># 存活探测</span>
+            <span class="attr">httpGet:</span>
+              <span class="attr">path:</span> <span class="string">/ready</span>              <span class="comment"># 检查 /ready 端点，确认 Loki 是否健康/就绪</span>
+              <span class="attr">port:</span> <span class="string">http-metrics</span>
+              <span class="attr">scheme:</span> <span class="string">HTTP</span>
+            <span class="attr">initialDelaySeconds:</span> <span class="number">45</span>     <span class="comment"># 启动后 45 秒开始探测</span>
+            <span class="attr">timeoutSeconds:</span> <span class="number">1</span>           <span class="comment"># 每次探测超时 1 秒</span>
+            <span class="attr">periodSeconds:</span> <span class="number">10</span>           <span class="comment"># 每 10 秒探测一次</span>
+            <span class="attr">successThreshold:</span> <span class="number">1</span>         <span class="comment"># 1 次成功即健康</span>
+            <span class="attr">failureThreshold:</span> <span class="number">3</span>         <span class="comment"># 3 次失败标记不健康</span>
+          <span class="attr">readinessProbe:</span>               <span class="comment"># 就绪探测</span>
+            <span class="attr">httpGet:</span>
+              <span class="attr">path:</span> <span class="string">/ready</span>
+              <span class="attr">port:</span> <span class="string">http-metrics</span>
+              <span class="attr">scheme:</span> <span class="string">HTTP</span>
+            <span class="attr">initialDelaySeconds:</span> <span class="number">45</span>
+            <span class="attr">timeoutSeconds:</span> <span class="number">1</span>
+            <span class="attr">periodSeconds:</span> <span class="number">10</span>
+            <span class="attr">successThreshold:</span> <span class="number">1</span>
+            <span class="attr">failureThreshold:</span> <span class="number">3</span>
+          <span class="attr">securityContext:</span>
+            <span class="attr">readOnlyRootFilesystem:</span> <span class="literal">true</span>    <span class="comment"># 容器根文件系统为只读，增强安全性。</span>
+      <span class="attr">terminationGracePeriodSeconds:</span> <span class="number">4800</span>   <span class="comment"># Pod 终止时的宽限期为 4800 秒（80 分钟）</span>
+      <span class="attr">volumes:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">config</span>          <span class="comment"># 定义卷，将 ConfigMap loki 挂载到容器</span>
+          <span class="attr">configMap:</span>
+            <span class="attr">defaultMode:</span> <span class="number">0640</span>   <span class="comment"># 文件权限为 rw-r-----（所有者读写，组可读）。0640 前面有0，因此被解析为八进制数</span>
+            <span class="attr">name:</span> <span class="string">loki</span>          <span class="comment"># 引用名为 loki ConfigMap</span>
+  <span class="attr">volumeClaimTemplates:</span>
+    <span class="bullet">-</span> <span class="attr">metadata:</span>
+        <span class="attr">name:</span> <span class="string">storage</span>
+        <span class="attr">labels:</span>
+          <span class="attr">app:</span> <span class="string">loki</span>
+      <span class="attr">spec:</span>
+        <span class="attr">storageClassName:</span> <span class="string">&quot;loki-storage&quot;</span>   <span class="comment"># 注意修改 storageClass 名称</span>
+        <span class="attr">accessModes:</span>
+          <span class="bullet">-</span> <span class="string">ReadWriteOnce</span>
+        <span class="attr">resources:</span>
+          <span class="attr">requests:</span>
+            <span class="attr">storage:</span> <span class="string">&quot;10Gi&quot;</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 7.Loki Service</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">loki</span>
+<span class="attr">spec:</span>
+  <span class="attr">type:</span> <span class="string">ClusterIP</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">3100</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">name:</span> <span class="string">http</span>
+      <span class="attr">targetPort:</span> <span class="string">http-metrics</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">loki</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单</span>
+$ kubectl apply -f loki.yaml
+
+<span class="comment"># ConfigMap</span>
+$ kubectl get configMap -n logging
+NAME               DATA   AGE
+kube-root-ca.crt   1      55m
+loki               1      54m
+loki-promtail      1      55m
+
+<span class="comment"># StatefulSet</span>
+$ kubectl get StatefulSet -n logging
+NAME   READY   AGE
+loki   1/1     55m
+
+<span class="comment"># Pod</span>
+$ kubectl get pod -n logging
+NAME                  READY   STATUS    RESTARTS   AGE
+loki-0                1/1     Running   0          55m
+loki-promtail-cbllm   1/1     Running   0          56m
+loki-promtail-h7pz5   1/1     Running   0          56m
+loki-promtail-rrwtf   1/1     Running   0          56m
+loki-promtail-vs4df   1/1     Running   0          56m
+
+<span class="comment"># Service</span>
+$ kubectl get svc -n logging
+NAME   TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+loki   ClusterIP   10.106.23.220   &lt;none&gt;        3100/TCP   55m</code></pre>
+
+
+
+
+
+<h2 id="3-部署-Grafana"><a href="#3-部署-Grafana" class="headerlink" title="3. 部署 Grafana"></a>3. 部署 Grafana</h2><p>部署 Grafana， 展示推送到 Loki 的日志数据</p>
+<h3 id="3-1-Grafana-资源清单"><a href="#3-1-Grafana-资源清单" class="headerlink" title="3.1 Grafana 资源清单"></a>3.1 Grafana 资源清单</h3><p><strong>资源清单：</strong> <code>loki-grafana.yaml</code></p>
+<pre><code class="highlight yaml"><span class="comment"># 1.声明 PVC ，使用 StorageClass 动态创建PV</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">grafana-pvc</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+<span class="attr">spec:</span>
+  <span class="attr">accessModes:</span>
+    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span>
+  <span class="attr">resources:</span>
+    <span class="attr">requests:</span>
+      <span class="attr">storage:</span> <span class="string">5Gi</span>
+  <span class="attr">storageClassName:</span> <span class="string">loki-storage</span> <span class="comment"># 使用 StorageClass 动态创建PV</span>
+  <span class="attr">volumeMode:</span> <span class="string">Filesystem</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 2.创建Deployment</span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">labels:</span>
+    <span class="attr">app:</span> <span class="string">grafana</span>
+  <span class="attr">name:</span> <span class="string">grafana</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">grafana</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">grafana</span>
+    <span class="attr">spec:</span>
+      <span class="attr">securityContext:</span>
+        <span class="attr">fsGroup:</span> <span class="number">472</span>
+        <span class="attr">supplementalGroups:</span>
+          <span class="bullet">-</span> <span class="number">0</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">grafana</span>
+          <span class="attr">image:</span> <span class="string">grafana/grafana:8.3.5</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">ports:</span>
+            <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">3000</span>
+              <span class="attr">name:</span> <span class="string">http-grafana</span>
+              <span class="attr">protocol:</span> <span class="string">TCP</span>
+          <span class="attr">resources:</span>
+            <span class="attr">requests:</span>
+              <span class="attr">cpu:</span> <span class="string">500m</span>
+              <span class="attr">memory:</span> <span class="string">1024Mi</span>
+            <span class="attr">limits:</span>
+              <span class="attr">cpu:</span> <span class="string">1000m</span>
+              <span class="attr">memory:</span> <span class="string">2048Mi</span>
+          <span class="attr">volumeMounts:</span>
+            <span class="bullet">-</span> <span class="attr">mountPath:</span> <span class="string">/var/lib/grafana</span>
+              <span class="attr">name:</span> <span class="string">grafana-pv</span>
+      <span class="attr">volumes:</span>                              <span class="comment"># 挂载容器卷</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">grafana-pv</span>
+          <span class="attr">persistentVolumeClaim:</span>
+            <span class="attr">claimName:</span> <span class="string">grafana-pvc</span>          <span class="comment"># 使用声明的PVC，通过 StorageClass 动态创建PV</span>
+      <span class="attr">nodeSelector:</span> <span class="comment"># 指定Pod运行的节点</span>
+        <span class="attr">kubernetes.io/hostname:</span> <span class="string">k8s-node02</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 3.创建Service</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Service</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">grafana</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+<span class="attr">spec:</span>
+  <span class="attr">ports:</span>
+    <span class="bullet">-</span> <span class="attr">port:</span> <span class="number">3000</span>
+      <span class="attr">protocol:</span> <span class="string">TCP</span>
+      <span class="attr">targetPort:</span> <span class="string">http-grafana</span>
+      <span class="attr">nodePort:</span> <span class="number">30339</span>
+  <span class="attr">selector:</span>
+    <span class="attr">app:</span> <span class="string">grafana</span>
+  <span class="attr">type:</span> <span class="string">NodePort</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 4.创建 Ingress</span>
+<span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span> <span class="comment"># 指定 API 版本</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">grafana-ui</span>
+  <span class="attr">namespace:</span> <span class="string">logging</span>
+  <span class="attr">labels:</span>
+    <span class="attr">k8s-app:</span> <span class="string">grafana</span>
+<span class="attr">spec:</span>
+  <span class="attr">ingressClassName:</span> <span class="string">nginx</span>       <span class="comment"># 指定此 Ingress 资源由名称为 nginx 的 IngressClass 处理</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">loki.grafana.com</span>    <span class="comment"># 指定此规则适用于请求的 HTTP 主机头（Host Header）为 loki.grafana.com 的流量。客户端必须通过该域名访问</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>             <span class="comment"># 指定匹配的 URL 路径为 /，即根路径,表示匹配所有以 / 开头的请求</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span>    <span class="comment"># 定义路径匹配的类型为 Prefix，表示匹配以指定路径（/) 开头的所有请求</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">grafana</span>   <span class="comment"># 指定后端服务的名称为 nginx-svc.（必须存在于同一命名空间，或通过 &lt;namespace&gt;/&lt;service-name&gt; 跨命名空间引用）</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">3000</span>  <span class="comment"># 指定目标 Service 的端口为 80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单</span>
+$ kubectl apply -f loki-grafana.yaml 
+
+<span class="comment"># 查看 Ingress</span>
+$ kubectl get ingress -n logging
+NAME         CLASS   HOSTS              ADDRESS   PORTS   AGE
+grafana-ui   nginx   loki.grafana.com             80      10s
+
+<span class="comment"># 查看 Serivce</span>
+$ kubectl get svc -n logging
+NAME      TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+grafana   NodePort    10.104.180.186   &lt;none&gt;        3000:30339/TCP   6m13s
+loki      ClusterIP   10.106.23.220    &lt;none&gt;        3100/TCP         148m
+
+<span class="comment"># 查看 PVC</span>
+$ kubectl get pvc -n logging
+NAME             STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+grafana-pvc      Bound    pvc-649c73ed-2885-4924-a219-ee58a8ab0166   5Gi        RWO            loki-storage   &lt;<span class="built_in">unset</span>&gt;                 6m28s
+storage-loki-0   Bound    pvc-819fb39b-1ad9-48ff-8dfe-fafa62885af7   10Gi       RWO            loki-storage   &lt;<span class="built_in">unset</span>&gt;                 149m
+
+<span class="comment"># 查看 PV</span>
+$ kubectl get pv -n logging
+NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                                    STORAGECLASS   VOLUMEATTRIBUTESCLASS   REASON   AGE
+pvc-649c73ed-2885-4924-a219-ee58a8ab0166   5Gi        RWO            Delete           Bound    logging/grafana-pvc                      loki-storage   &lt;<span class="built_in">unset</span>&gt;                          6m36s
+pvc-819fb39b-1ad9-48ff-8dfe-fafa62885af7   10Gi       RWO            Delete           Bound    logging/storage-loki-0                   loki-storage   &lt;<span class="built_in">unset</span>&gt;                          149m
+
+<span class="comment"># 查看 Pod</span>
+$ kubectl get pods -n logging
+NAME                       READY   STATUS    RESTARTS   AGE
+grafana-599d67bdbb-m6zjz   1/1     Running   0          6m54s
+loki-0                     1/1     Running   0          149m
+loki-promtail-cbllm        1/1     Running   0          150m
+loki-promtail-h7pz5        1/1     Running   0          150m
+loki-promtail-rrwtf        1/1     Running   0          150m
+loki-promtail-vs4df        1/1     Running   0          150m</code></pre>
+
+
+
+<h3 id="3-2-配置-Host-域名映射"><a href="#3-2-配置-Host-域名映射" class="headerlink" title="3.2 配置 Host 域名映射"></a>3.2 配置 Host 域名映射</h3><p>在浏览器所在主机编辑 <code>/etc/hosts</code> </p>
+<pre><code class="highlight plaintext">10.20.1.140 loki.grafana.com</code></pre>
+
+<p>保存后，使用浏览器访问 Grafana，地址：<a target="_blank" rel="noopener" href="https://loki.grafana.com/">https://loki.grafana.com/</a></p>
+<h2 id="4-Grafana-基础使用"><a href="#4-Grafana-基础使用" class="headerlink" title="4. Grafana 基础使用"></a>4. Grafana 基础使用</h2><h3 id="4-1-登录-Grafana"><a href="#4-1-登录-Grafana" class="headerlink" title="4.1 登录 Grafana"></a>4.1 登录 Grafana</h3><p>默认用户名：admin  </p>
+<p>默认密码：admin</p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135129.png" alt="登录Grafana"></p>
+<p><strong>Grafana 首页</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135208.png" alt="Grafana首页"></p>
+<h3 id="4-2-添加-Loki-作为数据源"><a href="#4-2-添加-Loki-作为数据源" class="headerlink" title="4.2 添加 Loki 作为数据源"></a>4.2 添加 Loki 作为数据源</h3><p><strong>添加数据源</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135300.png" alt="添加 Loki 作为数据源1"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135317.png" alt="添加 Loki 作为数据源2"></p>
+<p><strong>选择 Loki</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135333.png" alt="添加 Loki 作为数据源3"></p>
+<p><strong>Loki数据源设置</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135515.png" alt="添加 Loki 作为数据源4"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135555.png" alt="添加 Loki 作为数据源5"></p>
+<h3 id="4-3-查看日志"><a href="#4-3-查看日志" class="headerlink" title="4.3 查看日志"></a>4.3 查看日志</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-140241.png" alt="查看日志"></p>
+<p>至此，基于资源清单 yaml 部署 Loki、Promtail、Grafana 就完成了。</p>
+<h1 id="三、使用-Helm-部署-Loki"><a href="#三、使用-Helm-部署-Loki" class="headerlink" title="三、使用 Helm 部署 Loki"></a>三、使用 Helm 部署 Loki</h1><p><strong>使用 Helm 部署 Loki 需要保持网络通畅，如果你的服务器无法连接外网，那就需要提前将loki的helm安装包下载到服务器，并且提前将需要的镜像导入到服务器中。</strong></p>
+<h2 id="1-部署-StorageClass"><a href="#1-部署-StorageClass" class="headerlink" title="1. 部署 StorageClass"></a>1. 部署 StorageClass</h2><p>使用 StorageClass 自动创建 PV，管理文件存储。</p>
+<p>资源清单：<code>loki-storage.yaml</code></p>
+<pre><code class="highlight yaml"><span class="comment"># 1.命名空间</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Namespace</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">loki-storage</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 2.存储类</span>
+<span class="attr">apiVersion:</span> <span class="string">storage.k8s.io/v1</span>
+<span class="attr">kind:</span> <span class="string">StorageClass</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+  <span class="attr">name:</span> <span class="string">loki-storage</span>
+<span class="comment"># provisioner: nfs-provisioner</span>
+<span class="attr">provisioner:</span> <span class="string">k8s-sigs.io/nfs-subdir-external-provisioner</span> <span class="comment"># 指定动态配置器，NFS 子目录外部配置器</span>
+<span class="attr">parameters:</span>
+  <span class="attr">pathPattern:</span> <span class="string">$&#123;.PVC.namespace&#125;/$&#123;.PVC.name&#125;</span> <span class="comment"># 动态生成的 NFS 路径，格式为 &lt;PVC 命名空间&gt;/&lt;PVC 名称&gt;，例如 loki-storageclass/test-claim。</span>
+  <span class="attr">archiveOnDelete:</span> <span class="string">&quot;true&quot;</span> <span class="comment">##删除 pv,pv内容是否备份</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 3.NFS 动态存储配置器，用于自动为 PVC 创建 PV</span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+  <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># NFS 动态存储配置器，用于自动为 PVC 创建 PV</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">nfs-client-provisioner</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">nfs-client-provisioner</span>
+    <span class="attr">spec:</span>
+      <span class="attr">serviceAccountName:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># 指定使用的 ServiceAccountName</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span>
+          <span class="attr">image:</span> <span class="string">k8s.dockerproxy.com/sig-storage/nfs-subdir-external-provisioner:v4.0.2</span>
+          <span class="attr">imagePullPolicy:</span> <span class="string">IfNotPresent</span>
+          <span class="attr">volumeMounts:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-root</span> <span class="comment"># 挂载的卷名称，与 volumes 部分定义的卷对应</span>
+              <span class="attr">mountPath:</span> <span class="string">/persistentvolumes</span> <span class="comment"># 将 NFS 卷挂载到容器内的 /persistentvolumes 路径，供容器读写 NFS 共享数据。</span>
+          <span class="attr">env:</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">PROVISIONER_NAME</span>
+              <span class="attr">value:</span> <span class="string">k8s-sigs.io/nfs-subdir-external-provisioner</span> <span class="comment"># 指定配置器名称，与 StorageClass 保持一致</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NFS_SERVER</span>
+              <span class="attr">value:</span> <span class="number">10.20</span><span class="number">.1</span><span class="number">.139</span> <span class="comment"># NFS 服务器地址</span>
+            <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">NFS_PATH</span>
+              <span class="attr">value:</span> <span class="string">/root/data/loki</span> <span class="comment"># NFS 共享路径</span>
+      <span class="attr">volumes:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">nfs-client-root</span> <span class="comment"># 定义一个名为 nfs-client-root 的 NFS 卷，连接到 NFS 服务器的指定地址和路径</span>
+          <span class="attr">nfs:</span>
+            <span class="attr">server:</span> <span class="number">10.20</span><span class="number">.1</span><span class="number">.139</span> <span class="comment"># NFS 服务器地址</span>
+            <span class="attr">path:</span> <span class="string">/root/data/loki</span> <span class="comment"># NFS 共享路径</span>
+      <span class="attr">nodeSelector:</span> <span class="comment"># 指定Pod运行的节点</span>
+        <span class="attr">kubernetes.io/hostname:</span> <span class="string">k8s-node01</span>
+      <span class="comment"># nodeName: k8s-node01 # 指定 Pod 运行在 k8s-node02 节点上</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 4.服务账户</span>
+<span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ServiceAccount</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># SA 的名称</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 5.集群角色</span>
+<span class="attr">kind:</span> <span class="string">ClusterRole</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">nfs-client-provisioner-runner</span>
+<span class="attr">rules:</span>
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;nodes&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>]
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;persistentvolumes&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;create&quot;</span>, <span class="string">&quot;delete&quot;</span>]
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;persistentvolumeclaims&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;update&quot;</span>]
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;storage.k8s.io&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;storageclasses&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>]
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>]
+    <span class="attr">resources:</span> [<span class="string">&quot;events&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;create&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;patch&quot;</span>]
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 6.集群角色绑定</span>
+<span class="attr">kind:</span> <span class="string">ClusterRoleBinding</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">run-nfs-client-provisioner</span>
+<span class="attr">subjects:</span>
+  <span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span> <span class="comment"># 绑定类型 ServiceAccount</span>
+    <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># ServiceAccount 的名称</span>
+    <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+<span class="attr">roleRef:</span>
+  <span class="attr">kind:</span> <span class="string">ClusterRole</span> <span class="comment"># 绑定的角色类型</span>
+  <span class="attr">name:</span> <span class="string">nfs-client-provisioner-runner</span> <span class="comment"># 集群角色名称 nfs-client-provisioner-runner</span>
+  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># 角色</span>
+<span class="attr">kind:</span> <span class="string">Role</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">leader-locking-nfs-client-provisioner</span> <span class="comment"># 角色的名称，表明它与 NFS 客户端存储提供者的领导者选举（leader election）机制相关。</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+<span class="attr">rules:</span>
+  <span class="bullet">-</span> <span class="attr">apiGroups:</span> [<span class="string">&quot;&quot;</span>] <span class="comment"># 空字符串表示核心 API 组（core API group），包含 Kubernetes 的基本资源，如 endpoints。</span>
+    <span class="attr">resources:</span> [<span class="string">&quot;endpoints&quot;</span>]
+    <span class="attr">verbs:</span> [<span class="string">&quot;get&quot;</span>, <span class="string">&quot;list&quot;</span>, <span class="string">&quot;watch&quot;</span>, <span class="string">&quot;create&quot;</span>, <span class="string">&quot;update&quot;</span>, <span class="string">&quot;patch&quot;</span>]
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="comment"># SA角色绑定</span>
+<span class="attr">kind:</span> <span class="string">RoleBinding</span>
+<span class="attr">apiVersion:</span> <span class="string">rbac.authorization.k8s.io/v1</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">run-leader-locking-nfs-client-provisioner</span>
+  <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+<span class="attr">subjects:</span>
+  <span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">ServiceAccount</span> <span class="comment"># 绑定资源类型为 ServiceAccount</span>
+    <span class="attr">name:</span> <span class="string">nfs-client-provisioner</span> <span class="comment"># 绑定的ServiceAccount 名称</span>
+    <span class="attr">namespace:</span> <span class="string">loki-storage</span>
+<span class="attr">roleRef:</span>
+  <span class="attr">kind:</span> <span class="string">Role</span> <span class="comment"># 绑定角色（loki-storage名称空间的角色）</span>
+  <span class="attr">apiGroup:</span> <span class="string">rbac.authorization.k8s.io</span>
+  <span class="attr">name:</span> <span class="string">leader-locking-nfs-client-provisioner</span> <span class="comment"># 角色的名称</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 执行</span>
+$ kubectl apply -f loki-storage.yaml
+
+<span class="comment"># 查看Pod</span>
+$ kubectl get pods -n loki-storage
+NAME                                      READY   STATUS    RESTARTS   AGE
+nfs-client-provisioner-79f97f7689-h5rrl   1/1     Running   0          20h</code></pre>
+
+
+
+
+
+<h2 id="2-下载-Helm-Chat-包"><a href="#2-下载-Helm-Chat-包" class="headerlink" title="2. 下载 Helm Chat 包"></a>2. 下载 Helm Chat 包</h2><pre><code class="highlight bash"><span class="comment"># 添加grafana仓库</span>
+$ helm repo add grafana https://grafana.github.io/helm-charts
+
+<span class="comment"># 更新仓库</span>
+$ helm repo update
+
+<span class="comment"># 拉取 Chart 包</span>
+$ helm pull grafana/loki-stack --version=2.9.11
+
+<span class="comment"># 查看下载的 chat 包</span>
+$ ll
+-rw-r--r-- 1 root root 132807 Jul 16 15:09 loki-stack-2.9.11.tgz
+
+<span class="comment"># 如果上面的命令由于网络问题无法下载 Chat 包, 就手动下载，然后上传到服务器上</span>
+<span class="comment"># helm包下载地址 https://github.com/grafana/helm-charts/releases/download/loki-stack-2.9.11/loki-stack-2.9.11.tgz</span></code></pre>
+
+
+
+<p><strong>解压 Chart 包</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 解压</span>
+$ tar -zxvf loki-stack-2.9.11.tgz
+
+<span class="comment"># 查看解压目录</span>
+$ <span class="built_in">ls</span> 
+loki-stack  loki-stack-2.9.11.tgz</code></pre>
+
+
+
+<h2 id="3-编辑-values-yaml"><a href="#3-编辑-values-yaml" class="headerlink" title="3. 编辑 values.yaml"></a>3. 编辑 values.yaml</h2><p><code>vim loki-stack/values.yaml</code></p>
+<p>内容如下：</p>
+<pre><code class="highlight yaml"><span class="attr">loki:</span>
+  <span class="attr">enabled:</span> <span class="literal">true</span>
+  <span class="attr">isDefault:</span> <span class="literal">true</span>
+  <span class="attr">url:</span> <span class="string">http://&#123;&#123;(include</span> <span class="string">&quot;loki.serviceName&quot;</span> <span class="string">.)&#125;&#125;:&#123;&#123;</span> <span class="string">.Values.loki.service.port</span> <span class="string">&#125;&#125;</span>
+  <span class="attr">readinessProbe:</span>
+    <span class="attr">httpGet:</span>
+      <span class="attr">path:</span> <span class="string">/ready</span>
+      <span class="attr">port:</span> <span class="string">http-metrics</span>
+    <span class="attr">initialDelaySeconds:</span> <span class="number">45</span>
+  <span class="attr">livenessProbe:</span>
+    <span class="attr">httpGet:</span>
+      <span class="attr">path:</span> <span class="string">/ready</span>
+      <span class="attr">port:</span> <span class="string">http-metrics</span>
+    <span class="attr">initialDelaySeconds:</span> <span class="number">45</span>
+  <span class="attr">datasource:</span>
+    <span class="attr">jsonData:</span> <span class="string">&quot;&#123;&#125;&quot;</span>
+    <span class="attr">uid:</span> <span class="string">&quot;&quot;</span>
+  <span class="attr">persistence:</span> <span class="comment"># 添加存储设置</span>
+    <span class="attr">enabled:</span> <span class="literal">true</span>
+    <span class="attr">accessModes:</span>
+    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span>
+    <span class="attr">size:</span> <span class="string">10Gi</span>
+    <span class="attr">storageClassName:</span> <span class="string">loki-storage</span> <span class="comment"># 使用 loki-storage 自动创建PV</span>
+
+
+<span class="attr">promtail:</span>
+  <span class="attr">enabled:</span> <span class="literal">true</span>
+  <span class="attr">config:</span>
+    <span class="attr">logLevel:</span> <span class="string">info</span>
+    <span class="attr">serverPort:</span> <span class="number">3101</span>
+    <span class="attr">clients:</span>
+      <span class="bullet">-</span> <span class="attr">url:</span> <span class="string">http://&#123;&#123;</span> <span class="string">.Release.Name</span> <span class="string">&#125;&#125;:3100/loki/api/v1/push</span>
+  <span class="attr">defaultVolumes:</span> <span class="comment"># 定时 Promtail Pod 使用的卷</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">run</span>
+      <span class="attr">hostPath:</span>
+        <span class="attr">path:</span> <span class="string">/run/promtail</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">containers</span>
+      <span class="attr">hostPath:</span>
+        <span class="attr">path:</span> <span class="string">/data/docker/containers</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">pods</span>
+      <span class="attr">hostPath:</span>
+        <span class="attr">path:</span> <span class="string">/var/log/pods</span>
+  <span class="attr">defaultVolumeMounts:</span> <span class="comment"># 定义容器内的挂载点，将上述卷挂载到 Promtail 容器</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">run</span>
+      <span class="attr">mountPath:</span> <span class="string">/run/promtail</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">containers</span>
+      <span class="attr">mountPath:</span> <span class="string">/data/docker/containers</span>
+      <span class="attr">readOnly:</span> <span class="literal">true</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">pods</span>
+      <span class="attr">mountPath:</span> <span class="string">/var/log/pods</span>
+      <span class="attr">readOnly:</span> <span class="literal">true</span>
+
+
+<span class="attr">grafana:</span>
+  <span class="attr">enabled:</span> <span class="literal">true</span>     <span class="comment"># 启用部署Grafana</span>
+  <span class="attr">persistence:</span>
+    <span class="attr">enabled:</span> <span class="literal">true</span>
+    <span class="attr">accessModes:</span>
+    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span>
+    <span class="attr">size:</span> <span class="string">5Gi</span>
+    <span class="attr">storageClassName:</span> <span class="string">loki-storage</span> <span class="comment"># 使用 loki-storage 自动创建PV</span>
+    
+<span class="comment"># 显式禁用不需要的子 Chart</span>
+<span class="attr">test_pod:</span>
+  <span class="attr">enabled:</span> <span class="literal">false</span>
+  
+<span class="attr">filebeat:</span>
+  <span class="attr">enabled:</span> <span class="literal">false</span>
+
+<span class="attr">fluent-bit:</span>
+  <span class="attr">enabled:</span> <span class="literal">false</span>
+
+<span class="attr">prometheus:</span>
+  <span class="attr">enabled:</span> <span class="literal">false</span>
+
+<span class="attr">logstash:</span>
+  <span class="attr">enabled:</span> <span class="literal">false</span></code></pre>
+
+<p>如上，修改了 loki、promtail、grafana ，使用 helm 部署时会依次安装这3个组件，并且关闭其它不需要的模块</p>
+<h2 id="4-修改-grafana-密码"><a href="#4-修改-grafana-密码" class="headerlink" title="4. 修改 grafana 密码"></a>4. 修改 grafana 密码</h2><p>编辑 grafana 目录下的 <code>values.yaml</code> 文件</p>
+<pre><code class="highlight bash">$ vim loki-stack/charts/grafana/values.yaml
+
+
+<span class="comment"># 编辑下面的内容，将 admin 用户的密码也设置成 admin</span>
+<span class="comment"># Administrator credentials when not using an existing secret (see below)</span>
+adminUser: admin
+adminPassword: admin</code></pre>
+
+
+
+
+
+<h2 id="5-使用Helm部署Loki"><a href="#5-使用Helm部署Loki" class="headerlink" title="5. 使用Helm部署Loki"></a>5. 使用Helm部署Loki</h2><pre><code class="highlight bash"><span class="comment"># 进入 loki 解压目录</span>
+$ <span class="built_in">cd</span> loki-stack
+
+<span class="comment"># 查看文件夹内容</span>
+$ ll
+total 20
+-rw-r--r-- 1 root root  374 Jul 16 16:50 Chart.yaml
+-rw-r--r-- 1 root root 2027 Jul 16 16:50 README.md
+drwxr-xr-x 9 root root  117 Jul 16 16:50 charts
+-rw-r--r-- 1 root root  729 Jul 16 16:50 requirements.lock
+-rw-r--r-- 1 root root  867 Jul 16 16:50 requirements.yaml
+drwxr-xr-x 3 root root   80 Jul 16 16:50 templates
+-rw-r--r-- 1 root root 1455 Jul 16 16:50 values.yaml
+
+<span class="comment"># 执行 helm 命令，安装 loki</span>
+$ helm install loki -n loki --create-namespace -f values.yaml .
+NAME: loki
+LAST DEPLOYED: Wed Jul 16 17:00:37 2025
+NAMESPACE: loki
+STATUS: deployed
+REVISION: 1
+NOTES:
+The Loki stack has been deployed to your cluster. Loki can now be added as a datasource <span class="keyword">in</span> Grafana.
+
+See http://docs.grafana.org/features/datasources/loki/ <span class="keyword">for</span> more detail.
+
+
+<span class="comment"># 补充命令：更新部署</span>
+helm upgrade loki -n loki -f values.yaml .</code></pre>
+
+
+
+<p>查看部署资源</p>
+<pre><code class="highlight bash">$ helm list -n loki
+NAME	NAMESPACE	REVISION	UPDATED                                	STATUS  	CHART            	APP VERSION
+loki	loki     	1       	2025-07-16 17:15:50.136762865 +0800 CST	deployed	loki-stack-2.9.11	v2.6.1
+
+
+$ kubectl get pods -n loki
+NAME                           READY   STATUS    RESTARTS   AGE
+loki-0                         1/1     Running   0          3m38s
+loki-grafana-8869df8b7-ggnnh   1/1     Running   0          3m38s
+loki-promtail-5gvgd            1/1     Running   0          3m38s
+loki-promtail-bb5l9            1/1     Running   0          3m38s
+loki-promtail-gbv8t            1/1     Running   0          3m38s
+loki-promtail-mrw6n            1/1     Running   0          3m38s
+
+
+$ kubectl get svc -n loki
+NAME              TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+loki              ClusterIP   10.97.142.238   &lt;none&gt;        3100/TCP   76s
+loki-grafana      ClusterIP   10.111.244.51   &lt;none&gt;        80/TCP     76s
+loki-headless     ClusterIP   None            &lt;none&gt;        3100/TCP   76s
+loki-memberlist   ClusterIP   None            &lt;none&gt;        7946/TCP   76s
+
+
+$ kubectl get statefulset -n loki
+NAME   READY   AGE
+loki   1/1     91s
+
+
+$ kubectl get deployment -n loki
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+loki-grafana   1/1     1            1           99s
+
+
+$ kubectl get cm -n loki
+NAME               DATA   AGE
+kube-root-ca.crt   1      16m
+loki-grafana       1      107s</code></pre>
+
+
+
+<h2 id="6-部署-Ingress"><a href="#6-部署-Ingress" class="headerlink" title="6. 部署 Ingress"></a>6. 部署 Ingress</h2><p>用于浏览器访问 Grafana</p>
+<p>资源清单：<code>loki-ingress.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">networking.k8s.io/v1</span> <span class="comment"># 指定 API 版本</span>
+<span class="attr">kind:</span> <span class="string">Ingress</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">grafana-ui</span>
+  <span class="attr">namespace:</span> <span class="string">loki</span>
+  <span class="attr">labels:</span>
+    <span class="attr">k8s-app:</span> <span class="string">grafana</span>
+<span class="attr">spec:</span>
+  <span class="attr">ingressClassName:</span> <span class="string">nginx</span>       <span class="comment"># 指定此 Ingress 资源由名称为 nginx 的 IngressClass 处理</span>
+  <span class="attr">rules:</span>
+    <span class="bullet">-</span> <span class="attr">host:</span> <span class="string">loki.grafana.com</span>    <span class="comment"># 指定此规则适用于请求的 HTTP 主机头（Host Header）为 loki.grafana.com 的流量。客户端必须通过该域名访问</span>
+      <span class="attr">http:</span>
+        <span class="attr">paths:</span>
+          <span class="bullet">-</span> <span class="attr">path:</span> <span class="string">/</span>             <span class="comment"># 指定匹配的 URL 路径为 /，即根路径,表示匹配所有以 / 开头的请求</span>
+            <span class="attr">pathType:</span> <span class="string">Prefix</span>    <span class="comment"># 定义路径匹配的类型为 Prefix，表示匹配以指定路径（/) 开头的所有请求</span>
+            <span class="attr">backend:</span>
+              <span class="attr">service:</span>
+                <span class="attr">name:</span> <span class="string">loki-grafana</span>   <span class="comment"># 指定后端服务的名称为 nginx-svc.（必须存在于同一命名空间，或通过 &lt;namespace&gt;/&lt;service-name&gt; 跨命名空间引用）</span>
+                <span class="attr">port:</span>
+                  <span class="attr">number:</span> <span class="number">80</span>  <span class="comment"># 指定目标 Service 的端口为 80</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f loki-ingress.yaml</code></pre>
+
+
+
+<p><strong>修改 HOSTS 文件</strong></p>
+<p>添加域名映射</p>
+<pre><code class="highlight plaintext">10.20.1.140 loki.grafana.com</code></pre>
+
+
+
+
+
+<p><strong>补充：如果没有设置 grafana 的初始密码，grafana 在创建时会默认生成密码</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看有哪些 Secret</span>
+$ kubectl get secret -n loki
+NAME                         TYPE                 DATA   AGE
+loki                         Opaque               1      13m
+loki-grafana                 Opaque               3      13m
+loki-promtail                Opaque               1      13m
+sh.helm.release.v1.loki.v1   helm.sh/release.v1   1      13m
+
+<span class="comment"># 查看默认用户名</span>
+$ kubectl get secret -n loki loki-grafana -o jsonpath=<span class="string">&quot;&#123;.data.admin-user&#125;&quot;</span> | <span class="built_in">base64</span> --decode 
+admin
+
+<span class="comment"># 查看默认密码</span>
+$ $ kubectl get secret -n loki loki-grafana -o jsonpath=<span class="string">&quot;&#123;.data.admin-password&#125;&quot;</span> | <span class="built_in">base64</span> --decode
+UnBUY0EbcPuaLrHnBybhYuZOSFb5rmDvNpXQn2vr
+</code></pre>
+
+
+
+<h2 id="7-添加-Loki-数据源"><a href="#7-添加-Loki-数据源" class="headerlink" title="7. 添加 Loki 数据源"></a>7. 添加 Loki 数据源</h2><p><strong>登录 Grafana</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135126.png" alt="Grafana"></p>
+<p><strong>添加数据源</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135316.png" alt="添加数据源"></p>
+<p><strong>选择 Loki 作为数据源</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135346.png" alt="选择默认的 Loki 数据源"></p>
+<p><strong>编辑数据源</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135559.png" alt="编辑数据源"></p>
+<p><strong>保存数据源配置</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135639.png" alt="保存数据源配置"></p>
+<p><strong>选择数据源，搜索查看日志</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135917.png" alt="查看日志"></p>
+<p><strong>选择标签，点击查询</strong></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-140204.png" alt="选择标签，点击查询"></p>
+<p><strong>至此，关于如何使用 Helm 部署 Loki 就介绍完成了</strong></p>
+<p><strong>参考链接：</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://grafana.org.cn/docs/loki/latest/get-started/overview/">https://grafana.org.cn/docs/loki/latest/get-started/overview/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/starsray/p/17549842.html">https://www.cnblogs.com/starsray/p/17549842.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.boysec.cn/boy/632ed78c.html">https://www.boysec.cn/boy/632ed78c.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.qikqiak.com/k3s/logging/loki/overview/">https://www.qikqiak.com/k3s/logging/loki/overview/</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.frognew.com/tags/loki.html">https://blog.frognew.com/tags/loki.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/sj1163739403/article/details/142638504">https://blog.csdn.net/sj1163739403/article/details/142638504</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ichen820/article/details/134287977">https://blog.csdn.net/ichen820/article/details/134287977</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.ywbj.cc/?p=951">https://www.ywbj.cc/?p=951</a></p>
+</blockquote>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
