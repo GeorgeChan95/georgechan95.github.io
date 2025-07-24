@@ -9,41 +9,40 @@
   <meta name="keywords" content=" java , juc ">
   <meta name="description" content="04-集合的线程安全 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="概要： 简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：使用 yaml 资源清单部署 和 使用 Helm 部署 集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点   10.20.1.140 k8s-node01 Node节点   10.20.1.141 k8s-node02 Node节点   1">
+<meta name="description" content="概要： 简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：使用 yaml 资源清单部署 和 使用 Helm 部署 集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点，NFS Server   10.20.1.140 k8s-node01 Node节点, NFS Client   10.20.1.14">
 <meta property="og:type" content="article">
-<meta property="og:title" content="015-K8S-Prometheus部署及监控告警">
-<meta property="og:url" content="https://georgechan95.github.io/blog/e62b8338.html">
+<meta property="og:title" content="014-K8S-部署Loki+Promtail+Grafana实现日志监控">
+<meta property="og:url" content="https://georgechan95.github.io/blog/f8cf646f.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="概要： 简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：使用 yaml 资源清单部署 和 使用 Helm 部署 集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点   10.20.1.140 k8s-node01 Node节点   10.20.1.141 k8s-node02 Node节点   1">
+<meta property="og:description" content="概要： 简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：使用 yaml 资源清单部署 和 使用 Helm 部署 集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点，NFS Server   10.20.1.140 k8s-node01 Node节点, NFS Client   10.20.1.14">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/22/20250722-193045.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/22/20250722-205857.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-141026.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-150843.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-155007.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-163620.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-195227.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-204348.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-204501.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-204521.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/23/20250723-204708.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/24/20250724-082411.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/24/20250724-082434.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/24/20250724-082630.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/24/20250724-082736.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/24/20250724-104820.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/24/20250724-162449.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/24/20250724-205334.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/24/20250724-205424.png">
-<meta property="article:published_time" content="2025-07-19T08:39:00.000Z">
-<meta property="article:modified_time" content="2025-07-24T13:04:59.289Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-131130.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-132416.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-161149.jpeg">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135129.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135208.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135300.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135317.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135333.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135515.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135555.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-140241.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135126.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135316.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135346.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135559.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135639.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135917.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-140204.png">
+<meta property="article:published_time" content="2025-07-10T13:00:00.000Z">
+<meta property="article:modified_time" content="2025-07-22T06:19:53.678Z">
 <meta property="article:author" content="George">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Rocky">
-<meta property="article:tag" content="Prometheus">
+<meta property="article:tag" content="Loki">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/22/20250722-193045.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-131130.png">
 
 
 <link rel="icon" href="/img/favicon.png">
@@ -1496,19 +1495,19 @@
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/2016918085.html"
+           href="/blog/3069199997.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/3069199997.html"
+           href="/blog/2016918085.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
