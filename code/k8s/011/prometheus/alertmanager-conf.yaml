@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: alert-config
+  namespace: kube-ops
+data:
+  config.yml: |-
+    global:
+      # 定义告警在没有新触发的情况下被标记为已解决（resolved）的时间，设置为 5 分钟。
+      resolve_timeout: 5m
+      # 配置邮件发送信息
+      smtp_smarthost: 'smtp.163.com:25'             # 指定 SMTP 服务器地址和端口，用于发送邮件通知
+      smtp_from: '18326088610@163.com'              # 邮件发送者的地址，显示为发件人（From 字段）
+      smtp_auth_username: '18326088610@163.com'     # SMTP 认证用户名，与发件人地址一致
+      smtp_auth_password: 'xxxxxxxxxxxxxxxx'        # SMTP 认证密码，通常是 163 邮箱的授权码（非登录密码）
+      smtp_hello: '163.com'                         # SMTP 客户端在与服务器建立连接时发送的 HELO/EHLO 域名，设置为 163.com
+      smtp_require_tls: false                       # 禁用 TLS 加密，邮件通过明文传输（端口 25 通常不加密）
+    route:    # 定义告警的路由策略，决定如何分组、处理和分发告警
+      # 这里的标签列表是接收到报警信息后的重新分组标签，例如，接收到的报警信息里面有许多具有 cluster=A 和 alertname=LatncyHigh 这样的标签的报警信息将会批量被聚合到一个分组里面
+      group_by: ['alertname', 'cluster']
+      # 当一个新的报警分组被创建后，需要等待至少group_wait时间来初始化通知，这种方式可以确保您能有足够的时间为同一分组来获取多个警报，然后一起触发这个报警信息。
+      group_wait: 30s
+      # 当第一个报警发送后，等待'group_interval'时间来发送新的一组报警信息。
+      group_interval: 5m
+      # 如果一个报警信息已经发送成功了，等待'repeat_interval'时间来重新发送他们
+      repeat_interval: 5m
+      # 默认的receiver：如果一个报警没有被一个route匹配，则发送给默认的接收器
+      receiver: default
+      # 上面所有的属性都由所有子路由继承，并且可以在每个子路由上进行覆盖。
+      routes:
+        - receiver: email   # 匹配子路由的告警发送到 email 接收器
+          group_wait: 10s   # 子路由覆盖父路由的 group_wait，仅等待 10 秒发送通知
+          match:
+            team: node      # 仅匹配带有标签 team=node 的告警（如 Prometheus 规则中定义的 HighNodeCPU 告警）
+    receivers:              # 定义告警通知的接收器，指定通知方式和目标
+      - name: 'default'
+        email_configs:
+          - to: 'george_95@126.com'     # 告警邮件发送到 george_95@126.com
+            send_resolved: true         # 当告警解决时，发送“已恢复”通知邮件
+      - name: 'email'                   # 自定义接收器，处理匹配 team: node 的告警
+        email_configs:
+          - to: 'george_95@126.com'     # 告警邮件发送到 george_95@126.com
+            send_resolved: true         # 当告警解决时，发送“已恢复”通知邮件

@@ -1,0 +1,197 @@
+# 定义 PVC
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus
+  namespace: kube-ops
+spec:
+  storageClassName: prometheus-storage  # 指定使用的 StorageClass
+  accessModes:
+    - ReadWriteMany                     # 存储卷可以被多个节点（Node）以读写模式同时挂载
+  resources:
+    requests:
+      storage: 10Gi                     # 定义 PVC 请求的资源量，这里特指存储容量
+
+---
+
+# 创建 SA
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: kube-ops
+
+---
+
+# 集群角色
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: prometheus
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+      - services
+      - endpoints
+      - pods
+      - nodes/proxy
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - nodes/metrics
+    verbs:
+      - get
+  - nonResourceURLs:
+      - /metrics
+    verbs:
+      - get
+
+---
+
+# 集群角色绑定
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: prometheus
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: prometheus
+subjects:
+  - kind: ServiceAccount
+    name: prometheus
+    namespace: kube-ops
+
+---
+
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: kube-ops
+  labels:
+    app: prometheus
+spec:
+  replicas: 1               # Pod 副本数为1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      serviceAccountName: prometheus    # 指定 Pod 使用的 Kubernetes 服务账号（ServiceAccount）为 prometheus
+      containers:
+        - name: alertmanager
+          image: prom/alertmanager:v0.28.0
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--config.file=/etc/alertmanager/config.yml"
+            - "--storage.path=/alertmanager/data"
+          ports:
+            - containerPort: 9093
+              name: alertmanager
+          volumeMounts:
+            - mountPath: "/etc/alertmanager"
+              name: alertcfg
+          resources:
+            requests:
+              cpu: 300m
+              memory: 512Mi
+            limits:
+              cpu: 300m
+              memory: 512Mi
+        - name: prometheus
+          image: prom/prometheus:v2.54.1
+          imagePullPolicy: IfNotPresent
+          command:
+            - "/bin/prometheus"         # 指定容器启动时运行的命令为 /bin/prometheus，这是 Prometheus 的主可执行文件
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"    # 指定 Prometheus 的配置文件路径为 /etc/prometheus/prometheus.yml，这个文件由 ConfigMap（prometheus-config）提供，挂载到容器内
+            - "--storage.tsdb.path=/prometheus"                 # 指定 Prometheus 时间序列数据库（TSDB）的存储路径为 /prometheus，这个路径由 PVC（prometheus）提供，持久化存储数据
+            - "--storage.tsdb.retention=24h"                    # 设置数据保留时间为 24 小时，意味着 Prometheus 只保留最近 24 小时的监控数据，旧数据将被删除。生产环境建议 15-30天
+            - "--web.enable-admin-api"                          # 启用 Prometheus 的 Admin HTTP API，允许执行管理操作（如删除时间序列）
+            - "--web.enable-lifecycle"                          # 启用生命周期 API，支持通过 HTTP 请求（如 localhost:9090/-/reload）动态重新加载配置文件。
+          ports:
+            - containerPort: 9090       # 指定 Prometheus 监听端口，用于提供 Web UI 和 API
+              protocol: TCP
+              name: http
+          volumeMounts:                 # 定义容器内的挂载点，将卷挂载到指定路径
+            - mountPath: "/prometheus"  # 将名为 data 的卷挂载到容器内的 /prometheus 路径，用于存储 TSDB 数据
+              subPath: prometheus       # 表示使用卷中的子路径 prometheus，避免覆盖整个卷的其他内容
+              name: data                # 卷由 PVC（prometheus）提供
+            - mountPath: "/etc/prometheus"      # 将名为 config-volume 的卷挂载到容器内的 /etc/prometheus 路径，用于存储配置文件
+              name: config-volume               # 由 ConfigMap（prometheus-config）提供
+          resources:
+            requests:
+              cpu: 500m                 # 请求 100 毫核（0.1 CPU 核心），表示容器需要的最小 CPU 资源
+              memory: 1024Mi             # 请求 512 MiB 内存，表示容器需要的最小内存
+            limits:
+              cpu: 500m                 # 限制容器最多使用 100 毫核 CPU，防止过量占用
+              memory: 1024Mi             # 限制容器最多使用 512 MiB 内存，防止内存溢出
+      securityContext:                  # 定义 Pod 的安全上下文，控制容器运行时的权限
+        runAsUser: 0                    # 指定容器以用户 ID 0（即 root 用户）运行
+      volumes:                          # 定义 Pod 使用的卷，供容器挂载
+        - name: data
+          persistentVolumeClaim:        # 指定挂载的PVC
+            claimName: prometheus
+        - name: config-volume
+          configMap:                    # 指定挂载的 configMap
+            name: prometheus-config
+        - name: alertcfg                # 挂载AlertManager ConfigMap
+          configMap:
+            name: alert-config
+      nodeSelector:
+        kubernetes.io/hostname: k8s-node02
+---
+
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: kube-ops
+  labels:
+    app: prometheus
+spec:
+  selector:
+    app: prometheus
+  type: NodePort
+  ports:
+    - name: prometheus  # 端口名称
+      port: 9090            # service 对外端口 9090
+      targetPort: 9090      # 内部名为 http 的端口 （9090）
+    - name: alertmanager    # altermanager 端口配置
+      port: 9093
+      targetPort: 9093
+
+---
+
+# Ingress， 安装参考：https://georgechan95.github.io/blog/6436eaf1.html
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: prometheus-ui
+  namespace: kube-ops
+spec:
+  ingressClassName: nginx           # 指定 Ingress 控制器为 nginx，由 Nginx Ingress Controller 处理
+  rules:
+    - host: my.prometheus.com       # 定义一个基于域名 my.prometheus.com 的路由规则
+      http:
+        paths:
+          - backend:
+              service:
+                name: prometheus    # 流量转发到 kube-ops 命名空间中的 prometheus 服务
+                port:
+                  number: 9090
+            path: /                 # 匹配根路径 / 及所有以 / 开头的子路径（如 /graph, /api/v1）
+            pathType: Prefix

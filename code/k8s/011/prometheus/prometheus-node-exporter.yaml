@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: kube-ops
+  labels:
+    name: node-exporter
+spec:
+  selector:
+    matchLabels:
+      name: node-exporter
+  template:
+    metadata:
+      labels:
+        name: node-exporter
+    spec:
+      hostPID: true                         # 允许 Pod 使用主机节点的 PID 命名空间, Node Exporter 需要访问主机的 /proc 文件系统以收集进程相关指标（如 CPU、内存使用情况），因此需要 hostPID: true
+      hostIPC: true                         # 允许 Pod 使用主机节点的 IPC（进程间通信）命名空间，这通常用于访问主机的共享内存或其他 IPC 机制，但在 Node Exporter 中可能不是必需，建议评估是否需要以降低安全风险。
+      hostNetwork: true                     # Pod 使用主机节点的网络命名空间，直接绑定到主机的网络接口和端口，Node Exporter 的端口（9100）将直接绑定到主机网络，便于 Prometheus 抓取节点的指标（如通过节点 IP:9100）
+      containers:
+        - name: node-exporter
+          image: prom/node-exporter:v0.16.0   # Node Exporter 收集主机系统的指标（如 CPU、内存、磁盘、文件系统等）并通过 HTTP 端点（默认 /metrics）暴露
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9100             # Node Exporter 监听 9100 端口，暴露 Prometheus 格式的指标端点（默认 /metrics）
+          resources:
+            requests:
+              cpu: 0.15                       # 请求 0.15 CPU 核心（150 毫核），表示 Node Exporter 的最小 CPU 需求
+          securityContext:
+            privileged: true                  # 容器以特权模式运行，拥有对主机的广泛访问权限
+          args:
+            - --path.procfs                   # 指定进程文件系统路径为 /host/proc，映射到主机的 /proc，用于收集进程、CPU、内存等指标
+            - /host/proc
+            - --path.sysfs                    # 指定系统文件系统路径为 /host/sys，映射到主机的 /sys，用于收集硬件相关指标（如设备信息）
+            - /host/sys
+            - --collector.filesystem.ignored-mount-points   # 配置文件系统收集器，忽略以 /sys, /proc, /dev, /host, /etc 开头的挂载点，防止收集容器内部或无关的文件系统指标，专注于主机文件系统
+            - '"^/(sys|proc|dev|host|etc)($|/)"'
+          volumeMounts:
+            - name: dev
+              mountPath: /host/dev      # 挂载主机的 /dev 到容器内的 /host/dev
+            - name: proc
+              mountPath: /host/proc     # 挂载主机的 /proc 到 /host/proc
+            - name: sys
+              mountPath: /host/sys      # 挂载主机的 /sys 到 /host/sys
+            - name: rootfs
+              mountPath: /rootfs        # 挂载主机的根文件系统（/）到 /rootfs
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"    # 允许 Pod 调度到带有 node-role.kubernetes.io/control-plane 污点的节点
+          operator: Exists
+          effect: NoSchedule
+      volumes:                          # 定义 Pod 使用的卷，映射主机文件系统到容器
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: dev
+          hostPath:
+            path: /dev
+        - name: sys
+          hostPath:
+            path: /sys
+        - name: rootfs
+          hostPath:
+            path: /

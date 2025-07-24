@@ -1,0 +1,128 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: kube-ops
+data:
+  rules.yml: |          # 配置Prometheus告警规则，内存使用超过 20% 就告警
+    groups:             # 告警规则，不需要告警时，就先注释了
+#      - name: test-rule
+#        rules:
+#          - alert: NodeMemoryUsage
+#            expr: (node_memory_MemTotal_bytes - (node_memory_MemFree_bytes + node_memory_Buffers_bytes + node_memory_Cached_bytes)) / node_memory_MemTotal_bytes * 100 > 20
+#            for: 2m       # 告警条件需持续满足 2 分钟（2m）才会触发
+#            labels:       # 为告警添加标签 team=node，用于路由和分组
+#              team: node
+#            annotations:  # 提供告警的附加信息，显示在通知（如邮件）中
+#              summary: "{{$labels.instance}}: High Memory usage detected"
+#              description: "{{$labels.instance}}: Memory usage is above 20% (current value is: {{ $value }}"
+  prometheus.yml: |           # 使用 | 表示 YAML 中的多行文本
+    global:                   # 定义 Prometheus 的全局配置，适用于所有抓取任务（除非在具体任务中被覆盖）
+      scrape_interval: 15s    # 表示 prometheus 抓取指标数据的频率，默认是 15s
+      scrape_timeout: 15s     # 表示 prometheus 抓取指标数据的超时时间，默认是 15s
+    scrape_configs:
+    - job_name: 'prometheus'  # 定义任务名，这里监控 prometheus 自身
+      static_configs:
+      - targets: ['localhost:9090']
+        
+    - job_name: 'ingressnginx140'         # 10.20.1.140 Ingress-nginx 指标数据抓取
+      static_configs:
+        - targets: ['10.20.1.140:10254']
+          
+    - job_name: 'ingressnginx141'         # 10.20.1.141 Ingress-nginx 指标数据抓取
+      static_configs:
+        - targets: ['10.20.1.141:10254']
+          
+    - job_name: 'ingressnginx142'         # 10.20.1.142 Ingress-nginx 指标数据抓取
+      static_configs:
+        - targets: ['10.20.1.142:10254']
+          
+    - job_name: 'kubernetes-nodes'        # 基于Node自动发现节点，并抓取指标信息。Node Exporter：提供系统级指标，适合监控节点的硬件和操作系统状态（如磁盘 I/O、网络流量）。
+      kubernetes_sd_configs:
+        - role: node
+      relabel_configs:
+        - source_labels: [__address__]    # 默认抓取节点的 Kubelet 端点（端口 10250，/metrics），但这里通过 relabel_configs 修改为 Node Exporter 的端口（9100）
+          regex: '(.*):10250'
+          replacement: '${1}:9100'
+          target_label: __address__
+          action: replace
+        - action: labelmap                # 将 Kubernetes 节点的标签（__meta_kubernetes_node_label_<key>）映射为 Prometheus 指标的标签
+          regex: __meta_kubernetes_node_label_(.+)
+          
+    - job_name: 'kubernetes-kubelet'      # 基于Node发现，从 Kubelet 抓取指标信息。Kubelet：提供 Kubernetes 特定指标，如 Pod 运行状态、Kubelet 的健康状况和 API 请求统计。
+      kubernetes_sd_configs:
+        - role: node
+      scheme: https
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt         # k8s 自动为pod挂载的证书文件路径,在pod内部
+        insecure_skip_verify: true
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token  # k8s 自动为pod挂载的token文件路径，在pod内部
+      relabel_configs:
+        - action: labelmap
+          regex: __meta_kubernetes_node_label_(.+)                            # 将 Kubernetes 节点的标签（__meta_kubernetes_node_label_<key>）映射为 Prometheus 指标的标签
+          
+    - job_name: 'kubernetes-cadvisor'                                         # 抓取任务名称为 kubernetes-cadvisor，用于监控 Kubernetes 节点的 cAdvisor 指标
+      kubernetes_sd_configs:
+        - role: node
+      scheme: https                                                           # 指定使用 HTTPS 协议访问目标（Kubernetes API 服务器的 443 端口）
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt         # 使用 Pod 内部的服务账号卷挂载的 CA 证书
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token  # 使用服务账号的 Bearer 令牌
+      relabel_configs:                                              # 定义标签重写规则，修改服务发现的目标地址和路径
+        - action: labelmap                                          # 规则1：将节点的标签（如 kubernetes.io/hostname）映射到 Prometheus 指标标签 
+          regex: __meta_kubernetes_node_label_(.+)
+        - target_label: __address__
+          replacement: kubernetes.default.svc:443                   # 规则2：将抓取目标地址设置为 kubernetes.default.svc:443，即 Kubernetes API 服务器的 ClusterIP 服务（默认命名空间 default，端口 443）
+        - source_labels: [__meta_kubernetes_node_name]              # 规则3：使用节点名称（__meta_kubernetes_node_name，如 node01）动态构造指标路径
+          regex: (.+)
+          target_label: __metrics_path__
+          replacement: /api/v1/nodes/${1}/proxy/metrics/cadvisor
+          
+    - job_name: 'kubernetes-apiservers'                             # 抓取任务名称为 kubernetes-apiservers，用于监控 Kubernetes API 服务器的指标，包括请求速率、延迟、错误率等（如 apiserver_request_total, apiserver_request_duration_seconds）
+      kubernetes_sd_configs:
+        - role: endpoints                                           # 使用 Kubernetes 服务发现，角色为 endpoints，发现集群中的所有 Endpoints 对象
+      scheme: https                                                 # Kubernetes API 服务器默认通过 HTTPS（端口 443）暴露 /metrics 端点
+      tls_config:
+        ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt         # 使用 Prometheus Pod 内部的服务账号卷挂载的 CA 证书（位于 /var/run/secrets/kubernetes.io/serviceaccount/ca.crt）验证 API 服务器的 TLS 证书
+      bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token  # 使用服务账号的 Bearer 令牌（位于 /var/run/secrets/kubernetes.io/serviceaccount/token）进行身份验证
+      relabel_configs:
+        - source_labels: [__meta_kubernetes_namespace, __meta_kubernetes_service_name, __meta_kubernetes_endpoint_port_name]    # 断点所在的名称空间，断点所在的 Service， 断点端口名称
+          action: keep                      # 仅保留匹配正则表达式的端点，未匹配的端点被丢弃。
+          regex: default;kubernetes;https   # 确保 Prometheus 只抓取 default 命名空间中 kubernetes 服务的 HTTPS 端点（即 API 服务器的 /metrics）
+          
+    - job_name: 'kubernetes-service-endpoints'        # 抓取任务名称为 kubernetes-service-endpoints，用于监控 Kubernetes Service 的 Endpoints 指标。
+      kubernetes_sd_configs:
+        - role: endpoints                             # 使用 Kubernetes 服务发现，角色为 endpoints，发现集群中所有 Service 的 Endpoints 对象
+      relabel_configs:                                # 定义标签重写规则，过滤和配置服务发现的目标，确保只抓取符合条件的 Service Endpoints
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scrape]
+          action: keep                                # 仅保留注解 prometheus.io/scrape: "true" 的 Service Endpoints，未匹配的被丢弃
+          regex: true
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_scheme]
+          action: replace                             # 将匹配的值替换到 __scheme__ 标签，决定抓取协议（http 或 https），允许 Service 指定是否通过 HTTPS 抓取指标，适用于需要安全连接的场景
+          target_label: __scheme__
+          regex: (https?)                             # 匹配 http 或 https，若注解未设置，默认使用 http
+        - source_labels: [__meta_kubernetes_service_annotation_prometheus_io_path]
+          action: replace                             # 检查 Service 的注解 prometheus.io/path，将匹配的值替换到 __metrics_path__ 标签，指定指标端点的路径
+          target_label: __metrics_path__
+          regex: (.+)
+        - source_labels: [__address__, __meta_kubernetes_service_annotation_prometheus_io_port]
+          action: replace                             # 将地址和端口组合替换到 __address__ 标签，允许 Service 指定抓取端口（如 prometheus.io/port: "8080"），覆盖 Endpoints 的默认端口
+          target_label: __address__
+          regex: ([^:]+)(?::\d+)?;(\d+)
+          replacement: $1:$2
+        - action: labelmap                            # 将 Service 的标签（如 app=my-app）映射到 Prometheus 指标标签
+          regex: __meta_kubernetes_service_label_(.+)
+        - source_labels: [__meta_kubernetes_namespace]      # 将 Service 的命名空间（__meta_kubernetes_namespace）写入指标标签 kubernetes_namespace
+          action: replace
+          target_label: kubernetes_namespace          
+        - source_labels: [__meta_kubernetes_service_name]   # 将 Service 名称（__meta_kubernetes_service_name）写入指标标签 kubernetes_name
+          action: replace
+          target_label: kubernetes_name
+          
+    alerting:               # 定义 Prometheus 与 Alertmanager 的连接，用于发送告警
+      alertmanagers:        # 指定 Alertmanager 实例的地址
+        - static_configs:
+            - targets: ["prometheus.kube-ops.svc.cluster.local:9093"]   # <service-name>.<namespace>.svc.<cluster-domain>，注意 这里Service名称是 prometheus
+              
+    rule_files:             # 指定告警规则文件路径
+      - /etc/prometheus/rules.yml

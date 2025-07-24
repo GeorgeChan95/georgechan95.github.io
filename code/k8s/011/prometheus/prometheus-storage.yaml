@@ -1,0 +1,140 @@
+# 1.命名空间
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: prometheus-storage
+
+---
+
+# 2.存储类
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  namespace: prometheus-storage
+  name: prometheus-storage
+# provisioner: nfs-provisioner
+provisioner: k8s-sigs.io/nfs-subdir-external-provisioner # 指定动态配置器，NFS 子目录外部配置器
+parameters:
+  pathPattern: ${.PVC.namespace}/${.PVC.name} # 动态生成的 NFS 路径，格式为 <PVC 命名空间>/<PVC 名称>，例如 prometheus-storageclass/test-claim。
+  archiveOnDelete: "true" ##删除 pv,pv内容是否备份
+
+---
+
+# 3.NFS 动态存储配置器，用于自动为 PVC 创建 PV
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: prometheus-storage
+  name: nfs-client-provisioner # NFS 动态存储配置器，用于自动为 PVC 创建 PV
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner # 指定使用的 ServiceAccountName
+      containers:
+        - name: nfs-client-provisioner
+          image: k8s.dockerproxy.com/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: nfs-client-root # 挂载的卷名称，与 volumes 部分定义的卷对应
+              mountPath: /persistentvolumes # 将 NFS 卷挂载到容器内的 /persistentvolumes 路径，供容器读写 NFS 共享数据。
+          env:
+            - name: PROVISIONER_NAME
+              value: k8s-sigs.io/nfs-subdir-external-provisioner # 指定配置器名称，与 StorageClass 保持一致
+            - name: NFS_SERVER
+              value: 10.20.1.139 # NFS 服务器地址
+            - name: NFS_PATH
+              value: /root/data/prometheus # NFS 共享路径
+      volumes:
+        - name: nfs-client-root # 定义一个名为 nfs-client-root 的 NFS 卷，连接到 NFS 服务器的指定地址和路径
+          nfs:
+            server: 10.20.1.139 # NFS 服务器地址
+            path: /root/data/prometheus # NFS 共享路径
+      nodeSelector: # 指定Pod运行的节点
+        kubernetes.io/hostname: k8s-node01
+      # nodeName: k8s-node01 # 指定 Pod 运行在 k8s-node01 节点上
+
+---
+
+# 4.服务账户
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nfs-client-provisioner # SA 的名称
+  namespace: prometheus-storage
+
+---
+
+# 5.集群角色
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nfs-client-provisioner-runner
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "update", "patch"]
+
+---
+
+# 6.集群角色绑定
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: run-nfs-client-provisioner
+subjects:
+  - kind: ServiceAccount # 绑定类型 ServiceAccount
+    name: nfs-client-provisioner # ServiceAccount 的名称
+    namespace: prometheus-storage
+roleRef:
+  kind: ClusterRole # 绑定的角色类型
+  name: nfs-client-provisioner-runner # 集群角色名称 nfs-client-provisioner-runner
+  apiGroup: rbac.authorization.k8s.io
+
+---
+
+# 7.角色
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-nfs-client-provisioner # 角色的名称，表明它与 NFS 客户端存储提供者的领导者选举（leader election）机制相关。
+  namespace: prometheus-storage
+rules:
+  - apiGroups: [""] # 空字符串表示核心 API 组（core API group），包含 Kubernetes 的基本资源，如 endpoints。
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+
+---
+
+# 8.SA角色绑定
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: run-leader-locking-nfs-client-provisioner
+  namespace: prometheus-storage
+subjects:
+  - kind: ServiceAccount # 绑定资源类型为 ServiceAccount
+    name: nfs-client-provisioner # 绑定的ServiceAccount 名称
+    namespace: prometheus-storage
+roleRef:
+  kind: Role # 绑定角色（prometheus-storage名称空间的角色）
+  apiGroup: rbac.authorization.k8s.io
+  name: leader-locking-nfs-client-provisioner # 角色的名称

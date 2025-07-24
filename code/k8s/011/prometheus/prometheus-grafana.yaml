@@ -1,0 +1,158 @@
+# 1.声明 PVC ，使用 StorageClass 动态创建PV
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: grafana-pvc
+  namespace: kube-ops
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: prometheus-storage # 使用 StorageClass 动态创建PV
+  volumeMode: Filesystem
+
+---
+
+# 2.创建Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: grafana
+  name: grafana
+  namespace: kube-ops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      securityContext:
+        fsGroup: 472
+        supplementalGroups:
+          - 0
+      containers:
+        - name: grafana
+          image: grafana/grafana:8.3.5
+          imagePullPolicy: IfNotPresent
+          env:                                    # 设置grafana初始华用户名和密码
+            - name: GF_SECURITY_ADMIN_USER
+              value: admin
+            - name: GF_SECURITY_ADMIN_PASSWORD
+              value: admin
+          ports:
+            - containerPort: 3000
+              name: http-grafana
+              protocol: TCP
+          readinessProbe:                         # 就绪探测
+            failureThreshold: 10
+            httpGet:
+              path: /api/health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 60               # 延迟 60秒探测，等待job执行完成
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 30
+          livenessProbe:                          # 存活探测
+            failureThreshold: 3
+            httpGet:
+              path: /api/health
+              port: 3000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1024Mi
+            limits:
+              cpu: 1000m
+              memory: 2048Mi
+          volumeMounts:
+            - mountPath: /var/lib/grafana
+              subPath: grafana
+              name: grafana-pv
+          securityContext:                  # 容器以用户id 472 运行
+            runAsUser: 472
+      volumes:                              # 挂载容器卷
+        - name: grafana-pv
+          persistentVolumeClaim:
+            claimName: grafana-pvc          # 使用声明的PVC，通过 StorageClass 动态创建PV
+      nodeSelector: # 指定Pod运行的节点
+        kubernetes.io/hostname: k8s-node02
+
+---
+
+# 3.创建Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana
+  namespace: kube-ops
+spec:
+  ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: http-grafana
+      nodePort: 30339
+  selector:
+    app: grafana
+  type: NodePort
+
+---
+
+# 创建 job，调整 grafana 挂载目录权限
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: grafana-chown
+  namespace: kube-ops
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: grafana-chown
+          command: ["chown", "-R", "472:472", "/var/lib/grafana"]
+          image: busybox:1.37.0
+          imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - name: storage
+              subPath: grafana
+              mountPath: /var/lib/grafana
+      volumes:
+        - name: storage
+          persistentVolumeClaim:
+            claimName: grafana-pvc
+
+---
+
+# 4.创建 Ingress
+apiVersion: networking.k8s.io/v1 # 指定 API 版本
+kind: Ingress
+metadata:
+  name: grafana-ui
+  namespace: kube-ops
+  labels:
+    k8s-app: grafana
+spec:
+  ingressClassName: nginx       # 指定此 Ingress 资源由名称为 nginx 的 IngressClass 处理
+  rules:
+    - host: prom.grafana.com    # 指定此规则适用于请求的 HTTP 主机头（Host Header）为 prom.grafana.com 的流量。客户端必须通过该域名访问
+      http:
+        paths:
+          - path: /             # 指定匹配的 URL 路径为 /，即根路径,表示匹配所有以 / 开头的请求
+            pathType: Prefix    # 定义路径匹配的类型为 Prefix，表示匹配以指定路径（/) 开头的所有请求
+            backend:
+              service:
+                name: grafana   # 指定后端服务的名称为 nginx-svc.（必须存在于同一命名空间，或通过 <namespace>/<service-name> 跨命名空间引用）
+                port:
+                  number: 3000  # 指定目标 Service 的端口为 80
