@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: nginx
+  annotations:
+    # 设置Pod固定ip地址
+    "cni.projectcalico.org/ipAddrs": "[\"171.20.45.27\"]"
+  name: fixed-pod-ip
+  namespace: default
+spec:
+  containers:
+    - image: nginx:1.29.0
+      imagePullPolicy: IfNotPresent
+      name: nginx

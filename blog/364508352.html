@@ -9,40 +9,23 @@
   <meta name="keywords" content=" java , jvm ">
   <meta name="description" content="第十二章-垃圾回收概述和相关算法 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="概要： 简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：使用 yaml 资源清单部署 和 使用 Helm 部署 集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点，NFS Server   10.20.1.140 k8s-node01 Node节点, NFS Client   10.20.1.14">
+<meta name="description" content="需求： 在某种情况下，创建 Pod 时主动给它分配IP地址，并要求即使重启Pod IP地址也不变。 这里演示 Calico 网络插件环境中，如何给 Pod 分配固定的 IP 地址。 一、确认环境1. 修改 calico 配置文件修改配置文件 vim &#x2F;etc&#x2F;cni&#x2F;net.d&#x2F;10-calico.conflist ，将 ipam 类型修改为 calico-ipam $ vim &#x2F;etc&#x2F;cni&#x2F;">
 <meta property="og:type" content="article">
-<meta property="og:title" content="014-K8S-部署Loki+Promtail+Grafana实现日志监控">
-<meta property="og:url" content="https://georgechan95.github.io/blog/f8cf646f.html">
+<meta property="og:title" content="016-K8S-固定Pod IP地址，基于Calico插件">
+<meta property="og:url" content="https://georgechan95.github.io/blog/c9536d9e.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="概要： 简述 Loki 相关组件原理，并演示两种使用 Loki 监控Pod日志的部署方式：使用 yaml 资源清单部署 和 使用 Helm 部署 集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点，NFS Server   10.20.1.140 k8s-node01 Node节点, NFS Client   10.20.1.14">
+<meta property="og:description" content="需求： 在某种情况下，创建 Pod 时主动给它分配IP地址，并要求即使重启Pod IP地址也不变。 这里演示 Calico 网络插件环境中，如何给 Pod 分配固定的 IP 地址。 一、确认环境1. 修改 calico 配置文件修改配置文件 vim &#x2F;etc&#x2F;cni&#x2F;net.d&#x2F;10-calico.conflist ，将 ipam 类型修改为 calico-ipam $ vim &#x2F;etc&#x2F;cni&#x2F;">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-131130.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-132416.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-161149.jpeg">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135129.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135208.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135300.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135317.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135333.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135515.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-135555.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/16/20250716-140241.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135126.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135316.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135346.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135559.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135639.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-135917.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/17/20250717-140204.png">
-<meta property="article:published_time" content="2025-07-10T13:00:00.000Z">
-<meta property="article:modified_time" content="2025-07-22T06:19:53.678Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/26/20250726-135737.png">
+<meta property="article:published_time" content="2025-07-26T05:35:00.000Z">
+<meta property="article:modified_time" content="2025-07-28T03:04:43.752Z">
 <meta property="article:author" content="George">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="Docker">
 <meta property="article:tag" content="Rocky">
-<meta property="article:tag" content="Loki">
+<meta property="article:tag" content="Pod">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/12/20250712-131130.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/07/26/20250726-135737.png">
 
 
 <link rel="icon" href="/img/favicon.png">
@@ -171,7 +154,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(109)</small>
+                <small>(110)</small>
             
         </div>
     </li>
@@ -288,7 +271,7 @@
         <div data-rel="k8s">
             
             k8s
-            <small>(15)</small>
+            <small>(16)</small>
         </div>
         
     </li>
@@ -362,8 +345,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="109">
-<input type="hidden" id="yelog_site_word_count" value="548.2k">
+<input type="hidden" id="yelog_site_posts_number" value="110">
+<input type="hidden" id="yelog_site_word_count" value="549.8k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -505,6 +488,10 @@
             </li>
         
             <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Pod</a>
+            </li>
+        
+            <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>Prometheus</a>
             </li>
         
@@ -538,6 +525,15 @@
 
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/c9536d9e.html"
+           data-tag="linux,Docker,Rocky,Pod"
+           data-author="" >
+            <span class="post-title" title="016-K8S-固定Pod IP地址，基于Calico插件">016-K8S-固定Pod IP地址，基于Calico插件</span>
+            <span class="post-date" title="2025-07-26 13:35:00">2025/07/26</span>
+        </a>
         
         
         <a  class="全部文章 k8s "
@@ -857,7 +853,7 @@
         
         <a  class="全部文章 neo4j "
            href="/blog/a3b0b090.html"
-           data-tag="neo4j,SpringBoot"
+           data-tag="SpringBoot,neo4j"
            data-author="" >
             <span class="post-title" title="Spring Boot对Neo4j节点关系的增删改查">Spring Boot对Neo4j节点关系的增删改查</span>
             <span class="post-date" title="2024-11-12 21:00:30">2024/11/12</span>
@@ -875,7 +871,7 @@
         
         <a  class="全部文章 neo4j "
            href="/blog/7dc0fcde.html"
-           data-tag="neo4j,SpringBoot"
+           data-tag="SpringBoot,neo4j"
            data-author="" >
             <span class="post-title" title="Spring Boot整合Neo4j实现增删改查">Spring Boot整合Neo4j实现增删改查</span>
             <span class="post-date" title="2024-11-07 19:04:30">2024/11/07</span>
