@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: my-network-policy
+  namespace: network
+spec:
+  podSelector:
+    matchLabels: # 匹配作用的 Pod 标签
+      env: prod
+  policyTypes:
+  - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:      # 具有 name=default 标签的命名空间下的pod
+              name: default
+          podSelector:
+            matchLabels:      # 在具有 name=default 标签的命名空间基础上，还需要具有 role=podclient 标签的pod
+              role: podclient
+      ports:
+        - protocol: TCP
+          port: 80            # web1 只开放80端口

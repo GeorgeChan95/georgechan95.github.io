@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: my-network-policy
+  namespace: network
+spec:
+  podSelector:
+    matchLabels: # 匹配作用的 Pod 标签
+      env: prod
+  policyTypes:
+  - Ingress
+  ingress:
+    - from:
+        - ipBlock:
+            cidr: 171.20.10.0/24    # 只允许 171.20.10.0/24 这个网段的pod可以访问 web1 的80端口(TCP)、
+            except:
+              - 171.20.10.10/32        # 排除单个ip
+      ports:
+        - protocol: TCP
+          port: 80            # web1 只开放80端口

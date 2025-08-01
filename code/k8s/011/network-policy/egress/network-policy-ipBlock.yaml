@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: multi-port-egress
+  namespace: network
+spec:
+  podSelector:
+    matchLabels: # 匹配作用的 Pod 标签
+      env: prod
+  policyTypes:
+  - Egress
+  egress:                   # 出站网络策略
+    - to:
+        - ipBlock:
+            cidr: 171.20.0.0/16    # 只允许 171.20.0.0/16 这个网段的pod可以访问
+      ports:
+        - protocol: TCP
+          port: 53                  # 可以访问 53-80 之间的端口
+          endPort: 80

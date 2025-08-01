@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: my-network-policy
+  namespace: network
+spec:
+  podSelector:
+    matchLabels: # 匹配作用的 Pod 标签
+      env: prod
+  policyTypes:
+  - Egress
+  egress:                   # 出站网络策略
+    - to:
+        - namespaceSelector:      # 标签为 kubernetes.io/metadata.name: kube-system 下的所有 pod，web1 都能访问
+            matchLabels:
+              kubernetes.io/metadata.name: kube-system
+      ports:
+        - protocol: UDP           # 能访问端口 53，且协议为UDP
+          port: 53
+    - to:
+        - podSelector:
+            matchLabels: # 并且能访问标签为 env: dev 的Pod（web3）
+              env: dev
+      ports:
+        - protocol: TCP  # 能访问端口 80，且协议为TCP
+          port: 80

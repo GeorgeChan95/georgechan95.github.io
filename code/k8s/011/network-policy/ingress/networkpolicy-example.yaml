@@ -1,0 +1,35 @@
+apiVersion: networking.k8s.io/v1    # networking.k8s.io/v1 是 NetworkPolicy 资源的标准 API
+kind: NetworkPolicy
+metadata:
+  name: my-network-policy
+  namespace: network                # 资源所在名称空间，该 NetworkPolicy 只能作用于该名称空间下的Pod
+spec:
+  podSelector:
+    matchLabels:
+      role: db                      # 当前网络策略作用于 network 名称空间下，具有标签 role: db 的 Pod
+  policyTypes:
+  - Ingress                         # 控制入站流量
+  - Egress                          # 控制出站流量
+  ingress:
+    - from:
+        - ipBlock:
+            #cidr: 0.0.0.0/0表示允许所有客户端可以访问
+            cidr: 172.17.0.0/16     # 允许来自 IP 范围 172.17.0.0 到 172.17.255.255 的流量
+            except:
+              - 172.17.1.0/24       # 排除子范围 172.17.1.0 到 172.17.1.255，即这部分 IP 被禁止。
+        - namespaceSelector:
+            matchLabels:
+              project: myproject    # 允许来自具有标签 project=myproject 的命名空间中的所有 Pod 发起的流量。
+        - podSelector:
+            matchLabels:
+              role: frontend        # 允许 【同一命名】 空间内具有标签 role=frontend 的 Pod 发起的流量。
+      ports:
+        - protocol: TCP
+          port: 6379                # 只允许上述来源访问 role=db Pod 的 TCP 6379 端口
+  egress:
+    - to:
+        - ipBlock:
+            cidr: 10.0.0.0/24       # 允许 role=db Pod 访问 IP 范围 10.0.0.0 到 10.0.0.255 的目标
+      ports:
+        - protocol: TCP
+          port: 5978                # 只允许访问目标的 TCP 5978 端口
