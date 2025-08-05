@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>16-命令模式 | George&#39;s Blog</title>
+  <title>019-K8S-kubectl端口转发 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 设计模式 ">
-  <meta name="description" content="16-命令模式 | George&#39;s Blog">
+  <meta name="keywords" content=" linux , Docker , Rocky ">
+  <meta name="description" content="019-K8S-kubectl端口转发 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#x72;&#x67;&#101;&#x5f;&#x39;&#53;&#x40;&#49;&#x32;&#x36;&#46;&#99;&#x6f;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1555,9 +1555,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-design-pattern/16-命令模式" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-k8s/019-K8S-kubectl端口转发" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">16-命令模式</h1>
+        <h1 class="article-title">019-K8S-kubectl端口转发</h1>
     
     <div class="article-meta">
         
@@ -1567,7 +1567,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="设计模式">设计模式</a>
+            <a  data-rel="k8s">k8s</a>
             
         </span>
         
@@ -1575,19 +1575,23 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">设计模式</a>
+            <a class="color1">linux</a>
+            
+            <a class="color2">Docker</a>
+            
+            <a class="color1">Rocky</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-11-23 15:05:24'>2024-11-23 20:30</time>
+            发布时间 : <time class="date" title='最后更新: 2025-08-05 21:34:26'>2025-08-04 23:02</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2.2k</span>
+        <span>字数:39</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1617,7 +1621,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">一、命令模式的结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A1%88%E4%BE%8B%EF%BC%9AAudioPlayer%E7%B3%BB%E7%BB%9F"><span class="toc-text">二、案例：AudioPlayer系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%8F%E5%91%BD%E4%BB%A4"><span class="toc-text">三、宏命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">四、命令模式的优点</span></a></li></ol>
+        
     
 <style>
     .left-col .switch-btn,
@@ -1633,391 +1637,14 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>命令模式属于对象的行为模式。命令模式又称为行动(Action)模式或交易(Transaction)模式。</strong></p>
-<p><strong>命令模式把一个请求或者操作封装到一个对象中。命令模式允许系统使用不同的请求把客户端参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。</strong></p>
-<h1 id="一、命令模式的结构"><a href="#一、命令模式的结构" class="headerlink" title="一、命令模式的结构"></a>一、命令模式的结构</h1><p>命令模式是对命令的封装。命令模式把发出命令的责任和执行命令的责任分割开，委派给不同的对象。</p>
-<p>每一个命令都是一个操作：请求的一方发出请求要求执行一个操作；接收的一方收到请求，并执行操作。命令模式允许请求的一方和接收的一方独立开来，使得请求的一方不必知道接收请求的一方的接口，更不必知道请求是怎么被接收，以及操作是否被执行、何时被执行，以及是怎么被执行的。</p>
-<p>命令允许请求的一方和接收请求的一方能够独立演化，从而具有以下的优点：</p>
-<ul>
-<li><p>命令模式使新的命令很容易地被加入到系统里。</p>
-</li>
-<li><p>允许接收请求的一方决定是否要否决请求。</p>
-</li>
-<li><p>能较容易地设计一个命令队列。</p>
-</li>
-<li><p>可以容易地实现对请求的撤销和恢复。</p>
-</li>
-<li><p>在需要的情况下，可以较容易地将命令记入日志。</p>
-</li>
-</ul>
-<p>下面以一个示意性的系统，说明命令模式的结构。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-140717.png" alt="命令模式UML"></p>
-<p>命令模式涉及到五个角色，它们分别是：</p>
-<ul>
-<li><strong>客户端(Client)角色：</strong>创建一个具体命令(ConcreteCommand)对象并确定其接收者。</li>
-<li><strong>命令(Command)角色：</strong>声明了一个给所有具体命令类的抽象接口。</li>
-<li><strong>具体命令(ConcreteCommand)角色：</strong>定义一个接收者和行为之间的弱耦合；实现execute()方法，负责调用接收者的相应操作。execute()方法通常叫做执行方法。</li>
-<li><strong>请求者(Invoker)角色：</strong>负责调用命令对象执行请求，相关的方法叫做行动方法。</li>
-<li><strong>接收者(Receiver)角色：</strong>负责具体实施和执行一个请求。任何一个类都可以成为接收者，实施和执行请求的方法叫做行动方法。</li>
-</ul>
-<p><strong>代码示例</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 命令接收者</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Receiver</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">     * 真正执行命令相应的操作</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">action</span><span class="params">()</span>&#123;
-        System.out.println(<span class="string">&quot;==命令接收者执行操作==&quot;</span>);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 抽象命令角色</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体命令角色</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">// 聚合命令接收者</span>
-    <span class="keyword">private</span> Receiver receiver;
-
-    <span class="keyword">public</span> <span class="title function_">ConcreteCommand</span><span class="params">(Receiver receiver)</span> &#123;
-        <span class="built_in">this</span>.receiver = receiver;
-    &#125;
-
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        <span class="comment">// 调用接收者执行具体的方法</span>
-        receiver.action();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 请求者角色</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Invoker</span> &#123;
-    <span class="comment">// 聚合抽象命令角色</span>
-    <span class="keyword">private</span> Command command;
-
-    <span class="keyword">public</span> <span class="title function_">Invoker</span><span class="params">(Command command)</span> &#123;
-        <span class="built_in">this</span>.command = command;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 行动方法：调用命令对象执行请求</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">action</span><span class="params">()</span> &#123;
-        command.execute();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 测试类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
-
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 命令接收者</span>
-        <span class="type">Receiver</span> <span class="variable">receiver</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Receiver</span>();
-
-        <span class="comment">// 创建命令对象，将命令接受者设置进去</span>
-        <span class="type">Command</span> <span class="variable">command</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteCommand</span>(receiver);
-
-        <span class="comment">// 创建请求执行者，并将命令对象设置进去</span>
-        <span class="type">Invoker</span> <span class="variable">invoker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Invoker</span>(command);
-
-        <span class="comment">// 执行命令</span>
-        invoker.action();
-    &#125;
-&#125;</code></pre>
-
+        <p>一、</p>
+<p><strong>参考链接</strong></p>
 <blockquote>
-<p>运行结果：</p>
-<pre><code class="highlight shell">==命令接收者执行操作==</code></pre>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/J56793/article/details/145400712">https://blog.csdn.net/J56793/article/details/145400712</a></p>
+<p><a target="_blank" rel="noopener" href="https://feisky.gitbooks.io/kubernetes/content/practice/portforward.html">https://feisky.gitbooks.io/kubernetes/content/practice/portforward.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/waldron/p/17927449.html">https://www.cnblogs.com/waldron/p/17927449.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://chanjarster.github.io/post/k8s/kubectl-port-forward/">https://chanjarster.github.io/post/k8s/kubectl-port-forward/</a></p>
 </blockquote>
-<h1 id="二、案例：AudioPlayer系统"><a href="#二、案例：AudioPlayer系统" class="headerlink" title="二、案例：AudioPlayer系统"></a>二、案例：AudioPlayer系统</h1><p>小女孩茱丽(Julia)有一个盒式录音机，此录音机有播音(Play)、倒带(Rewind)和停止(Stop)功能，录音机的键盘便是请求者(Invoker)角色；茱丽(Julia)是客户端角色，而录音机便是接收者角色。Command类扮演抽象命令角色，而PlayCommand、StopCommand和RewindCommand便是具体命令类。茱丽(Julia)不需要知道播音(play)、倒带(rewind)和停止(stop)功能是怎么具体执行的，这些命令执行的细节全都由键盘(Keypad)具体实施。茱丽(Julia)只需要在键盘上按下相应的键便可以了。</p>
-<p>录音机是典型的命令模式。录音机按键把客户端与录音机的操作细节分割开来。</p>
-<p><strong>UML类图</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-142909.png" alt="命令模式案例：AudioPlayer系统"></p>
-<p><strong>代码如下：</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 接收者角色：录音机</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AudioPlayer</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">play</span><span class="params">()</span>&#123;
-        System.out.println(<span class="string">&quot;录音机播放...&quot;</span>);
-    &#125;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span>&#123;
-        System.out.println(<span class="string">&quot;录音机倒带...&quot;</span>);
-    &#125;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stop</span><span class="params">()</span>&#123;
-        System.out.println(<span class="string">&quot;录音机停止...&quot;</span>);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 命令角色</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体命令角色：播放命令</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlayCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">// 命令接收者</span>
-    <span class="keyword">private</span> AudioPlayer audioPlayer;
-
-    <span class="keyword">public</span> <span class="title function_">PlayCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
-        <span class="built_in">this</span>.audioPlayer = audioPlayer;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        audioPlayer.play();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体命令角色：倒带命令</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RewindCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">// 命令接收者</span>
-    <span class="keyword">private</span> AudioPlayer audioPlayer;
-
-    <span class="keyword">public</span> <span class="title function_">RewindCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
-        <span class="built_in">this</span>.audioPlayer = audioPlayer;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        audioPlayer.rewind();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体命令角色：停止命令</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StopCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">// 命令接收者</span>
-    <span class="keyword">private</span> AudioPlayer audioPlayer;
-
-    <span class="keyword">public</span> <span class="title function_">StopCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
-        <span class="built_in">this</span>.audioPlayer = audioPlayer;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        audioPlayer.stop();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 请求者角色：键盘</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Keypad</span> &#123;
-    <span class="keyword">private</span> Command playCommand;
-    <span class="keyword">private</span> Command rewindCommand;
-    <span class="keyword">private</span> Command stopCommand;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setPlayCommand</span><span class="params">(Command playCommand)</span> &#123;
-        <span class="built_in">this</span>.playCommand = playCommand;
-    &#125;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setRewindCommand</span><span class="params">(Command rewindCommand)</span> &#123;
-        <span class="built_in">this</span>.rewindCommand = rewindCommand;
-    &#125;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStopCommand</span><span class="params">(Command stopCommand)</span> &#123;
-        <span class="built_in">this</span>.stopCommand = stopCommand;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行播放方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">play</span><span class="params">()</span>&#123;
-        playCommand.execute();
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行倒带方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span>&#123;
-        rewindCommand.execute();
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行播放方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stop</span><span class="params">()</span>&#123;
-        stopCommand.execute();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 测试类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Julia</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 创建接收者对象</span>
-        <span class="type">AudioPlayer</span> <span class="variable">audioPlayer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AudioPlayer</span>();
-
-        <span class="comment">// 创建命令对象</span>
-        <span class="type">Command</span> <span class="variable">playCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PlayCommand</span>(audioPlayer);
-        <span class="type">Command</span> <span class="variable">rewindCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RewindCommand</span>(audioPlayer);
-        <span class="type">Command</span> <span class="variable">stopCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StopCommand</span>(audioPlayer);
-
-        <span class="comment">// 创建请求者对象</span>
-        <span class="type">Keypad</span> <span class="variable">keypad</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Keypad</span>();
-        keypad.setPlayCommand(playCommand);
-        keypad.setRewindCommand(rewindCommand);
-        keypad.setStopCommand(stopCommand);
-
-        <span class="comment">// 测试</span>
-        keypad.play();
-        keypad.stop();
-        keypad.rewind();
-        keypad.stop();
-        keypad.play();
-    &#125;
-&#125;</code></pre>
-
-<blockquote>
-<p>运行结果：</p>
-<pre><code class="highlight shell">录音机播放...
-录音机停止...
-录音机倒带...
-录音机停止...
-录音机播放...</code></pre>
-</blockquote>
-<h1 id="三、宏命令"><a href="#三、宏命令" class="headerlink" title="三、宏命令"></a>三、宏命令</h1><p>所谓宏命令简单点说就是包含多个命令的命令，是一个命令的组合。</p>
-<p>设想茱丽的录音机有一个记录功能，可以把一个一个的命令记录下来，再在任何需要的时候重新把这些记录下来的命令一次性执行，这就是所谓的宏命令集功能。因此，茱丽的录音机系统现在有四个键，分别为播音、倒带、停止和宏命令功能。此时系统的设计与前面的设计相比有所增强，主要体现在Julia类现在有了一个新方法，用以操作宏命令键。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-144947.png" alt="宏命令"></p>
-<p><strong>代码如下：</strong></p>
-<p>系统需要一个代表宏命令的接口，以定义出具体宏命令所需要的接口。</p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 系统需要一个代表宏命令的接口，以定义出具体宏命令所需要的接口。</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MacroCommand</span> <span class="keyword">extends</span> <span class="title class_">Command</span> &#123;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 宏命令聚集的管理方法，可以添加一个成员命令</span>
-<span class="comment">     * <span class="doctag">@param</span> cmd</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Command cmd)</span>;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 宏命令聚集的管理方法, 可以删除一个成员命令</span>
-<span class="comment">     * <span class="doctag">@param</span> cmd</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Command cmd)</span>;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体的宏命令MacroAudioCommand类负责把个别的命令合成宏命令。</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MacroAudioCommand</span> <span class="keyword">implements</span> <span class="title class_">MacroCommand</span> &#123;
-    List&lt;Command&gt; commandList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
-
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Command cmd)</span> &#123;
-        commandList.add(cmd);
-    &#125;
-
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Command cmd)</span> &#123;
-        commandList.remove(cmd);
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        <span class="keyword">for</span> (Command command : commandList) &#123;
-            command.execute();
-        &#125;
-    &#125;
-
-&#125;
-
-<span class="comment">/**</span>
-<span class="comment"> * 测试类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Julia</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 创建接收者对象</span>
-
-        <span class="type">AudioPlayer</span> <span class="variable">audioPlayer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AudioPlayer</span>();
-        <span class="comment">//创建命令对象</span>
-        <span class="type">Command</span> <span class="variable">playCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PlayCommand</span>(audioPlayer);
-        <span class="type">Command</span> <span class="variable">rewindCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RewindCommand</span>(audioPlayer);
-        <span class="type">Command</span> <span class="variable">stopCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StopCommand</span>(audioPlayer);
-
-        <span class="type">MacroCommand</span> <span class="variable">marco</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MacroAudioCommand</span>();
-
-        marco.add(playCommand);
-        marco.add(rewindCommand);
-        marco.add(stopCommand);
-        marco.execute();
-    &#125;
-&#125;</code></pre>
-
-<blockquote>
-<p>运行结果：</p>
-<pre><code class="highlight shell">录音机播放...
-录音机倒带...
-录音机停止..</code></pre>
-</blockquote>
-<h1 id="四、命令模式的优点"><a href="#四、命令模式的优点" class="headerlink" title="四、命令模式的优点"></a>四、命令模式的优点</h1><ul>
-<li><p><strong>更松散的耦合</strong></p>
-<p>命令模式使得发起命令的对象——客户端，和具体实现命令的对象——接收者对象完全解耦，也就是说发起命令的对象完全不知道具体实现对象是谁，也不知道如何实现。</p>
-</li>
-<li><p><strong>更动态的控制</strong></p>
-<p>命令模式把请求封装起来，可以动态地对它进行参数化、队列化和日志化等操作，从而使得系统更灵活。</p>
-</li>
-<li><p><strong>很自然的复合命令</strong></p>
-<p>命令模式中的命令对象能够很容易地组合成复合命令，也就是宏命令，从而使系统操作更简单，功能更强大。</p>
-</li>
-<li><p><strong>更好的扩展性</strong></p>
-<p>由于发起命令的对象和具体的实现完全解耦，因此扩展新的命令就很容易，只需要实现新的命令对象，然后在装配的时候，把具体的实现对象设置到命令对象中，然后就可以使用这个命令对象，已有的实现完全不用变化。</p>
-</li>
-</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
