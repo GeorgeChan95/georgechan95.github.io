@@ -1,0 +1,14 @@
+apiVersion: audit.k8s.io/v1
+kind: Policy
+rules:
+  # 设置机密资源的审计日志级别为Metadata
+  - level: Metadata
+    resources:
+      - group: ""
+        resources: ["pods"]
+    namespaces: ["default"]             # 默认就是default命名空间
+  # 设置节点的审计日志级别为RequestResponse
+  - level: RequestResponse
+    userGroups: ["system:nodes"]
+  # 对于其他内容，不要记录任何内容
+  - level: None

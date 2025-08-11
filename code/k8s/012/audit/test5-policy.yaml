@@ -1,0 +1,11 @@
+apiVersion: audit.k8s.io/v1     # 只记录audit命名空间的pods,services,deployments操作日志
+kind: Policy
+omitStages:                     # 记录审计阶段为：ResponseStarted
+  - "ResponseStarted"
+rules:
+  - level: Metadata             # 设置机密资源的审计日志级别为 Metadata
+    users: ["george"]           # 只记录 george 用户的操作
+    resources:
+      - group: ""
+        resources: ["pods"]
+    namespaces: ["audit"]       # 只记录该命名空间的日志

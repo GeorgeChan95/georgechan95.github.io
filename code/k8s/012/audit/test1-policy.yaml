@@ -1,0 +1,9 @@
+apiVersion: audit.k8s.io/v1
+kind: Policy
+omitStages:                     # 记录审计阶段为：ResponseStarted
+  - "ResponseStarted"
+rules:
+  - level: Metadata             # 设置机密资源的审计日志级别为Metadata
+    resources:
+      - group: ""
+    namespaces: ["audit"]       # 只记录该命名空间的日志
