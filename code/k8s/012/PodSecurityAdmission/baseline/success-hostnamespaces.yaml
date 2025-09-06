@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: my-baseline-namespace
+  name: success-hostnamespaces
+spec:
+  selector:
+    matchLabels:
+      app: fail-hostnamespaces
+  template:
+    metadata:
+      labels:
+        app: fail-hostnamespaces
+    spec:
+      hostPID: false # 不与主机共享PID
+      containers:
+        - name: nginx
+          image: nginx:1.29.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: false # 禁用特权模式

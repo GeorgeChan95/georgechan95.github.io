@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: read-only-root-filesystem-pod
+spec:
+  selector:
+    matchLabels:
+      app: read-only-root-filesystem-pod
+  template:
+    metadata:
+      labels:
+        app: read-only-root-filesystem-pod
+    spec:
+      containers:
+        - name: alpine
+          image: alpine:3.22.1
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            readOnlyRootFilesystem: true # 只读根文件系统
+          command:  # 容器启动命令
+            - /bin/sleep
+            - "3600"
+          volumeMounts:
+            - name: read-only-root-filesystem-pod # # 挂载了一个可写的 emptyDir 卷到 /volume 路径，允许容器写入数据
+              mountPath: /volume
+              readOnly: false
+      volumes:
+        - name: read-only-root-filesystem-pod # 定义一个 emptyDir 卷，是一种临时存储卷，卷在 Pod 创建时分配，初始为空，生命周期与 Pod 绑定（Pod 删除时卷被销毁）
+          emptyDir: {}

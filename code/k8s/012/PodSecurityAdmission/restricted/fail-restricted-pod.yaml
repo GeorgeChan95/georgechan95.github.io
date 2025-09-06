@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: my-restricted-namespace
+  name: fail-restricted
+spec:
+  selector:
+    matchLabels:
+      app: fail-restricted
+  template:
+    metadata:
+      labels:
+        app: fail-restricted
+    spec:
+      hostPID: true # 与主机共享PID
+      containers:
+        - name: alpine
+          image: alpine:3.22.1
+          imagePullPolicy: IfNotPresent
+          command: # 容器启动命令
+            - /bin/sleep
+            - "3600"
+          securityContext:
+            privileged: true # 启用特权模式

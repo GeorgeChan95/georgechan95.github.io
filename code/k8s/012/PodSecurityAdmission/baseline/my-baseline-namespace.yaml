@@ -1,0 +1,25 @@
+apiVersion: v1 # 命名空间的 API 版本（固定为 v1）
+kind: Namespace # 资源类型：命名空间（用于隔离集群资源）
+metadata:
+  name: my-baseline-namespace # 命名空间名称，Pod 将在此命名空间内运行
+  labels: # 核心：通过标签配置 Pod 安全策略（PSA 规则）
+    # 强制实施 Baseline 级别的安全标准，所有在该命名空间创建的 Pod 必须符合此标准，否则会被拒绝创建。
+    # Baseline 标准核心约束（Kubernetes 官方定义）：
+      # - 禁止特权容器（privileged: true）。
+      # - 禁止已知的特权升级路径（如 allowPrivilegeEscalation: true 且 runAsUser: 0）。
+      # - 允许默认的（相对宽松的）Pod 配置（如允许使用主机网络 hostNetwork、主机 PID hostPID、主机 IPC hostIPC 等，这也是与更严格的 Restricted 级别的主要区别）
+    pod-security.kubernetes.io/enforce: baseline
+    # 指定 enforce 规则所使用的 Kubernetes 版本（此处为 v1.29）， 这确保了 PSA 规则仅在指定的 Kubernetes 版本下生效，避免与未来版本的 Kubernetes 发生冲突。
+    pod-security.kubernetes.io/enforce-version: v1.29
+    # 当 Pod 不符合 Baseline 标准时，不阻止创建，但会生成警告信息（通过 API 响应或事件日志）。
+    pod-security.kubernetes.io/warn: baseline
+    # 指定 warn 规则所使用的 Kubernetes 版本，与 enforce-version 保持一致（v1.29），确保警告规则与强制规则基于相同的标准定义
+    pod-security.kubernetes.io/warn-version: v1.29
+
+# 当同时指定 enforce: baseline 和 warn: baseline 时，Pod 创建流程如下：
+# - 先检查 enforce 规则：
+#   若 Pod 完全符合 baseline 标准 → 允许创建，进入下一步。
+#   若 Pod 违反 baseline 核心约束（如特权容器、特权升级等）→ 直接拒绝创建，流程终止。
+# - 再检查 warn 规则（仅当 enforce 允许创建时）：
+#   若 Pod 存在潜在风险（如使用了不推荐但未被 enforce 禁止的配置）→ 生成警告信息（如 Warning: Pod violates PodSecurity "baseline:v1.29"）。
+#   若 Pod 完全符合 baseline 标准 → 无警告，Pod 正常运行。

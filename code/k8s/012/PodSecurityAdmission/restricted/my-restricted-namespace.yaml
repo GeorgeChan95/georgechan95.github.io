@@ -1,0 +1,13 @@
+apiVersion: v1 # 命名空间的 API 版本（固定为 v1）
+kind: Namespace # 资源类型：命名空间（用于隔离集群资源）
+metadata:
+  name: my-restricted-namespace # 命名空间名称，Pod 将在此命名空间内运行
+  labels: # 核心：通过标签配置 Pod 安全策略（PSA 规则）
+    # 强制实施 Baseline 级别的安全标准，所有在该命名空间创建的 Pod 必须符合此标准，否则会被拒绝创建。
+    pod-security.kubernetes.io/enforce: restricted
+    # 指定 enforce 规则所使用的 Kubernetes 版本（此处为 v1.29）， 这确保了 PSA 规则仅在指定的 Kubernetes 版本下生效，避免与未来版本的 Kubernetes 发生冲突。
+    pod-security.kubernetes.io/enforce-version: v1.29
+    # 当 Pod 不符合 Restricted 标准时，不阻止创建，但会生成警告信息（通过 API 响应或事件日志）。
+    pod-security.kubernetes.io/warn: restricted
+    # 指定 warn 规则所使用的 Kubernetes 版本，与 enforce-version 保持一致（v1.29），确保警告规则与强制规则基于相同的标准定义
+    pod-security.kubernetes.io/warn-version: v1.29

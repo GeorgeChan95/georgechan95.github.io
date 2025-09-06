@@ -1,0 +1,51 @@
+apiVersion: policy/v1
+kind: PodSecurityPolicy
+metadata:
+  name: exporter-node-cluster-monitoring
+spec:
+  allowPrivilegeEscalation: false
+  # 强制使用只读的根文件系统
+  readOnlyRootFilesystem: true
+  # 不允许使用特权方式运行容器
+  privileged: false
+  allowedHostPaths:
+    - pathPrefix: /
+      readOnly: true
+  # 指定容器可以使用的用户组id范围
+  fsGroup:
+    ranges:
+      - max: 65535
+        min: 1
+    rule: MustRunAs
+  supplementalGroups:
+    ranges:
+      - max: 65535
+        min: 1
+    rule: MustRunAs
+  # 允许使用宿主机的网络命名空间
+  hostNetwork: true
+  # 允许使用宿主机的PID
+  hostPID: true
+  # 允许使用宿主机的IPC
+  hostIPC: true
+  # 只允许绑定宿主机的9796端口，和1000~1080的端口
+  hostPorts:
+    - max: 9796
+      min: 9796
+    - max: 1000
+      min: 1080
+  # 可以使用任意用户运行
+  runAsUser:
+    rule: RunAsAny
+  # 可以使用seLinux的任意规则
+  seLinux:
+    rule: RunAsAny
+  # 支持的挂载方式
+  volumes:
+    - configMap
+    - emptyDir
+    - projected
+    - secret
+    - downwardAPI
+    - persistentVolumeClaim
+    - hostPath

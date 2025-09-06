@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-ipc-pid
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-ipc-pid
+  template:
+    metadata:
+      labels:
+        app: nginx-ipc-pid
+    spec:
+      hostIPC: true # 主机共享 IPC 命名空间
+      hostPID: true # 主机共享 PID 命名空间
+      containers:
+        - name: nginx
+          image: nginx:1.29.0
+          imagePullPolicy: IfNotPresent

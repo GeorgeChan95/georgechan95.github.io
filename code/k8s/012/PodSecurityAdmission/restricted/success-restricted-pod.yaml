@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: my-restricted-namespace
+  name: success-restricted
+spec:
+  selector:
+    matchLabels:
+      app: success-restricted
+  template:
+    metadata:
+      labels:
+        app: success-restricted
+    spec:
+      hostPID: false # 不与主机共享PID
+      containers:
+        - name: nginx-nonroot
+          image: nginx-nonroot:1.0
+          imagePullPolicy: IfNotPresent
+          # 容器级别的安全上下文
+          securityContext:
+            # 以非root启动
+            runAsNonRoot: true
+            # 运行容器的用户ID
+            runAsUser: 101
+            # 不允许权限提升
+            allowPrivilegeEscalation: false
+            # 禁用所有能力
+            capabilities:
+              drop:
+                - ALL
+      # Pod级别的安全上下文
+      securityContext:
+        # 不允许以root启动
+        runAsNonRoot: true
+        # 不允许使用默认的seccomp profile
+        seccompProfile:
+          type: RuntimeDefault

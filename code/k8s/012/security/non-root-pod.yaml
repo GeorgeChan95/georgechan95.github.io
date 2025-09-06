@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: non-root-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: non-root-pod
+  template:
+    metadata:
+      labels:
+        app: non-root-pod
+    spec:
+      containers:
+        - name: nginx-nonroot
+          image: nginx-nonroot:1.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsNonRoot: true # 以非root用户运行
+            runAsUser: 101 # 运行用户 ID, 以非root用户运行，最好指定运行的用户id

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: capabilities-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: capabilities-pod
+  template:
+    metadata:
+      labels:
+        app: capabilities-pod
+    spec:
+      containers:
+        - name: nginx-capabilities
+          image: nginx:1.29.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: false # 禁用特权模式
+            capabilities:
+              add:
+                - NET_ADMIN # 添加网络管理能力
+                - SYS_PTRACE # 添加跟踪进程的能力（适用于 hostPID: true）
+              drop:
+#                - CHOWN # 禁用更改文件所有者的能力（Nginx启动需要修改文件所有者，因此不能禁用）
+                - SYS_ADMIN # 禁用高危的系统管理能力

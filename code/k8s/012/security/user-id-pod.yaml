@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: alpine-user-id
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: alpine-user-id
+  template:
+    metadata:
+      labels:
+        app: alpine-user-id
+    spec:
+      containers:
+        - name: alpine
+          image: alpine:3.22.1
+          imagePullPolicy: IfNotPresent
+          command:  # 容器启动命令
+            - /bin/sleep
+            - "3600"
+          securityContext:
+            runAsUser: 405 # 运行用户 ID

@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: default
+  name: privileged-pod
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: privileged-pod
+  template:
+    metadata:
+      labels:
+        app: privileged-pod
+    spec:
+      containers:
+        - name: nginx-privileged
+          image: nginx:1.29.0
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            privileged: true # 启用特权模式
