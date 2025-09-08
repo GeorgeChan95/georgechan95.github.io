@@ -940,7 +940,7 @@
         
         <a  class="全部文章 neo4j "
            href="/blog/a3b0b090.html"
-           data-tag="SpringBoot,neo4j"
+           data-tag="neo4j,SpringBoot"
            data-author="" >
             <span class="post-title" title="Spring Boot对Neo4j节点关系的增删改查">Spring Boot对Neo4j节点关系的增删改查</span>
             <span class="post-date" title="2024-11-12 21:00:30">2024/11/12</span>
@@ -958,7 +958,7 @@
         
         <a  class="全部文章 neo4j "
            href="/blog/7dc0fcde.html"
-           data-tag="SpringBoot,neo4j"
+           data-tag="neo4j,SpringBoot"
            data-author="" >
             <span class="post-title" title="Spring Boot整合Neo4j实现增删改查">Spring Boot整合Neo4j实现增删改查</span>
             <span class="post-date" title="2024-11-07 19:04:30">2024/11/07</span>
@@ -1860,12 +1860,12 @@
 
 <p>需要注意的是，create 请求不能被 resourceName 限制，因为在鉴权时还不知道对象名称。 另一个例外是 deletecollection。</p>
 <h2 id="3-主体引用-Referring-to-subjects"><a href="#3-主体引用-Referring-to-subjects" class="headerlink" title="3. 主体引用 Referring to subjects"></a>3. 主体引用 Referring to subjects</h2><p>RoleBinding 或 ClusterRoleBinding 绑定一个 role 到主体（subjects）。主体（subjects）可以是 groups，users 或 ServiceAccounts 。</p>
-<p> Kubernetes将用户名表示为字符串。这些可以是：普通名称，比如 “alice” ；邮件风格的名字，比如 “<a href="mailto:&#x62;&#111;&#x62;&#64;&#101;&#120;&#x61;&#109;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;">&#x62;&#111;&#x62;&#64;&#101;&#120;&#x61;&#109;&#112;&#x6c;&#x65;&#x2e;&#x63;&#111;&#x6d;</a>” ；或表示为字符串的数字用户id。</p>
+<p> Kubernetes将用户名表示为字符串。这些可以是：普通名称，比如 “alice” ；邮件风格的名字，比如 “<a href="mailto:&#x62;&#111;&#x62;&#x40;&#101;&#x78;&#97;&#109;&#112;&#108;&#x65;&#x2e;&#x63;&#111;&#109;">&#x62;&#111;&#x62;&#x40;&#101;&#x78;&#97;&#109;&#112;&#108;&#x65;&#x2e;&#x63;&#111;&#109;</a>” ；或表示为字符串的数字用户id。</p>
 <p><strong>注意：前缀  <code>system:</code>  是保留给 Kubernetes 系统使用的，因此应该确保不会出现名称以 <code>system:</code>  开头的用户或组。除了这个特殊的前缀，RBAC 授权系统不要求用户名使用任何格式。</strong></p>
 <p><strong>ServiceAccounts具有前缀为 <code>system:serviceaccount:</code>  的名称，属于具有前缀为 system:serviceaccounts: 的名称的组。</strong></p>
 <h3 id="RoleBinding的示例"><a href="#RoleBinding的示例" class="headerlink" title="RoleBinding的示例"></a>RoleBinding的示例</h3><p>下面的示例只是展示 RoleBinding 中 subjects 的部分。</p>
 <ul>
-<li><p>用户的名称为 “<a href="mailto:&#x61;&#108;&#x69;&#x63;&#x65;&#64;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;">&#x61;&#108;&#x69;&#x63;&#x65;&#64;&#x65;&#x78;&#x61;&#x6d;&#x70;&#108;&#x65;&#x2e;&#x63;&#x6f;&#x6d;</a>” ：</p>
+<li><p>用户的名称为 “<a href="mailto:&#x61;&#x6c;&#105;&#x63;&#101;&#64;&#101;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#x6d;">&#x61;&#x6c;&#105;&#x63;&#101;&#64;&#101;&#120;&#97;&#109;&#x70;&#x6c;&#x65;&#x2e;&#99;&#x6f;&#x6d;</a>” ：</p>
 <pre><code class="highlight yaml"><span class="attr">subjects:</span>
 <span class="bullet">-</span> <span class="attr">kind:</span> <span class="string">User</span>
   <span class="attr">name:</span> <span class="string">&quot;alice@example.com&quot;</span>
