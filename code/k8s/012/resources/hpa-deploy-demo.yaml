@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpa-deploy-demo
+spec:
+  replicas: 1 # 默认副本数量为1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: my-container
+#          image: wangyanglinux/hpa:v1
+          image: nginx:1.29.0
+          resources: # 定义容器的资源请求和限制，控制 CPU 和内存的使用
+            requests:
+              memory: "100Mi"
+              cpu: "200m"
+            limits:
+              memory: "200Mi"
+              cpu: "400m"
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-deploy-demo
+spec:
+  selector:
+    app: myapp
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80

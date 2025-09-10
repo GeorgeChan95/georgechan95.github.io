@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: resource-limited-pod
+spec:
+  containers:
+    - name: my-container
+      image: nginx:1.29.0
+      # 定义容器的资源请求和限制，控制 CPU 和内存的使用
+      resources:
+        requests: # 定义容器的资源请求，即容器启动时需要的最小资源量
+          # 容器启动时需要的最小内存量
+          memory: "64Mi"
+          # 容器启动时需要的最小CPU量（250毫核， 0.25核心）
+          cpu: "250m"
+        limits: # 定义容器的资源限制，即容器可以使用的最大资源量
+          # 容器可以使用的最大内存量
+          memory: "128Mi"
+          # 容器可以使用的最大CPU量（500毫核， 0.5核心）
+          cpu: "500m"
