@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: LimitRange
+metadata:
+  name: limit-range-demo  # 限制范围的名称
+  namespace: default      # 限制范围的命名空间
+spec:
+  limits:
+    - type: Pod        # 限制Pod的资源
+      max:                # 定义了 Pod 中所有容器的资源请求（requests）和限制（limits）之和的最大值。
+        cpu: "1"          # 该 Pod 使用的 CPU 总和不能超过 1 核。
+        memory: "1Gi"     # 该 Pod 使用的内存总和不能超过 1GiB。
+      min:                # 定义了 Pod 中所有容器的资源请求（requests）之和的最小值
+        cpu: "200m"       # 该 Pod 至少需要请求（requests）200 milliCPU（即 0.2 核）
+        memory: "100Mi"   # 该 Pod 至少需要请求（requests）100 Mebibyte 内存
+    - type: Container  # 限制Container的资源
+      max:                # 定义了单个容器可以设置的资源限制（limits）的最大值。
+        cpu: 500m         # 任何容器定义的 limits.cpu 都不能超过 500m（0.5核）
+        memory: 1Gi       # 任何容器定义的 limits.memory 都不能超过 500MiB
+      min:                # 定义了单个容器可以设置的资源请求（requests）的最小值。
+        cpu: 100m         # 任何容器定义的 requests.cpu 都不能低于 100m（0.1 核）
+        memory: 100Mi     # 任何容器定义的 requests.memory 都不能低于 100MiB
+      defaultRequest:     # 默认请求值，如果一个容器被创建时没有指定 requests.cpu 或 requests.memory，系统会自动为它设置这些默认值
+        cpu: 200m
+        memory: 500Mi
+      default:            # 默认限制值，如果一个容器被创建时没有指定 limits.cpu 或 limits.memory，系统会自动为它设置这些默认值
+        cpu: 500m
+        memory: 500Mi
+      maxLimitRequestRatio: # 定义了容器的最大资源限制与请求的比例。
+        cpu: "2"            #  容器的 limits.cpu / requests.cpu 的比值不能大于 2。例如，如果 requests.cpu 是 100m，那么 limits.cpu 最大只能设为 200m
+        memory: "4"         # 容器的 limits.memory / requests.memory 的比值不能大于 4。例如，如果 requests.memory 是 100MiB，那么 limits.memory 最大只能设为 400MiB

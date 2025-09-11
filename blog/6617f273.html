@@ -9,12 +9,12 @@
   <meta name="keywords" content=" linux , Docker , Rocky ">
   <meta name="description" content="022-K8S-资源限制 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#103;&#x65;&#95;&#57;&#x35;&#x40;&#49;&#50;&#54;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#114;&#x67;&#x65;&#95;&#57;&#x35;&#64;&#x31;&#x32;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="关于">
 <meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#103;&#101;&#111;&#114;&#103;&#x65;&#95;&#57;&#x35;&#x40;&#49;&#50;&#54;&#x2e;&#x63;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#114;&#x67;&#x65;&#95;&#57;&#x35;&#64;&#x31;&#x32;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
 <meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
@@ -374,7 +374,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="119">
-<input type="hidden" id="yelog_site_word_count" value="579.7k">
+<input type="hidden" id="yelog_site_word_count" value="582.9k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1604,19 +1604,19 @@
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/3069199997.html"
+           href="/blog/2016918085.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/2016918085.html"
+           href="/blog/3069199997.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
@@ -1678,12 +1678,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2025-09-10 13:18:27'>2025-09-09 21:03</time>
+            发布时间 : <time class="date" title='最后更新: 2025-09-11 21:51:29'>2025-09-09 21:03</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2k</span>
+        <span>字数:5.2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1713,7 +1713,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-%E6%A6%82%E5%BF%B5"><span class="toc-text">一、资源限制 - 概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-%E7%89%B9%E6%80%A7"><span class="toc-text">二、资源限制 - 特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-HPA"><span class="toc-text">三、资源限制 - HPA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-%E6%A1%88%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">1. 资源限制 - 案例解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">2. 资源限制 - 案例实操</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%83%A8%E7%BD%B2-metrics-server"><span class="toc-text">2.1 部署 metrics.server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%BC%94%E7%A4%BA-hpa-%E8%87%AA%E5%8A%A8%E6%89%A9%E7%BC%A9%E5%AE%B9"><span class="toc-text">2.2 演示 hpa 自动扩缩容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E9%83%A8%E7%BD%B2-Deployment"><span class="toc-text">2.2.1 部署 Deployment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E9%83%A8%E7%BD%B2-HPA"><span class="toc-text">2.2.2 部署 HPA</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-HPA%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">2.3 HPA资源清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-HPA-%E6%93%8D%E4%BD%9C"><span class="toc-text">2.4 HPA 操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81Pod-QoS-%E7%AD%89%E7%BA%A7"><span class="toc-text">四、Pod QoS 等级</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81LimitRange"><span class="toc-text">五、LimitRange</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81LimitRange"><span class="toc-text">六、LimitRange</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-%E6%A6%82%E5%BF%B5"><span class="toc-text">一、资源限制 - 概念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-%E7%89%B9%E6%80%A7"><span class="toc-text">二、资源限制 - 特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-HPA"><span class="toc-text">三、资源限制 - HPA</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-%E6%A1%88%E4%BE%8B%E8%A7%A3%E6%9E%90"><span class="toc-text">1. 资源限制 - 案例解析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%B5%84%E6%BA%90%E9%99%90%E5%88%B6-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">2. 资源限制 - 案例实操</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%83%A8%E7%BD%B2-metrics-server"><span class="toc-text">2.1 部署 metrics.server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%BC%94%E7%A4%BA-hpa-%E8%87%AA%E5%8A%A8%E6%89%A9%E7%BC%A9%E5%AE%B9"><span class="toc-text">2.2 演示 hpa 自动扩缩容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E9%83%A8%E7%BD%B2-Deployment"><span class="toc-text">2.2.1 部署 Deployment</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E9%83%A8%E7%BD%B2-HPA"><span class="toc-text">2.2.2 部署 HPA</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-HPA%E8%B5%84%E6%BA%90%E6%B8%85%E5%8D%95"><span class="toc-text">2.3 HPA资源清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-HPA-%E6%93%8D%E4%BD%9C"><span class="toc-text">2.4 HPA 操作</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%9C%8D%E5%8A%A1%E8%B4%A8%E9%87%8F%E7%AD%89%E7%BA%A7%EF%BC%88QoS%EF%BC%89"><span class="toc-text">四、服务质量等级（QoS）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-QoS"><span class="toc-text">1. 什么是 QoS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-QoS-%E7%AD%89%E7%BA%A7%E5%88%86%E7%B1%BB"><span class="toc-text">2. QoS 等级分类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Guaranteed%EF%BC%88%E4%BF%9D%E8%AF%81%E7%BA%A7%EF%BC%89-%E4%BC%98%E5%85%88%E7%BA%A7%E6%9C%80%E9%AB%98"><span class="toc-text">2.1 Guaranteed（保证级）-  优先级最高</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-Burstable%EF%BC%88%E7%AA%81%E5%8F%91%E7%BA%A7%EF%BC%89-%E4%BC%98%E5%85%88%E7%BA%A7%E4%B8%AD%E7%AD%89"><span class="toc-text">2.2 Burstable（突发级）-  优先级中等</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-BestEffort%EF%BC%88%E5%B0%BD%E5%8A%9B%E8%80%8C%E4%B8%BA%E7%BA%A7%EF%BC%89-%E4%BC%98%E5%85%88%E7%BA%A7%E6%9C%80%E4%BD%8E"><span class="toc-text">2.3 BestEffort（尽力而为级）-   优先级最低</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-QoS-%E7%9A%84%E4%BD%9C%E7%94%A8%E6%9C%BA%E5%88%B6"><span class="toc-text">3. QoS 的作用机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%B0%83%E5%BA%A6%E4%BC%98%E5%85%88%E7%BA%A7"><span class="toc-text">3.1 调度优先级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%B5%84%E6%BA%90%E5%9B%9E%E6%94%B6%E7%AD%96%E7%95%A5"><span class="toc-text">3.2 资源回收策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E6%9F%A5%E7%9C%8B-Pod-%E7%9A%84-QoS-%E7%AD%89%E7%BA%A7"><span class="toc-text">4. 查看 Pod 的 QoS 等级</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E3%80%81LimitRange"><span class="toc-text">五、LimitRange</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5"><span class="toc-text">1. 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B"><span class="toc-text">2. 案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%88%9B%E5%BB%BA-LimitRange"><span class="toc-text">2.1 创建 LimitRange</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%88%9B%E5%BB%BA-Pod"><span class="toc-text">2.2 创建 Pod</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-1-%E4%B8%8D%E7%AC%A6%E5%90%88-LimitRange-%E8%A6%81%E6%B1%82%E7%9A%84-Pod"><span class="toc-text">2.2.1 不符合 LimitRange 要求的 Pod</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2-2-%E7%AC%A6%E5%90%88-LimitRange-%E8%A6%81%E6%B1%82%E7%9A%84-Pod"><span class="toc-text">2.2.2 符合 LimitRange 要求的 Pod</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E3%80%81ResourceQuota"><span class="toc-text">六、ResourceQuota</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%A6%82%E5%BF%B5-1"><span class="toc-text">1. 概念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%A1%88%E4%BE%8B-1"><span class="toc-text">2. 案例</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%88%9B%E5%BB%BA-ResourceQuota"><span class="toc-text">2.1 创建 ResourceQuota</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%88%9B%E5%BB%BA-Pod-1"><span class="toc-text">2.2 创建 Pod</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1729,7 +1729,37 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="一、资源限制-概念"><a href="#一、资源限制-概念" class="headerlink" title="一、资源限制 - 概念"></a>一、资源限制 - 概念</h1><p><em>备注：CPU单位换算：100m CPU，100 milliCPU 和 0.1 CPU 都相同；精度不能超过 1m。1000m CPU &#x3D; 1 CPU。</em></p>
+        <p><strong>集群环境</strong></p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>Hostname</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10.20.1.139</td>
+<td>k8s-master01</td>
+<td>Master节点</td>
+</tr>
+<tr>
+<td>10.20.1.140</td>
+<td>k8s-node01</td>
+<td>Node节点</td>
+</tr>
+<tr>
+<td>10.20.1.141</td>
+<td>k8s-node02</td>
+<td>Node节点</td>
+</tr>
+<tr>
+<td>10.20.1.142</td>
+<td>k8s-node03</td>
+<td>Node节点</td>
+</tr>
+</tbody></table>
+<h1 id="一、资源限制-概念"><a href="#一、资源限制-概念" class="headerlink" title="一、资源限制 - 概念"></a>一、资源限制 - 概念</h1><p><em>备注：CPU单位换算：100m CPU，100 milliCPU 和 0.1 CPU 都相同；精度不能超过 1m。1000m CPU &#x3D; 1 CPU。</em></p>
 <p><strong>官方文档</strong></p>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/tasks/configure-pod-container/assign-cpu-resource/">https://kubernetes.io/zh-cn/docs/tasks/configure-pod-container/assign-cpu-resource/</a></li>
@@ -2006,7 +2036,6 @@ metrics-server-56cfc8b678-zvqpz            1/1     Running   2 (56s ago)    2m9s
     <span class="attr">spec:</span>
       <span class="attr">containers:</span>
         <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span>
-<span class="comment">#          image: wangyanglinux/hpa:v1</span>
           <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
           <span class="attr">resources:</span> <span class="comment"># 定义容器的资源请求和限制，控制 CPU 和内存的使用</span>
             <span class="attr">requests:</span>
@@ -2121,7 +2150,328 @@ kubectl delete hpa hpa-deploy-demo</code></pre>
 
 
 
-<h1 id="四、Pod-QoS-等级"><a href="#四、Pod-QoS-等级" class="headerlink" title="四、Pod QoS 等级"></a>四、Pod QoS 等级</h1><h1 id="五、LimitRange"><a href="#五、LimitRange" class="headerlink" title="五、LimitRange"></a>五、LimitRange</h1><h1 id="六、LimitRange"><a href="#六、LimitRange" class="headerlink" title="六、LimitRange"></a>六、LimitRange</h1>
+<h1 id="四、服务质量等级（QoS）"><a href="#四、服务质量等级（QoS）" class="headerlink" title="四、服务质量等级（QoS）"></a>四、服务质量等级（QoS）</h1><h2 id="1-什么是-QoS"><a href="#1-什么是-QoS" class="headerlink" title="1. 什么是 QoS"></a>1. 什么是 QoS</h2><p>QoS（Quality of Service）即服务质量等级，是 Kubernetes 中作用于 Pod 的重要配置机制。当 Kubernetes 创建 Pod 时，会根据容器的资源配置自动为其分配相应的 QoS 等级，这直接影响 Pod 的调度优先级和资源回收策略。</p>
+<h2 id="2-QoS-等级分类"><a href="#2-QoS-等级分类" class="headerlink" title="2. QoS 等级分类"></a>2. QoS 等级分类</h2><p>Kubernetes 中的 QoS 等级分为三种：</p>
+<h3 id="2-1-Guaranteed（保证级）-优先级最高"><a href="#2-1-Guaranteed（保证级）-优先级最高" class="headerlink" title="2.1 Guaranteed（保证级）-  优先级最高"></a>2.1 Guaranteed（保证级）-  优先级最高</h3><p><strong>特征</strong>：Pod 中的每个容器都必须同时设置 CPU 和内存的 <code>limits</code> 和 <code>requests</code>，且对应的值必须相等。</p>
+<p><strong>适用场景</strong>：关键业务应用，需要稳定的资源保证。</p>
+<p><strong>配置示例</strong>：</p>
+<pre><code class="highlight yaml"><span class="attr">spec:</span>
+  <span class="attr">containers:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span>
+      <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+      <span class="attr">resources:</span> <span class="comment"># 定义容器的资源请求和限制，控制 CPU 和内存的使用</span>
+        <span class="attr">requests:</span>
+          <span class="attr">memory:</span> <span class="string">&quot;100Mi&quot;</span>
+          <span class="attr">cpu:</span> <span class="string">&quot;200m&quot;</span>
+        <span class="attr">limits:</span>
+          <span class="attr">memory:</span> <span class="string">&quot;100Mi&quot;</span>
+          <span class="attr">cpu:</span> <span class="string">&quot;200m&quot;</span></code></pre>
+
+<p><strong>如果容器的资源 requests 没有显式设置，默认与 limits 相同</strong></p>
+<h3 id="2-2-Burstable（突发级）-优先级中等"><a href="#2-2-Burstable（突发级）-优先级中等" class="headerlink" title="2.2 Burstable（突发级）-  优先级中等"></a>2.2 Burstable（突发级）-  优先级中等</h3><p><strong>特征</strong>：Pod 中至少有一个容器设置了内存或 CPU 的 <code>requests</code> 或 <code>limits</code>，但不满足 Guaranteed 等级的要求。</p>
+<p><strong>适用场景</strong>：一般业务应用，允许资源使用量在一定范围内波动。</p>
+<p><strong>配置示例</strong>：</p>
+<pre><code class="highlight yaml"><span class="attr">spec:</span>
+  <span class="attr">containers:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span>
+      <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+      <span class="attr">resources:</span> <span class="comment"># 定义容器的资源请求和限制，控制 CPU 和内存的使用</span>
+        <span class="attr">requests:</span>
+          <span class="attr">memory:</span> <span class="string">&quot;100Mi&quot;</span>
+        <span class="attr">limits:</span>
+          <span class="attr">memory:</span> <span class="string">&quot;200Mi&quot;</span></code></pre>
+
+
+
+
+
+<h3 id="2-3-BestEffort（尽力而为级）-优先级最低"><a href="#2-3-BestEffort（尽力而为级）-优先级最低" class="headerlink" title="2.3 BestEffort（尽力而为级）-   优先级最低"></a>2.3 BestEffort（尽力而为级）-   优先级最低</h3><p><strong>特征</strong>：Pod 中的所有容器都没有设置任何内存或 CPU 的 <code>limits</code> 和 <code>requests</code>。</p>
+<p><strong>适用场景</strong>：非关键应用，对资源要求不高，可以容忍被优先回收。</p>
+<p><strong>配置示例</strong>：</p>
+<pre><code class="highlight yaml"><span class="attr">spec:</span>
+  <span class="attr">containers:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span>
+      <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+      <span class="attr">resources:</span> &#123;&#125;</code></pre>
+
+
+
+
+
+<h2 id="3-QoS-的作用机制"><a href="#3-QoS-的作用机制" class="headerlink" title="3. QoS 的作用机制"></a>3. QoS 的作用机制</h2><h3 id="3-1-调度优先级"><a href="#3-1-调度优先级" class="headerlink" title="3.1 调度优先级"></a>3.1 调度优先级</h3><ul>
+<li><strong>Guaranteed</strong>：最高优先级，优先分配到资源充足的节点</li>
+<li><strong>Burstable</strong>：中等优先级，在满足基本资源需求的前提下调度</li>
+<li><strong>BestEffort</strong>：最低优先级，通常调度到剩余资源较多的节点</li>
+</ul>
+<h3 id="3-2-资源回收策略"><a href="#3-2-资源回收策略" class="headerlink" title="3.2 资源回收策略"></a>3.2 资源回收策略</h3><p>当节点资源不足时，Kubernetes 会按照以下顺序回收 Pod：</p>
+<ol>
+<li>首先回收 <strong>BestEffort</strong> 级别的 Pod</li>
+<li>其次回收超出 <code>requests</code> 资源使用量的 <strong>Burstable</strong> 级别 Pod</li>
+<li>最后回收 <strong>Guaranteed</strong> 级别的 Pod（仅在系统组件需要资源时）</li>
+</ol>
+<h2 id="4-查看-Pod-的-QoS-等级"><a href="#4-查看-Pod-的-QoS-等级" class="headerlink" title="4. 查看 Pod 的 QoS 等级"></a>4. 查看 Pod 的 QoS 等级</h2><p>使用以下命令可以查看 Pod 的 QoS 等级：</p>
+<pre><code class="highlight bash">kubectl get pod &lt;pod-name&gt; -o yaml | grep qosClass</code></pre>
+
+<p>或者使用 <code>describe</code> 命令：</p>
+<pre><code class="highlight bash">kubectl describe pod &lt;pod-name&gt; | grep QoS</code></pre>
+
+
+
+
+
+<h1 id="五、LimitRange"><a href="#五、LimitRange" class="headerlink" title="五、LimitRange"></a>五、LimitRange</h1><h2 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h2><p><code>LimitRange</code> 是一种用于限制容器资源使用的配置对象。它允许集群管理员定义资源的最小和最大限制，并确保容器在这些限制范围内使用资源。</p>
+<p>通过使用 <code>LimitRange</code>，可以避免容器使用过多或过少的资源，保护集群免受资源耗尽和应用程序崩溃的影响。</p>
+<p>默认情况下， Kubernetes 集群上的容器运行使用的计算资源没有限制。 使用 Kubernetes 资源配额， 管理员（也称为 集群操作者）可以在一个指定的命名空间内限制集群资源的使用与创建。 在命名空间中，一个 Pod 最多能够使用命名空间的资源配额所定义的 CPU 和内存用量。 作为集群操作者或命名空间级的管理员，你可能也会担心如何确保一个 Pod 不会垄断命名空间内所有可用的资源。</p>
+<p>LimitRange 是限制命名空间内可为每个适用的对象类别 （例如 Pod 或 PersistentVolumeClaim） 指定的资源分配量（限制和请求）的策略对象。</p>
+<p>一个 LimitRange（限制范围） 对象提供的限制能够做到：</p>
+<ul>
+<li>在一个命名空间中实施对每个 Pod 或 Container 最小和最大的资源使用量的限制。</li>
+<li>在一个命名空间中实施对每个 PersistentVolumeClaim 能申请的最小和最大的存储空间大小的限制。</li>
+<li>在一个命名空间中实施对一种资源的申请值和限制值的比值的控制。</li>
+<li>设置一个命名空间中对计算资源的默认申请&#x2F;限制值，并且自动的在运行时注入到多个 Container 中。</li>
+</ul>
+<p><strong>当某命名空间中有一个 LimitRange 对象时，将在该命名空间中实施 LimitRange 限制。</strong></p>
+<h2 id="2-案例"><a href="#2-案例" class="headerlink" title="2. 案例"></a>2. 案例</h2><h3 id="2-1-创建-LimitRange"><a href="#2-1-创建-LimitRange" class="headerlink" title="2.1 创建 LimitRange"></a>2.1 创建 LimitRange</h3><p>资源清单：<code>limit-range.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">LimitRange</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">limit-range-demo</span>  <span class="comment"># 限制范围的名称</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>      <span class="comment"># 限制范围的命名空间</span>
+<span class="attr">spec:</span>
+  <span class="attr">limits:</span>
+    <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">Pod</span>        <span class="comment"># 限制Pod的资源</span>
+      <span class="attr">max:</span>                <span class="comment"># 定义了 Pod 中所有容器的资源请求（requests）和限制（limits）之和的最大值。</span>
+        <span class="attr">cpu:</span> <span class="string">&quot;1&quot;</span>          <span class="comment"># 该 Pod 使用的 CPU 总和不能超过 1 核。</span>
+        <span class="attr">memory:</span> <span class="string">&quot;1Gi&quot;</span>     <span class="comment"># 该 Pod 使用的内存总和不能超过 1GiB。</span>
+      <span class="attr">min:</span>                <span class="comment"># 定义了 Pod 中所有容器的资源请求（requests）之和的最小值</span>
+        <span class="attr">cpu:</span> <span class="string">&quot;200m&quot;</span>       <span class="comment"># 该 Pod 至少需要请求（requests）200 milliCPU（即 0.2 核）</span>
+        <span class="attr">memory:</span> <span class="string">&quot;100Mi&quot;</span>   <span class="comment"># 该 Pod 至少需要请求（requests）100 Mebibyte 内存</span>
+    <span class="bullet">-</span> <span class="attr">type:</span> <span class="string">Container</span>  <span class="comment"># 限制Container的资源</span>
+      <span class="attr">max:</span>                <span class="comment"># 定义了单个容器可以设置的资源限制（limits）的最大值。</span>
+        <span class="attr">cpu:</span> <span class="string">500m</span>         <span class="comment"># 任何容器定义的 limits.cpu 都不能超过 500m（0.5核）</span>
+        <span class="attr">memory:</span> <span class="string">1Gi</span>       <span class="comment"># 任何容器定义的 limits.memory 都不能超过 500MiB</span>
+      <span class="attr">min:</span>                <span class="comment"># 定义了单个容器可以设置的资源请求（requests）的最小值。</span>
+        <span class="attr">cpu:</span> <span class="string">100m</span>         <span class="comment"># 任何容器定义的 requests.cpu 都不能低于 100m（0.1 核）</span>
+        <span class="attr">memory:</span> <span class="string">100Mi</span>     <span class="comment"># 任何容器定义的 requests.memory 都不能低于 100MiB</span>
+      <span class="attr">defaultRequest:</span>     <span class="comment"># 默认请求值，如果一个容器被创建时没有指定 requests.cpu 或 requests.memory，系统会自动为它设置这些默认值</span>
+        <span class="attr">cpu:</span> <span class="string">200m</span>
+        <span class="attr">memory:</span> <span class="string">500Mi</span>
+      <span class="attr">default:</span>            <span class="comment"># 默认限制值，如果一个容器被创建时没有指定 limits.cpu 或 limits.memory，系统会自动为它设置这些默认值</span>
+        <span class="attr">cpu:</span> <span class="string">500m</span>
+        <span class="attr">memory:</span> <span class="string">500Mi</span>
+      <span class="attr">maxLimitRequestRatio:</span> <span class="comment"># 定义了容器的最大资源限制与请求的比例。</span>
+        <span class="attr">cpu:</span> <span class="string">&quot;2&quot;</span>            <span class="comment">#  容器的 limits.cpu / requests.cpu 的比值不能大于 2。例如，如果 requests.cpu 是 100m，那么 limits.cpu 最大只能设为 200m</span>
+        <span class="attr">memory:</span> <span class="string">&quot;4&quot;</span>         <span class="comment"># 容器的 limits.memory / requests.memory 的比值不能大于 4。例如，如果 requests.memory 是 100MiB，那么 limits.memory 最大只能设为 400MiB</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单，创建 LimitRange</span>
+$ kubectl apply -f limit-range.yaml 
+limitrange/limit-range-demo created
+
+<span class="comment"># 查看有哪些 LimitRange</span>
+$ kubectl get LimitRange
+NAME               CREATED AT
+limit-range-demo   2025-09-11T12:50:58Z
+
+<span class="comment"># 查看详情</span>
+$ kubectl describe LimitRange limit-range-demo
+Name:       limit-range-demo
+Namespace:  default
+Type        Resource  Min    Max   Default Request  Default Limit  Max Limit/Request Ratio
+----        --------  ---    ---   ---------------  -------------  -----------------------
+Pod         cpu       200m   1     -                -              -
+Pod         memory    100Mi  1Gi   -                -              -
+Container   memory    100Mi  1Gi   500Mi            500Mi          4
+Container   cpu       100m   500m  200m             500m           2</code></pre>
+
+
+
+<h3 id="2-2-创建-Pod"><a href="#2-2-创建-Pod" class="headerlink" title="2.2 创建 Pod"></a>2.2 创建 Pod</h3><h4 id="2-2-1-不符合-LimitRange-要求的-Pod"><a href="#2-2-1-不符合-LimitRange-要求的-Pod" class="headerlink" title="2.2.1 不符合 LimitRange 要求的 Pod"></a>2.2.1 不符合 LimitRange 要求的 Pod</h4><p>资源清单：<code>error-limit-deploy.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Pod</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">error-limited-deploy</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">containers:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span>
+      <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+      <span class="comment"># 最大内存与最小内存的比值不能超过 4，这里超过了，因此资源清单执行失败</span>
+      <span class="attr">resources:</span>
+        <span class="attr">requests:</span> <span class="comment"># 定义容器的资源请求，即容器启动时需要的最小资源量</span>
+          <span class="attr">memory:</span> <span class="string">&quot;100Mi&quot;</span>
+          <span class="attr">cpu:</span> <span class="string">&quot;250m&quot;</span>
+        <span class="attr">limits:</span> <span class="comment"># 定义容器的资源限制，即容器可以使用的最大资源量</span>
+          <span class="attr">memory:</span> <span class="string">&quot;500Mi&quot;</span>
+          <span class="attr">cpu:</span> <span class="string">&quot;500m&quot;</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f error-limit-deploy.yaml 
+Error from server (Forbidden): error when creating <span class="string">&quot;error-limit-deploy.yaml&quot;</span>: pods <span class="string">&quot;error-limited-deploy&quot;</span> is forbidden: memory max <span class="built_in">limit</span> to request ratio per Container is 4, but provided ratio is 5.000000</code></pre>
+
+<p>最大内存与最小内存的比值不能超过 4，这里是5，超过了，因此 Pod 创建失败。</p>
+<h4 id="2-2-2-符合-LimitRange-要求的-Pod"><a href="#2-2-2-符合-LimitRange-要求的-Pod" class="headerlink" title="2.2.2 符合 LimitRange 要求的 Pod"></a>2.2.2 符合 LimitRange 要求的 Pod</h4><p>资源清单：<code>right-limit-deploy.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">Pod</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">error-limited-deploy</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">containers:</span>
+    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span>
+      <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+      <span class="comment"># 最大内存与最小内存的比值不能超过 4，这里超过了，因此资源清单执行失败</span>
+      <span class="attr">resources:</span>
+        <span class="attr">requests:</span> <span class="comment"># 定义容器的资源请求，即容器启动时需要的最小资源量</span>
+          <span class="attr">memory:</span> <span class="string">&quot;200Mi&quot;</span>
+          <span class="attr">cpu:</span> <span class="string">&quot;200m&quot;</span>
+        <span class="attr">limits:</span> <span class="comment"># 定义容器的资源限制，即容器可以使用的最大资源量</span>
+          <span class="attr">memory:</span> <span class="string">&quot;500Mi&quot;</span>
+          <span class="attr">cpu:</span> <span class="string">&quot;400m&quot;</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash">$ kubectl apply -f right-limit-deploy.yaml 
+pod/error-limited-deploy created
+
+$ kubectl get pods 
+NAME                   READY   STATUS    RESTARTS   AGE
+error-limited-deploy   1/1     Running   0          94s</code></pre>
+
+
+
+
+
+<h1 id="六、ResourceQuota"><a href="#六、ResourceQuota" class="headerlink" title="六、ResourceQuota"></a>六、ResourceQuota</h1><h2 id="1-概念-1"><a href="#1-概念-1" class="headerlink" title="1. 概念"></a>1. 概念</h2><p><code>ResourceQuota</code> 是一种用于限制命名空间内资源使用的对象。它允许集群管理员对命名空间中的资源使用进行配额管理，确保不同的团队或项目之间资源的公平分配和有效利用。</p>
+<p>使用 <code>ResourceQuota</code>，可以限制命名空间中的CPU、内存和其他资源的总量，防止资源滥用和浪费。</p>
+<p>资源配额，通过 ResourceQuota 对象来定义，对每个命名空间的资源消耗总量提供限制。 它可以限制命名空间中某种类型的对象的总数目上限，也可以限制命名空间中的 Pod 可以使用的计算资源的总上限。</p>
+<p>资源配额的工作方式如下：</p>
+<ul>
+<li>不同的团队可以在不同的命名空间下工作。这可以通过 RBAC 强制执行。</li>
+<li>集群管理员可以为每个命名空间创建一个或多个 ResourceQuota 对象。</li>
+<li>当用户在命名空间下创建资源（如 Pod、Service 等）时，Kubernetes 的配额系统会跟踪集群的资源使用情况， 以确保使用的资源用量不超过 ResourceQuota 中定义的硬性资源限额。</li>
+<li>如果资源创建或者更新请求违反了配额约束，那么该请求会报错（HTTP 403 FORBIDDEN）， 并在消息中给出有可能违反的约束。</li>
+<li>如果命名空间下的计算资源 （如 cpu 和 memory）的配额被启用， 则用户必须为这些资源设定请求值（request）和约束值（limit），否则配额系统将拒绝 Pod 的创建。 提示: 可使用 LimitRanger 准入控制器来为没有设置计算资源需求的 Pod 设置默认值。</li>
+</ul>
+<p>简而言之，<code>ResourceQuota</code> 配额就是用来设置一个命名空间最多能创建多少个对象，比如能创建多少svc，能创建多少pod&#x2F;deploy。</p>
+<h2 id="2-案例-1"><a href="#2-案例-1" class="headerlink" title="2. 案例"></a>2. 案例</h2><h3 id="2-1-创建-ResourceQuota"><a href="#2-1-创建-ResourceQuota" class="headerlink" title="2.1 创建 ResourceQuota"></a>2.1 创建 ResourceQuota</h3><p><strong>资源清单：</strong> <code>resource-quota.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">ResourceQuota</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">my-resource-quota</span>
+  <span class="attr">namespace:</span> <span class="string">test-quota</span>
+<span class="attr">spec:</span>
+  <span class="attr">hard:</span> <span class="comment"># 强制性的资源上限</span>
+    <span class="attr">requests.cpu:</span> <span class="string">&quot;20&quot;</span>            <span class="comment"># 该命名空间中所有 Pod 的 spec.containers[].resources.requests.cpu 之和不能超过 20 个 CPU 核心</span>
+    <span class="attr">requests.memory:</span> <span class="string">100Gi</span>        <span class="comment"># 该命名空间中所有 Pod 的 spec.containers[].resources.requests.memory 之和不能超过 100 Gibibyte</span>
+    <span class="attr">limits.cpu:</span> <span class="string">&quot;40&quot;</span>              <span class="comment"># 该命名空间中所有 Pod 的 spec.containers[].resources.limits.cpu 之和不能超过 40 个 CPU 核心</span>
+    <span class="attr">limits.memory:</span> <span class="string">200Gi</span>          <span class="comment"># 该命名空间中所有 Pod 的 spec.containers[].resources.limits.memory 之和不能超过 200 Gibibyte</span>
+    <span class="attr">pods:</span> <span class="string">&quot;1&quot;</span>                     <span class="comment"># 在该命名空间中最多只能创建 1 个 Pod</span>
+    <span class="attr">configmaps:</span> <span class="string">&quot;10&quot;</span>              <span class="comment"># 最多只能创建 10 个 ConfigMap</span>
+    <span class="attr">persistentvolumeclaims:</span> <span class="string">&quot;4&quot;</span>   <span class="comment"># 最多只能创建 4 个 PersistentVolumeClaim (PVC)</span>
+    <span class="attr">replicationcontrollers:</span> <span class="string">&quot;20&quot;</span>  <span class="comment"># 最多只能创建 20 个 ReplicationController（一种老的 Pod 控制器）</span>
+    <span class="attr">secrets:</span> <span class="string">&quot;10&quot;</span>                 <span class="comment"># 最多只能创建 10 个 Secret</span>
+    <span class="attr">services:</span> <span class="string">&quot;10&quot;</span>                <span class="comment"># 最多只能创建 10 个 Service</span>
+    <span class="attr">services.loadbalancers:</span> <span class="string">&quot;2&quot;</span>   <span class="comment"># 在所有的 Service 中，类型为 LoadBalancer 的不能超过 2 个</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 创建名称空间</span>
+$ kubectl create ns test-quota
+namespace/test-quota created
+
+<span class="comment"># 执行资源清单，创建 ResourceQuota</span>
+$ kubectl apply -f resource-quota.yaml 
+resourcequota/my-resource-quota created
+
+<span class="comment"># 查看 quota 配置详情</span>
+$ kubectl describe ResourceQuota -n test-quota
+Name:                   my-resource-quota
+Namespace:              test-quota
+Resource                Used  Hard
+--------                ----  ----
+configmaps              1     10
+limits.cpu              0     40
+limits.memory           0     200Gi
+persistentvolumeclaims  0     4
+pods                    0     1
+replicationcontrollers  0     20
+requests.cpu            0     20
+requests.memory         0     100Gi
+secrets                 0     10
+services                0     10
+services.loadbalancers  0     2</code></pre>
+
+
+
+<h3 id="2-2-创建-Pod-1"><a href="#2-2-创建-Pod-1" class="headerlink" title="2.2 创建 Pod"></a>2.2 创建 Pod</h3><p>资源清单：<code>test-deploy.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">test-deploy</span>
+  <span class="attr">namespace:</span> <span class="string">test-quota</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span> <span class="comment"># 默认副本数量为1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span>
+          <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+          <span class="attr">resources:</span> <span class="comment"># 定义容器的资源请求和限制，控制 CPU 和内存的使用</span>
+            <span class="attr">requests:</span>
+              <span class="attr">memory:</span> <span class="string">&quot;100Mi&quot;</span>
+              <span class="attr">cpu:</span> <span class="string">&quot;200m&quot;</span>
+            <span class="attr">limits:</span>
+              <span class="attr">memory:</span> <span class="string">&quot;200Mi&quot;</span>
+              <span class="attr">cpu:</span> <span class="string">&quot;400m&quot;</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 执行资源清单创建 Pod</span>
+$ kubectl apply -f test-deploy.yaml 
+deployment.apps/test-deploy created
+
+<span class="comment"># 查看Pod，当前只有一个</span>
+$ kubectl get pods -n test-quota
+NAME                           READY   STATUS    RESTARTS   AGE
+test-deploy-5587d8c7c4-mptk4   1/1     Running   0          12s
+
+<span class="comment"># 给 Pod 扩容，由于在 ResourceQuota 中限制只能有1个 Pod，因此扩容会失败</span>
+$ kubectl scale deployment test-deploy --replicas=3 -n test-quota
+deployment.apps/test-deploy scaled
+
+<span class="comment"># 监控pod，发现一直只有一个副本</span>
+$ kubectl get pods -n test-quota -w
+NAME                           READY   STATUS    RESTARTS   AGE
+test-deploy-5587d8c7c4-mptk4   1/1     Running   0          79s</code></pre>
+
+
+
+
+
+
+
+<p><strong>参考链接</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://jimmysong.io/book/kubernetes-handbook/cluster/qos/">https://jimmysong.io/book/kubernetes-handbook/cluster/qos/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/renshengdezheli/p/17528247.html">https://www.cnblogs.com/renshengdezheli/p/17528247.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zhanglianghhh/p/14259632.html">https://www.cnblogs.com/zhanglianghhh/p/14259632.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://juejin.cn/post/6974203884369608734">https://juejin.cn/post/6974203884369608734</a></p>
+</blockquote>
+
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
     </div>

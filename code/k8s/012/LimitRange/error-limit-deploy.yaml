@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: error-limited-deploy
+  namespace: default
+spec:
+  containers:
+    - name: my-container
+      image: nginx:1.29.0
+      # 最大内存与最小内存的比值不能超过 4，这里超过了，因此资源清单执行失败
+      resources:
+        requests: # 定义容器的资源请求，即容器启动时需要的最小资源量
+          memory: "100Mi"
+          cpu: "250m"
+        limits: # 定义容器的资源限制，即容器可以使用的最大资源量
+          memory: "500Mi"
+          cpu: "500m"

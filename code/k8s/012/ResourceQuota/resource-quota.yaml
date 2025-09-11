@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: my-resource-quota
+  namespace: test-quota
+spec:
+  hard: # 强制性的资源上限
+    requests.cpu: "20"            # 该命名空间中所有 Pod 的 spec.containers[].resources.requests.cpu 之和不能超过 20 个 CPU 核心
+    requests.memory: 100Gi        # 该命名空间中所有 Pod 的 spec.containers[].resources.requests.memory 之和不能超过 100 Gibibyte
+    limits.cpu: "40"              # 该命名空间中所有 Pod 的 spec.containers[].resources.limits.cpu 之和不能超过 40 个 CPU 核心
+    limits.memory: 200Gi          # 该命名空间中所有 Pod 的 spec.containers[].resources.limits.memory 之和不能超过 200 Gibibyte
+    pods: "1"                     # 在该命名空间中最多只能创建 1 个 Pod
+    configmaps: "10"              # 最多只能创建 10 个 ConfigMap
+    persistentvolumeclaims: "4"   # 最多只能创建 4 个 PersistentVolumeClaim (PVC)
+    replicationcontrollers: "20"  # 最多只能创建 20 个 ReplicationController（一种老的 Pod 控制器）
+    secrets: "10"                 # 最多只能创建 10 个 Secret
+    services: "10"                # 最多只能创建 10 个 Service
+    services.loadbalancers: "2"   # 在所有的 Service 中，类型为 LoadBalancer 的不能超过 2 个
