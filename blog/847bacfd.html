@@ -17,7 +17,7 @@
 <meta property="og:description" content="集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点   10.20.1.140 k8s-node01 Node节点   10.20.1.141 k8s-node02 Node节点   10.20.1.142 k8s-node03 Node节点   一、Cordonkubectl cordon 命令用于将节点标记为不可调度。这意味着">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-09-12T12:11:00.000Z">
-<meta property="article:modified_time" content="2025-09-12T04:16:14.042Z">
+<meta property="article:modified_time" content="2025-09-12T04:34:08.340Z">
 <meta property="article:author" content="George">
 <meta property="article:tag" content="linux">
 <meta property="article:tag" content="Docker">
@@ -377,7 +377,7 @@
     </div>
 </div>
 <input type="hidden" id="yelog_site_posts_number" value="120">
-<input type="hidden" id="yelog_site_word_count" value="587.1k">
+<input type="hidden" id="yelog_site_word_count" value="588.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -1608,19 +1608,10 @@
         
         <a  class="全部文章 Hexo Typora "
            href="/blog/877664098.html"
-           data-tag="typora,github,hexo"
+           data-tag="hexo,typora,github"
            data-author="" >
             <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
             <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
-        </a>
-        
-        
-        <a  class="全部文章 Hexo "
-           href="/blog/2016918085.html"
-           data-tag="hexo,github pages"
-           data-author="" >
-            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
-            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
         
@@ -1629,6 +1620,15 @@
            data-tag="hexo,github pages"
            data-author="" >
             <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
@@ -1690,12 +1690,12 @@
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2025-09-12 12:16:14'>2025-09-12 20:11</time>
+            发布时间 : <time class="date" title='最后更新: 2025-09-12 12:34:08'>2025-09-12 20:11</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:4.1k</span>
+        <span>字数:5.2k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1725,7 +1725,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Cordon"><span class="toc-text">一、Cordon</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">1. 使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-text">2. 如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">3. 案例实操</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Drain"><span class="toc-text">二、Drain</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-text">1. 使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-1"><span class="toc-text">2. 如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D-1"><span class="toc-text">3. 案例实操</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-drain-%E7%89%B9%E5%88%AB%E8%AF%B4%E6%98%8E"><span class="toc-text">4. drain - 特别说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%81%A2%E5%A4%8D%E8%A2%AB%E5%8B%BF%E9%A9%B1%E9%80%90%E7%9A%84%E8%8A%82%E7%82%B9"><span class="toc-text">5. 恢复被勿驱逐的节点</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Cordon"><span class="toc-text">一、Cordon</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">1. 使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-text">2. 如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">3. 案例实操</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Drain"><span class="toc-text">二、Drain</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-text">1. 使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-1"><span class="toc-text">2. 如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D-1"><span class="toc-text">3. 案例实操</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-drain-%E7%89%B9%E5%88%AB%E8%AF%B4%E6%98%8E"><span class="toc-text">4. drain - 特别说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%81%A2%E5%A4%8D%E8%A2%AB%E5%8B%BF%E9%A9%B1%E9%80%90%E7%9A%84%E8%8A%82%E7%82%B9"><span class="toc-text">5. 恢复被勿驱逐的节点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Taints-%E5%92%8C-Drain-%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">6. Taints 和 Drain 的区别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%9F%BA%E6%9C%AC%E5%AE%9A%E4%B9%89"><span class="toc-text">6.1 基本定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%8A%9F%E8%83%BD%E6%AF%94%E8%BE%83"><span class="toc-text">6.2 功能比较</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">6.3 实现机制的区别</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">6.4 使用场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-text">6.5 注意事项</span></a></li></ol></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -2111,12 +2111,103 @@ metrics-server-56cfc8b678-znl7h            1/1     Running       1 (7m4s ago)   
 
 
 
-
-
-
-
-
-
+<h2 id="6-Taints-和-Drain-的区别"><a href="#6-Taints-和-Drain-的区别" class="headerlink" title="6. Taints 和 Drain 的区别"></a>6. Taints 和 Drain 的区别</h2><p>在 Kubernetes 中，<strong>Taints（污点）</strong> 和 <strong>Drain（清空节点）</strong> 都是用于管理节点调度和 Pod 驱逐的机制，但它们的作用、实现方式和应用场景有显著区别。Taints 是一种更细粒度的调度控制工具，而 Drain 是一个高层的操作命令，用于节点维护。下面我从定义、功能、实现、场景等方面进行详细比较。</p>
+<h3 id="6-1-基本定义"><a href="#6-1-基本定义" class="headerlink" title="6.1 基本定义"></a>6.1 基本定义</h3><ul>
+<li><p><strong>Taints（污点）</strong>：是一种节点属性，用于“排斥”某些 Pod 调度到该节点。只有 Pod 配置了匹配的 <strong>Tolerations（容忍）</strong> 才能调度到带有该 Taint 的节点。Taints 可以有三种效果（Effect）：</p>
+<ul>
+<li><p>NoSchedule：阻止新 Pod 调度到节点（不影响现有 Pod）。</p>
+</li>
+<li><p>PreferNoSchedule：优先避免调度新 Pod（但可能调度）。</p>
+</li>
+<li><p>NoExecute：阻止新 Pod 调度，并驱逐现有 Pod（如果 Pod 无匹配 Toleration）。</p>
+</li>
+</ul>
+</li>
+<li><p><strong>Drain（清空节点）</strong>：是一个 kubectl drain 命令，用于安全地从节点上驱逐所有（或指定）Pod，并标记节点为不可调度（相当于 Cordon）。它不是一个独立机制，而是结合了 Cordon 和 Eviction 的过程。</p>
+</li>
+</ul>
+<h3 id="6-2-功能比较"><a href="#6-2-功能比较" class="headerlink" title="6.2 功能比较"></a>6.2 功能比较</h3><table>
+<thead>
+<tr>
+<th>方面</th>
+<th>Taints (污点)</th>
+<th>Drain (清空节点)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>主要作用</strong></td>
+<td>控制 Pod 调度和驱逐，通过节点“污点”排斥不匹配 Pod。</td>
+<td>安全驱逐节点上 Pod，并防止新 Pod 调度，用于节点维护。</td>
+</tr>
+<tr>
+<td><strong>对新 Pod</strong></td>
+<td>通过 NoSchedule 效果阻止调度（需 Pod 有 Toleration 才能调度）。</td>
+<td>标记节点为 unschedulable，阻止所有新 Pod 调度（忽略 DaemonSet）。</td>
+</tr>
+<tr>
+<td><strong>对现有 Pod</strong></td>
+<td>通过 NoExecute 效果驱逐不匹配 Pod（渐进式）。</td>
+<td>强制驱逐所有非 DaemonSet Pod（可配置忽略 PDB、local storage 等）。</td>
+</tr>
+<tr>
+<td><strong>自动性</strong></td>
+<td>手动添加&#x2F;移除 Taint；节点控制器可自动添加（如 out-of-disk）。</td>
+<td>手动执行命令；自动添加 unschedulable Taint。</td>
+</tr>
+<tr>
+<td><strong>影响范围</strong></td>
+<td>细粒度：可针对特定节点组（如专用硬件节点）隔离 Pod。</td>
+<td>全局：针对整个节点清空，DaemonSet Pod 被忽略（会重建）。</td>
+</tr>
+<tr>
+<td><strong>恢复方式</strong></td>
+<td>kubectl taint nodes <node> key:NoSchedule- 移除 Taint。</td>
+<td>kubectl uncordon <node> 移除 unschedulable 标记。</td>
+</tr>
+<tr>
+<td><strong>示例命令</strong></td>
+<td>kubectl taint nodes node1 key&#x3D;value:NoSchedule</td>
+<td>kubectl drain node1 –ignore-daemonsets</td>
+</tr>
+</tbody></table>
+<h3 id="6-3-实现机制的区别"><a href="#6-3-实现机制的区别" class="headerlink" title="6.3 实现机制的区别"></a>6.3 实现机制的区别</h3><ul>
+<li><p><strong>Taints 的实现</strong>：</p>
+<ul>
+<li>Taints 存储在节点的 spec.taints 字段中，与 Pod 的 Tolerations 匹配。</li>
+<li>Kubernetes 调度器（Scheduler）在调度 Pod 时检查 Taints 和 Tolerations。</li>
+<li>例如，添加 Taint 后，只有有 Toleration 的 Pod（如 DaemonSet）才能运行。节点控制器会自动添加特定 Taint（如 node.kubernetes.io&#x2F;not-ready:NoExecute）来处理故障节点。</li>
+<li>它更灵活，支持自定义键值对（如 dedicated&#x3D;frontend:NoSchedule），用于节点亲和性反向控制。</li>
+</ul>
+</li>
+<li><p><strong>Drain 的实现</strong>：</p>
+<ul>
+<li>Drain 内部会先执行 cordon（标记节点 unschedulable），相当于添加一个隐式的 Taint node.kubernetes.io&#x2F;unschedulable:NoSchedule。</li>
+<li>然后逐个驱逐 Pod（evict），尊重 PodDisruptionBudget (PDB)，忽略 DaemonSet。</li>
+<li>完成后，节点被“清空”，但 DaemonSet Pod 仍运行（因为它们忽略 unschedulable Taint）。</li>
+<li>Drain 不是直接使用 Taints，而是结合了 Taints 的效果（unschedulable Taint） + 手动驱逐逻辑。</li>
+</ul>
+<p><strong>关键点</strong>：Drain 会自动使用 Taint 来实现部分功能，但 Taints 可以独立使用，而不一定涉及驱逐。</p>
+</li>
+</ul>
+<h3 id="6-4-使用场景"><a href="#6-4-使用场景" class="headerlink" title="6.4 使用场景"></a>6.4 使用场景</h3><ul>
+<li><strong>Taints 适合：</strong><ul>
+<li>专用节点隔离：如将 GPU 节点 Taint 为 gpu&#x3D;true:NoSchedule，只允许有 GPU Toleration 的 Pod 调度。</li>
+<li>故障处理：自动驱逐 Pod 到健康节点（NoExecute 效果）。</li>
+<li>高级调度：结合 Node Affinity，实现复杂亲和规则。</li>
+</ul>
+</li>
+<li><strong>Drain 适合：</strong><ul>
+<li>节点维护：如升级 kubelet、重启节点前清空 Pod，确保 Pod 迁移到其他节点。</li>
+<li>临时不可用：快速标记节点维护中，防止新 Pod 调度。</li>
+</ul>
+</li>
+<li><strong>两者结合</strong>：在 Drain 过程中，Kubernetes 会添加 node.kubernetes.io&#x2F;unschedulable Taint 来阻止调度。如果你想在 Drain 后进一步隔离，可以添加自定义 Taint。</li>
+</ul>
+<h3 id="6-5-注意事项"><a href="#6-5-注意事项" class="headerlink" title="6.5 注意事项"></a>6.5 注意事项</h3><ul>
+<li><strong>兼容性</strong>：DaemonSet Pod 通常有内置 Toleration，能忽略 unschedulable Taint，因此 Drain 不会移除它们。</li>
+<li><strong>潜在问题</strong>：如果 Pod 有本地存储（如 emptyDir），Drain 可能失败，需要 –delete-emptydir-data 参数。</li>
+<li><strong>最佳实践</strong>：Drain 前备份 Pod 配置；使用 Taints 时，确保关键 Pod（如系统组件）有对应 Toleration。</li>
+</ul>
 <p><strong>参考链接</strong></p>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_cordon/">https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_cordon/</a></p>
