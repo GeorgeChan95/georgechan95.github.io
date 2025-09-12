@@ -9,16 +9,19 @@
   <meta name="keywords" content=" linux , Docker , Rocky , Pod ">
   <meta name="description" content="016-K8S-固定Pod IP地址，基于Calico插件 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#114;&#x67;&#x65;&#95;&#57;&#x35;&#64;&#x31;&#x32;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="关于">
-<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
+<meta name="description" content="集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点   10.20.1.140 k8s-node01 Node节点   10.20.1.141 k8s-node02 Node节点   10.20.1.142 k8s-node03 Node节点   一、Cordonkubectl cordon 命令用于将节点标记为不可调度。这意味着">
+<meta property="og:type" content="article">
+<meta property="og:title" content="023-K8S-Cordon和Drain的使用">
+<meta property="og:url" content="https://georgechan95.github.io/blog/847bacfd.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#x65;&#x6f;&#114;&#x67;&#x65;&#95;&#57;&#x35;&#64;&#x31;&#x32;&#x36;&#46;&#99;&#111;&#x6d;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:description" content="集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点   10.20.1.140 k8s-node01 Node节点   10.20.1.141 k8s-node02 Node节点   10.20.1.142 k8s-node03 Node节点   一、Cordonkubectl cordon 命令用于将节点标记为不可调度。这意味着">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
-<meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
+<meta property="article:published_time" content="2025-09-12T12:11:00.000Z">
+<meta property="article:modified_time" content="2025-09-12T04:16:14.042Z">
 <meta property="article:author" content="George">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Rocky">
 <meta name="twitter:card" content="summary">
 
 
@@ -148,7 +151,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(119)</small>
+                <small>(120)</small>
             
         </div>
     </li>
@@ -265,7 +268,7 @@
         <div data-rel="k8s">
             
             k8s
-            <small>(22)</small>
+            <small>(23)</small>
         </div>
         
     </li>
@@ -373,8 +376,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="119">
-<input type="hidden" id="yelog_site_word_count" value="582.9k">
+<input type="hidden" id="yelog_site_posts_number" value="120">
+<input type="hidden" id="yelog_site_word_count" value="587.1k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -557,6 +560,15 @@
 
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/847bacfd.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="023-K8S-Cordon和Drain的使用">023-K8S-Cordon和Drain的使用</span>
+            <span class="post-date" title="2025-09-12 20:11:00">2025/09/12</span>
+        </a>
         
         
         <a  class="全部文章 Python PyCharm "
@@ -1596,7 +1608,7 @@
         
         <a  class="全部文章 Hexo Typora "
            href="/blog/877664098.html"
-           data-tag="hexo,typora,github"
+           data-tag="typora,github,hexo"
            data-author="" >
             <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
             <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>

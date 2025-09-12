@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Docker配置网络代理实现外网镜像下载 | George&#39;s Blog</title>
+  <title>023-K8S-Cordon和Drain的使用 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" linux , Docker , 科学上网 ">
-  <meta name="description" content="Docker配置网络代理实现外网镜像下载 | George&#39;s Blog">
+  <meta name="keywords" content=" linux , Docker , Rocky ">
+  <meta name="description" content="023-K8S-Cordon和Drain的使用 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="集群环境    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点   10.20.1.140 k8s-node01 Node节点   10.20.1.141 k8s-node02 Node节点   10.20.1.142 k8s-node03 Node节点   一、Cordonkubectl cordon 命令用于将节点标记为不可调度。这意味着">
 <meta property="og:type" content="article">
@@ -1659,9 +1659,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-docker/Docker配置网络代理实现外网镜像下载" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-k8s/023-K8S-Cordon和Drain的使用" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">Docker配置网络代理实现外网镜像下载</h1>
+        <h1 class="article-title">023-K8S-Cordon和Drain的使用</h1>
     
     <div class="article-meta">
         
@@ -1671,7 +1671,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="Docker">Docker</a>
+            <a  data-rel="k8s">k8s</a>
             
         </span>
         
@@ -1683,19 +1683,19 @@
             
             <a class="color2">Docker</a>
             
-            <a class="color5">科学上网</a>
+            <a class="color1">Rocky</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2025-01-08 13:48:23'>2025-01-08 23:00</time>
+            发布时间 : <time class="date" title='最后更新: 2025-09-12 12:16:14'>2025-09-12 20:11</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:1.3k</span>
+        <span>字数:4.1k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1725,7 +1725,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%83%8C%E6%99%AF"><span class="toc-text">背景</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE-Dockerd-%E4%BB%A3%E7%90%86"><span class="toc-text">配置 Dockerd 代理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%B0%E5%BB%BA-docker-%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">新建 docker 代理配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E7%94%9F%E6%95%88"><span class="toc-text">配置生效</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95%E9%95%9C%E5%83%8F%E6%8B%89%E5%8F%96"><span class="toc-text">测试镜像拉取</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Container-%E4%BB%A3%E7%90%86"><span class="toc-text">Container 代理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-text">修改防火墙配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9-Privoxy-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">修改 Privoxy 配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E5%90%AF-Privoxy"><span class="toc-text">重启 Privoxy</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA-Docker-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-text">创建 Docker 配置文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%8B%E8%AF%95-Docker-Container-%E4%BB%A3%E7%90%86"><span class="toc-text">测试 Docker Container 代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AEContainer%E4%BB%A3%E7%90%86%E6%96%B9%E5%BC%8F%E4%BA%8C"><span class="toc-text">配置Container代理方式二</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83"><span class="toc-text">参考</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker-Build-%E4%BB%A3%E7%90%86"><span class="toc-text">Docker Build 代理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83-1"><span class="toc-text">参考</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81Cordon"><span class="toc-text">一、Cordon</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">1. 使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8"><span class="toc-text">2. 如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">3. 案例实操</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Drain"><span class="toc-text">二、Drain</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF-1"><span class="toc-text">1. 使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8-1"><span class="toc-text">2. 如何使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D-1"><span class="toc-text">3. 案例实操</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-drain-%E7%89%B9%E5%88%AB%E8%AF%B4%E6%98%8E"><span class="toc-text">4. drain - 特别说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%81%A2%E5%A4%8D%E8%A2%AB%E5%8B%BF%E9%A9%B1%E9%80%90%E7%9A%84%E8%8A%82%E7%82%B9"><span class="toc-text">5. 恢复被勿驱逐的节点</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1741,167 +1741,387 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>系统环境</strong></p>
-<blockquote>
-<p>系统：Rocky Linux 9.3</p>
-<p>Docker：27.4.1</p>
-<p>服务器已配置代理，并且可访问外网，具体操作见：<a href="https://georgechan95.github.io/blog/7f174b3e.html">Rocky9安装Shadowsocks实现科学上网</a></p>
-</blockquote>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a><strong>背景</strong></h1><ul>
-<li>部分镜像在国外，国内无法下载</li>
-<li>容器在运行时需要从国外网站下载依赖</li>
-<li>构建自定义镜像时需要访问国外网络</li>
+        <p><strong>集群环境</strong></p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>Hostname</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10.20.1.139</td>
+<td>k8s-master01</td>
+<td>Master节点</td>
+</tr>
+<tr>
+<td>10.20.1.140</td>
+<td>k8s-node01</td>
+<td>Node节点</td>
+</tr>
+<tr>
+<td>10.20.1.141</td>
+<td>k8s-node02</td>
+<td>Node节点</td>
+</tr>
+<tr>
+<td>10.20.1.142</td>
+<td>k8s-node03</td>
+<td>Node节点</td>
+</tr>
+</tbody></table>
+<h1 id="一、Cordon"><a href="#一、Cordon" class="headerlink" title="一、Cordon"></a>一、Cordon</h1><p><strong><code>kubectl cordon</code></strong> 命令用于将节点标记为不可调度。这意味着 Kubernetes 调度器不会将任何新的 Pod 调度到该节点上。但是，已经在该节点上运行的 Pod 不会受到影响，它们将继续运行。在 <code>kubectl cordon</code> 节点后删除节点上已有 Pod，Kubernetes 会自动将新的 Pod 调度到其他可用节点上，从而实现 Pod 的迁移。但是，请务必注意控制器、资源限制、节点亲和性&#x2F;反亲和性以及 Taints 和 Tolerations 等因素，以确保 Pod 能够成功迁移。</p>
+<h2 id="1-使用场景"><a href="#1-使用场景" class="headerlink" title="1. 使用场景"></a>1. 使用场景</h2><ul>
+<li><strong>节点维护：</strong> 在对节点进行维护（例如，硬件更换、内核更新、资源调整）之前，可以使用 <code>cordon</code> 命令来防止新的 Pod 调度到该节点上。</li>
+<li><strong>资源调整：</strong>在调整节点的计算资源时，可以先使用 <code>cordon</code> 命令，以避免资源竞争。</li>
+<li><strong>工作负载重新分配：</strong>在需要将工作负载重新分配到其他节点时，可以使用 <code>cordon</code> 命令来阻止新的 Pod 调度到目标节点上。</li>
 </ul>
-<h1 id="配置-Dockerd-代理"><a href="#配置-Dockerd-代理" class="headerlink" title="配置 Dockerd 代理"></a>配置 Dockerd 代理</h1><h2 id="新建-docker-代理配置文件"><a href="#新建-docker-代理配置文件" class="headerlink" title="新建 docker 代理配置文件"></a>新建 docker 代理配置文件</h2><p>在执行 docker pull 时，是由守护进程 dockerd 来执行。因此，代理需要配在 dockerd 的环境中。而这个环境，则是受 systemd 所管控，因此实际是 systemd 的配置。</p>
-<pre><code class="highlight shell">sudo mkdir -p /etc/systemd/system/docker.service.d
-sudo touch /etc/systemd/system/docker.service.d/proxy.conf</code></pre>
+<h2 id="2-如何使用"><a href="#2-如何使用" class="headerlink" title="2. 如何使用"></a>2. 如何使用</h2><ul>
+<li><p>将节点设置成不可调度</p>
+<pre><code class="highlight bash">$ kubectl cordon &lt;node_name&gt; [options]
+<span class="comment"># 具体选项参考官网：https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_cordon/</span></code></pre>
 
-<p>在这个 proxy.conf 文件（可以是任意 *.conf 的形式）中，添加以下内容：</p>
-<pre><code class="highlight shell">[Service]
-Environment=&quot;HTTP_PROXY=http://127.0.0.1:8118/&quot;
-Environment=&quot;HTTPS_PROXY=http://127.0.0.1:8118/&quot;
-Environment=&quot;NO_PROXY=localhost,127.0.0.1&quot;</code></pre>
+<p>将 <code>&lt;node-name&gt;</code> 替换为要 cordon 的节点的名称。</p>
+</li>
+<li><p>检查节点状态</p>
+<p>使用以下命令检查节点的状态，确认节点是否已被 cordon：</p>
+<pre><code class="highlight bash">kubectl get nodes &lt;node-name&gt;</code></pre>
 
-<ul>
-<li><p>配置解析</p>
-<p>由于Docker所在服务器已配置代理，可以科学上网，所以代理服务器IP为：127.0.0.1，指代本机。</p>
-<p>服务器配置代理使用的是 Privoxy，默认代理端口：8118</p>
+<p>在输出中，STATUS 列将显示 Ready,SchedulingDisabled，表示节点已被 cordon。</p>
+</li>
+<li><p>解除节点的不可调度状态</p>
+<p>完成维护或调整后，可以使用以下命令将节点标记为可调度：</p>
+<pre><code class="highlight bash">kubectl uncordon &lt;node-name&gt;</code></pre>
+
+<p>撤销状态后，新的Pod可以调度到该节点上。</p>
 </li>
 </ul>
-<h2 id="配置生效"><a href="#配置生效" class="headerlink" title="配置生效"></a>配置生效</h2><p>重启docker以及守护进程</p>
-<pre><code class="highlight sheLl">sudo systemctl daemon-reload
-sudo systemctl restart docker</code></pre>
+<h2 id="3-案例实操"><a href="#3-案例实操" class="headerlink" title="3. 案例实操"></a>3. 案例实操</h2><ul>
+<li><p>当前集群节点状态</p>
+<pre><code class="highlight bash">$ kubectl get nodes -o wide
+NAME           STATUS   ROLES           AGE   VERSION    INTERNAL-IP   EXTERNAL-IP   OS-IMAGE                      KERNEL-VERSION                CONTAINER-RUNTIME
+k8s-master01   Ready    control-plane   46d   v1.29.15   10.20.1.139   &lt;none&gt;        Rocky Linux 9.3 (Blue Onyx)   5.14.0-362.8.1.el9_3.x86_64   docker://28.0.4
+k8s-node01     Ready    &lt;none&gt;          46d   v1.29.15   10.20.1.140   &lt;none&gt;        Rocky Linux 9.3 (Blue Onyx)   5.14.0-362.8.1.el9_3.x86_64   docker://28.0.4
+k8s-node02     Ready    &lt;none&gt;          46d   v1.29.15   10.20.1.141   &lt;none&gt;        Rocky Linux 9.3 (Blue Onyx)   5.14.0-362.8.1.el9_3.x86_64   docker://28.0.4
+k8s-node03     Ready    &lt;none&gt;          46d   v1.29.15   10.20.1.142   &lt;none&gt;        Rocky Linux 9.3 (Blue Onyx)   5.14.0-362.8.1.el9_3.x86_64   docker://28.3.1</code></pre>
 
 
+</li>
+<li><p>给节点设置 cordon</p>
+<pre><code class="highlight bash"><span class="comment"># 给 node01 节点设置 cordon </span>
+$ kubectl cordon k8s-node01
+node/k8s-node01 cordoned
 
-<h2 id="测试镜像拉取"><a href="#测试镜像拉取" class="headerlink" title="测试镜像拉取"></a>测试镜像拉取</h2><p>下载一个国内无法拉取的谷歌镜像，如果成功则表明代理生效。</p>
-<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">拉取谷歌镜像</span>
-root@shadowsockts:~# docker pull k8s.gcr.io/kube-proxy:v1.17.17
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">查看镜像</span>
-root@shadowsockts:~# docker images
-REPOSITORY              TAG        IMAGE ID       CREATED         SIZE
-calico/typha            v3.26.3    5993c7d25ac5   15 months ago   67.4MB
-k8s.gcr.io/kube-proxy   v1.17.17   3ef67d180564   3 years ago     117MB</code></pre>
-
-
-
-
-
-<h1 id="Container-代理"><a href="#Container-代理" class="headerlink" title="Container 代理"></a>Container 代理</h1><p>在容器运行阶段，如果需要代理上网，则需要配置 ~&#x2F;.docker&#x2F;config.json 。以下配置，只在Docker 17.07及以上版本生效。</p>
-<h2 id="修改防火墙配置"><a href="#修改防火墙配置" class="headerlink" title="修改防火墙配置"></a>修改防火墙配置</h2><blockquote>
-<p>方式一：临时关闭防火墙</p>
-<p>禁用 firewalld 和临时关闭 iptables，否则容器无法进行网络代理，防火墙会拦截代理请求</p>
-<pre><code class="highlight shell">systemctl stop firewalld &amp; systemctl disable firewalld
-systemctl stop iptables</code></pre>
-</blockquote>
-<blockquote>
-<p>方式二：添加 iptables 规则，允许代理端口通过</p>
-<pre><code class="highlight shell">iptables -I INPUT -p tcp --dport 8118 -j ACCEPT
-iptables -I FORWARD -p tcp --dport 8118 -j ACCEPT
-iptables -I OUTPUT -p tcp --dport 8118 -j ACCEPT
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash"><span class="comment"># 如果使用 iptables-services：</span></span>
-service iptables save
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">如果使用 firewalld：</span>
-firewall-cmd --runtime-to-permanent
-firewall-cmd --reload</code></pre>
-
-<p>我这里防火墙使用的是 iptables， 如果使用 firewalld 规则配置则不同。</p>
-</blockquote>
-<h2 id="修改-Privoxy-配置文件"><a href="#修改-Privoxy-配置文件" class="headerlink" title="修改 Privoxy 配置文件"></a>修改 Privoxy 配置文件</h2><pre><code class="highlight shell">vim /etc/privoxy/config
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">添加监听IP，192.168.6.221 为Privoxy所在服务器真实IP</span>
-listen-address  192.168.6.221:8118</code></pre>
-
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/01/08/20250108-114726.png" alt="Privoxy 配置文件"></p>
-<h2 id="重启-Privoxy"><a href="#重启-Privoxy" class="headerlink" title="重启 Privoxy"></a>重启 Privoxy</h2><pre><code class="highlight shell">systemctl restart privoxy</code></pre>
+<span class="comment"># 再次查看节点状态，发现 node01 被打上了 SchedulingDisabled 标签</span>
+$ kubectl get nodes
+NAME           STATUS                     ROLES           AGE   VERSION
+k8s-master01   Ready                      control-plane   46d   v1.29.15
+k8s-node01     Ready,SchedulingDisabled   &lt;none&gt;          46d   v1.29.15
+k8s-node02     Ready                      &lt;none&gt;          46d   v1.29.15
+k8s-node03     Ready                      &lt;none&gt;          46d   v1.29.15</code></pre>
 
 
+</li>
+<li><p>创建 Pod</p>
+<p>资源清单：<code>cordon-deployment.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">myapp</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span> <span class="comment"># 默认副本数量为1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">myapp</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">myapp</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">my-container</span>
+          <span class="attr">image:</span> <span class="string">nginx:1.29.0</span></code></pre>
 
-<h2 id="创建-Docker-配置文件"><a href="#创建-Docker-配置文件" class="headerlink" title="创建 Docker 配置文件"></a>创建 Docker 配置文件</h2><p>在 Docker 客户端上，在启动容器的用户的主目录中创建或编辑 ~&#x2F;.docker&#x2F;config.json 文件</p>
-<pre><code class="highlight shell">mkdir ~/.docker
-vim ~/.docker/config.json
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">编辑内容如下：</span>
-&#123;
-    &quot;proxies&quot;:&#123;
-        &quot;default&quot;:&#123;
-            &quot;httpProxy&quot;:&quot;http://192.168.6.221:8118&quot;,
-            &quot;httpsProxy&quot;:&quot;https://192.168.6.221:8118&quot;,
-            &quot;noProxy&quot;:&quot;localhost&quot;
-        &#125;
-    &#125;
-&#125;
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">重启docker</span>
-sudo systemctl daemon-reload
-sudo systemctl restart docker</code></pre>
+<p>执行资源清单</p>
+<pre><code class="highlight bash">$ kubectl apply -f cordon-deployment.yaml
+deployment.apps/myapp created
 
-<blockquote>
-<p><strong>将上面 prioxy 服务所在IP 替换成代理服务器真实IP和端口</strong></p>
-</blockquote>
-<ul>
-<li><p>配置解析</p>
-<pre><code class="highlight plaintext">192.168.6.221 为网络代理服务器IP
-8118 是服务器代理端口。
-这个是用户级的配置，除了 proxies，docker login 等相关信息也会在其中。而且还可以配置信息展示的格式、插件参数等。
+<span class="comment"># 查看 Pod， 被调度到 node02 节点上</span>
+$ kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+myapp-85497bd9fb-hdvdn   1/1     Running   0          25s   171.20.58.223   k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
 
-此外，容器的网络代理，也可以直接在其运行时通过 -e 注入 http_proxy 等环境变量。这两种方法分别适合不同场景。
-config.json 非常方便，默认在所有配置修改后启动的容器生效，适合个人开发环境。在CI/CD的自动构建环境、或者实际上线运行的环境中，这种方法就不太合适，用 -e 注入这种显式配置会更好，减轻对构建、部署环境的依赖。当然，在这些环境中，最好用良好的设计避免配置代理上网。</code></pre></li>
+
+</li>
+<li><p>增加 Pod 副本数</p>
+<pre><code class="highlight bash"><span class="comment"># Pod 设置10个副本</span>
+$ kubectl scale deployment myapp --replicas=10
+deployment.apps/myapp scaled
+
+<span class="comment"># 查看 Pod, 发现10个副本都被分布在 node02 和 node03 节点上，没有被调度到 node01 节点上</span>
+$ kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE     IP               NODE         NOMINATED NODE   READINESS GATES
+myapp-85497bd9fb-8kzkf   1/1     Running   0          2m52s   171.20.58.225    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-9vm9s   1/1     Running   0          2m52s   171.20.58.224    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-gtc22   1/1     Running   0          2m52s   171.20.58.227    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-hdvdn   1/1     Running   0          4m4s    171.20.58.223    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-j2tkd   1/1     Running   0          2m52s   171.20.58.228    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-kg9qf   1/1     Running   0          2m52s   171.20.135.147   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-mh9dx   1/1     Running   0          2m53s   171.20.135.145   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-qvrgl   1/1     Running   0          2m52s   171.20.58.226    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-tbcrv   1/1     Running   0          2m52s   171.20.135.149   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-wgpwc   1/1     Running   0          2m52s   171.20.135.146   k8s-node03   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+
+</li>
+<li><p>节点设置 uncordon</p>
+<pre><code class="highlight bash"><span class="comment"># 给 node01 节点设置 uncordon </span>
+$ kubectl uncordon k8s-node01
+node/k8s-node01 uncordoned
+
+<span class="comment"># 再次查看 Node 状态，发现 node01 节点的 SchedulingDisabled 已经去除了</span>
+$ kubectl get nodes
+NAME           STATUS   ROLES           AGE   VERSION
+k8s-master01   Ready    control-plane   46d   v1.29.15
+k8s-node01     Ready    &lt;none&gt;          46d   v1.29.15
+k8s-node02     Ready    &lt;none&gt;          46d   v1.29.15
+k8s-node03     Ready    &lt;none&gt;          46d   v1.29.15</code></pre>
+
+
+</li>
+<li><p>再次增加 Pod 副本数</p>
+<pre><code class="highlight bash"><span class="comment"># 将 Pod 的副本数从 10 增加到 20</span>
+$ kubectl scale deployment myapp --replicas=20
+deployment.apps/myapp scaled
+
+<span class="comment"># 再次查看 Pod， 发现可以被调度到 node01 节点了</span>
+$ kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE     IP               NODE         NOMINATED NODE   READINESS GATES
+myapp-85497bd9fb-6wjg6   1/1     Running   0          36s     171.20.135.151   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-8kzkf   1/1     Running   0          6m45s   171.20.58.225    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-97lnr   1/1     Running   0          36s     171.20.58.229    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-9vm9s   1/1     Running   0          6m45s   171.20.58.224    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-d2s9d   1/1     Running   0          36s     171.20.85.195    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-f8jqn   1/1     Running   0          36s     171.20.85.254    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-gbg7t   1/1     Running   0          36s     171.20.85.251    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-gtc22   1/1     Running   0          6m45s   171.20.58.227    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-hdvdn   1/1     Running   0          7m57s   171.20.58.223    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-j2tkd   1/1     Running   0          6m45s   171.20.58.228    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-kg9qf   1/1     Running   0          6m45s   171.20.135.147   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-m7zhs   1/1     Running   0          37s     171.20.85.252    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-mh9dx   1/1     Running   0          6m46s   171.20.135.145   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-nx2nb   1/1     Running   0          36s     171.20.135.150   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-q4z5x   1/1     Running   0          36s     171.20.85.255    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-qvrgl   1/1     Running   0          6m45s   171.20.58.226    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-tbcrv   1/1     Running   0          6m45s   171.20.135.149   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-wgpwc   1/1     Running   0          6m45s   171.20.135.146   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-x9vdq   1/1     Running   0          36s     171.20.85.253    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-xc7q7   1/1     Running   0          36s     171.20.85.198    k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre></li>
 </ul>
-<h2 id="测试-Docker-Container-代理"><a href="#测试-Docker-Container-代理" class="headerlink" title="测试 Docker Container 代理"></a>测试 Docker Container 代理</h2><blockquote>
-<p>创建一个容器，进入容器测试是否可以访问外网</p>
-<pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">创建容器</span>
-docker run -itd --name centos --restart always centos:7
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">进入容器</span>
-docker exec -it centos /bin/bash
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">查看容器内代理配置</span>
-[root@9d38f88f2411 /]# echo $http_proxy
-http://192.168.204.151:8118
-[root@9d38f88f2411 /]# echo $https_proxy
-http://192.168.204.151:8118
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">在容器内访问谷歌</span>
-curl https://www.google.com
-<span class="meta prompt_"></span>
-<span class="meta prompt_"># </span><span class="language-bash">容器内查看ip</span>
-[root@shadowsockts /]# curl cip.cc
-IP	: 112.169.175.22
-地址	: 韩国  韩国
+<h1 id="二、Drain"><a href="#二、Drain" class="headerlink" title="二、Drain"></a>二、Drain</h1><p><strong><code>kubectl drain</code></strong> 命令用于安全地将节点上的所有 Pod 驱逐到其他节点。在驱逐 Pod 之前，<code>drain</code> 命令会先 cordon 节点，以防止新的 Pod 调度到该节点上。</p>
+<h2 id="1-使用场景-1"><a href="#1-使用场景-1" class="headerlink" title="1. 使用场景"></a>1. 使用场景</h2><ul>
+<li><strong>节点维护：</strong>在需要关闭或删除节点之前，可以使用 <code>drain</code> 命令将节点上的所有 Pod 驱逐到其他节点，以确保应用程序的可用性。</li>
+<li><strong>节点缩容：</strong>在需要缩减集群规模时，可以使用 <code>drain</code> 命令将要移除的节点上的 Pod 驱逐到其他节点。</li>
+</ul>
+<h2 id="2-如何使用-1"><a href="#2-如何使用-1" class="headerlink" title="2. 如何使用"></a>2. 如何使用</h2><ul>
+<li><p>给节点设置 Drain </p>
+<pre><code class="highlight bash">kubectl drain &lt;node-name&gt; --ignore-daemonsets --force</code></pre>
 
-数据二	: 韩国 | KT电信
+<ul>
+<li><p><code>--ignore-daemonsets</code>：忽略 DaemonSet 管理的 Pod。DaemonSet 通常提供节点本地服务，即使节点被标记为不可调度，也应该在节点上运行。</p>
+</li>
+<li><p><code>--force</code>：强制驱逐 Pod，即使它们没有被 ReplicationController、Job 或 DaemonSet 管理。</p>
+</li>
+</ul>
+</li>
+<li><p>处理 Grace Period</p>
+<p>如果 Pod 有较长的 grace period，<code>drain</code> 命令可能需要较长时间才能完成。可以使用 <code>--grace-period</code> 标志来覆盖 Pod 的终止宽限期，并强制立即驱逐：</p>
+<pre><code class="highlight bash">kubectl drain &lt;node-name&gt; --grace-period 0 --force --ignore-daemonsets</code></pre>
 
-数据三	: 韩国 | 韩国电信
+<p>请谨慎使用此选项，因为强制停止 Pod 可能会导致数据丢失或应用程序错误。</p>
+</li>
+</ul>
+<h2 id="3-案例实操-1"><a href="#3-案例实操-1" class="headerlink" title="3. 案例实操"></a>3. 案例实操</h2><ul>
+<li><p>查看当前集群 Pod 运行情况</p>
+<pre><code class="highlight bash">$ kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE     IP               NODE         NOMINATED NODE   READINESS GATES
+myapp-85497bd9fb-6wjg6   1/1     Running   0          36s     171.20.135.151   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-8kzkf   1/1     Running   0          6m45s   171.20.58.225    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-97lnr   1/1     Running   0          36s     171.20.58.229    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-9vm9s   1/1     Running   0          6m45s   171.20.58.224    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-d2s9d   1/1     Running   0          36s     171.20.85.195    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-f8jqn   1/1     Running   0          36s     171.20.85.254    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-gbg7t   1/1     Running   0          36s     171.20.85.251    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-gtc22   1/1     Running   0          6m45s   171.20.58.227    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-hdvdn   1/1     Running   0          7m57s   171.20.58.223    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-j2tkd   1/1     Running   0          6m45s   171.20.58.228    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-kg9qf   1/1     Running   0          6m45s   171.20.135.147   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-m7zhs   1/1     Running   0          37s     171.20.85.252    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-mh9dx   1/1     Running   0          6m46s   171.20.135.145   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-nx2nb   1/1     Running   0          36s     171.20.135.150   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-q4z5x   1/1     Running   0          36s     171.20.85.255    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-qvrgl   1/1     Running   0          6m45s   171.20.58.226    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-tbcrv   1/1     Running   0          6m45s   171.20.135.149   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-wgpwc   1/1     Running   0          6m45s   171.20.135.146   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-x9vdq   1/1     Running   0          36s     171.20.85.253    k8s-node01   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-xc7q7   1/1     Running   0          36s     171.20.85.198    k8s-node01   &lt;none&gt;           &lt;none&gt;</code></pre>
 
-URL	: http://www.cip.cc/112.169.175.22</code></pre>
+
+</li>
+<li><p>给 node01 节点设置 Drain</p>
+<pre><code class="highlight bash">$ kubectl drain k8s-node01 --ignore-daemonsets --force
+node/k8s-node01 cordoned
+
+<span class="comment"># 查看节点状态， node01 被打上了 SchedulingDisabled 标签</span>
+$ kubectl get nodes 
+NAME           STATUS                     ROLES           AGE   VERSION
+k8s-master01   Ready                      control-plane   46d   v1.29.15
+k8s-node01     Ready,SchedulingDisabled   &lt;none&gt;          46d   v1.29.15
+k8s-node02     Ready                      &lt;none&gt;          46d   v1.29.15
+k8s-node03     Ready                      &lt;none&gt;          46d   v1.29.15</code></pre>
+
+
+</li>
+<li><p>查看 node01 节点的 Pod</p>
+<pre><code class="highlight bash"><span class="comment"># 所有pod都被调度到 node02和node03节点了</span>
+$ kubectl get pods -o wide
+NAME                     READY   STATUS    RESTARTS   AGE     IP               NODE         NOMINATED NODE   READINESS GATES
+myapp-85497bd9fb-4cx54   1/1     Running   0          6m37s   171.20.58.233    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-6wjg6   1/1     Running   0          79m     171.20.135.151   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-8kzkf   1/1     Running   0          85m     171.20.58.225    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-97lnr   1/1     Running   0          79m     171.20.58.229    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-9vm9s   1/1     Running   0          85m     171.20.58.224    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-cv4xb   1/1     Running   0          6m38s   171.20.135.153   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-gtc22   1/1     Running   0          85m     171.20.58.227    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-hdvdn   1/1     Running   0          86m     171.20.58.223    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-j2tkd   1/1     Running   0          85m     171.20.58.228    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-kg9qf   1/1     Running   0          85m     171.20.135.147   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-mh9dx   1/1     Running   0          85m     171.20.135.145   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-nx2nb   1/1     Running   0          79m     171.20.135.150   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-qvrgl   1/1     Running   0          85m     171.20.58.226    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-rtcjg   1/1     Running   0          6m37s   171.20.135.154   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-rwvr7   1/1     Running   0          6m39s   171.20.135.152   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-sj22k   1/1     Running   0          6m37s   171.20.135.155   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-tbcrv   1/1     Running   0          85m     171.20.135.149   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-wgpwc   1/1     Running   0          85m     171.20.135.146   k8s-node03   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-x98hg   1/1     Running   0          6m38s   171.20.58.231    k8s-node02   &lt;none&gt;           &lt;none&gt;
+myapp-85497bd9fb-z886v   1/1     Running   0          6m38s   171.20.58.232    k8s-node02   &lt;none&gt;           &lt;none&gt;</code></pre>
+
+
+</li>
+<li><p>取消 node01 节点的不可调度标签</p>
+<pre><code class="highlight bash">$ kubectl uncordon k8s-node01
+node/k8s-node01 uncordoned</code></pre></li>
+</ul>
+<h2 id="4-drain-特别说明"><a href="#4-drain-特别说明" class="headerlink" title="4. drain - 特别说明"></a>4. drain - 特别说明</h2><p>kubectl drain 操作会将相应节点上的旧 Pod 删除，并在可调度节点上面起一个对应的 Pod。当旧 Pod 没有被正常删除的情况下，新 Pod 不会起来。例如：旧 Pod 一直处于 Terminating 状态。</p>
+<p>对应的解决方式是通过重启相应节点的 kubelet，或者强制删除该 Pod 。</p>
+<pre><code class="highlight bash"><span class="comment"># 重启发生`Terminating`节点的kubelet</span>
+systemctl restart kubelet
+
+<span class="comment"># 强制删除`Terminating`状态的Pod</span>
+kubectl delete pod &lt;PodName&gt; --namespace=&lt;Namespace&gt; --force --grace-period=0</code></pre>
+
+
+
+
+
+<h2 id="5-恢复被勿驱逐的节点"><a href="#5-恢复被勿驱逐的节点" class="headerlink" title="5. 恢复被勿驱逐的节点"></a>5. 恢复被勿驱逐的节点</h2><p>如果在执行 drain 命令时，勿将不该驱逐的 Pod 驱逐出去，例如如下情况</p>
+<pre><code class="highlight bash"><span class="comment"># 1.执行 drain 命令，驱逐 node01 节点上的Pod，由于node01部署了 metrics-server，因此发生报错，提示需要添加参数 --delete-emptydir-data</span>
+$ kubectl drain k8s-node01 --ignore-daemonsets --force
+node/k8s-node01 cordoned
+error: unable to drain node <span class="string">&quot;k8s-node01&quot;</span> due to error:cannot delete Pods with <span class="built_in">local</span> storage (use --delete-emptydir-data to override): kube-system/metrics-server-56cfc8b678-zvqpz, continuing <span class="built_in">command</span>...
+There are pending nodes to be drained:
+ k8s-node01
+cannot delete Pods with <span class="built_in">local</span> storage (use --delete-emptydir-data to override): kube-system/metrics-server-56cfc8b678-zvqpz
+
+<span class="comment"># 查看 metrics-server</span>
+$ kubectl get pod -n kube-system  -o wide -w | grep metrics-server
+metrics-server-56cfc8b678-zvqpz            1/1     Running   2 (2d1h ago)     2d1h   171.20.85.237   k8s-node01     &lt;none&gt;           &lt;none&gt;
+
+<span class="comment"># 2. 再次执行 drain 命令，node01 上的 Pod都被驱逐了，但也让 calico、etrics-server等组件也被驱逐了</span>
+$ kubectl drain k8s-node01 --ignore-daemonsets --force --delete-emptydir-data
+node/k8s-node01 already cordoned
+Warning: ignoring DaemonSet-managed Pods: ingress-nginx/ingress-nginx-controller-cv9bj, kube-system/calico-node-45x9j, kube-system/kube-proxy-9qk4c
+evicting pod test-quota/test-deploy-5587d8c7c4-mptk4
+evicting pod default/myapp-85497bd9fb-m7zhs
+evicting pod default/myapp-85497bd9fb-gbg7t
+evicting pod default/myapp-85497bd9fb-xc7q7
+evicting pod default/myapp-85497bd9fb-q4z5x
+evicting pod default/myapp-85497bd9fb-f8jqn
+evicting pod kube-system/coredns-5f98f8d567-cv75d
+evicting pod kube-system/calico-kube-controllers-558d465845-78g6d
+evicting pod kube-system/metrics-server-56cfc8b678-zvqpz
+evicting pod default/myapp-85497bd9fb-d2s9d
+evicting pod default/myapp-85497bd9fb-x9vdq
+I0912 11:08:35.913958  761187 request.go:697] Waited <span class="keyword">for</span> 1.021455195s due to client-side throttling, not priority and fairness, request: GET:https://10.20.1.139:6443/api/v1/namespaces/kube-system/pods/metrics-server-56cfc8b678-zvqpz
+I0912 11:08:46.113856  761187 request.go:697] Waited <span class="keyword">for</span> 1.222486642s due to client-side throttling, not priority and fairness, request: GET:https://10.20.1.139:6443/api/v1/namespaces/kube-system/pods/calico-kube-controllers-558d465845-78g6d
+I0912 11:08:56.114006  761187 request.go:697] Waited <span class="keyword">for</span> 1.222272943s due to client-side throttling, not priority and fairness, request: GET:https://10.20.1.139:6443/api/v1/namespaces/default/pods/myapp-85497bd9fb-d2s9d
+pod/myapp-85497bd9fb-gbg7t evicted
+pod/myapp-85497bd9fb-d2s9d evicted
+pod/myapp-85497bd9fb-m7zhs evicted
+pod/test-deploy-5587d8c7c4-mptk4 evicted
+I0912 11:09:06.914431  761187 request.go:697] Waited <span class="keyword">for</span> 1.022353159s due to client-side throttling, not priority and fairness, request: GET:https://10.20.1.139:6443/api/v1/namespaces/kube-system/pods/coredns-5f98f8d567-cv75d
+pod/myapp-85497bd9fb-f8jqn evicted
+pod/myapp-85497bd9fb-xc7q7 evicted
+pod/calico-kube-controllers-558d465845-78g6d evicted
+pod/coredns-5f98f8d567-cv75d evicted
+pod/metrics-server-56cfc8b678-zvqpz evicted
+pod/myapp-85497bd9fb-x9vdq evicted
+pod/myapp-85497bd9fb-q4z5x evicted
+node/k8s-node01 drained</code></pre>
+
+
+
+<p>如何让 calico 、metrics-server 等组件重新调度到node01 节点</p>
+<pre><code class="highlight bash"><span class="comment"># 删除 node01 节点的 SchedulingDisabled 标签</span>
+$ kubectl uncordon k8s-node01
+node/k8s-node01 uncordoned
+
+<span class="comment"># 滚动更新pod，重新调度</span>
+$ kubectl rollout restart deployment -n kube-system coredns
+deployment.apps/coredns restarted
+$ kubectl rollout restart deployment -n kube-system metrics-server
+deployment.apps/metrics-server restarted
+$ kubectl rollout restart deployment -n kube-system calico-kube-controllers
+deployment.apps/calico-kube-controllers restarted
+
+<span class="comment"># 再次查看 Pod</span>
+$ kubectl get pods -n kube-system -o wide
+NAME                                       READY   STATUS        RESTARTS        AGE     IP               NODE           NOMINATED NODE   READINESS GATES
+calico-kube-controllers-558d465845-f2mhr   1/1     Running       0               7m46s   171.20.32.129    k8s-master01   &lt;none&gt;           &lt;none&gt;
+calico-node-45x9j                          1/1     Running       0               46d     10.20.1.140      k8s-node01     &lt;none&gt;           &lt;none&gt;
+calico-node-8rmt5                          1/1     Running       0               46d     10.20.1.139      k8s-master01   &lt;none&gt;           &lt;none&gt;
+calico-node-fzs4f                          1/1     Running       0               46d     10.20.1.142      k8s-node03     &lt;none&gt;           &lt;none&gt;
+calico-node-zhnlk                          1/1     Running       0               46d     10.20.1.141      k8s-node02     &lt;none&gt;           &lt;none&gt;
+calico-typha-5b56944f9b-6gd7p              1/1     Running       0               46d     10.20.1.141      k8s-node02     &lt;none&gt;           &lt;none&gt;
+coredns-5c988c55b8-ckqnf                   1/1     Running       0               30s     171.20.85.196    k8s-node01     &lt;none&gt;           &lt;none&gt;
+coredns-5c988c55b8-ljzxf                   0/1     Running       0               27s     171.20.135.156   k8s-node03     &lt;none&gt;           &lt;none&gt;
+coredns-5f98f8d567-72vc7                   1/1     Terminating   0               46d     171.20.58.192    k8s-node02     &lt;none&gt;           &lt;none&gt;
+etcd-k8s-master01                          1/1     Running       1               46d     10.20.1.139      k8s-master01   &lt;none&gt;           &lt;none&gt;
+kube-apiserver-k8s-master01                1/1     Running       4 (2d15h ago)   32d     10.20.1.139      k8s-master01   &lt;none&gt;           &lt;none&gt;
+kube-controller-manager-k8s-master01       1/1     Running       39              46d     10.20.1.139      k8s-master01   &lt;none&gt;           &lt;none&gt;
+kube-proxy-9qk4c                           1/1     Running       0               46d     10.20.1.140      k8s-node01     &lt;none&gt;           &lt;none&gt;
+kube-proxy-bm6rt                           1/1     Running       0               46d     10.20.1.142      k8s-node03     &lt;none&gt;           &lt;none&gt;
+kube-proxy-dwz4c                           1/1     Running       0               46d     10.20.1.139      k8s-master01   &lt;none&gt;           &lt;none&gt;
+kube-proxy-vsl77                           1/1     Running       0               46d     10.20.1.141      k8s-node02     &lt;none&gt;           &lt;none&gt;
+kube-scheduler-k8s-master01                1/1     Running       37 (24h ago)    46d     10.20.1.139      k8s-master01   &lt;none&gt;           &lt;none&gt;
+metrics-server-56cfc8b678-znl7h            1/1     Running       1 (7m4s ago)    7m46s   171.20.58.230    k8s-node02     &lt;none&gt;           &lt;none&gt;</code></pre>
+
+
+
+
+
+
+
+
+
+<p><strong>参考链接</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_cordon/">https://kubernetes.io/zh-cn/docs/reference/kubectl/generated/kubectl_cordon/</a></p>
+<p><a target="_blank" rel="noopener" href="https://chegva.com/6300.html">https://chegva.com/6300.html</a></p>
 </blockquote>
-<h2 id="配置Container代理方式二"><a href="#配置Container代理方式二" class="headerlink" title="配置Container代理方式二"></a>配置Container代理方式二</h2><p>启动容器时，作为环境变量添加进去, 仅对当前启动容器有效。 <strong>这种方式比较常用</strong></p>
-<pre><code class="highlight shell">docker run -itd \
-    --name centos \
-    --restart always \
-    --env &quot;httpProxy:http://192.168.204.151:8118&quot; \
-    --env &quot;httpsProxy:https://192.168.204.151:8118&quot; \
-    --env &quot;noProxy:localhost&quot; \
-    centos:7</code></pre>
-
-
-
-<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a target="_blank" rel="noopener" href="https://kebingzao.com/2019/02/22/docker-container-proxy/">https://kebingzao.com/2019/02/22/docker-container-proxy/</a></p>
-<p><a target="_blank" rel="noopener" href="https://neucrack.com/p/286">https://neucrack.com/p/286</a></p>
-<p><a target="_blank" rel="noopener" href="https://hksanduo.github.io/2020/03/07/2020-03-07-docker-container-use-socks5-proxy/">https://hksanduo.github.io/2020/03/07/2020-03-07-docker-container-use-socks5-proxy/</a></p>
-<h1 id="Docker-Build-代理"><a href="#Docker-Build-代理" class="headerlink" title="Docker Build 代理"></a>Docker Build 代理</h1><pre><code class="highlight shell">docker build . \
-    --build-arg &quot;HTTP_PROXY=http://192.168.204.151:8118&quot; \
-    --build-arg &quot;HTTPS_PROXY=https://192.168.204.151:8118&quot; \
-    --build-arg &quot;NO_PROXY=localhost,127.0.0.1,.example.com&quot; \
-    -t your/image:tag</code></pre>
-
-
-
-<h2 id="参考-1"><a href="#参考-1" class="headerlink" title="参考"></a><strong>参考</strong></h2><p><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1806455">https://cloud.tencent.com/developer/article/1806455</a></p>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
