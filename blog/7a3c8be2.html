@@ -1,0 +1,2708 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>024-K8S-Etcd的备份与恢复 | George&#39;s Blog</title>
+  <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
+  <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
+  <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
+  <meta name="keywords" content=" linux , Docker , Rocky , Etcd , Velero ">
+  <meta name="description" content="024-K8S-Etcd的备份与恢复 | George&#39;s Blog">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="description" content="集群环境 使用 kubeadmin 安装，Etcd 为单节点    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点   10.20.1.140 k8s-node01 Node节点   10.20.1.141 k8s-node02 Node节点   10.20.1.142 k8s-node03 Node节点   一、ETCD简介ETCD用于共享">
+<meta property="og:type" content="article">
+<meta property="og:title" content="024-K8S-Etcd的备份与恢复">
+<meta property="og:url" content="https://georgechan95.github.io/blog/7a3c8be2.html">
+<meta property="og:site_name" content="George&#39;s Blog">
+<meta property="og:description" content="集群环境 使用 kubeadmin 安装，Etcd 为单节点    IP Hostname 用途    10.20.1.139 k8s-master01 Master节点   10.20.1.140 k8s-node01 Node节点   10.20.1.141 k8s-node02 Node节点   10.20.1.142 k8s-node03 Node节点   一、ETCD简介ETCD用于共享">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234034.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234122.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234744.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234814.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234917.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/16/20250916-210931.png">
+<meta property="article:published_time" content="2025-09-14T09:30:00.000Z">
+<meta property="article:modified_time" content="2025-09-17T12:56:38.703Z">
+<meta property="article:author" content="George">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Rocky">
+<meta property="article:tag" content="Etcd">
+<meta property="article:tag" content="Velero">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234034.png">
+
+
+<link rel="icon" href="/img/favicon.png">
+
+<link href="/css/style.css?v=1.1.0" rel="stylesheet">
+
+<link href="/css/hl_theme/sublime.css?v=1.1.0" rel="stylesheet">
+
+<link href="//cdn.jsdelivr.net/npm/animate.css@4.1.0/animate.min.css" rel="stylesheet">
+
+<script src="//cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+<script src="/js/titleTip.js?v=1.1.0" ></script>
+
+<script src="//cdn.jsdelivr.net/npm/highlightjs@9.16.2/highlight.pack.min.js"></script>
+<script>
+    hljs.initHighlightingOnLoad();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
+
+
+
+<script src="//cdn.jsdelivr.net/npm/jquery.cookie@1.4.1/jquery.cookie.min.js" ></script>
+
+<script src="/js/iconfont.js?v=1.1.0" ></script>
+
+<meta name="generator" content="Hexo 7.3.0"><link rel="alternate" href="/atom.xml" title="George's Blog" type="application/atom+xml">
+</head>
+<div style="display: none">
+  <input class="theme_disqus_on" value="false">
+  <input class="theme_preload_comment" value="">
+  <input class="theme_blog_path" value="">
+  <input id="theme_shortcut" value="true" />
+  <input id="theme_highlight_on" value="true" />
+  <input id="theme_code_copy" value="true" />
+</div>
+
+
+
+<script src="/js/image-loader.js"></script>
+<body>
+<aside class="nav">
+    <div class="nav-left">
+        <a href="/"
+   class="avatar_target">
+    <img class="avatar"
+         src="/img/avatar.jpg"/>
+</a>
+<div class="author">
+    <span>George</span>
+</div>
+
+<div class="icon">
+    
+        
+            <a title="rss"
+               href="/atom.xml"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-rss"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+            <a title="github"
+               href="https://github.com/GeorgeChan95"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-github"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+    
+        
+            <a title="email"
+               href="mailto:george_95@126.com"
+               target="_blank">
+                
+                    <svg class="iconfont-svg" aria-hidden="true">
+                        <use xlink:href="#icon-email"></use>
+                    </svg>
+                
+            </a>
+        
+    
+        
+    
+        
+    
+        
+    
+</div>
+
+
+
+
+
+<ul>
+    <li>
+        <div class="all active" data-rel="全部文章">全部文章
+            
+                <small>(121)</small>
+            
+        </div>
+    </li>
+    
+        
+            
+                
+    <li>
+        <div data-rel="设计模式">
+            
+            设计模式
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="算法">
+            
+            算法
+            <small>(5)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Docker">
+            
+            Docker
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Hexo">
+            <i class="fold iconfont icon-right"></i>
+            Hexo
+            <small>(5)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Hexo&lt;---&gt;Typora">
+            
+            Typora
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JUC">
+            
+            JUC
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="JVM">
+            
+            JVM
+            <small>(27)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="k8s">
+            
+            k8s
+            <small>(24)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="linux">
+            
+            linux
+            <small>(4)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="neo4j">
+            
+            neo4j
+            <small>(3)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="Python">
+            <i class="fold iconfont icon-right"></i>
+            Python
+            <small>(3)</small>
+        </div>
+        
+            <ul class="sub hide">
+                
+                    
+    <li>
+        <div data-rel="Python&lt;---&gt;PyCharm">
+            
+            PyCharm
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+                
+            </ul>
+        
+    </li>
+
+            
+        
+    
+        
+            
+        
+    
+        
+            
+                
+    <li>
+        <div data-rel="UML">
+            
+            UML
+            <small>(1)</small>
+        </div>
+        
+    </li>
+
+            
+        
+    
+</ul>
+<div class="left-bottom">
+    <div class="menus">
+        
+            
+            
+            
+    </div>
+    <div>
+        
+            <a class="about  site_url"
+               
+               href="/about">关于</a>
+        
+        
+    </div>
+</div>
+<input type="hidden" id="yelog_site_posts_number" value="121">
+<input type="hidden" id="yelog_site_word_count" value="594k">
+<div style="display: none">
+    <span id="busuanzi_value_site_uv"></span>
+    <span id="busuanzi_value_site_pv"></span>
+</div>
+
+    </div>
+    <div class="nav-right">
+        <div class="friends-area">
+    <div class="friends-title">
+        友情链接
+        <i class="iconfont icon-left"></i>
+    </div>
+    <div class="friends-content">
+        <ul>
+            
+            <li><a target="_blank" href="http://yelog.org/">叶落阁</a></li>
+            
+        </ul>
+    </div>
+</div>
+        <div class="title-list">
+    <div class="right-top">
+        <div id="default-panel">
+            <i class="iconfont icon-search" data-title="搜索 快捷键 i"></i>
+            <div class="right-title">全部文章</div>
+            <i class="iconfont icon-file-tree" data-title="切换到大纲视图 快捷键 w"></i>
+        </div>
+        <div id="search-panel">
+            <i class="iconfont icon-left" data-title="返回"></i>
+            <input id="local-search-input" autocomplete="off"/>
+            <label class="border-line" for="input"></label>
+            <i class="iconfont icon-case-sensitive" data-title="大小写敏感"></i>
+            <i class="iconfont icon-tag" data-title="标签"></i>
+        </div>
+        <div id="outline-panel" style="display: none">
+            <div class="right-title">大纲</div>
+            <i class="iconfont icon-list" data-title="切换到文章列表"></i>
+        </div>
+    </div>
+
+    <div class="tags-list">
+    <input id="tag-search" />
+    <div class="tag-wrapper">
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>插入排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二分法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>二进制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>合并有序链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>科学上网</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>链表</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>设计模式</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>双亲委派机制</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>算法</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>位运算</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>选择排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Docker</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Etcd</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>github pages</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Harbor</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>hexo</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>java</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jenkins</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>juc</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>jvm</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>linux</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Loki</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>neo4j</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Pod</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Prometheus</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Python</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Rocky</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>sitemap</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>SpringBoot</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>typora</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>ubuntu18</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>UML</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>Velero</a>
+            </li>
+        
+    </div>
+
+</div>
+
+    
+    <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/7a3c8be2.html"
+           data-tag="linux,Docker,Rocky,Etcd,Velero"
+           data-author="" >
+            <span class="post-title" title="024-K8S-Etcd的备份与恢复">024-K8S-Etcd的备份与恢复</span>
+            <span class="post-date" title="2025-09-14 17:30:00">2025/09/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/847bacfd.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="023-K8S-Cordon和Drain的使用">023-K8S-Cordon和Drain的使用</span>
+            <span class="post-date" title="2025-09-12 20:11:00">2025/09/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 Python PyCharm "
+           href="/blog/2cd8097a.html"
+           data-tag="Python"
+           data-author="" >
+            <span class="post-title" title="003-PyCharm下载和安装">003-PyCharm下载和安装</span>
+            <span class="post-date" title="2025-09-10 12:17:00">2025/09/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/6617f273.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="022-K8S-资源限制">022-K8S-资源限制</span>
+            <span class="post-date" title="2025-09-09 21:03:00">2025/09/09</span>
+        </a>
+        
+        
+        <a  class="全部文章 Python "
+           href="/blog/7591dd09.html"
+           data-tag="Python"
+           data-author="" >
+            <span class="post-title" title="002-安装Python开发环境">002-安装Python开发环境</span>
+            <span class="post-date" title="2025-09-08 20:22:00">2025/09/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 Python "
+           href="/blog/95026633.html"
+           data-tag="Python"
+           data-author="" >
+            <span class="post-title" title="001-Python语言概述">001-Python语言概述</span>
+            <span class="post-date" title="2025-09-07 10:44:00">2025/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/e2c03adc.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="021-K8S-安全参数">021-K8S-安全参数</span>
+            <span class="post-date" title="2025-08-23 14:43:00">2025/08/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/88f4f580.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="020-K8S-审计">020-K8S-审计</span>
+            <span class="post-date" title="2025-08-10 14:43:00">2025/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/9bea6e2e.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="019-K8S-kubectl端口转发">019-K8S-kubectl端口转发</span>
+            <span class="post-date" title="2025-08-04 23:02:00">2025/08/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/af9812e0.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="018-K8S-临时容器">018-K8S-临时容器</span>
+            <span class="post-date" title="2025-08-03 22:01:00">2025/08/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/99657768.html"
+           data-tag="linux,Docker,Rocky,Pod"
+           data-author="" >
+            <span class="post-title" title="017-K8S-网络策略NetworkPolicy">017-K8S-网络策略NetworkPolicy</span>
+            <span class="post-date" title="2025-07-28 21:33:00">2025/07/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/c9536d9e.html"
+           data-tag="linux,Docker,Rocky,Pod"
+           data-author="" >
+            <span class="post-title" title="016-K8S-固定Pod IP地址，基于Calico插件">016-K8S-固定Pod IP地址，基于Calico插件</span>
+            <span class="post-date" title="2025-07-26 13:35:00">2025/07/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/e62b8338.html"
+           data-tag="linux,Docker,Rocky,Prometheus"
+           data-author="" >
+            <span class="post-title" title="015-K8S-Prometheus部署及监控告警">015-K8S-Prometheus部署及监控告警</span>
+            <span class="post-date" title="2025-07-19 16:39:00">2025/07/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/f8cf646f.html"
+           data-tag="linux,Docker,Rocky,Loki"
+           data-author="" >
+            <span class="post-title" title="014-K8S-部署Loki+Promtail+Grafana实现日志监控">014-K8S-部署Loki+Promtail+Grafana实现日志监控</span>
+            <span class="post-date" title="2025-07-10 21:00:00">2025/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/3fee6d19.html"
+           data-tag="linux,Docker,Rocky,Harbor"
+           data-author="" >
+            <span class="post-title" title="013-K8S-使用Helm安装Harbor">013-K8S-使用Helm安装Harbor</span>
+            <span class="post-date" title="2025-07-07 22:37:00">2025/07/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/b42f2c7b.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="012-新建Node节点添加到K8S集群中">012-新建Node节点添加到K8S集群中</span>
+            <span class="post-date" title="2025-07-07 20:32:00">2025/07/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/6436eaf1.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="011-Kubernetes Ingress-Nginx">011-Kubernetes Ingress-Nginx</span>
+            <span class="post-date" title="2025-06-25 19:42:00">2025/06/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/d8e3c7b3.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="010-Kubernetes Helm">010-Kubernetes Helm</span>
+            <span class="post-date" title="2025-06-21 14:12:00">2025/06/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/424f1119.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="009-Kubernetes 集群安全机制">009-Kubernetes 集群安全机制</span>
+            <span class="post-date" title="2025-06-14 09:18:00">2025/06/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/f2285a2d.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="008-Kubernetes 调度器">008-Kubernetes 调度器</span>
+            <span class="post-date" title="2025-06-02 14:40:00">2025/06/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/ef156b88.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="007-Kubernetes 存储">007-Kubernetes 存储</span>
+            <span class="post-date" title="2025-05-02 10:26:00">2025/05/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/970719d6.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="006-Kubernetes Service">006-Kubernetes Service</span>
+            <span class="post-date" title="2025-04-28 22:10:00">2025/04/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/c790096a.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="005-Kubernetes控制器">005-Kubernetes控制器</span>
+            <span class="post-date" title="2025-04-02 20:12:00">2025/04/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/79e06aab.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="004-Pod的生命周期">004-Pod的生命周期</span>
+            <span class="post-date" title="2025-03-22 09:05:00">2025/03/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 Docker "
+           href="/blog/b01d5c62.html"
+           data-tag="linux,Docker,科学上网"
+           data-author="" >
+            <span class="post-title" title="Docker配置网络代理实现外网镜像下载">Docker配置网络代理实现外网镜像下载</span>
+            <span class="post-date" title="2025-01-08 23:00:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/7f174b3e.html"
+           data-tag="linux,科学上网,Rocky"
+           data-author="" >
+            <span class="post-title" title="Rocky9安装Shadowsocks实现科学上网">Rocky9安装Shadowsocks实现科学上网</span>
+            <span class="post-date" title="2025-01-08 21:09:00">2025/01/08</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/b00f53e9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群">003-基于Rocky9.3系统使用kubeadm安装k8s1.29集群</span>
+            <span class="post-date" title="2025-01-03 22:05:00">2025/01/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/3c79d8d9.html"
+           data-tag="linux,Docker,Rocky"
+           data-author="" >
+            <span class="post-title" title="002-Rocky9.3系统初始化设置和Docker安装">002-Rocky9.3系统初始化设置和Docker安装</span>
+            <span class="post-date" title="2025-01-02 13:25:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 k8s "
+           href="/blog/7e3a5200.html"
+           data-tag="linux,Rocky"
+           data-author="" >
+            <span class="post-title" title="001-ESXi8安装Rocky9.3虚拟机">001-ESXi8安装Rocky9.3虚拟机</span>
+            <span class="post-date" title="2025-01-02 09:34:00">2025/01/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/77d85f50.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="25-责任链模式">25-责任链模式</span>
+            <span class="post-date" title="2024-12-03 21:08:00">2024/12/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/fcec839d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="24-策略模式">24-策略模式</span>
+            <span class="post-date" title="2024-12-02 18:16:00">2024/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/6109865a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="23-状态模式">23-状态模式</span>
+            <span class="post-date" title="2024-11-29 19:30:00">2024/11/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/58d4db7.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="22-解释器模式">22-解释器模式</span>
+            <span class="post-date" title="2024-11-28 22:00:00">2024/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/a5cf7eb4.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="21-备忘录模式">21-备忘录模式</span>
+            <span class="post-date" title="2024-11-27 21:40:00">2024/11/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3148d6be.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="20-中介者模式">20-中介者模式</span>
+            <span class="post-date" title="2024-11-26 20:35:00">2024/11/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f06aea0b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="19-观察者模式">19-观察者模式</span>
+            <span class="post-date" title="2024-11-25 21:07:00">2024/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/7dbd9149.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="18-迭代器模式">18-迭代器模式</span>
+            <span class="post-date" title="2024-11-24 00:02:00">2024/11/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4fdf6e52.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="17-访问者模式">17-访问者模式</span>
+            <span class="post-date" title="2024-11-23 21:55:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/60fd53f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="16-命令模式">16-命令模式</span>
+            <span class="post-date" title="2024-11-23 20:30:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/4930323d.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="15-模板方法模式">15-模板方法模式</span>
+            <span class="post-date" title="2024-11-23 19:40:00">2024/11/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/e4235185.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="14-代理模式">14-代理模式</span>
+            <span class="post-date" title="2024-11-21 23:16:00">2024/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/1b225c1f.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="13-享元模式">13-享元模式</span>
+            <span class="post-date" title="2024-11-20 23:10:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/906e9e8b.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="12-外观模式">12-外观模式</span>
+            <span class="post-date" title="2024-11-20 22:09:00">2024/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c456a66a.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="11-组合模式">11-组合模式</span>
+            <span class="post-date" title="2024-11-16 17:00:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90213fc6.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="10-装饰器模式">10-装饰器模式</span>
+            <span class="post-date" title="2024-11-16 14:06:00">2024/11/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/c7419cfa.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="09-桥接模式">09-桥接模式</span>
+            <span class="post-date" title="2024-11-14 20:51:00">2024/11/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/f77fc055.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="08-适配器模式">08-适配器模式</span>
+            <span class="post-date" title="2024-11-12 22:55:00">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/a3b0b090.html"
+           data-tag="neo4j,SpringBoot"
+           data-author="" >
+            <span class="post-title" title="Spring Boot对Neo4j节点关系的增删改查">Spring Boot对Neo4j节点关系的增删改查</span>
+            <span class="post-date" title="2024-11-12 21:00:30">2024/11/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/3ab9aa56.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="07-建造者模式">07-建造者模式</span>
+            <span class="post-date" title="2024-11-11 21:55:00">2024/11/11</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/7dc0fcde.html"
+           data-tag="neo4j,SpringBoot"
+           data-author="" >
+            <span class="post-title" title="Spring Boot整合Neo4j实现增删改查">Spring Boot整合Neo4j实现增删改查</span>
+            <span class="post-date" title="2024-11-07 19:04:30">2024/11/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/564adc33.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="06-原型模式">06-原型模式</span>
+            <span class="post-date" title="2024-11-06 19:00:00">2024/11/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/effeea78.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="05-工厂模式">05-工厂模式</span>
+            <span class="post-date" title="2024-11-04 21:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/d7e99843.html"
+           data-tag="设计模式"
+           data-author="" >
+            <span class="post-title" title="04-单例模式">04-单例模式</span>
+            <span class="post-date" title="2024-11-04 19:00:00">2024/11/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/90f1850a.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="03-UML类图">03-UML类图</span>
+            <span class="post-date" title="2024-11-02 14:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 UML "
+           href="/blog/c13304c1.html"
+           data-tag="设计模式,UML"
+           data-author="" >
+            <span class="post-title" title="02-UML图绘制工具">02-UML图绘制工具</span>
+            <span class="post-date" title="2024-11-02 09:57:00">2024/11/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2e826df1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Docker环境下RTSP流转RTMP和HLS">Docker环境下RTSP流转RTMP和HLS</span>
+            <span class="post-date" title="2024-11-01 15:17:33">2024/11/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 设计模式 "
+           href="/blog/cd625bba.html"
+           data-tag="设计模式,java"
+           data-author="" >
+            <span class="post-title" title="01-设计模式六大原则">01-设计模式六大原则</span>
+            <span class="post-date" title="2024-10-31 17:00:00">2024/10/31</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1a649f4c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="13-JUC进阶-ReentrantReadWriteLock与StampedLock">13-JUC进阶-ReentrantReadWriteLock与StampedLock</span>
+            <span class="post-date" title="2024-10-19 09:26:00">2024/10/19</span>
+        </a>
+        
+        
+        <a  class="全部文章 neo4j "
+           href="/blog/5c93903a.html"
+           data-tag="linux,neo4j"
+           data-author="" >
+            <span class="post-title" title="Docker部署Neo4j并导入CSV数据">Docker部署Neo4j并导入CSV数据</span>
+            <span class="post-date" title="2024-10-17 15:00:30">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/ad38e6b1.html"
+           data-tag="linux,ubuntu18"
+           data-author="" >
+            <span class="post-title" title="Ubuntu18.04离线源环境搭建">Ubuntu18.04离线源环境搭建</span>
+            <span class="post-date" title="2024-10-17 09:47:33">2024/10/17</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3fdbf0f6.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
+            <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3e0d7592.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
+            <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4502cffa.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
+            <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4de6a39b.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
+            <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/72329cf5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
+            <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/5e3757c1.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
+            <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/546d628d.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
+            <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/1f2e0014.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
+            <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/19653fb9.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
+            <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/219e52ea.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
+            <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/7e2d78eb.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
+            <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/3d102971.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
+            <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/37d56d14.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
+            <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/31919959.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
+            <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a0197c15.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
+            <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/a6760d1f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
+            <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/838e7581.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
+            <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f60e37c5.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
+            <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/f184587f.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
+            <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/9a09d992.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
+            <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/bd2134da.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="03-线程间通信">03-线程间通信</span>
+            <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/850dac3c.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="02-Lock接口">02-Lock接口</span>
+            <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JUC "
+           href="/blog/4e6bd685.html"
+           data-tag="java,juc"
+           data-author="" >
+            <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
+            <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1b0522f4.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十五章-分析GC日志">第二十五章-分析GC日志</span>
+            <span class="post-date" title="2024-08-28 21:36:08">2024/08/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/944806143.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十四章-JVM运行时参数">第二十四章-JVM运行时参数</span>
+            <span class="post-date" title="2024-08-27 18:30:10">2024/08/27</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/490498600.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-使用OQL语言查询对象信息">第二十三章-使用OQL语言查询对象信息</span>
+            <span class="post-date" title="2024-08-24 15:02:10">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1471620196.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-浅堆-深堆-内存泄漏">第二十三章-浅堆-深堆-内存泄漏</span>
+            <span class="post-date" title="2024-08-24 13:04:37">2024/08/24</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/971417975.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十三章-JVM监控及诊断工具-GUI篇">第二十三章-JVM监控及诊断工具-GUI篇</span>
+            <span class="post-date" title="2024-08-16 21:00:00">2024/08/16</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2165702380.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十二章-JVM监控及诊断工具-命令行篇">第二十二章-JVM监控及诊断工具-命令行篇</span>
+            <span class="post-date" title="2024-08-12 19:36:32">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2681163762.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十一章-性能监控与调优概述">第二十一章-性能监控与调优概述</span>
+            <span class="post-date" title="2024-08-12 19:13:06">2024/08/12</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3537043756.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第二十章-再谈类的加载器">第二十章-再谈类的加载器</span>
+            <span class="post-date" title="2024-08-10 13:43:10">2024/08/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3387211378.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十九章-类的加载过程详解">第十九章-类的加载过程详解</span>
+            <span class="post-date" title="2024-08-02 19:33:27">2024/08/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1107503247.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十八章-字节码指令集与解析指令">第十八章-字节码指令集与解析指令</span>
+            <span class="post-date" title="2024-08-01 01:40:02">2024/08/01</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2772873157.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十七章-使用javap指令解析class文件">第十七章-使用javap指令解析class文件</span>
+            <span class="post-date" title="2024-07-22 23:54:00">2024/07/22</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/143162370.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十六章-Class文件结构">第十六章-Class文件结构</span>
+            <span class="post-date" title="2024-07-15 19:54:50">2024/07/15</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/309245330.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十五章-GC日志分析">第十五章-GC日志分析</span>
+            <span class="post-date" title="2024-07-13 08:34:00">2024/07/13</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1750792302.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十四章-垃圾收集器">第十四章-垃圾收集器</span>
+            <span class="post-date" title="2024-07-10 19:27:00">2024/07/10</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/484946532.html"
+           data-tag="算法,合并有序链表"
+           data-author="" >
+            <span class="post-title" title="合并两个有序链表">合并两个有序链表</span>
+            <span class="post-date" title="2024-07-06 09:11:00">2024/07/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2929260443.html"
+           data-tag="算法,链表"
+           data-author="" >
+            <span class="post-title" title="链表反转">链表反转</span>
+            <span class="post-date" title="2024-07-05 19:45:45">2024/07/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/1403776474.html"
+           data-tag="算法,选择排序,冒泡排序,插入排序"
+           data-author="" >
+            <span class="post-title" title="选择-冒泡-插入排序">选择-冒泡-插入排序</span>
+            <span class="post-date" title="2024-07-03 11:02:16">2024/07/03</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2561891005.html"
+           data-tag="算法,二分法"
+           data-author="" >
+            <span class="post-title" title="二分搜索">二分搜索</span>
+            <span class="post-date" title="2024-06-29 10:04:10">2024/06/29</span>
+        </a>
+        
+        
+        <a  class="全部文章 算法 "
+           href="/blog/2224151177.html"
+           data-tag="算法,二进制,位运算"
+           data-author="" >
+            <span class="post-title" title="二进制和位运算">二进制和位运算</span>
+            <span class="post-date" title="2024-06-20 08:04:00">2024/06/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2105268063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十三章-垃圾回收相关概念">第十三章-垃圾回收相关概念</span>
+            <span class="post-date" title="2024-01-14 14:27:00">2024/01/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/364508352.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十二章-垃圾回收概述和相关算法">第十二章-垃圾回收概述和相关算法</span>
+            <span class="post-date" title="2024-01-06 16:28:00">2024/01/06</span>
+        </a>
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/2050535563.html"
+           data-tag="linux,jenkins"
+           data-author="" >
+            <span class="post-title" title="Jenkins的安装和搭建自动化部署平台">Jenkins的安装和搭建自动化部署平台</span>
+            <span class="post-date" title="2024-01-05 16:00:00">2024/01/05</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/2388209687.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十一章-StringTable(字符串常量池)">第十一章-StringTable(字符串常量池)</span>
+            <span class="post-date" title="2023-12-25 17:27:06">2023/12/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3385856233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第十章-执行引擎">第十章-执行引擎</span>
+            <span class="post-date" title="2023-12-23 20:03:00">2023/12/23</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/4075763684.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第九章-对象的实例化内存布局与访问定位">第九章-对象的实例化内存布局与访问定位</span>
+            <span class="post-date" title="2023-12-21 11:50:00">2023/12/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/3720767522.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第八章-直接内存">第八章-直接内存</span>
+            <span class="post-date" title="2023-12-20 17:03:00">2023/12/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/105864584.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第七章-方法区">第七章-方法区</span>
+            <span class="post-date" title="2023-12-14 18:24:00">2023/12/14</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/543408063.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第六章-JVM堆">第六章-JVM堆</span>
+            <span class="post-date" title="2023-12-02 08:01:00">2023/12/02</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/554039338.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第五章-本地方法接口">第五章-本地方法接口</span>
+            <span class="post-date" title="2023-11-30 17:55:00">2023/11/30</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1123461525.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第四章-虚拟机栈">第四章-虚拟机栈</span>
+            <span class="post-date" title="2023-11-28 20:55:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1626061462.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第三章-运行时数据区">第三章-运行时数据区</span>
+            <span class="post-date" title="2023-11-28 19:31:00">2023/11/28</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/222077543.html"
+           data-tag="java,jvm,双亲委派机制"
+           data-author="" >
+            <span class="post-title" title="第二章-JVM类加载子系统">第二章-JVM类加载子系统</span>
+            <span class="post-date" title="2023-11-25 14:35:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 JVM "
+           href="/blog/1897413233.html"
+           data-tag="java,jvm"
+           data-author="" >
+            <span class="post-title" title="第一章-JVM和Java体系结构">第一章-JVM和Java体系结构</span>
+            <span class="post-date" title="2023-11-25 10:00:00">2023/11/25</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/4179015178.html"
+           data-tag="hexo,github pages,sitemap"
+           data-author="" >
+            <span class="post-title" title="给博客网站添加站点地图-sitemap">给博客网站添加站点地图-sitemap</span>
+            <span class="post-date" title="2023-11-21 20:00:00">2023/11/21</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo Typora "
+           href="/blog/877664098.html"
+           data-tag="hexo,typora,github"
+           data-author="" >
+            <span class="post-title" title="Typora设置图片自动上传Github">Typora设置图片自动上传Github</span>
+            <span class="post-date" title="2023-11-20 20:30:00">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/2016918085.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3069199997.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
+        </a>
+        
+        
+        <a  class="全部文章 Hexo "
+           href="/blog/3070587776.html"
+           data-tag="hexo,github pages"
+           data-author="" >
+            <span class="post-title" title="基于Hexo和Github Pages搭建个人博客">基于Hexo和Github Pages搭建个人博客</span>
+            <span class="post-date" title="2023-11-18 15:40:20">2023/11/18</span>
+        </a>
+        
+        <div id="no-item-tips">
+
+        </div>
+    </nav>
+    <div id="outline-list">
+    </div>
+</div>
+
+    </div>
+    <div class="hide-list">
+        <div class="semicircle" data-title="切换全屏 快捷键 s">
+            <div class="brackets first"><</div>
+            <div class="brackets">&gt;</div>
+        </div>
+    </div>
+</aside>
+<div id="post">
+    <div class="pjax">
+        <article id="post-k8s/024-K8S-Etcd的备份与恢复" class="article article-type-post" itemscope itemprop="blogPost">
+    
+        <h1 class="article-title">024-K8S-Etcd的备份与恢复</h1>
+    
+    <div class="article-meta">
+        
+        
+        
+        <span class="book">
+            <i class="iconfont icon-category"></i>
+            
+            
+            <a  data-rel="k8s">k8s</a>
+            
+        </span>
+        
+        
+        <span class="tag">
+            <i class="iconfont icon-tag"></i>
+            
+            <a class="color1">linux</a>
+            
+            <a class="color2">Docker</a>
+            
+            <a class="color1">Rocky</a>
+            
+            <a class="color5">Etcd</a>
+            
+            <a class="color2">Velero</a>
+            
+        </span>
+        
+    </div>
+    <div class="article-meta">
+        
+            发布时间 : <time class="date" title='最后更新: 2025-09-17 20:56:38'>2025-09-14 17:30</time>
+        
+    </div>
+    <div class="article-meta">
+        
+        <span>字数:5.9k</span>
+        
+        
+        <span id="busuanzi_container_page_pv">
+            阅读 :<span id="busuanzi_value_page_pv">
+                <span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </span>
+        </span>
+        
+        
+        <span class="top-comment" title="跳转至评论区">
+            <a href="#comments">
+                评论:<span class="count-comment">
+                    <span class="spinner">
+                      <div class="cube1"></div>
+                      <div class="cube2"></div>
+                    </span>
+                </span>
+            </a>
+        </span>
+        
+    </div>
+    
+    <div class="toc-ref">
+    
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81ETCD%E7%AE%80%E4%BB%8B"><span class="toc-text">一、ETCD简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8-etcdctl-%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%87%E4%BB%BD%E5%92%8C%E6%81%A2%E5%A4%8D"><span class="toc-text">二、使用 etcdctl 实现数据的备份和恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-kubeadmin-%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F"><span class="toc-text">1. kubeadmin 安装方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%8B%B7%E8%B4%9D-etcdctl-%E8%87%B3-master-%E8%8A%82%E7%82%B9"><span class="toc-text">1.1 拷贝 etcdctl 至 master 节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%9F%BA%E4%BA%8E-ETCD-v3-%E6%8E%A5%E5%8F%A3%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E5%A4%87%E4%BB%BD"><span class="toc-text">1.2  基于 ETCD v3 接口实现数据备份</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%81%A2%E5%A4%8D-etcd-%E6%95%B0%E6%8D%AE"><span class="toc-text">1.3 恢复 etcd 数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%BA%8C%E8%BF%9B%E5%88%B6%E9%9B%86%E7%BE%A4%E5%AE%89%E8%A3%85%E6%96%B9%E5%BC%8F"><span class="toc-text">2. 二进制集群安装方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%A4%87%E4%BB%BD-etcd"><span class="toc-text">2.1 备份 etcd</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-etcd-%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%98%E5%8E%9F"><span class="toc-text">2.2 etcd 数据库还原</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E4%BD%BF%E7%94%A8-velero-%E5%AE%9E%E7%8E%B0%E6%95%B0%E6%8D%AE%E7%9A%84%E5%A4%87%E4%BB%BD%E5%92%8C%E6%81%A2%E5%A4%8D"><span class="toc-text">三、使用 velero 实现数据的备份和恢复</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Velero%E7%AE%80%E4%BB%8B"><span class="toc-text">1. Velero简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Velero-%E4%B8%8E-etcd-%E5%BF%AB%E7%85%A7%E5%A4%87%E4%BB%BD%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">2. Velero 与 etcd 快照备份的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-velero-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-text">3. velero 整体架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-velero-%E5%A4%87%E4%BB%BD%E6%B5%81%E7%A8%8B"><span class="toc-text">4. velero 备份流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E6%A1%88%E4%BE%8B%E5%AE%9E%E6%93%8D"><span class="toc-text">5. 案例实操</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%AE%89%E8%A3%85-minio-%E6%9C%8D%E5%8A%A1"><span class="toc-text">5.1 安装 minio 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E7%99%BB%E5%BD%95-minio"><span class="toc-text">5.2 登录 minio</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E5%88%9B%E5%BB%BA-bucket-%E5%AD%98%E5%82%A8%E6%A1%B6"><span class="toc-text">5.3 创建 bucket 存储桶</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-4-%E5%9C%A8-master-%E8%8A%82%E7%82%B9%E9%83%A8%E7%BD%B2-velero"><span class="toc-text">5.4 在 master 节点部署 velero</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-5-%E5%AE%89%E8%A3%85-velero-%E4%BD%BF%E7%94%A8-minio-%E4%BD%9C%E4%B8%BA%E5%A4%87%E4%BB%BD%E5%AD%98%E5%82%A8"><span class="toc-text">5.5 安装 velero, 使用 minio 作为备份存储</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-6-%E6%BC%94%E7%A4%BA-Velero-%E7%9A%84%E5%A4%87%E4%BB%BD%E5%92%8C%E8%BF%98%E5%8E%9F"><span class="toc-text">5.6 演示 Velero 的备份和还原</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-velero-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">6. velero 常用命令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E4%B8%BA%E4%B8%8E%E6%A0%87%E7%AD%BE%E9%80%89%E6%8B%A9%E5%99%A8%E5%8C%B9%E9%85%8D%E7%9A%84%E4%BB%BB%E4%BD%95%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E5%A4%87%E4%BB%BD-%EF%BC%9Aapp-velero-demo"><span class="toc-text">6.1 为与标签选择器匹配的任何对象创建备份 ：app&#x3D;velero-demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%A4%87%E4%BB%BD%E9%99%A4%E4%B8%8E%E6%A0%87%E7%AD%BE%E5%8C%B9%E9%85%8D%E7%9A%84%E5%AF%B9%E8%B1%A1%E4%B9%8B%E5%A4%96%E7%9A%84%E6%89%80%E6%9C%89%E5%AF%B9%E8%B1%A1-%EF%BC%9Aapp-velero-demo"><span class="toc-text">6.2 备份除与标签匹配的对象之外的所有对象 ：app&#x3D;velero-demo</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E5%AE%9A%E6%97%B6%E5%A4%87%E4%BB%BD%E6%95%B0%E6%8D%AE"><span class="toc-text">6.3 定时备份数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E5%8D%B8%E8%BD%BD-Velero"><span class="toc-text">7. 卸载 Velero</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E8%A1%A5%E5%85%85"><span class="toc-text">8.补充</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-text">8.1 常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E5%AE%89%E5%85%A8%E7%9A%84%E8%BF%98%E5%8E%9F"><span class="toc-text">8.2 安全的还原</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-%E8%B5%84%E6%BA%90%E8%BF%87%E6%BB%A4"><span class="toc-text">8.3 资源过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93include-namespaces"><span class="toc-text">–include-namespaces</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93include-resources"><span class="toc-text">–include-resources</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93include-cluster-resources"><span class="toc-text">–include-cluster-resources</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93selector%EF%BC%8C%E8%AF%A5%E9%80%89%E9%A1%B9%E4%B8%8D%E8%83%BD%E4%B8%8E-selector-%E4%B8%80%E8%B5%B7%E4%BD%BF%E7%94%A8"><span class="toc-text">–selector，该选项不能与 --selector  一起使用</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93or-selector"><span class="toc-text">–or-selector</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93include-cluster-scoped-resources"><span class="toc-text">–include-cluster-scoped-resources</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93include-namespace-scoped-resources%EF%BC%8C%E6%A0%BC%E5%BC%8F%E4%B8%BA-resources-group"><span class="toc-text">–include-namespace-scoped-resources，格式为 resources.group</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93exclude-namespaces"><span class="toc-text">–exclude-namespaces</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93exclude-resources"><span class="toc-text">–exclude-resources</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#velero-io-exclude-from-backup-true"><span class="toc-text">velero.io&#x2F;exclude-from-backup&#x3D;true</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93exclude-cluster-scoped-resources"><span class="toc-text">–exclude-cluster-scoped-resources</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E2%80%93exclude-namespace-scoped-resources%EF%BC%8C%E6%A0%BC%E5%BC%8F%E4%B8%BA-resources-group"><span class="toc-text">–exclude-namespace-scoped-resources，格式为 resources.group</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Velero-%E6%8F%90%E4%BE%9B%E8%B5%84%E6%BA%90%E7%AD%96%E7%95%A5%E6%9D%A5%E8%BF%87%E6%BB%A4%E8%B5%84%E6%BA%90%E4%BB%A5%E8%BF%9B%E8%A1%8C%E5%A4%87%E4%BB%BD%E6%88%96%E6%81%A2%E5%A4%8D%E3%80%82%E7%9B%AE%E5%89%8D%E4%BB%85%E6%94%AF%E6%8C%81%E9%80%9A%E8%BF%87%E8%B5%84%E6%BA%90%E7%AD%96%E7%95%A5%E8%B7%B3%E8%BF%87%E5%A4%87%E4%BB%BD%E5%8D%B7"><span class="toc-text">Velero 提供资源策略来过滤资源以进行备份或恢复。目前仅支持通过资源策略跳过备份卷</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%B9%B6%E8%A1%8C%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-text">并行文件上传</span></a></li></ol></li></ol></li></ol></li></ol>
+    
+<style>
+    .left-col .switch-btn,
+    .left-col .switch-area {
+        display: none;
+    }
+    .toc-level-3 i,
+    .toc-level-3 ol {
+        display: none !important;
+    }
+</style>
+</div>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><strong>集群环境</strong></p>
+<p>使用 kubeadmin 安装，Etcd 为单节点</p>
+<table>
+<thead>
+<tr>
+<th>IP</th>
+<th>Hostname</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10.20.1.139</td>
+<td>k8s-master01</td>
+<td>Master节点</td>
+</tr>
+<tr>
+<td>10.20.1.140</td>
+<td>k8s-node01</td>
+<td>Node节点</td>
+</tr>
+<tr>
+<td>10.20.1.141</td>
+<td>k8s-node02</td>
+<td>Node节点</td>
+</tr>
+<tr>
+<td>10.20.1.142</td>
+<td>k8s-node03</td>
+<td>Node节点</td>
+</tr>
+</tbody></table>
+<h1 id="一、ETCD简介"><a href="#一、ETCD简介" class="headerlink" title="一、ETCD简介"></a>一、ETCD简介</h1><p>ETCD用于共享和配置服务发现的分布式，一致性的KV存储系统。 ETCD是CoreOS公司发起的一个开源项目，授权协议为Apache。</p>
+<p>ETCD 存储 k8s 所有数据信息</p>
+<p>ETCD 是 k8s 集群极为重要的一块服务，存储了集群所有的数据信息。同理，如果发生灾难或者 etcd 的数据丢失，都会影响集群数据的恢复。因此需要对 ETCD 数据进行备份，当集群发生崩溃或数据丢失时，可使用备份的数据对集群进行恢复操作。</p>
+<h1 id="二、使用-etcdctl-实现数据的备份和恢复"><a href="#二、使用-etcdctl-实现数据的备份和恢复" class="headerlink" title="二、使用 etcdctl 实现数据的备份和恢复"></a>二、使用 etcdctl 实现数据的备份和恢复</h1><h2 id="1-kubeadmin-安装方式"><a href="#1-kubeadmin-安装方式" class="headerlink" title="1. kubeadmin 安装方式"></a>1. kubeadmin 安装方式</h2><p>当前集群使用 kubeadmin 安装，Etcd 为单节点服务。</p>
+<h3 id="1-1-拷贝-etcdctl-至-master-节点"><a href="#1-1-拷贝-etcdctl-至-master-节点" class="headerlink" title="1.1 拷贝 etcdctl 至 master 节点"></a>1.1 拷贝 etcdctl 至 master 节点</h3><p>etcdctl 工具服务器默认是没有安装的，需要从容器中拷贝到宿主机上。</p>
+<pre><code class="highlight bash"><span class="comment"># 从容器中拷贝 etcdctl 工具到宿主机</span>
+$ docker <span class="built_in">cp</span> $(docker ps  |  grep -v etcd-mirror | grep -w etcd | awk <span class="string">&#x27;&#123;print $1&#125;&#x27;</span>):/usr/local/bin/etcdctl /usr/bin/
+Successfully copied 17.9MB to /usr/bin/
+
+<span class="comment"># 验证，查看 etcdctl 版本</span>
+$ etcdctl version
+etcdctl version: 3.5.16
+API version: 3.5</code></pre>
+
+
+
+<h3 id="1-2-基于-ETCD-v3-接口实现数据备份"><a href="#1-2-基于-ETCD-v3-接口实现数据备份" class="headerlink" title="1.2  基于 ETCD v3 接口实现数据备份"></a>1.2  基于 ETCD v3 接口实现数据备份</h3><pre><code class="highlight bash"><span class="comment"># 备份 etcd 数据至 root 目录下</span>
+$ ETCDCTL_API=3 etcdctl --endpoints=<span class="string">&quot;https://10.20.1.139:2379&quot;</span>  --cert=<span class="string">&quot;/etc/kubernetes/pki/etcd/server.crt&quot;</span>  --key=<span class="string">&quot;/etc/kubernetes/pki/etcd/server.key&quot;</span>  --cacert=<span class="string">&quot;/etc/kubernetes/pki/etcd/ca.crt&quot;</span>   snapshot save /root/snap-$(<span class="built_in">date</span> +%Y%m%d%H%M).db
+
+<span class="comment"># 查看备份的文件</span>
+$ ll /root/snap-202509141757.db 
+-rw------- 1 root root 9199648 Sep 14 17:57 /root/snap-202509141757.db</code></pre>
+
+
+
+<h3 id="1-3-恢复-etcd-数据"><a href="#1-3-恢复-etcd-数据" class="headerlink" title="1.3 恢复 etcd 数据"></a>1.3 恢复 etcd 数据</h3><p>未防止在数据恢复的过程中存在干扰导致数据恢复失败，在执行恢复操作前，需要先停止 etcd 和 apiServer </p>
+<pre><code class="highlight bash"><span class="comment"># 查看 manifest 目录内容</span>
+$ ll /etc/kubernetes/manifests
+total 16
+-rw------- 1 root root 2427 Jul 27 16:32 etcd.yaml
+-rw------- 1 root root 4006 Aug 11 10:13 kube-apiserver.yaml
+-rw------- 1 root root 2799 Jul 27 16:32 kube-controller-manager.yaml
+-rw------- 1 root root 1499 Jul 27 16:32 kube-scheduler.yaml
+
+<span class="comment"># 移动 manifest 目录，etcd 和 apiServer 会自动停止运行</span>
+$ <span class="built_in">mv</span> /etc/kubernetes/manifests /etc/kubernetes/manifests-bak</code></pre>
+
+
+
+<p>在恢复前为了能看到 etcd 的恢复效果，这里先把 etcd 数据库内容移除</p>
+<pre><code class="highlight bash">$ <span class="built_in">mv</span> /data/etcd/ /data/etcd-back &amp;&amp; <span class="built_in">mkdir</span> /data/etcd &amp;&amp; <span class="built_in">chmod</span>  700 /data/etcd
+<span class="comment"># 默认etcd 目录在 /var/lib/etcd , /data/etcd 目录是在集群初始化时（kubeadm init --config /opt/software/kubeadm-config.yaml --upload-certs）修改的路径</span></code></pre>
+
+
+
+<p>恢复 etcd 数据</p>
+<pre><code class="highlight bash"><span class="comment"># 执行命令，讲备份的etcd 数据还原到集群中</span>
+$ ETCDCTL_API=3 etcdctl --endpoints=<span class="string">&quot;https://10.20.1.139:2379&quot;</span>  --cert=<span class="string">&quot;/etc/kubernetes/pki/etcd/server.crt&quot;</span>  --key=<span class="string">&quot;/etc/kubernetes/pki/etcd/server.key&quot;</span>  --cacert=<span class="string">&quot;/etc/kubernetes/pki/etcd/ca.crt&quot;</span>   snapshot restore /root/snap-202509141757.db
+
+<span class="comment"># 启动 etcd 和 api-server</span>
+$ <span class="built_in">mv</span> /etc/kubernetes/manifests-bak /etc/kubernetes/manifests</code></pre>
+
+
+
+<p>再次查看集群</p>
+<pre><code class="highlight bash">$ kubectl get pods -A
+NAMESPACE       NAME                                       READY   STATUS             RESTARTS         AGE
+ingress-nginx   ingress-nginx-controller-79sh6             1/1     Running            0                49d
+ingress-nginx   ingress-nginx-controller-cv9bj             1/1     Running            0                49d
+ingress-nginx   ingress-nginx-controller-sg989             1/1     Running            0                49d
+kube-system     calico-kube-controllers-76dfd7b977-g9sxh   1/1     Running            7 (4m23s ago)    2d6h
+kube-system     calico-node-45x9j                          1/1     Running            0                49d
+kube-system     calico-node-8rmt5                          1/1     Running            0                49d
+kube-system     calico-node-fzs4f                          1/1     Running            0                49d
+kube-system     calico-node-zhnlk                          1/1     Running            0                49d
+kube-system     calico-typha-5b56944f9b-6gd7p              1/1     Running            0                49d
+kube-system     coredns-5c988c55b8-ckqnf                   1/1     Running            0                2d6h
+kube-system     coredns-5c988c55b8-ljzxf                   1/1     Running            0                2d6h
+kube-system     etcd-k8s-master01                          1/1     Running            0                49d
+kube-system     kube-apiserver-k8s-master01                1/1     Running            0                34d
+kube-system     kube-controller-manager-k8s-master01       1/1     Running            0                49d
+kube-system     kube-proxy-9qk4c                           1/1     Running            0                49d
+kube-system     kube-proxy-bm6rt                           1/1     Running            0                49d
+kube-system     kube-proxy-dwz4c                           1/1     Running            0                49d
+kube-system     kube-proxy-vsl77                           1/1     Running            0                49d
+kube-system     kube-scheduler-k8s-master01                1/1     Running            0                49d
+kube-system     metrics-server-784f4d97b8-88pfh            1/1     Running            0                2d6h
+nfs-storage     nfs-client-provisioner-58998fc8b5-dh7w2    0/1     CrashLoopBackOff   54 (5m11s ago)   49d
+test-quota      test-deploy-5587d8c7c4-7b6fj               1/1     Running            0                2d7h</code></pre>
+
+<p>数据都已恢复回来。</p>
+<h2 id="2-二进制集群安装方式"><a href="#2-二进制集群安装方式" class="headerlink" title="2. 二进制集群安装方式"></a>2. 二进制集群安装方式</h2><h3 id="2-1-备份-etcd"><a href="#2-1-备份-etcd" class="headerlink" title="2.1 备份 etcd"></a>2.1 备份 etcd</h3><pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">yum install -y etcd</span></code></pre>
+
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">ETCDCTL_API=3  etcdctl snapshot save snap.20240422.db --cacert=/etc/etcd/ssl/ca.pem --cert=/etc/etcd/ssl/etcd.pem --key=/etc/etcd/ssl/etcd-key.pem --endpoints=<span class="string">&quot;https://192.168.66.11:2379&quot;</span></span></code></pre>
+
+
+
+<h3 id="2-2-etcd-数据库还原"><a href="#2-2-etcd-数据库还原" class="headerlink" title="2.2 etcd 数据库还原"></a>2.2 etcd 数据库还原</h3><pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">systemctl stop kube-apiserver</span>
+<span class="meta prompt_">$ </span><span class="language-bash">systemctl stop etcd</span>
+<span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">mv</span> /var/lib/etcd/default.etcd /var/lib/etcd/default.etcd.bak</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">查看数据库路径</span>
+<span class="meta prompt_"># </span><span class="language-bash">systemctl <span class="built_in">cat</span> etcd.service</span>
+<span class="meta prompt_"> </span>
+<span class="meta prompt_">$ </span><span class="language-bash">ETCDCTL_API=3 etcdctl snapshot restore /data/backup/etcd-snapshot-previous.db --data-dir=/var/lib/etcd/default.etcd</span>
+<span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">chown</span> -R etcd:etcd /var/lib/etcd</span>
+<span class="meta prompt_">$ </span><span class="language-bash">systemctl start kube-apiserver</span>
+<span class="meta prompt_">$ </span><span class="language-bash">systemctl start etcd.service</span></code></pre>
+
+
+
+
+
+
+
+<h1 id="三、使用-velero-实现数据的备份和恢复"><a href="#三、使用-velero-实现数据的备份和恢复" class="headerlink" title="三、使用 velero 实现数据的备份和恢复"></a>三、使用 velero 实现数据的备份和恢复</h1><h2 id="1-Velero简介"><a href="#1-Velero简介" class="headerlink" title="1. Velero简介"></a>1. Velero简介</h2><p>Velero 是 vmware 开源的一个云原生的灾难恢复和迁移工具，它本身也是开源的,采用Go语言编写，可以安全的备份、恢复和迁移 Kubernetes 集群资源数据；官网 <a target="_blank" rel="noopener" href="https://www.cnblogs.com/qiuhom-1874/p/17670945.html">https://velero.io/</a> 。Velero 是西班牙语意思是帆船，非常符合 Kubernetes 社区的命名风格，Velero 的开发公司 Heptio，已被 VMware 收购。Velero 支持标准的 K8S 集群，既可以是私有云平台也可以是公有云，除了灾备之外它还能做资源移转，支持把容器应用从一个集群迁移到另一个集群。Velero 的工作方式就是把kubernetes 中的数据备份到对象存储以实现高可用和持久化，默认的备份保存时间为720小时，并在需要的时候进行下载和恢复。</p>
+<h2 id="2-Velero-与-etcd-快照备份的区别"><a href="#2-Velero-与-etcd-快照备份的区别" class="headerlink" title="2. Velero 与 etcd 快照备份的区别"></a>2. Velero 与 etcd 快照备份的区别</h2><ul>
+<li><p>etcd 快照是全局完成备份(类似于 MySQL 全部备份),即使需要恢复一个资源对象(类似于只恢复 MySQL 的一个库),但是也需要做全局恢复到备份的状态(类似于 MySQL 的全库恢复),即会影响其它 namespace 中 pod 运行服务(类似于会影响 MySQL 其它数据库的数据)。</p>
+</li>
+<li><p>Velero 可以有针对性的备份,比如按照 namespace 单独备份、只备份单独的资源对象等,在恢复的时候可以根据备份只恢复单独的 namespace 或资源对象，而不影响其它 namespace 中 pod 运行服务。</p>
+</li>
+<li><p>velero 支持 ceph、oss 等对象存储，etcd 快照是一个为本地文件。</p>
+</li>
+<li><p>velero 支持任务计划实现周期备份，但 etcd 快照也可以基于 cronjob 实现。</p>
+</li>
+<li><p>velero 支持对AWS EBS 创建快照及还原</p>
+<p><a target="_blank" rel="noopener" href="https://www.qloudx.com/velero-for-kubernetes-backup-restore-stateful-workloads-with-aws-ebs-snapshots/">https://www.qloudx.com/velero-for-kubernetes-backup-restore-stateful-workloads-with-aws-ebs-snapshots/</a><br><a target="_blank" rel="noopener" href="https://github.com/vmware-tanzu/velero-plugin-for-aws">https://github.com/vmware-tanzu/velero-plugin-for-aws</a></p>
+</li>
+</ul>
+<h2 id="3-velero-整体架构"><a href="#3-velero-整体架构" class="headerlink" title="3. velero 整体架构"></a>3. velero 整体架构</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234034.png" alt="velero 整体架构"></p>
+<h2 id="4-velero-备份流程"><a href="#4-velero-备份流程" class="headerlink" title="4. velero 备份流程"></a>4. velero 备份流程</h2><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234122.png" alt="velero 备份流程"></p>
+<p>Velero 客户端调用 Kubernetes API Server 创建 Backup 任务。Backup 控制器基于watch 机制通过 API Server 获取到备份任务。Backup 控制器开始执行备份动作，其会通过请求 API Server 获取需要备份的数据。Backup 控制器将获取到的数据备份到指定的对象存储 server 端。</p>
+<h2 id="5-案例实操"><a href="#5-案例实操" class="headerlink" title="5. 案例实操"></a>5. 案例实操</h2><h3 id="5-1-安装-minio-服务"><a href="#5-1-安装-minio-服务" class="headerlink" title="5.1 安装 minio 服务"></a>5.1 安装 minio 服务</h3><pre><code class="highlight bash"><span class="comment"># 安装 minio</span>
+$ docker run --name minio \
+-p 9000:9000 \
+-p 9999:9999 \
+-d --restart=always \
+-e <span class="string">&quot;MINIO_ROOT_USER=admin&quot;</span> \
+-e <span class="string">&quot;MINIO_ROOT_PASSWORD=12345678&quot;</span> \
+-v /data/minio/data:/data \
+minio/minio:RELEASE.2022-04-12T06-55-35Z server /data \
+--console-address <span class="string">&#x27;0.0.0.0:9999&#x27;</span></code></pre>
+
+
+
+<h3 id="5-2-登录-minio"><a href="#5-2-登录-minio" class="headerlink" title="5.2 登录 minio"></a>5.2 登录 minio</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234744.png" alt="登录 minio"></p>
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234814.png" alt="minio 首页"></p>
+<h3 id="5-3-创建-bucket-存储桶"><a href="#5-3-创建-bucket-存储桶" class="headerlink" title="5.3 创建 bucket 存储桶"></a>5.3 创建 bucket 存储桶</h3><p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/15/20250915-234917.png" alt="创建 bucket 存储桶"></p>
+<h3 id="5-4-在-master-节点部署-velero"><a href="#5-4-在-master-节点部署-velero" class="headerlink" title="5.4 在 master 节点部署 velero"></a>5.4 在 master 节点部署 velero</h3><p>下载地址：<a target="_blank" rel="noopener" href="https://github.com/vmware-tanzu/velero/">https://github.com/vmware-tanzu/velero/</a></p>
+<p>Velero 与 K8S 版本匹配关系：<a target="_blank" rel="noopener" href="https://github.com/vmware-tanzu/velero/">https://github.com/vmware-tanzu/velero/</a></p>
+<table>
+<thead>
+<tr>
+<th>Velero version</th>
+<th>Expected Kubernetes version compatibility</th>
+<th>Tested on Kubernetes version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1.17</td>
+<td>1.18-latest</td>
+<td>1.31.7, 1.32.3, 1.33.1, and 1.34.0</td>
+</tr>
+<tr>
+<td>1.16</td>
+<td>1.18-latest</td>
+<td>1.31.4, 1.32.3, and 1.33.0</td>
+</tr>
+<tr>
+<td>1.15</td>
+<td>1.18-latest</td>
+<td>1.28.8, 1.29.8, 1.30.4 and 1.31.1</td>
+</tr>
+<tr>
+<td>1.14</td>
+<td>1.18-latest</td>
+<td>1.27.9, 1.28.9, and 1.29.4</td>
+</tr>
+<tr>
+<td>1.13</td>
+<td>1.18-latest</td>
+<td>1.26.5, 1.27.3, 1.27.8, and 1.28.3</td>
+</tr>
+<tr>
+<td>1.12</td>
+<td>1.18-latest</td>
+<td>1.25.7, 1.26.5, 1.26.7, and 1.27.3</td>
+</tr>
+<tr>
+<td>1.11</td>
+<td>1.18-latest</td>
+<td>1.23.10, 1.24.9, 1.25.5, and 1.26.1</td>
+</tr>
+</tbody></table>
+<pre><code class="highlight bash"><span class="comment"># 下载 velero</span>
+$ wget https://github.com/vmware-tanzu/velero/releases/download/v1.14.1/velero-v1.14.1-linux-amd64.tar.gz
+
+<span class="comment"># 解压</span>
+$ tar -zxvf velero-v1.14.1-linux-amd64.tar.gz
+
+<span class="comment"># 查看二进制文件</span>
+$ <span class="built_in">cd</span> velero-v1.14.1-linux-amd64
+$ ll
+total 99048
+-rw-r--r-- 1 root root     10255 Aug 22  2024 LICENSE
+drwxr-xr-x 4 root root        36 Sep 16 00:00 examples
+-rwxr-xr-x 1 root root 101412456 Aug 26  2024 velero
+
+<span class="comment"># 将 velero 二进制文件移动到 /usr/local/bin/ 目录</span>
+$ <span class="built_in">mv</span> velero /usr/local/bin/
+<span class="comment"># 文件提权</span>
+$ <span class="built_in">chmod</span> +x /usr/local/bin/velero
+
+<span class="comment"># 查看 velero 是否安装成功</span>
+$ velero version
+Client:
+	Version: v1.14.1
+	Git commit: 8afe3cea8b7058f7baaf447b9fb407312c40d2da
+&lt;error getting server version: no matches <span class="keyword">for</span> kind <span class="string">&quot;ServerStatusRequest&quot;</span> <span class="keyword">in</span> version <span class="string">&quot;velero.io/v1&quot;</span>&gt;</code></pre>
+
+
+
+
+
+<h3 id="5-5-安装-velero-使用-minio-作为备份存储"><a href="#5-5-安装-velero-使用-minio-作为备份存储" class="headerlink" title="5.5 安装 velero, 使用 minio 作为备份存储"></a>5.5 安装 velero, 使用 minio 作为备份存储</h3><pre><code class="highlight bash"><span class="comment"># 创建目录</span>
+$ <span class="built_in">mkdir</span> -p /data/velero/
+
+<span class="comment"># 编辑 minio 认证凭据文件</span>
+$ <span class="built_in">cat</span> /data/velero/velero-auth.txt
+[default]
+aws_access_key_id = admin
+aws_secret_access_key = 12345678
+
+<span class="comment"># 在集群中安装 Velero，并将其配置为使用一个自建的 MinIO S3 兼容存储服务作为备份仓库，并且使用文件系统备份（FSB）方式来备份持久卷数据</span>
+$ velero --kubeconfig /root/.kube/config install --use-node-agent --default-volumes-to-fs-backup --provider aws --plugins velero/velero-plugin-for-aws:v1.13.0 --bucket etcd-bak --secret-file /data/velero/velero-auth.txt  --use-volume-snapshots=<span class="literal">false</span> --namespace velero-system --backup-location-config region=minio,s3ForcePathStyle=<span class="string">&#x27;true&#x27;</span>,s3Url=http://10.20.1.139:9000
+<span class="comment"># 不支持 hostPath 卷</span>
+<span class="comment"># 执行上面的命令，会自动拉取镜像</span>
+<span class="comment"># - docker pull velero/velero:v1.14.1</span>
+<span class="comment"># - docker pull velero/velero-plugin-for-aws:v1.13.0</span>
+
+<span class="comment"># 查看 velero 部署 Pod</span>
+$ kubectl get pods -n velero-system
+NAME                      READY   STATUS    RESTARTS        AGE
+node-agent-87z2k          1/1     Running   1 (89s ago)     11m
+node-agent-gqp8t          1/1     Running   4 (2m1s ago)    11m
+node-agent-rz9rh          1/1     Running   2 (2m15s ago)   11m
+velero-58448bc654-nhcm5   1/1     Running   0               11m
+
+<span class="comment"># 查看velero日志</span>
+$ kubectl logs -f deployment/velero -n velero-system</code></pre>
+
+<p><strong>命令解析：</strong></p>
+<ul>
+<li><p><code>velero ... install</code></p>
+<p>这是 Velero 客户端的主要命令，用于在集群中部署 Velero 的运维控制面（Deployment、CRD 等）。</p>
+</li>
+<li><p><code>--kubeconfig /root/.kube/config</code></p>
+<p>作用：指定 Kubernetes 集群的认证配置文件路径。</p>
+<p>解释：告诉 velero 命令行工具如何连接到目标 Kubernetes 集群。这里它使用 root 用户下的配置。</p>
+</li>
+<li><p><code>--use-node-agent</code></p>
+<p>作用：启用 Node Agent 模式（也称为“上传者”模型）。</p>
+<p>解释：这是 Velero 新版本中推荐的方式，用于替代旧的 restic 集成。每个节点会运行一个 DaemonSet（node-agent），由它来负责本节点上所有 Pod 卷的文件系统备份&#x2F;恢复操作，效率更高。</p>
+</li>
+<li><p><code>--default-volumes-to-fs-backup</code></p>
+<p>作用：将为所有 Pod 中的所有持久卷启用文件系统备份，无需在备份时额外指定注解。</p>
+<p>解释：这是一个便利选项。如果不加这个参数，你需要给每个包含需要备份的 PVC 的 Pod 打上 backup.velero.io&#x2F;backup-volumes&#x3D;<volume-name> 的注解。加上这个参数后，Velero 默认会尝试备份所有挂载的卷（注：有些卷如 emptyDir 或敏感目录可能仍需排除）。</p>
+</li>
+<li><p><code>--use-volume-snapshots=false</code></p>
+<p>作用：明确禁用卷快照功能。</p>
+<p>解释：因为此命令配置的是使用文件系统备份（–use-node-agent 和 –default-volumes-to-fs-backup），而不是基于云厂商特定存储的原生快照功能，所以需要显式关闭快照功能。这与 –provider aws 并不冲突，因为我们将 AWS S3 插件用于兼容 S3 的对象存储，而不是用于快照。</p>
+</li>
+<li><p><code>--provider aws</code></p>
+<p>作用：指定云提供商为 AWS。</p>
+<p>解释：Velero 需要知道它与哪种云存储交互。虽然这里使用的是 MinIO，但 MinIO 提供了与 AWS S3 兼容的 API，因此可以使用 AWS 提供商插件来连接它。</p>
+</li>
+<li><p><code>--plugins velero/velero-plugin-for-aws:v1.13.0</code></p>
+<p>作用：指定要安装的 Velero 插件镜像。</p>
+<p>解释：为了让 –provider aws 正常工作，需要安装 AWS 插件。这个插件使 Velero 能够与 S3 API（包括 MinIO 提供的 S3 兼容 API）进行通信。</p>
+</li>
+<li><p><code>--bucket velero</code></p>
+<p>作用：指定对象存储中的存储桶（Bucket）名称。</p>
+<p>解释：Velero 将把所有备份数据存储在 MinIO 中名为 velero 的存储桶中。这个存储桶需要提前在 MinIO 中创建好。</p>
+</li>
+<li><p><code>--secret-file /data/velero/velero-auth.txt</code></p>
+<p>作用：提供访问对象存储所需的认证凭据文件。</p>
+<p>解释：该文件通常包含两行：aws_access_key_id 和 aws_secret_access_key。这些是访问 MinIO 服务的用户名和密码（MinIO 使用与 AWS 兼容的认证格式）。</p>
+</li>
+<li><p><code>--backup-location-config region=minio,s3ForcePathStyle=&#39;true&#39;,s3Url=http://10.20.1.139:9000</code></p>
+<p>作用：配置备份存储位置的具体参数。</p>
+<p>解释：这是连接 MinIO 的关键配置：</p>
+<p>​	region&#x3D;minio: MinIO 默认区域，可以任意设置，但必须提供，通常设为 minio 或 us-east-1。</p>
+<p>​	s3ForcePathStyle&#x3D;’true’: 极其重要。强制使用路径风格的 S3 URL（例如 <a target="_blank" rel="noopener" href="http://endpoint/bucket/key%EF%BC%89%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA%E9%A3%8E%E6%A0%BC%EF%BC%88http://bucket.endpoint/key%EF%BC%89%E3%80%82MinIO">http://endpoint/bucket/key），而不是虚拟主机风格（http://bucket.endpoint/key）。MinIO</a> 通常需要启用这个选项。</p>
+<p>​	s3Url&#x3D;<a target="_blank" rel="noopener" href="http://10.20.1.139:9000/">http://10.20.1.139:9000</a>: 指定 MinIO 服务的访问地址和端口。Velero 将通过这个 URL 上传和下载备份数据。</p>
+</li>
+<li><p><code>--namespace velero-system</code></p>
+<p>作用：指定 Velero 组件将被安装到哪个 Kubernetes 命名空间中。</p>
+<p>解释：Velero 的所有 Pod（velero 和 node-agent）、Secret、ServiceAccount 等资源都会创建在这个名为 velero-system 的命名空间里。这是一个惯例，与其他系统组件隔离。</p>
+</li>
+</ul>
+<p><strong>查看 Velero 备份存储是否健康可用</strong></p>
+<pre><code class="highlight bash">$ kubectl  get BackupStorageLocation -n velero-system  -o yaml
+apiVersion: v1
+items:
+- apiVersion: velero.io/v1
+  kind: BackupStorageLocation
+  metadata:
+    creationTimestamp: <span class="string">&quot;2025-09-16T01:48:14Z&quot;</span>
+    generation: 3
+    labels:
+      component: velero
+    name: default
+    namespace: velero-system
+    resourceVersion: <span class="string">&quot;9463671&quot;</span>
+    uid: 1ca0f267-af96-4e08-96f9-b578dd335df3
+  spec:
+    config:
+      region: minio
+      s3ForcePathStyle: <span class="string">&quot;true&quot;</span>
+      s3Url: http://10.20.1.139:9000 <span class="comment"># minio 地址</span>
+    default: <span class="literal">true</span>
+    objectStorage:
+      bucket: etcd-bak <span class="comment"># 备份存储的桶</span>
+    provider: aws
+  status:
+    lastSyncedTime: <span class="string">&quot;2025-09-16T01:49:24Z&quot;</span>
+    lastValidationTime: <span class="string">&quot;2025-09-16T01:49:24Z&quot;</span>
+    phase: Available <span class="comment"># 可用</span>
+kind: List
+metadata:
+  resourceVersion: <span class="string">&quot;&quot;</span></code></pre>
+
+
+
+
+
+<h3 id="5-6-演示-Velero-的备份和还原"><a href="#5-6-演示-Velero-的备份和还原" class="headerlink" title="5.6 演示 Velero 的备份和还原"></a>5.6 演示 Velero 的备份和还原</h3><p><strong>资源清单：</strong><code>velero-demo-deploy.yaml</code></p>
+<pre><code class="highlight yaml"><span class="attr">apiVersion:</span> <span class="string">v1</span>
+<span class="attr">kind:</span> <span class="string">PersistentVolumeClaim</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">velero-demo-pvc</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">storageClassName:</span> <span class="string">nfs-client</span> <span class="comment"># 指定存储类</span>
+  <span class="attr">accessModes:</span>
+    <span class="bullet">-</span> <span class="string">ReadWriteOnce</span>
+  <span class="attr">resources:</span>
+    <span class="attr">requests:</span>
+      <span class="attr">storage:</span> <span class="string">1Gi</span>
+
+<span class="meta">---</span>
+<span class="meta"></span>
+<span class="attr">apiVersion:</span> <span class="string">apps/v1</span>
+<span class="attr">kind:</span> <span class="string">Deployment</span>
+<span class="attr">metadata:</span>
+  <span class="attr">name:</span> <span class="string">velero-demo</span>
+  <span class="attr">namespace:</span> <span class="string">default</span>
+<span class="attr">spec:</span>
+  <span class="attr">replicas:</span> <span class="number">1</span>
+  <span class="attr">selector:</span>
+    <span class="attr">matchLabels:</span>
+      <span class="attr">app:</span> <span class="string">velero-demo</span>
+  <span class="attr">template:</span>
+    <span class="attr">metadata:</span>
+      <span class="attr">labels:</span>
+        <span class="attr">app:</span> <span class="string">velero-demo</span>
+    <span class="attr">spec:</span>
+      <span class="attr">containers:</span>
+      <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">velero-demo</span>
+        <span class="attr">image:</span> <span class="string">nginx:1.29.0</span>
+        <span class="attr">ports:</span>
+        <span class="bullet">-</span> <span class="attr">containerPort:</span> <span class="number">80</span>
+        <span class="attr">volumeMounts:</span> <span class="comment"># 挂载卷</span>
+          <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">velero-storage</span>
+            <span class="attr">mountPath:</span> <span class="string">/usr/share/nginx/html</span> <span class="comment"># 挂载路径</span>
+      <span class="attr">volumes:</span>
+        <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">velero-storage</span>
+          <span class="attr">persistentVolumeClaim:</span> <span class="comment"># 挂载PVC</span>
+            <span class="attr">claimName:</span> <span class="string">velero-demo-pvc</span></code></pre>
+
+
+
+<p><strong>执行资源清单</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 查看PVC，已绑定</span>
+$ kubectl get pvc
+NAME              STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+velero-demo-pvc   Bound    pvc-0976d62a-08fe-43fe-8882-3a64379bd4c9   1Gi        RWO            nfs-client     &lt;<span class="built_in">unset</span>&gt;                 12m
+
+<span class="comment"># 查看POD运行成功</span>
+$ kubectl get pods -o wide
+NAME                          READY   STATUS    RESTARTS   AGE   IP              NODE         NOMINATED NODE   READINESS GATES
+velero-demo-cbbcc8454-k78rj   1/1     Running   0          12m   171.20.85.204   k8s-node01   &lt;none&gt;           &lt;none&gt;
+
+<span class="comment"># 在 nfs 挂载目录写入内容</span>
+$ <span class="built_in">echo</span> <span class="string">&quot;Hello Velero&quot;</span> &gt;&gt; index.html
+
+<span class="comment"># 测试 Nginx 访问</span>
+$ curl http://171.20.85.204
+Hello Velero</code></pre>
+
+
+
+<p><strong>执行 Velero 备份命令</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 备份 default 命名空间的数据</span>
+$ velero backup create default-backup-`<span class="built_in">date</span> +%Y%m%d%H%M%S` --include-namespaces default --kubeconfig=/root/.kube/config --namespace velero-system
+Backup request <span class="string">&quot;default-backup-20250916210829&quot;</span> submitted successfully.
+Run `velero backup describe default-backup-20250916210829` or `velero backup logs default-backup-20250916210829` <span class="keyword">for</span> more details.
+<span class="comment"># 执行操作成功</span>
+
+<span class="comment"># --ttl 24h0m0s	如果未指定，将应用 30 天的默认 TTL 值</span></code></pre>
+
+<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/09/16/20250916-210931.png" alt="数据已备份到 minio 中"></p>
+<p><strong>删除 default 命名空间的数据</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 删除挂载目录的index.html文件</span>
+$ <span class="built_in">rm</span> -rf index.html
+
+<span class="comment"># 删除pvc 和 pod</span>
+$ kubectl delete -f velero-demo-deploy.yaml 
+persistentvolumeclaim <span class="string">&quot;velero-demo-pvc&quot;</span> deleted
+deployment.apps <span class="string">&quot;velero-demo&quot;</span> deleted</code></pre>
+
+
+
+<p><strong>使用 Velero 恢复数据</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 使用 velero 恢复数据</span>
+$ velero restore create --from-backup default-backup-20250916210829 --<span class="built_in">wait</span> --kubeconfig=/root/.kube/config --namespace velero-system
+
+Restore request <span class="string">&quot;default-backup-20250916210829-20250916211224&quot;</span> submitted successfully.
+Waiting <span class="keyword">for</span> restore to complete. You may safely press ctrl-c to stop waiting - your restore will <span class="built_in">continue</span> <span class="keyword">in</span> the background.
+............................................................................................................................................................................................................................................................
+Restore completed with status: Completed. You may check <span class="keyword">for</span> more information using the commands `velero restore describe default-backup-20250916210829-20250916211224` and `velero restore logs default-backup-20250916210829-20250916211224`.
+<span class="comment"># 会自动拉取镜像：velero/velero-restore-helper:v1.14.1</span>
+
+
+<span class="comment"># 查看Pod</span>
+$ kubectl get pods -o wide 
+NAME                          READY   STATUS    RESTARTS   AGE     IP              NODE         NOMINATED NODE   READINESS GATES
+velero-demo-cbbcc8454-k78rj   1/1     Running   0          4m31s   171.20.85.203   k8s-node01   &lt;none&gt;           &lt;none&gt;
+
+
+<span class="comment"># 访问Pod，nginx已恢复</span>
+$ curl http://171.20.85.203
+Hello Velero</code></pre>
+
+<p>默认情况下，Velero 执行非破坏性恢复，这意味着它不会删除目标集群上的任何数据。如果备份中的资源已存在于目标集群中，Velero 将跳过该资源</p>
+<pre><code class="highlight bash">$ velero restore create --from-backup default-backup-20250916210829 --<span class="built_in">wait</span> --kubeconfig=/root/.kube/config --namespace velero-system</code></pre>
+
+
+
+
+
+<h2 id="6-velero-常用命令"><a href="#6-velero-常用命令" class="headerlink" title="6. velero 常用命令"></a>6. velero 常用命令</h2><h3 id="6-1-为与标签选择器匹配的任何对象创建备份-：app-velero-demo"><a href="#6-1-为与标签选择器匹配的任何对象创建备份-：app-velero-demo" class="headerlink" title="6.1 为与标签选择器匹配的任何对象创建备份 ：app=velero-demo"></a>6.1 为与标签选择器匹配的任何对象创建备份 ：<code>app=velero-demo</code></h3><pre><code class="highlight bash">$ velero backup create nginx-backup --selector app=nginx
+
+<span class="comment"># 示例</span>
+$ velero backup create backup-`<span class="built_in">date</span> +%Y%m%d%H%M%S` --selector app=velero-demo --include-namespaces default --kubeconfig=/root/.kube/config --namespace velero-system</code></pre>
+
+
+
+<h3 id="6-2-备份除与标签匹配的对象之外的所有对象-：app-velero-demo"><a href="#6-2-备份除与标签匹配的对象之外的所有对象-：app-velero-demo" class="headerlink" title="6.2 备份除与标签匹配的对象之外的所有对象 ：app=velero-demo"></a>6.2 备份除与标签匹配的对象<em>之外的</em>所有对象 ：<code>app=velero-demo</code></h3><pre><code class="highlight bash">$ velero backup create nginx-backup --selector <span class="string">&#x27;app notin (velero-demo)&#x27;</span>
+
+<span class="comment"># 示例</span>
+$ velero backup create backup-`<span class="built_in">date</span> +%Y%m%d%H%M%S` --selector <span class="string">&#x27;app notin (velero-demo)&#x27;</span> --include-namespaces default --kubeconfig=/root/.kube/config --namespace velero-system</code></pre>
+
+
+
+<h3 id="6-3-定时备份数据"><a href="#6-3-定时备份数据" class="headerlink" title="6.3 定时备份数据"></a>6.3 定时备份数据</h3><pre><code class="highlight bash"><span class="comment"># 每分钟执行执行一次备份</span>
+$ velero schedule create schedule-backup --schedule=<span class="string">&quot;* * * * *&quot;</span> --include-namespaces=default --default-volumes-to-fs-backup 
+
+<span class="comment"># 示例：每天2点执行一次备份</span>
+$ velero schedule create schedule-backup --schedule=<span class="string">&quot;0 2 * * *&quot;</span> --include-namespaces=default --default-volumes-to-fs-backup --kubeconfig=/root/.kube/config --namespace velero-system
+
+<span class="comment"># 查看 velero 定时任务</span>
+$ velero schedule get
+NAME              STATUS    CREATED                         SCHEDULE    BACKUP TTL   LAST BACKUP   SELECTOR   PAUSED
+schedule-backup   Enabled   2025-09-17 20:15:31 +0800 CST   0 2 * * *   0s           n/a           &lt;none&gt;     <span class="literal">false</span>
+
+<span class="comment"># 查看定时任务详情</span>
+$ velero schedule describe schedule-backup -n velero-system
+
+<span class="comment"># 暂停定时任务</span>
+$ velero schedule pause schedule-backup -n velero-system
+
+<span class="comment"># 删除定时任务</span>
+$ velero schedule delete schedule-backup -n velero-system
+Are you sure you want to <span class="built_in">continue</span> (Y/N)? Y
+Schedule deleted: schedule-backup
+<span class="comment"># 或者 --confirm 跳过确认，直接删除</span>
+$ velero schedule delete schedule-backup -n velero-system --confirm</code></pre>
+
+
+
+<pre><code class="highlight bash"><span class="comment"># 每天备份一次，@daily 相当于 0 * * * *</span>
+$ velero schedule create nginx-daily --schedule=<span class="string">&quot;@daily&quot;</span> --selector app=nginx</code></pre>
+
+
+
+
+
+<h2 id="7-卸载-Velero"><a href="#7-卸载-Velero" class="headerlink" title="7. 卸载 Velero"></a>7. 卸载 Velero</h2><p>如果部署的 velero 有问题，需要重新部署，那么才需要删除 velero。</p>
+<pre><code class="highlight bash"><span class="comment"># 方式一：</span>
+$ velero --kubeconfig /root/.kube/config uninstall --namespace velero-system
+
+
+<span class="comment"># 方式二：</span>
+<span class="comment"># 删除命名空间（这会删除该命名空间下的所有资源）</span>
+kubectl --kubeconfig /root/.kube/config delete namespace velero-system
+
+<span class="comment"># 删除 CRDs（自定义资源定义）</span>
+kubectl --kubeconfig /root/.kube/config delete crds \
+  backups.velero.io \
+  backupstoragelocations.velero.io \
+  deletebackuprequests.velero.io \
+  downloadrequests.velero.io \
+  podvolumebackups.velero.io \
+  podvolumerestores.velero.io \
+  resticrepositories.velero.io \
+  restores.velero.io \
+  schedules.velero.io \
+  serverstatusrequests.velero.io \
+  volumesnapshotlocations.velero.io</code></pre>
+
+
+
+
+
+<h2 id="8-补充"><a href="#8-补充" class="headerlink" title="8.补充"></a>8.补充</h2><h3 id="8-1-常用命令"><a href="#8-1-常用命令" class="headerlink" title="8.1 常用命令"></a>8.1 常用命令</h3><pre><code class="highlight bash"><span class="comment"># 备份存储库是否存在并且准备好</span>
+$ velero repo get
+NAME                          STATUS   LAST MAINTENANCE
+default-default-kopia-59zrm   Ready    2025-09-17 20:09:24 +0800 CST
+
+<span class="comment"># Velero 备份/恢复中是否存在任何错误</span>
+$ velero backup describe BACKUP_NAME
+<span class="comment"># 示例：$ velero backup describe &lt;BACKUP_NAME&gt; -n velero-system</span>
+$ velero backup logs BACKUP_NAME
+$ velero restore describe RESTORE_NAME
+$ velero restore logs RESTORE_NAME
+
+<span class="comment"># Pod 卷备份/恢复的状态如何</span>
+$ kubectl -n velero get podvolumebackups -l velero.io/backup-name=BACKUP_NAME -o yaml
+$ kubectl -n velero get podvolumerestores -l velero.io/restore-name=RESTORE_NAME -o yaml
+<span class="comment"># 示例：$ kubectl -n velero get podvolumebackups -l velero.io/backup-name=default-backup-20250916210829 -o yaml -n velero-system</span></code></pre>
+
+
+
+<h3 id="8-2-安全的还原"><a href="#8-2-安全的还原" class="headerlink" title="8.2 安全的还原"></a>8.2 安全的还原</h3><pre><code class="highlight bash"><span class="comment"># 修改 velero-system 命名空间中名为 default 的 BackupStorageLocation 资源，将其 accessMode 设置为 ReadOnly。</span>
+<span class="comment"># 效果：Velero 将无法向该存储位置写入新备份（例如，新的备份任务会失败），但可以读取现有备份以进行恢复操作。以防止意外修改或覆盖备份数据</span>
+$ kubectl patch backupstoragelocation default --namespace velero-system --<span class="built_in">type</span> merge --patch <span class="string">&#x27;&#123;&quot;spec&quot;:&#123;&quot;accessMode&quot;:&quot;ReadOnly&quot;&#125;&#125;&#x27;</span>
+
+
+<span class="comment"># 修改 velero-system 命名空间中名为 default 的 BackupStorageLocation 资源，将其 accessMode 设置为 ReadWrite。</span>
+<span class="comment"># 效果：Velero 恢复完整的读写权限，可以创建新备份、删除备份（根据策略）以及读取备份进行恢复。在生产环境中，ReadWrite 是默认模式</span>
+$ kubectl patch backupstoragelocation default --namespace velero-system --<span class="built_in">type</span> merge --patch <span class="string">&#x27;&#123;&quot;spec&quot;:&#123;&quot;accessMode&quot;:&quot;ReadWrite&quot;&#125;&#125;&#x27;</span></code></pre>
+
+
+
+<h3 id="8-3-资源过滤"><a href="#8-3-资源过滤" class="headerlink" title="8.3 资源过滤"></a>8.3 资源过滤</h3><h4 id="–include-namespaces"><a href="#–include-namespaces" class="headerlink" title="–include-namespaces"></a>–include-namespaces</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">备份命名空间及其对象</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --include-namespaces &lt;namespace&gt;</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">恢复两个命名空间及其对象</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero restore create &lt;backup-name&gt; --include-namespaces &lt;namespace1&gt;,&lt;namespace2&gt;</span></code></pre>
+
+
+
+<h4 id="–include-resources"><a href="#–include-resources" class="headerlink" title="–include-resources"></a>–include-resources</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">备份集群中的所有 deployment</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --include-resources deployments</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">恢复集群中的所有 deployment 和 configmap</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero restore create &lt;backup-name&gt; --include-resources deployments,configmaps</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">备份指定命名空间中的 deployment</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --include-resources deployments --include-namespaces &lt;namespace&gt;</span></code></pre>
+
+
+
+<h4 id="–include-cluster-resources"><a href="#–include-cluster-resources" class="headerlink" title="–include-cluster-resources"></a>–include-cluster-resources</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">备份整个集群，包括集群范围的资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt;</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">仅恢复集群中的命名空间资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero restore create &lt;backup-name&gt; --include-cluster-resources=<span class="literal">false</span></span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">备份命名空间并包含集群范围的资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --include-namespaces &lt;namespace&gt; --include-cluster-resources=<span class="literal">true</span></span></code></pre>
+
+
+
+<h4 id="–selector，该选项不能与-selector-一起使用"><a href="#–selector，该选项不能与-selector-一起使用" class="headerlink" title="–selector，该选项不能与 --selector  一起使用"></a>–selector，该选项不能与 <code>--selector</code>  一起使用</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">包含与标签选择器匹配的资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --selector &lt;key&gt;=&lt;value&gt;</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">包含与选择器不匹配的资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --selector <span class="string">&quot;&lt;key&gt; notin (&lt;value&gt;)&quot;</span></span></code></pre>
+
+
+
+<h4 id="–or-selector"><a href="#–or-selector" class="headerlink" title="–or-selector"></a>–or-selector</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">包含与任一标签选择器匹配的资源，foo=bar 或者 baz=qux</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create backup1 --or-selector <span class="string">&quot;foo=bar or baz=qux&quot;</span></span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">包括标记为 environment=production 或 environment=prod ，<span class="built_in">env</span>=prod 或 <span class="built_in">env</span>=production 的资源</span> 
+<span class="meta prompt_">$ </span><span class="language-bash">velero restore create restore-prod --from-backup=prod-backup --or-selector <span class="string">&quot;env in (prod,production) or environment in (prod, production)&quot;</span></span></code></pre>
+
+
+
+<h4 id="–include-cluster-scoped-resources"><a href="#–include-cluster-scoped-resources" class="headerlink" title="–include-cluster-scoped-resources"></a>–include-cluster-scoped-resources</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">备份集群中的所有 StorageClasses 和 ClusterRoles</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --include-cluster-scoped-resources=<span class="string">&quot;storageclasses,clusterroles&quot;</span></span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">备份集群中所有集群范围的资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --include-cluster-scoped-resources=<span class="string">&quot;*&quot;</span></span></code></pre>
+
+
+
+<h4 id="–include-namespace-scoped-resources，格式为-resources-group"><a href="#–include-namespace-scoped-resources，格式为-resources-group" class="headerlink" title="–include-namespace-scoped-resources，格式为 resources.group"></a>–include-namespace-scoped-resources，格式为 resources.group</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">备份集群中的所有 Deployment 和 ConfigMap</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --include-namespace-scoped-resources=<span class="string">&quot;deployments.apps,configmaps&quot;</span></span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">备份集群中所有命名空间资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --include-namespace-scoped-resources=<span class="string">&quot;*&quot;</span></span></code></pre>
+
+
+
+<h4 id="–exclude-namespaces"><a href="#–exclude-namespaces" class="headerlink" title="–exclude-namespaces"></a>–exclude-namespaces</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">从集群备份中排除 kube-system</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --exclude-namespaces kube-system</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">在恢复期间排除两个命名空间</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero restore create &lt;backup-name&gt; --exclude-namespaces &lt;namespace1&gt;,&lt;namespace2&gt;</span></code></pre>
+
+
+
+<h4 id="–exclude-resources"><a href="#–exclude-resources" class="headerlink" title="–exclude-resources"></a>–exclude-resources</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">从备份中排除 secrets</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --exclude-resources secrets</span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">排除 secret 和 rolebindings</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --exclude-resources secrets,rolebindings</span></code></pre>
+
+
+
+<h4 id="velero-io-exclude-from-backup-true"><a href="#velero-io-exclude-from-backup-true" class="headerlink" title="velero.io&#x2F;exclude-from-backup&#x3D;true"></a>velero.io&#x2F;exclude-from-backup&#x3D;true</h4><p>具有该标签的资源<code>velero.io/exclude-from-backup=true</code>不会包含在备份中，即使它包含匹配的选择器标签也是如此</p>
+<h4 id="–exclude-cluster-scoped-resources"><a href="#–exclude-cluster-scoped-resources" class="headerlink" title="–exclude-cluster-scoped-resources"></a>–exclude-cluster-scoped-resources</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">从备份中排除 StorageClasses 和 ClusterRoles</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --exclude-cluster-scoped-resources=<span class="string">&quot;storageclasses,clusterroles&quot;</span></span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">从备份中排除所有集群范围的资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --exclude-cluster-scoped-resources=<span class="string">&quot;*&quot;</span></span></code></pre>
+
+
+
+<h4 id="–exclude-namespace-scoped-resources，格式为-resources-group"><a href="#–exclude-namespace-scoped-resources，格式为-resources-group" class="headerlink" title="–exclude-namespace-scoped-resources，格式为 resources.group"></a>–exclude-namespace-scoped-resources，格式为 resources.group</h4><pre><code class="highlight shell"><span class="meta prompt_"># </span><span class="language-bash">从备份中排除所有 Deployment 和 ConfigMap</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --exclude-namespace-scoped-resources=<span class="string">&quot;deployments.apps,configmaps&quot;</span></span>
+<span class="meta prompt_"></span>
+<span class="meta prompt_"># </span><span class="language-bash">从备份中排除所有命名空间资源</span>
+<span class="meta prompt_">$ </span><span class="language-bash">velero backup create &lt;backup-name&gt; --exclude-namespace-scoped-resources=<span class="string">&quot;*&quot;</span></span></code></pre>
+
+
+
+<h4 id="Velero-提供资源策略来过滤资源以进行备份或恢复。目前仅支持通过资源策略跳过备份卷"><a href="#Velero-提供资源策略来过滤资源以进行备份或恢复。目前仅支持通过资源策略跳过备份卷" class="headerlink" title="Velero 提供资源策略来过滤资源以进行备份或恢复。目前仅支持通过资源策略跳过备份卷"></a>Velero 提供资源策略来过滤资源以进行备份或恢复。目前仅支持通过资源策略跳过备份卷</h4><p>① 创建资源策略配置映射</p>
+<p>用户需要从定义资源策略的 YAML 文件在 Velero 安装命名空间中创建一个配置映射。创建命令如下所示：</p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">kubectl create cm &lt;configmap-name&gt; --from-file &lt;yaml-file&gt; -n velero</span></code></pre>
+
+
+
+<p>② 创建对已定义资源策略的备份引用</p>
+<pre><code class="highlight shell"><span class="meta prompt_">$ </span><span class="language-bash">velero backup create --resource-policies-configmap &lt;configmap-name&gt;</span></code></pre>
+
+
+
+<p>③ YAML 模板</p>
+<pre><code class="highlight yaml"><span class="comment"># currently only supports v1 version</span>
+<span class="attr">version:</span> <span class="string">v1</span>
+<span class="attr">volumePolicies:</span>
+<span class="comment"># each policy consists of a list of conditions and an action</span>
+<span class="comment"># we could have lots of policies, but if the resource matched the first policy, the latters will be ignored</span>
+<span class="comment"># each key in the object is one condition, and one policy will apply to resources that meet ALL conditions</span>
+<span class="comment"># <span class="doctag">NOTE:</span> capacity or storageClass is suited for [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes), and pod [Volume](https://kubernetes.io/docs/concepts/storage/volumes) not support it.</span>
+<span class="bullet">-</span> <span class="attr">conditions:</span>
+    <span class="comment"># capacity condition matches the volumes whose capacity falls into the range</span>
+    <span class="attr">capacity:</span> <span class="string">&quot;10,100Gi&quot;</span>
+    <span class="comment"># pv matches specific csi driver</span>
+    <span class="attr">csi:</span>
+      <span class="attr">driver:</span> <span class="string">aws.ebs.csi.driver</span>
+    <span class="comment"># pv matches one of the storage class list</span>
+    <span class="attr">storageClass:</span>
+      <span class="bullet">-</span> <span class="string">gp2</span>
+      <span class="bullet">-</span> <span class="string">standard</span>
+  <span class="attr">action:</span>
+    <span class="attr">type:</span> <span class="string">skip</span>
+<span class="bullet">-</span> <span class="attr">conditions:</span>
+    <span class="attr">capacity:</span> <span class="string">&quot;0,100Gi&quot;</span>
+    <span class="comment"># nfs volume source with specific server and path (nfs could be empty or only config server or path)</span>
+    <span class="attr">nfs:</span>
+      <span class="attr">server:</span> <span class="number">192.168</span><span class="number">.200</span><span class="number">.90</span>
+      <span class="attr">path:</span> <span class="string">/mnt/data</span>
+  <span class="attr">action:</span>
+    <span class="attr">type:</span> <span class="string">skip</span>
+<span class="bullet">-</span> <span class="attr">conditions:</span>
+    <span class="attr">nfs:</span>
+      <span class="attr">server:</span> <span class="number">192.168</span><span class="number">.200</span><span class="number">.90</span>
+  <span class="attr">action:</span>
+    <span class="attr">type:</span> <span class="string">skip</span>
+<span class="bullet">-</span> <span class="attr">conditions:</span>
+    <span class="comment"># nfs could be empty which matches any nfs volume source</span>
+    <span class="attr">nfs:</span> &#123;&#125;
+  <span class="attr">action:</span>
+    <span class="attr">type:</span> <span class="string">skip</span>
+<span class="bullet">-</span> <span class="attr">conditions:</span>
+    <span class="comment"># csi could be empty which matches any csi volume source</span>
+    <span class="attr">csi:</span> &#123;&#125;
+  <span class="attr">action:</span>
+    <span class="attr">type:</span> <span class="string">skip</span>
+<span class="bullet">-</span> <span class="attr">conditions:</span>
+    <span class="attr">volumeTypes:</span>
+      <span class="bullet">-</span> <span class="string">emptyDir</span>
+      <span class="bullet">-</span> <span class="string">downwardAPI</span>
+      <span class="bullet">-</span> <span class="string">configmap</span>
+      <span class="bullet">-</span> <span class="string">cinder</span>
+  <span class="attr">action:</span>
+    <span class="attr">type:</span> <span class="string">skip</span></code></pre>
+
+
+
+<h4 id="并行文件上传"><a href="#并行文件上传" class="headerlink" title="并行文件上传"></a>并行文件上传</h4><pre><code class="highlight bash">$ velero backup create &lt;BACKUP_NAME&gt; --include-namespaces &lt;NAMESPACE&gt; --parallel-files-upload &lt;NUM&gt; --<span class="built_in">wait</span></code></pre>
+
+
+
+
+
+<p><strong>参考链接</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/xiaozhi1223/p/16570606.html">https://www.cnblogs.com/xiaozhi1223/p/16570606.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/qiuhom-1874/p/17670945.html">https://www.cnblogs.com/qiuhom-1874/p/17670945.html</a></p>
+</blockquote>
+
+      
+       <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>
+    </div>
+</article>
+
+
+
+
+
+    <div id="comments"></div>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+
+<script type="text/javascript">
+    $.getScript('/js/gitalk.js', function () {
+        var gitalk = new Gitalk({
+            clientID: 'f820fe811764cacedc4f',
+            clientSecret: '0ce07abb65f0e79ddb8830f32029b8a9656e0ee0',
+            repo: 'georgechan95.github.io',
+            owner: 'GeorgeChan95',
+            admin: ['GeorgeChan95'],
+            id: decodeURI(location.pathname),
+            distractionFreeMode: 'true',
+            language: 'zh-CN',
+            perPage: parseInt('15',10)
+        })
+        gitalk.render('comments')
+    })
+</script>
+
+
+
+
+    
+
+
+
+
+    </div>
+    <div class="copyright">
+        <p class="footer-entry">
+    ©2016-2020 George
+</p>
+<p class="footer-entry">Built with <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/yelog/hexo-theme-3-hexo" target="_blank">3-hexo</a> theme</p>
+
+    </div>
+    <div class="full-toc">
+        <button class="full" data-title="切换全屏 快捷键 s"><span class="min "></span></button>
+<a class="" id="rocket" ></a>
+
+    </div>
+</div>
+
+</body>
+<script src="/js/jquery.pjax.js?v=1.1.0" ></script>
+
+<script src="/js/script.js?v=1.1.0" ></script>
+<script>
+    var img_resize = 'default';
+    function initArticle() {
+        /*渲染对应的表格样式*/
+        
+            $("#post .pjax table").addClass("green_title");
+        
+
+        /*渲染打赏样式*/
+        
+
+        /*高亮代码块行号*/
+        
+
+        /*访问数量*/
+        
+        $.getScript("//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js");
+        
+
+        /*代码高亮，行号对齐*/
+        $('.pre-numbering').css('line-height',$('.has-numbering').css('line-height'));
+
+        
+        
+    }
+
+    /*打赏页面隐藏与展示*/
+    
+
+</script>
+
+<!--加入行号的高亮代码块样式-->
+
+<!--自定义样式设置-->
+<style>
+    
+    
+    .nav {
+        width: 542px;
+    }
+    .nav.fullscreen {
+        margin-left: -542px;
+    }
+    .nav-left {
+        width: 120px;
+    }
+    
+    
+    @media screen and (max-width: 1468px) {
+        .nav {
+            width: 492px;
+        }
+        .nav.fullscreen {
+            margin-left: -492px;
+        }
+        .nav-left {
+            width: 100px;
+        }
+    }
+    
+    
+    @media screen and (max-width: 1024px) {
+        .nav {
+            width: 492px;
+            margin-left: -492px
+        }
+        .nav.fullscreen {
+            margin-left: 0;
+        }
+    }
+    
+    @media screen and (max-width: 426px) {
+        .nav {
+            width: 100%;
+        }
+        .nav-left {
+            width: 100%;
+        }
+    }
+    
+    
+    .nav-right .title-list nav a .post-title, .nav-right .title-list #local-search-result a .post-title {
+        color: #383636;
+    }
+    
+    
+    .nav-right .title-list nav a .post-date, .nav-right .title-list #local-search-result a .post-date {
+        color: #5e5e5f;
+    }
+    
+    
+    .nav-right nav a.hover, #local-search-result a.hover{
+        background-color: #e2e0e0;
+    }
+    
+    
+
+    /*列表样式*/
+    
+
+    /* 背景图样式 */
+    
+    
+
+
+    /*引用块样式*/
+    
+
+    /*文章列表背景图*/
+    
+
+    
+    #post .pjax article :not(pre) > code {
+        color: #24292e;
+        font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+        background-color: rgba(27,31,35,.05);
+        border-radius: 3px;
+        font-size: 85%;
+        margin: 0;
+        padding: .2em .4em;
+    }
+    
+</style>
+
+
+
+
+
+
+
+</html>
