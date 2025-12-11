@@ -2,12 +2,12 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>16-命令模式 | George&#39;s Blog</title>
+  <title>麒麟V10离线源环境搭建 | George&#39;s Blog</title>
   <meta name="google-site-verification" content="RobLWkyyFziZxPJ4I887QROdX8XrYthcJwWTcuH0wwQ" />
   <meta name="msvalidate.01" content="626D541C48E5D151F52CECC2C6714BD4" />
   <meta name="360-site-verification" content="c838adf8357ca2f614d08ad5235a1717" />
-  <meta name="keywords" content=" 设计模式 ">
-  <meta name="description" content="16-命令模式 | George&#39;s Blog">
+  <meta name="keywords" content=" linux , 麒麟 ">
+  <meta name="description" content="麒麟V10离线源环境搭建 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#95;&#57;&#x35;&#x40;&#x31;&#x32;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:type" content="website">
@@ -1704,9 +1704,9 @@
 </aside>
 <div id="post">
     <div class="pjax">
-        <article id="post-design-pattern/16-命令模式" class="article article-type-post" itemscope itemprop="blogPost">
+        <article id="post-linux/麒麟V10离线源环境搭建" class="article article-type-post" itemscope itemprop="blogPost">
     
-        <h1 class="article-title">16-命令模式</h1>
+        <h1 class="article-title">麒麟V10离线源环境搭建</h1>
     
     <div class="article-meta">
         
@@ -1716,7 +1716,7 @@
             <i class="iconfont icon-category"></i>
             
             
-            <a  data-rel="设计模式">设计模式</a>
+            <a  data-rel="linux">linux</a>
             
         </span>
         
@@ -1724,19 +1724,21 @@
         <span class="tag">
             <i class="iconfont icon-tag"></i>
             
-            <a class="color5">设计模式</a>
+            <a class="color1">linux</a>
+            
+            <a class="color3">麒麟</a>
             
         </span>
         
     </div>
     <div class="article-meta">
         
-            发布时间 : <time class="date" title='最后更新: 2024-11-23 15:05:24'>2024-11-23 20:30</time>
+            发布时间 : <time class="date" title='最后更新: 2025-12-11 17:38:51'>2025-12-10 10:39</time>
         
     </div>
     <div class="article-meta">
         
-        <span>字数:2.2k</span>
+        <span>字数:1.5k</span>
         
         
         <span id="busuanzi_container_page_pv">
@@ -1766,7 +1768,7 @@
     
     <div class="toc-ref">
     
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">一、命令模式的结构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%A1%88%E4%BE%8B%EF%BC%9AAudioPlayer%E7%B3%BB%E7%BB%9F"><span class="toc-text">二、案例：AudioPlayer系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%8F%E5%91%BD%E4%BB%A4"><span class="toc-text">三、宏命令</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F%E7%9A%84%E4%BC%98%E7%82%B9"><span class="toc-text">四、命令模式的优点</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%88%B6%E4%BD%9C%E7%A6%BB%E7%BA%BF%E6%BA%90%EF%BC%88%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%83%BD%E8%81%94%E7%BD%91%EF%BC%89"><span class="toc-text">一、制作离线源（服务器能联网）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%BF%AE%E6%94%B9%E9%BB%98%E8%AE%A4%E7%9A%84%E6%BA%90%E6%96%87%E4%BB%B6"><span class="toc-text">1. 修改默认的源文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%88%B7%E6%96%B0%E7%BC%93%E5%AD%98"><span class="toc-text">2. 刷新缓存</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%AE%89%E8%A3%85%E5%BF%85%E8%A6%81%E7%9A%84%E8%BD%AF%E4%BB%B6%E5%8C%85"><span class="toc-text">3. 安装必要的软件包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%9B%E5%BB%BA%E7%A6%BB%E7%BA%BF%E6%BA%90%E7%9B%AE%E5%BD%95"><span class="toc-text">4. 创建离线源目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-text">5. 下载安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%94%9F%E6%88%90%E7%A6%BB%E7%BA%BF%E6%BA%90"><span class="toc-text">6. 生成离线源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E7%A6%BB%E7%BA%BF%E6%BA%90%E6%89%93%E5%8C%85"><span class="toc-text">7. 离线源打包</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BD%BF%E7%94%A8%E7%A6%BB%E7%BA%BF%E6%BA%90%E5%AE%89%E8%A3%85%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-text">二、使用离线源安装服务器</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%A4%87%E4%BB%BD%E6%97%A7%E6%BA%90"><span class="toc-text">1. 备份旧源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%8A%E4%BC%A0%E7%A6%BB%E7%BA%BF%E6%BA%90"><span class="toc-text">2. 上传离线源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AE%E7%B3%BB%E7%BB%9F%E6%BA%90%E6%96%87%E4%BB%B6"><span class="toc-text">3. 配置系统源文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%B7%E6%96%B0%E7%BC%93%E5%AD%98%EF%BC%8C%E6%B5%8B%E8%AF%95%E7%A6%BB%E7%BA%BF%E6%BA%90"><span class="toc-text">4. 刷新缓存，测试离线源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85Docker%E3%80%81Docker-Compose"><span class="toc-text">三、离线安装Docker、Docker-Compose</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BDDocker%E4%BA%8C%E8%BF%9B%E5%88%B6%E5%8C%85"><span class="toc-text">1. 下载Docker二进制包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%AE%89%E8%A3%85Docker"><span class="toc-text">2. 安装Docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%85%8D%E7%BD%AEDocker"><span class="toc-text">3. 配置Docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%90%AF%E5%8A%A8Docker"><span class="toc-text">4. 启动Docker</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%AE%89%E8%A3%85-Docker-Compose"><span class="toc-text">5. 安装 Docker-Compose</span></a></li></ol></li></ol>
     
 <style>
     .left-col .switch-btn,
@@ -1782,391 +1784,274 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><strong>命令模式属于对象的行为模式。命令模式又称为行动(Action)模式或交易(Transaction)模式。</strong></p>
-<p><strong>命令模式把一个请求或者操作封装到一个对象中。命令模式允许系统使用不同的请求把客户端参数化，对请求排队或者记录请求日志，可以提供命令的撤销和恢复功能。</strong></p>
-<h1 id="一、命令模式的结构"><a href="#一、命令模式的结构" class="headerlink" title="一、命令模式的结构"></a>一、命令模式的结构</h1><p>命令模式是对命令的封装。命令模式把发出命令的责任和执行命令的责任分割开，委派给不同的对象。</p>
-<p>每一个命令都是一个操作：请求的一方发出请求要求执行一个操作；接收的一方收到请求，并执行操作。命令模式允许请求的一方和接收的一方独立开来，使得请求的一方不必知道接收请求的一方的接口，更不必知道请求是怎么被接收，以及操作是否被执行、何时被执行，以及是怎么被执行的。</p>
-<p>命令允许请求的一方和接收请求的一方能够独立演化，从而具有以下的优点：</p>
+        <p><strong>系统环境</strong></p>
+<blockquote>
+<p>系统发行版：V10 SP3 2403&#x2F;(Halberd)-x86_64</p>
+<p>内核版本：4.19.90-89.11.v2401.ky10.x86_64</p>
+</blockquote>
+<p><strong>查看系统版本</strong></p>
+<pre><code class="highlight bash"><span class="comment"># nkvers</span>
+<span class="comment">############## Kylin Linux Version #################</span>
+Release:
+Kylin Linux Advanced Server release V10 (Halberd)
+
+Kernel:
+4.19.90-89.11.v2401.ky10.x86_64
+
+Build:
+Kylin Linux Advanced Server
+release V10 SP3 2403/(Halberd)-x86_64-Build20.01/20240426
+<span class="comment">#################################################</span></code></pre>
+
+
+
+
+
+<h1 id="一、制作离线源（服务器能联网）"><a href="#一、制作离线源（服务器能联网）" class="headerlink" title="一、制作离线源（服务器能联网）"></a>一、制作离线源（服务器能联网）</h1><h2 id="1-修改默认的源文件"><a href="#1-修改默认的源文件" class="headerlink" title="1. 修改默认的源文件"></a>1. 修改默认的源文件</h2><p>在系统初始化时，<code>/etc/yum.repos.d</code> 目录下默认有一个源文件 <code>kylin_x86_64.repo </code>，这里需要修改文件，让服务器从官方源下载我们需要的安装包，用于制作离线源。</p>
+<pre><code class="highlight bash"><span class="comment"># 进入源文件目录</span>
+[root@localhost ~]<span class="comment"># cd /etc/yum.repos.d/</span>
+
+[root@localhost yum.repos.d]<span class="comment"># pwd</span>
+/etc/yum.repos.d
+
+<span class="comment"># 当前系统是 x86_64 架构的,地址：https://update.cs2c.com.cn/NS/V10/V10SP3-2403/os/adv/lic/ </span>
+<span class="comment"># 写入源文件配置如下：</span>
+<span class="built_in">cat</span> &gt;/etc/yum.repos.d/kylin_x86_64.repo &lt;&lt;<span class="string">EOF</span>
+<span class="string">[ks10-adv-os]</span>
+<span class="string">name = Kylin Linux Advanced Server 10 - Os </span>
+<span class="string">baseurl = https://update.cs2c.com.cn/NS/V10/V10SP3-2403/os/adv/lic/base/x86_64/</span>
+<span class="string">gpgcheck = 0</span>
+<span class="string">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-kylin</span>
+<span class="string">enabled = 1</span>
+<span class="string">[ks10-adv-updates]</span>
+<span class="string">name = Kylin Linux Advanced Server 10 - Updates</span>
+<span class="string">baseurl = https://update.cs2c.com.cn/NS/V10/V10SP3-2403/os/adv/lic/updates/x86_64/</span>
+<span class="string">gpgcheck = 0</span>
+<span class="string">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-kylin</span>
+<span class="string">enabled = 1</span>
+<span class="string">[ks10-adv-addons]</span>
+<span class="string">name = Kylin Linux Advanced Server 10 - Addons</span>
+<span class="string">baseurl = https://update.cs2c.com.cn/NS/V10/V10SP3-2403/os/adv/lic/addons/x86_64/</span>
+<span class="string">gpgcheck = 1</span>
+<span class="string">gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-kylin</span>
+<span class="string">enabled = 0</span>
+<span class="string">EOF</span></code></pre>
+
+
+
+<h2 id="2-刷新缓存"><a href="#2-刷新缓存" class="headerlink" title="2. 刷新缓存"></a>2. 刷新缓存</h2><pre><code class="highlight bash"><span class="comment"># 清理 DNF 的所有缓存数据</span>
+dnf clean all
+<span class="comment"># 主动更新所有启用仓库的元数据缓存（repodata）</span>
+dnf makecache
+<span class="comment"># 显示当前系统启用的所有仓库列表</span>
+dnf repolist</code></pre>
+
+<p>操作成功，应显示如下内容：</p>
+<pre><code class="highlight bash">[root@localhost ~]<span class="comment"># dnf repolist</span>
+repo <span class="built_in">id</span>											repo name
+ks10-adv-os                     				Kylin Linux Advanced Server 10 - Os
+ks10-adv-updates                				Kylin Linux Advanced Server 10 - Updates</code></pre>
+
+
+
+<h2 id="3-安装必要的软件包"><a href="#3-安装必要的软件包" class="headerlink" title="3. 安装必要的软件包"></a>3. 安装必要的软件包</h2><pre><code class="highlight bash"><span class="comment"># 更新系统包缓存</span>
+sudo yum update -y
+
+<span class="comment"># 安装 createrepo 和 httpd（可选，用于本地服务测试）</span>
+sudo yum install createrepo httpd -y
+
+<span class="comment"># 验证安装</span>
+createrepo --version
+
+<span class="comment"># 下载离线源插件（用于下载离线源）</span>
+<span class="comment"># dnf install -y dnf-plugins-core</span></code></pre>
+
+
+
+<h2 id="4-创建离线源目录"><a href="#4-创建离线源目录" class="headerlink" title="4. 创建离线源目录"></a>4. 创建离线源目录</h2><pre><code class="highlight bash"><span class="built_in">mkdir</span> -p /opt/offline
+
+<span class="comment"># 修改权限</span>
+<span class="built_in">chmod</span> 777 -R /opt/offline/</code></pre>
+
+<p>后面所有的安装包都会放到此目录，及子目录下。</p>
+<h2 id="5-下载安装包"><a href="#5-下载安装包" class="headerlink" title="5. 下载安装包"></a>5. 下载安装包</h2><p>下载需要安装的应用的离线安装包，用于制作离线源给其他无法联网的服务器使用。</p>
+<p>这里下载一些常用的应用安装包，如下：</p>
+<pre><code class="highlight bash">dnf download --resolve --alldeps vim --destdir=/opt/offline
+dnf download --resolve --alldeps curl --destdir=/opt/offline
+dnf download --resolve --alldeps zip --destdir=/opt/offline
+dnf download --resolve --alldeps unzip --destdir=/opt/offline
+dnf download --resolve --alldeps wget --destdir=/opt/offline
+dnf download --resolve --alldeps net-tools --destdir=/opt/offline
+dnf download --resolve --alldeps openssh-server --destdir=/opt/offline
+dnf download --resolve --alldeps tree --destdir=/opt/offline
+dnf download --resolve --alldeps ntp --destdir=/opt/offline
+dnf download --resolve --alldeps nfs-utils rpcbind --destdir=/opt/offline
+dnf download --resolve --alldeps dos2unix --destdir=/opt/offline
+dnf download --resolve --alldeps vsftpd --destdir=/opt/offline
+dnf download --resolve --alldeps createrepo_c --destdir=/opt/offline
+dnf download --resolve --alldeps httpd --destdir=/opt/offline
+dnf download --resolve --alldeps ffmpeg --destdir=/opt/offline</code></pre>
+
+
+
+<h2 id="6-生成离线源"><a href="#6-生成离线源" class="headerlink" title="6. 生成离线源"></a>6. 生成离线源</h2><pre><code class="highlight bash"><span class="comment"># 进入离线源安装目录</span>
+<span class="built_in">cd</span> /opt/offline
+<span class="comment"># 执行命令，生成离线源</span>
+createrepo .
+
+<span class="comment">#如果你后续往目录里新增 RPM 包，只需要执行：</span>
+createrepo --update /opt/offline</code></pre>
+
+
+
+<h2 id="7-离线源打包"><a href="#7-离线源打包" class="headerlink" title="7. 离线源打包"></a>7. 离线源打包</h2><pre><code class="highlight bash"><span class="comment"># 打包</span>
+tar -czvf /opt/kylin-offline-repo.tar.gz -C /opt offline
+
+<span class="comment"># 查看打包后的离线源文件</span>
+[root@localhost /]<span class="comment"># ll /opt/</span>
+-rw-r--r-- 1 root root 213864300 12月 11 16:38 kylin-offline-repo.tar.gz</code></pre>
+
+<p>至此，离线源就制作完成了，可以使用 scp 、rsync 命令发送到没有联网的服务器上，用于离线安装</p>
+<h1 id="二、使用离线源安装服务器"><a href="#二、使用离线源安装服务器" class="headerlink" title="二、使用离线源安装服务器"></a>二、使用离线源安装服务器</h1><p>在无网络连接的麒麟服务器上，配置和使用离线源，系统的版本和系统架构需相同。</p>
+<h2 id="1-备份旧源"><a href="#1-备份旧源" class="headerlink" title="1. 备份旧源"></a>1. 备份旧源</h2><pre><code class="highlight bash"><span class="built_in">mkdir</span> -p /etc/yum.repos.d/bak
+<span class="built_in">mv</span> /etc/yum.repos.d/*.repo /etc/yum.repos.d/bak/</code></pre>
+
+
+
+<h2 id="2-上传离线源"><a href="#2-上传离线源" class="headerlink" title="2. 上传离线源"></a>2. 上传离线源</h2><p>将打包好的离线源文件 <code>kylin-offline-repo.tar.gz</code> 放到 <code>/opt</code> 目录下</p>
+<pre><code class="highlight bash"><span class="comment"># 解压离线源</span>
+tar -zxvf /opt/kylin-offline-repo.tar.gz -C /opt/
+
+<span class="comment"># 查看解压后的源文件</span>
+[root@localhost ~]<span class="comment"># cd /opt/</span>
+
+[root@localhost opt]<span class="comment"># ll</span>
+-rw-r--r-- 1 root root 213864300 12月 11 16:38 kylin-offline-repo.tar.gz
+drwxrwxrwx 3 root root     24576 12月 11 16:34 offline</code></pre>
+
+
+
+<h2 id="3-配置系统源文件"><a href="#3-配置系统源文件" class="headerlink" title="3. 配置系统源文件"></a>3. 配置系统源文件</h2><pre><code class="highlight bash"><span class="built_in">cat</span> &gt;/etc/yum.repos.d/local.repo &lt;&lt;<span class="string">EOF</span>
+<span class="string">[local-yum]</span>
+<span class="string">name=Kylin Local Repository</span>
+<span class="string">baseurl=file:///opt/offline</span>
+<span class="string">enabled=1</span>
+<span class="string">gpgcheck=0</span>
+<span class="string">EOF</span></code></pre>
+
+
+
+
+
+<h2 id="4-刷新缓存，测试离线源"><a href="#4-刷新缓存，测试离线源" class="headerlink" title="4. 刷新缓存，测试离线源"></a>4. 刷新缓存，测试离线源</h2><p><strong>刷新缓存</strong></p>
+<pre><code class="highlight bash"><span class="comment"># 清理 DNF 的所有缓存数据</span>
+dnf clean all
+<span class="comment"># 主动更新所有启用仓库的元数据缓存（repodata）</span>
+dnf makecache
+<span class="comment"># 显示当前系统启用的所有仓库列表</span>
+dnf repolist</code></pre>
+
+<p>操作成功，应显示如下内容：</p>
+<pre><code class="highlight bash">[root@localhost opt]<span class="comment"># dnf repolist</span>
+repo <span class="built_in">id</span>                            repo name
+local-yum                          Kylin Local Repository</code></pre>
+
+
+
+<p><strong>测试离线源</strong></p>
+<pre><code class="highlight bash">dnf install -y wget net-tools dos2unix ntp</code></pre>
+
+
+
+
+
+<h1 id="三、离线安装Docker、Docker-Compose"><a href="#三、离线安装Docker、Docker-Compose" class="headerlink" title="三、离线安装Docker、Docker-Compose"></a>三、离线安装Docker、Docker-Compose</h1><p>Docker 和 Docker-Compose 都可以使用二进制包的形式离线安装</p>
+<h2 id="1-下载Docker二进制包"><a href="#1-下载Docker二进制包" class="headerlink" title="1. 下载Docker二进制包"></a>1. 下载Docker二进制包</h2><pre><code class="highlight bash"><span class="comment"># 创建必要的文件夹</span>
+<span class="built_in">mkdir</span> -p /opt/software
+<span class="built_in">chmod</span> 777 -R /opt/software/
+
+<span class="comment"># 下载Docker二进制包</span>
+wget https://download.docker.com/linux/static/stable/x86_64/docker-28.5.2.tgz</code></pre>
+
+
+
+<h2 id="2-安装Docker"><a href="#2-安装Docker" class="headerlink" title="2. 安装Docker"></a>2. 安装Docker</h2><pre><code class="highlight bash"><span class="comment"># 解压Docker二进制包</span>
+tar -zxvf docker-28.5.2.tgz -C /opt/software/
+
+<span class="comment"># 移动二进制包到 /usr/bin 目录下</span>
+<span class="built_in">mv</span> /opt/software/docker/* /usr/bin/</code></pre>
+
+<p>编辑 docker.service</p>
+<pre><code class="highlight bash"><span class="built_in">cat</span> &gt;/usr/lib/systemd/system/docker.service &lt;&lt;<span class="string">EOF</span>
+<span class="string">[Unit]</span>
+<span class="string">Description=Docker Application Container Engine</span>
+<span class="string">Documentation=https://docs.docker.com</span>
+<span class="string">After=network-online.target firewalld.service</span>
+<span class="string">Wants=network-online.target</span>
+<span class="string">[Service]</span>
+<span class="string">Type=notify</span>
+<span class="string">ExecStart=/usr/bin/dockerd</span>
+<span class="string">ExecReload=/bin/kill -s HUP $MAINPID</span>
+<span class="string">LimitNOFILE=infinity</span>
+<span class="string">LimitNPROC=infinity</span>
+<span class="string">TimeoutStartSec=0</span>
+<span class="string">Delegate=yes</span>
+<span class="string">KillMode=process</span>
+<span class="string">Restart=on-failure</span>
+<span class="string">StartLimitBurst=3</span>
+<span class="string">StartLimitInterval=60s</span>
+<span class="string">[Install]</span>
+<span class="string">WantedBy=multi-user.target</span>
+<span class="string">EOF</span></code></pre>
+
+
+
+<h2 id="3-配置Docker"><a href="#3-配置Docker" class="headerlink" title="3. 配置Docker"></a>3. 配置Docker</h2><pre><code class="highlight bash"><span class="comment"># 1. 创建文件夹</span>
+<span class="built_in">mkdir</span> -p /etc/docker /mnt/sdb
+
+<span class="comment"># 2. 写入daemon.json 配置</span>
+<span class="built_in">cat</span> &gt;/etc/docker/daemon.json &lt;&lt;<span class="string">EOF</span>
+<span class="string">&#123;</span>
+<span class="string">  &quot;log-driver&quot;: &quot;json-file&quot;,</span>
+<span class="string">  &quot;log-opts&quot;: &#123;</span>
+<span class="string">        &quot;max-size&quot;: &quot;100m&quot;,</span>
+<span class="string">        &quot;max-file&quot;: &quot;10&quot;</span>
+<span class="string">  &#125;,</span>
+<span class="string">  &quot;data-root&quot;:&quot;/mnt/sdb/docker&quot;,</span>
+<span class="string">  &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;]</span>
+<span class="string">&#125;</span>
+<span class="string">EOF</span></code></pre>
+
+
+
+<h2 id="4-启动Docker"><a href="#4-启动Docker" class="headerlink" title="4. 启动Docker"></a>4. 启动Docker</h2><pre><code class="highlight bash">systemctl daemon-reload
+systemctl restart docker</code></pre>
+
 <ul>
-<li><p>命令模式使新的命令很容易地被加入到系统里。</p>
-</li>
-<li><p>允许接收请求的一方决定是否要否决请求。</p>
-</li>
-<li><p>能较容易地设计一个命令队列。</p>
-</li>
-<li><p>可以容易地实现对请求的撤销和恢复。</p>
-</li>
-<li><p>在需要的情况下，可以较容易地将命令记入日志。</p>
-</li>
+<li><p>测试</p>
+<pre><code class="highlight bash">docker info</code></pre></li>
 </ul>
-<p>下面以一个示意性的系统，说明命令模式的结构。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-140717.png" alt="命令模式UML"></p>
-<p>命令模式涉及到五个角色，它们分别是：</p>
-<ul>
-<li><strong>客户端(Client)角色：</strong>创建一个具体命令(ConcreteCommand)对象并确定其接收者。</li>
-<li><strong>命令(Command)角色：</strong>声明了一个给所有具体命令类的抽象接口。</li>
-<li><strong>具体命令(ConcreteCommand)角色：</strong>定义一个接收者和行为之间的弱耦合；实现execute()方法，负责调用接收者的相应操作。execute()方法通常叫做执行方法。</li>
-<li><strong>请求者(Invoker)角色：</strong>负责调用命令对象执行请求，相关的方法叫做行动方法。</li>
-<li><strong>接收者(Receiver)角色：</strong>负责具体实施和执行一个请求。任何一个类都可以成为接收者，实施和执行请求的方法叫做行动方法。</li>
-</ul>
-<p><strong>代码示例</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 命令接收者</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Receiver</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">     * 真正执行命令相应的操作</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">action</span><span class="params">()</span>&#123;
-        System.out.println(<span class="string">&quot;==命令接收者执行操作==&quot;</span>);
-    &#125;
-&#125;
+<h2 id="5-安装-Docker-Compose"><a href="#5-安装-Docker-Compose" class="headerlink" title="5. 安装 Docker-Compose"></a>5. 安装 Docker-Compose</h2><pre><code class="highlight bash"><span class="comment"># 下载二进制包</span>
+wget https://github.com/docker/compose/releases/download/v2.39.2/docker-compose-linux-x86_64
+
+<span class="comment"># 放到 /usr/local/bin/ 目录下</span>
+<span class="built_in">mv</span> docker-compose-linux-x86_64 /usr/local/bin/docker-compose
+
+<span class="comment"># 授权</span>
+<span class="built_in">chmod</span> +x /usr/local/bin/docker-compose
+
+<span class="comment"># 查看版本</span>
+docker-compose --version</code></pre>
 
 
-<span class="comment">/**</span>
-<span class="comment"> * 抽象命令角色</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;
-&#125;
 
 
-<span class="comment">/**</span>
-<span class="comment"> * 具体命令角色</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ConcreteCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">// 聚合命令接收者</span>
-    <span class="keyword">private</span> Receiver receiver;
 
-    <span class="keyword">public</span> <span class="title function_">ConcreteCommand</span><span class="params">(Receiver receiver)</span> &#123;
-        <span class="built_in">this</span>.receiver = receiver;
-    &#125;
-
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        <span class="comment">// 调用接收者执行具体的方法</span>
-        receiver.action();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 请求者角色</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Invoker</span> &#123;
-    <span class="comment">// 聚合抽象命令角色</span>
-    <span class="keyword">private</span> Command command;
-
-    <span class="keyword">public</span> <span class="title function_">Invoker</span><span class="params">(Command command)</span> &#123;
-        <span class="built_in">this</span>.command = command;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 行动方法：调用命令对象执行请求</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">action</span><span class="params">()</span> &#123;
-        command.execute();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 测试类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Client</span> &#123;
-
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 命令接收者</span>
-        <span class="type">Receiver</span> <span class="variable">receiver</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Receiver</span>();
-
-        <span class="comment">// 创建命令对象，将命令接受者设置进去</span>
-        <span class="type">Command</span> <span class="variable">command</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ConcreteCommand</span>(receiver);
-
-        <span class="comment">// 创建请求执行者，并将命令对象设置进去</span>
-        <span class="type">Invoker</span> <span class="variable">invoker</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Invoker</span>(command);
-
-        <span class="comment">// 执行命令</span>
-        invoker.action();
-    &#125;
-&#125;</code></pre>
-
+<p><strong>参考链接</strong></p>
 <blockquote>
-<p>运行结果：</p>
-<pre><code class="highlight shell">==命令接收者执行操作==</code></pre>
+<p><a target="_blank" rel="noopener" href="https://www.osyunwei.com/archives/13225.html">https://www.osyunwei.com/archives/13225.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/windwillow/p/17822122.html">https://www.cnblogs.com/windwillow/p/17822122.html</a></p>
 </blockquote>
-<h1 id="二、案例：AudioPlayer系统"><a href="#二、案例：AudioPlayer系统" class="headerlink" title="二、案例：AudioPlayer系统"></a>二、案例：AudioPlayer系统</h1><p>小女孩茱丽(Julia)有一个盒式录音机，此录音机有播音(Play)、倒带(Rewind)和停止(Stop)功能，录音机的键盘便是请求者(Invoker)角色；茱丽(Julia)是客户端角色，而录音机便是接收者角色。Command类扮演抽象命令角色，而PlayCommand、StopCommand和RewindCommand便是具体命令类。茱丽(Julia)不需要知道播音(play)、倒带(rewind)和停止(stop)功能是怎么具体执行的，这些命令执行的细节全都由键盘(Keypad)具体实施。茱丽(Julia)只需要在键盘上按下相应的键便可以了。</p>
-<p>录音机是典型的命令模式。录音机按键把客户端与录音机的操作细节分割开来。</p>
-<p><strong>UML类图</strong></p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-142909.png" alt="命令模式案例：AudioPlayer系统"></p>
-<p><strong>代码如下：</strong></p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 接收者角色：录音机</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">AudioPlayer</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">play</span><span class="params">()</span>&#123;
-        System.out.println(<span class="string">&quot;录音机播放...&quot;</span>);
-    &#125;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span>&#123;
-        System.out.println(<span class="string">&quot;录音机倒带...&quot;</span>);
-    &#125;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stop</span><span class="params">()</span>&#123;
-        System.out.println(<span class="string">&quot;录音机停止...&quot;</span>);
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 命令角色</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span>;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体命令角色：播放命令</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PlayCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">// 命令接收者</span>
-    <span class="keyword">private</span> AudioPlayer audioPlayer;
-
-    <span class="keyword">public</span> <span class="title function_">PlayCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
-        <span class="built_in">this</span>.audioPlayer = audioPlayer;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        audioPlayer.play();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体命令角色：倒带命令</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">RewindCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">// 命令接收者</span>
-    <span class="keyword">private</span> AudioPlayer audioPlayer;
-
-    <span class="keyword">public</span> <span class="title function_">RewindCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
-        <span class="built_in">this</span>.audioPlayer = audioPlayer;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        audioPlayer.rewind();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体命令角色：停止命令</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StopCommand</span> <span class="keyword">implements</span> <span class="title class_">Command</span> &#123;
-    <span class="comment">// 命令接收者</span>
-    <span class="keyword">private</span> AudioPlayer audioPlayer;
-
-    <span class="keyword">public</span> <span class="title function_">StopCommand</span><span class="params">(AudioPlayer audioPlayer)</span> &#123;
-        <span class="built_in">this</span>.audioPlayer = audioPlayer;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        audioPlayer.stop();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 请求者角色：键盘</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Keypad</span> &#123;
-    <span class="keyword">private</span> Command playCommand;
-    <span class="keyword">private</span> Command rewindCommand;
-    <span class="keyword">private</span> Command stopCommand;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setPlayCommand</span><span class="params">(Command playCommand)</span> &#123;
-        <span class="built_in">this</span>.playCommand = playCommand;
-    &#125;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setRewindCommand</span><span class="params">(Command rewindCommand)</span> &#123;
-        <span class="built_in">this</span>.rewindCommand = rewindCommand;
-    &#125;
-
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setStopCommand</span><span class="params">(Command stopCommand)</span> &#123;
-        <span class="built_in">this</span>.stopCommand = stopCommand;
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行播放方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">play</span><span class="params">()</span>&#123;
-        playCommand.execute();
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行倒带方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">rewind</span><span class="params">()</span>&#123;
-        rewindCommand.execute();
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行播放方法</span>
-<span class="comment">     */</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stop</span><span class="params">()</span>&#123;
-        stopCommand.execute();
-    &#125;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 测试类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Julia</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 创建接收者对象</span>
-        <span class="type">AudioPlayer</span> <span class="variable">audioPlayer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AudioPlayer</span>();
-
-        <span class="comment">// 创建命令对象</span>
-        <span class="type">Command</span> <span class="variable">playCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PlayCommand</span>(audioPlayer);
-        <span class="type">Command</span> <span class="variable">rewindCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RewindCommand</span>(audioPlayer);
-        <span class="type">Command</span> <span class="variable">stopCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StopCommand</span>(audioPlayer);
-
-        <span class="comment">// 创建请求者对象</span>
-        <span class="type">Keypad</span> <span class="variable">keypad</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Keypad</span>();
-        keypad.setPlayCommand(playCommand);
-        keypad.setRewindCommand(rewindCommand);
-        keypad.setStopCommand(stopCommand);
-
-        <span class="comment">// 测试</span>
-        keypad.play();
-        keypad.stop();
-        keypad.rewind();
-        keypad.stop();
-        keypad.play();
-    &#125;
-&#125;</code></pre>
-
-<blockquote>
-<p>运行结果：</p>
-<pre><code class="highlight shell">录音机播放...
-录音机停止...
-录音机倒带...
-录音机停止...
-录音机播放...</code></pre>
-</blockquote>
-<h1 id="三、宏命令"><a href="#三、宏命令" class="headerlink" title="三、宏命令"></a>三、宏命令</h1><p>所谓宏命令简单点说就是包含多个命令的命令，是一个命令的组合。</p>
-<p>设想茱丽的录音机有一个记录功能，可以把一个一个的命令记录下来，再在任何需要的时候重新把这些记录下来的命令一次性执行，这就是所谓的宏命令集功能。因此，茱丽的录音机系统现在有四个键，分别为播音、倒带、停止和宏命令功能。此时系统的设计与前面的设计相比有所增强，主要体现在Julia类现在有了一个新方法，用以操作宏命令键。</p>
-<p><img src="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2024/11/23/20241123-144947.png" alt="宏命令"></p>
-<p><strong>代码如下：</strong></p>
-<p>系统需要一个代表宏命令的接口，以定义出具体宏命令所需要的接口。</p>
-<pre><code class="highlight java"><span class="comment">/**</span>
-<span class="comment"> * 系统需要一个代表宏命令的接口，以定义出具体宏命令所需要的接口。</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">interface</span> <span class="title class_">MacroCommand</span> <span class="keyword">extends</span> <span class="title class_">Command</span> &#123;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 宏命令聚集的管理方法，可以添加一个成员命令</span>
-<span class="comment">     * <span class="doctag">@param</span> cmd</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Command cmd)</span>;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 宏命令聚集的管理方法, 可以删除一个成员命令</span>
-<span class="comment">     * <span class="doctag">@param</span> cmd</span>
-<span class="comment">     */</span>
-    <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Command cmd)</span>;
-&#125;
-
-
-<span class="comment">/**</span>
-<span class="comment"> * 具体的宏命令MacroAudioCommand类负责把个别的命令合成宏命令。</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">MacroAudioCommand</span> <span class="keyword">implements</span> <span class="title class_">MacroCommand</span> &#123;
-    List&lt;Command&gt; commandList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();
-
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">add</span><span class="params">(Command cmd)</span> &#123;
-        commandList.add(cmd);
-    &#125;
-
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">remove</span><span class="params">(Command cmd)</span> &#123;
-        commandList.remove(cmd);
-    &#125;
-
-    <span class="comment">/**</span>
-<span class="comment">     * 执行方法</span>
-<span class="comment">     */</span>
-    <span class="meta">@Override</span>
-    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">execute</span><span class="params">()</span> &#123;
-        <span class="keyword">for</span> (Command command : commandList) &#123;
-            command.execute();
-        &#125;
-    &#125;
-
-&#125;
-
-<span class="comment">/**</span>
-<span class="comment"> * 测试类</span>
-<span class="comment"> */</span>
-<span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Julia</span> &#123;
-    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;
-        <span class="comment">// 创建接收者对象</span>
-
-        <span class="type">AudioPlayer</span> <span class="variable">audioPlayer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">AudioPlayer</span>();
-        <span class="comment">//创建命令对象</span>
-        <span class="type">Command</span> <span class="variable">playCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">PlayCommand</span>(audioPlayer);
-        <span class="type">Command</span> <span class="variable">rewindCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">RewindCommand</span>(audioPlayer);
-        <span class="type">Command</span> <span class="variable">stopCommand</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StopCommand</span>(audioPlayer);
-
-        <span class="type">MacroCommand</span> <span class="variable">marco</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">MacroAudioCommand</span>();
-
-        marco.add(playCommand);
-        marco.add(rewindCommand);
-        marco.add(stopCommand);
-        marco.execute();
-    &#125;
-&#125;</code></pre>
-
-<blockquote>
-<p>运行结果：</p>
-<pre><code class="highlight shell">录音机播放...
-录音机倒带...
-录音机停止..</code></pre>
-</blockquote>
-<h1 id="四、命令模式的优点"><a href="#四、命令模式的优点" class="headerlink" title="四、命令模式的优点"></a>四、命令模式的优点</h1><ul>
-<li><p><strong>更松散的耦合</strong></p>
-<p>命令模式使得发起命令的对象——客户端，和具体实现命令的对象——接收者对象完全解耦，也就是说发起命令的对象完全不知道具体实现对象是谁，也不知道如何实现。</p>
-</li>
-<li><p><strong>更动态的控制</strong></p>
-<p>命令模式把请求封装起来，可以动态地对它进行参数化、队列化和日志化等操作，从而使得系统更灵活。</p>
-</li>
-<li><p><strong>很自然的复合命令</strong></p>
-<p>命令模式中的命令对象能够很容易地组合成复合命令，也就是宏命令，从而使系统操作更简单，功能更强大。</p>
-</li>
-<li><p><strong>更好的扩展性</strong></p>
-<p>由于发起命令的对象和具体的实现完全解耦，因此扩展新的命令就很容易，只需要实现新的命令对象，然后在装配的时候，把具体的实现对象设置到命令对象中，然后就可以使用这个命令对象，已有的实现完全不用变化。</p>
-</li>
-</ul>
 
       
        <hr><span style="font-style: italic;color: gray;"> 转载请注明来源，欢迎对文章中的引用来源进行考证，欢迎指出任何有错误或不够清晰的表达。可以在下面评论区评论，也可以邮件至 george_95@126.com </span>

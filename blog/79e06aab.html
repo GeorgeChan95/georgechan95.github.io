@@ -9,23 +9,17 @@
   <meta name="keywords" content=" linux , Docker , Rocky ">
   <meta name="description" content="004-Pod的生命周期 | George&#39;s Blog">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="description" content="一、系统环境 操作系统：Rocky Linux 9.3 内核版本：5.14.0-284.11.1.el9_2.x86_64 容器运行时：Docker + CRI-Docker Kubernetes 版本：1.29.2 网络插件：Calico  二、集群规划基于二进制安装包，部署三主两从的高可用集群。    主机名称 IPV4地址 CPU&#x2F;内存&#x2F;磁盘 说明 软件     10.2">
-<meta property="og:type" content="article">
-<meta property="og:title" content="026-K8S-二进制安装Node新节点到集群中">
-<meta property="og:url" content="https://georgechan95.github.io/blog/94adcd23.html">
+<meta name="description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#95;&#57;&#x35;&#x40;&#x31;&#x32;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
+<meta property="og:type" content="website">
+<meta property="og:title" content="关于">
+<meta property="og:url" content="https://georgechan95.github.io/about/index.html">
 <meta property="og:site_name" content="George&#39;s Blog">
-<meta property="og:description" content="一、系统环境 操作系统：Rocky Linux 9.3 内核版本：5.14.0-284.11.1.el9_2.x86_64 容器运行时：Docker + CRI-Docker Kubernetes 版本：1.29.2 网络插件：Calico  二、集群规划基于二进制安装包，部署三主两从的高可用集群。    主机名称 IPV4地址 CPU&#x2F;内存&#x2F;磁盘 说明 软件     10.2">
+<meta property="og:description" content="个人简介本人在合肥，从事后端开发工作。 联系方式 邮箱：&#x67;&#101;&#x6f;&#x72;&#103;&#101;&#95;&#57;&#x35;&#x40;&#x31;&#x32;&#54;&#x2e;&#99;&#111;&#109;  邮件可能几天才看一次，如有联系，请耐心等待。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/01/04/20250104-112243.png">
-<meta property="article:published_time" content="2025-11-01T07:42:00.000Z">
-<meta property="article:modified_time" content="2025-11-01T09:44:19.370Z">
+<meta property="article:published_time" content="2023-11-21T02:29:45.000Z">
+<meta property="article:modified_time" content="2024-12-09T05:22:48.462Z">
 <meta property="article:author" content="George">
-<meta property="article:tag" content="linux">
-<meta property="article:tag" content="Docker">
-<meta property="article:tag" content="Rocky">
-<meta property="article:tag" content="Etcd">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/GeorgeChan95/blogimg/master/img/2025/01/04/20250104-112243.png">
 
 
 <link rel="icon" href="/img/favicon.png">
@@ -154,7 +148,7 @@
     <li>
         <div class="all active" data-rel="全部文章">全部文章
             
-                <small>(123)</small>
+                <small>(124)</small>
             
         </div>
     </li>
@@ -286,7 +280,7 @@
         <div data-rel="linux">
             
             linux
-            <small>(4)</small>
+            <small>(5)</small>
         </div>
         
     </li>
@@ -379,8 +373,8 @@
         
     </div>
 </div>
-<input type="hidden" id="yelog_site_posts_number" value="123">
-<input type="hidden" id="yelog_site_word_count" value="643.2k">
+<input type="hidden" id="yelog_site_posts_number" value="124">
+<input type="hidden" id="yelog_site_word_count" value="644.7k">
 <div style="display: none">
     <span id="busuanzi_value_site_uv"></span>
     <span id="busuanzi_value_site_pv"></span>
@@ -451,6 +445,10 @@
         
             <li class="article-tag-list-item">
                 <i class="iconfont icon-tag"></i><a>冒泡排序</a>
+            </li>
+        
+            <li class="article-tag-list-item">
+                <i class="iconfont icon-tag"></i><a>麒麟</a>
             </li>
         
             <li class="article-tag-list-item">
@@ -571,6 +569,15 @@
 
     
     <nav id="title-list-nav">
+        
+        
+        <a  class="全部文章 linux "
+           href="/blog/f8bccbba.html"
+           data-tag="linux,麒麟"
+           data-author="" >
+            <span class="post-title" title="麒麟V10离线源环境搭建">麒麟V10离线源环境搭建</span>
+            <span class="post-date" title="2025-12-10 10:39:00">2025/12/10</span>
+        </a>
         
         
         <a  class="全部文章 k8s "
@@ -1106,7 +1113,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/1a649f4c.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="13-JUC进阶-ReentrantReadWriteLock与StampedLock">13-JUC进阶-ReentrantReadWriteLock与StampedLock</span>
             <span class="post-date" title="2024-10-19 09:26:00">2024/10/19</span>
@@ -1133,7 +1140,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/3fdbf0f6.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="12-JUC进阶-从ReentrantLock到AQS源码详解">12-JUC进阶-从ReentrantLock到AQS源码详解</span>
             <span class="post-date" title="2024-10-15 19:42:07">2024/10/15</span>
@@ -1142,7 +1149,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/3e0d7592.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="11-JUC进阶-Synchronized与锁升级">11-JUC进阶-Synchronized与锁升级</span>
             <span class="post-date" title="2024-10-06 09:28:00">2024/10/06</span>
@@ -1151,7 +1158,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/4502cffa.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="10-JUC进阶-Java对象内存布局和对象头">10-JUC进阶-Java对象内存布局和对象头</span>
             <span class="post-date" title="2024-10-04 09:54:40">2024/10/04</span>
@@ -1160,7 +1167,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/4de6a39b.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="09-JUC进阶-ThreadLocal">09-JUC进阶-ThreadLocal</span>
             <span class="post-date" title="2024-10-01 20:39:10">2024/10/01</span>
@@ -1169,7 +1176,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/72329cf5.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="08-JUC进阶-常用的原子操作类(18个)">08-JUC进阶-常用的原子操作类(18个)</span>
             <span class="post-date" title="2024-09-28 13:37:09">2024/09/28</span>
@@ -1178,7 +1185,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/5e3757c1.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="07-JUC进阶-CAS">07-JUC进阶-CAS</span>
             <span class="post-date" title="2024-09-26 19:37:00">2024/09/26</span>
@@ -1187,7 +1194,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/546d628d.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="06-JUC进阶-Volatile与Java内存模型">06-JUC进阶-Volatile与Java内存模型</span>
             <span class="post-date" title="2024-09-25 19:01:01">2024/09/25</span>
@@ -1196,7 +1203,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/1f2e0014.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="05-JUC进阶-Java内存模型-JMM">05-JUC进阶-Java内存模型-JMM</span>
             <span class="post-date" title="2024-09-23 23:01:07">2024/09/23</span>
@@ -1205,7 +1212,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/19653fb9.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="04-JUC进阶-LockSupport与线程中断">04-JUC进阶-LockSupport与线程中断</span>
             <span class="post-date" title="2024-09-23 20:51:50">2024/09/23</span>
@@ -1214,7 +1221,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/219e52ea.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="03-JUC进阶-Java中的锁的解析">03-JUC进阶-Java中的锁的解析</span>
             <span class="post-date" title="2024-09-21 14:15:20">2024/09/21</span>
@@ -1223,7 +1230,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/7e2d78eb.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="02-JUC进阶-CompletableFuture">02-JUC进阶-CompletableFuture</span>
             <span class="post-date" title="2024-09-18 22:50:00">2024/09/18</span>
@@ -1232,7 +1239,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/3d102971.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="01-JUC进阶-线程基础">01-JUC进阶-线程基础</span>
             <span class="post-date" title="2024-09-18 22:32:00">2024/09/18</span>
@@ -1241,7 +1248,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/37d56d14.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="11-CompletableFuture">11-CompletableFuture</span>
             <span class="post-date" title="2024-09-16 16:12:00">2024/09/16</span>
@@ -1250,7 +1257,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/31919959.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="10-Fork/Join">10-Fork/Join</span>
             <span class="post-date" title="2024-09-16 13:10:00">2024/09/16</span>
@@ -1259,7 +1266,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/a0197c15.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="09-ThreadPool-线程池">09-ThreadPool-线程池</span>
             <span class="post-date" title="2024-09-13 20:10:08">2024/09/13</span>
@@ -1268,7 +1275,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/a6760d1f.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="08-阻塞队列BlockingQueue">08-阻塞队列BlockingQueue</span>
             <span class="post-date" title="2024-09-07 17:30:00">2024/09/07</span>
@@ -1277,7 +1284,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/838e7581.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore">07-JUC辅助类CountDownLatch、CyclicBarrier、Semaphore</span>
             <span class="post-date" title="2024-09-07 13:00:00">2024/09/07</span>
@@ -1286,7 +1293,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/f60e37c5.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="06-Callable &amp; Future 接口">06-Callable &amp; Future 接口</span>
             <span class="post-date" title="2024-09-06 22:10:00">2024/09/06</span>
@@ -1295,7 +1302,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/f184587f.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="05-公平锁和非公平锁，死锁，可重入锁">05-公平锁和非公平锁，死锁，可重入锁</span>
             <span class="post-date" title="2024-09-05 20:12:00">2024/09/05</span>
@@ -1304,7 +1311,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/9a09d992.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="04-集合的线程安全">04-集合的线程安全</span>
             <span class="post-date" title="2024-09-04 21:09:05">2024/09/04</span>
@@ -1313,7 +1320,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/bd2134da.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="03-线程间通信">03-线程间通信</span>
             <span class="post-date" title="2024-09-04 20:06:00">2024/09/04</span>
@@ -1322,7 +1329,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/850dac3c.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="02-Lock接口">02-Lock接口</span>
             <span class="post-date" title="2024-08-30 19:27:00">2024/08/30</span>
@@ -1331,7 +1338,7 @@
         
         <a  class="全部文章 JUC "
            href="/blog/4e6bd685.html"
-           data-tag="java,juc"
+           data-tag="juc,java"
            data-author="" >
             <span class="post-title" title="01-多线程的基本概念">01-多线程的基本概念</span>
             <span class="post-date" title="2024-08-30 19:03:01">2024/08/30</span>
@@ -1654,19 +1661,19 @@
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/3069199997.html"
+           href="/blog/2016918085.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
+            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
         
         <a  class="全部文章 Hexo "
-           href="/blog/2016918085.html"
+           href="/blog/3069199997.html"
            data-tag="hexo,github pages"
            data-author="" >
-            <span class="post-title" title="Hexo博客安装主题">Hexo博客安装主题</span>
+            <span class="post-title" title="Hexo主题常用配置">Hexo主题常用配置</span>
             <span class="post-date" title="2023-11-20 00:00:01">2023/11/20</span>
         </a>
         
